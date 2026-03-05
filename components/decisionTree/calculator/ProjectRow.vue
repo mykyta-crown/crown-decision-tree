@@ -80,6 +80,7 @@ function onMenuAction(action: 'edit' | 'archive' | 'duplicate' | 'delete') {
     <!-- Col 1: Checkbox -->
     <div class="col-checkbox" @click.stop>
       <v-checkbox hide-details density="compact" />
+    </div>
 
     <!-- Col 2: Project name -->
     <div class="col-name">
