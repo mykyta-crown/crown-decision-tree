@@ -1,0 +1,146 @@
+{
+  "auction": {
+    "group_id": "bfeacbc7-f2b0-4fcb-b804-f0ea812bf38a",
+    "name": "Test ",
+    "description": "Test single Auction",
+    "date": "2024-12-03T17:00:15.656Z",
+    "time": "18:00",
+    "currency": "EUR",
+    "timezone": "CEST",
+    "type": "dutch",
+    "test": true,
+    "company_id": "fbe426fb-a2e2-40a1-84c3-ce8428002f2a",
+    "buyer_id": "6adda705-d34f-41d8-ae35-d427c62eff83",
+    "log_visibility": "only_own",
+    "published": true,
+    "usage": "test",
+    "start_at": "2024-12-03T17:00:00.000Z",
+    "end_at": "2024-12-03T17:05:00.000Z",
+    "awarding_principles": "<p>Supplier ranked #1 will be awarded with 100% of the lot.</p>",
+    "commercials_terms": "<p><strong>Offer validity:</strong> 90 days</p><p><strong>Payement terms:</strong> 60 days</p><p><strong>Incoterms:</strong> DDP</p>",
+    "lots": [
+      {
+        "name": "Single Lot with prebid and a very long name",
+        "duration": 5,
+        "baseline": "400000",
+        "multiplier": true,
+        "rank_trigger": "all",
+        "min_bid_decr": "10000",
+        "min_bid_decr_type": "EUR",
+        "max_bid_decr": "0500000",
+        "max_bid_decr_type": "EUR",
+        "overtime_range": 0.25,
+        "suppliers": [
+          {
+            "email": "supplier+1@crown.ovh"
+          },
+          {
+            "email": "supplier+2@crown.ovh"
+          },
+          {
+            "email": "supplier+3@crown.ovh"
+          },
+          {
+            "email": "supplier+4@crown.ovh"
+          },
+          {
+            "email": "supplier+5@crown.ovh"
+          }
+        ],
+        "items": [
+          {
+            "line_item": "Yuzu's fur ",
+            "unit": "Tons",
+            "quantity": "5",
+            "supplier+1@crown.ovh": "100000",
+            "supplier+4@crown.ovh": "94000",
+            "supplier+2@crown.ovh": "98000",
+            "supplier+5@crown.ovh": "92000",
+            "supplier+3@crown.ovh": "96000"
+          }
+        ],
+        "commercials_docs": [],
+        "awarding_principles": "<p>Supplier ranked #1 will be awarded with 100% of the lot.</p>",
+        "commercials_terms": "<p><strong>Offer validity:</strong> 90 days</p><p><strong>Payement terms:</strong> 60 days</p><p><strong>Incoterms:</strong> DDP</p>",
+        "dutch_prebid_enabled": true,
+        "overtime_rule": "all",
+        "start_at": "2024-12-03T17:00:00.000Z",
+        "end_at": "2024-12-03T17:05:00.000Z",
+        "lot_number": 1,
+        "suppliers_prices": [
+          {
+            "supplier": {
+              "email": "supplier+1@crown.ovh"
+            },
+            "lines_items": [
+              {
+                "line_item": "Yuzu's fur ",
+                "quantity": "5",
+                "unit": "Tons",
+                "ceiling": "100000",
+                "index": 0
+              }
+            ]
+          },
+          {
+            "supplier": {
+              "email": "supplier+2@crown.ovh"
+            },
+            "lines_items": [
+              {
+                "line_item": "Yuzu's fur ",
+                "quantity": "5",
+                "unit": "Tons",
+                "ceiling": "98000",
+                "index": 0
+              }
+            ]
+          },
+          {
+            "supplier": {
+              "email": "supplier+3@crown.ovh"
+            },
+            "lines_items": [
+              {
+                "line_item": "Yuzu's fur ",
+                "quantity": "5",
+                "unit": "Tons",
+                "ceiling": "96000",
+                "index": 0
+              }
+            ]
+          },
+          {
+            "supplier": {
+              "email": "supplier+4@crown.ovh"
+            },
+            "lines_items": [
+              {
+                "line_item": "Yuzu's fur ",
+                "quantity": "5",
+                "unit": "Tons",
+                "ceiling": "94000",
+                "index": 0
+              }
+            ]
+          },
+          {
+            "supplier": {
+              "email": "supplier+5@crown.ovh"
+            },
+            "lines_items": [
+              {
+                "line_item": "Yuzu's fur ",
+                "quantity": "5",
+                "unit": "Tons",
+                "ceiling": "92000",
+                "index": 0
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "type": "dutch"
+}

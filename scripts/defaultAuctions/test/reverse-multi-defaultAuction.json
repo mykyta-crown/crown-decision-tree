@@ -1,0 +1,407 @@
+{
+  "auction": {
+    "group_id": "bfeacbc7-f2b0-4fcb-b804-f0ea812bf38a",
+    "name": "Test ",
+    "description": "Test single Auction",
+    "date": "2024-12-03T17:00:15.656Z",
+    "time": "18:00",
+    "currency": "EUR",
+    "timezone": "CEST",
+    "type": "reverse",
+    "test": true,
+    "company_id": "fbe426fb-a2e2-40a1-84c3-ce8428002f2a",
+    "buyer_id": "6adda705-d34f-41d8-ae35-d427c62eff83",
+    "log_visibility": "only_own",
+    "published": true,
+    "usage": "test",
+    "start_at": "2024-12-03T17:00:00.000Z",
+    "end_at": "2024-12-03T17:05:00.000Z",
+    "awarding_principles": "<p>Supplier ranked #1 will be awarded with 100% of the lot.</p>",
+    "commercials_terms": "<p><strong>Offer validity:</strong> 90 days</p><p><strong>Payement terms:</strong> 60 days</p><p><strong>Incoterms:</strong> DDP</p>",
+    "lots": [
+      {
+        "name": "Lot 1 with everyone and 2 items",
+        "duration": 5,
+        "baseline": "0500000",
+        "multiplier": true,
+        "rank_trigger": "all",
+        "min_bid_decr": "500",
+        "min_bid_decr_type": "EUR",
+        "max_bid_decr": "05000",
+        "max_bid_decr_type": "EUR",
+        "overtime_range": 1,
+        "suppliers": [
+          {
+            "email": "supplier+1@crown.ovh"
+          },
+          {
+            "email": "supplier+2@crown.ovh"
+          },
+          {
+            "email": "supplier+3@crown.ovh"
+          },
+          {
+            "email": "supplier+4@crown.ovh"
+          },
+          {
+            "email": "supplier+5@crown.ovh"
+          }
+        ],
+        "items": [
+          {
+            "line_item": "Apples with a very long generic name",
+            "unit": "Tons",
+            "quantity": "10",
+            "supplier+1@crown.ovh": "50000",
+            "supplier+4@crown.ovh": "48500",
+            "supplier+2@crown.ovh": "49500",
+            "supplier+5@crown.ovh": "49750",
+            "supplier+3@crown.ovh": "49000"
+          },
+          {
+            "line_item": "Banan' ",
+            "unit": "Tons",
+            "quantity": 1,
+            "supplier+1@crown.ovh": "050000",
+            "mult_supplier+1@crown.ovh": 1,
+            "supplier+2@crown.ovh": "0050000",
+            "mult_supplier+2@crown.ovh": 1,
+            "supplier+3@crown.ovh": "050000",
+            "mult_supplier+3@crown.ovh": 1,
+            "supplier+4@crown.ovh": "0050000",
+            "mult_supplier+4@crown.ovh": 1,
+            "supplier+5@crown.ovh": "0050000",
+            "mult_supplier+5@crown.ovh": 1
+          }
+        ],
+        "commercials_docs": [],
+        "awarding_principles": "<p>Supplier ranked #1 will be awarded with 100% of the lot.</p>",
+        "commercials_terms": "<p><strong>Offer validity:</strong> 90 days</p><p><strong>Payement terms:</strong> 60 days</p><p><strong>Incoterms:</strong> DDP</p>",
+        "dutch_prebid_enabled": true,
+        "overtime_rule": "all",
+        "start_at": "2024-12-03T17:00:00.000Z",
+        "end_at": "2024-12-03T17:05:00.000Z",
+        "lot_number": 1,
+        "suppliers_prices": [
+          {
+            "supplier": {
+              "email": "supplier+1@crown.ovh"
+            },
+            "lines_items": [
+              {
+                "line_item": "Apples with a very long generic name",
+                "quantity": "10",
+                "unit": "Tons",
+                "ceiling": "50000",
+                "index": 0
+              },
+              {
+                "line_item": "Banan' ",
+                "quantity": 1,
+                "unit": "Tons",
+                "ceiling": "050000",
+                "multiplier": 1,
+                "index": 1
+              }
+            ]
+          },
+          {
+            "supplier": {
+              "email": "supplier+2@crown.ovh"
+            },
+            "lines_items": [
+              {
+                "line_item": "Apples with a very long generic name",
+                "quantity": "10",
+                "unit": "Tons",
+                "ceiling": "49500",
+                "index": 0
+              },
+              {
+                "line_item": "Banan' ",
+                "quantity": 1,
+                "unit": "Tons",
+                "ceiling": "0050000",
+                "multiplier": 1,
+                "index": 1
+              }
+            ]
+          },
+          {
+            "supplier": {
+              "email": "supplier+3@crown.ovh"
+            },
+            "lines_items": [
+              {
+                "line_item": "Apples with a very long generic name",
+                "quantity": "10",
+                "unit": "Tons",
+                "ceiling": "49000",
+                "index": 0
+              },
+              {
+                "line_item": "Banan' ",
+                "quantity": 1,
+                "unit": "Tons",
+                "ceiling": "050000",
+                "multiplier": 1,
+                "index": 1
+              }
+            ]
+          },
+          {
+            "supplier": {
+              "email": "supplier+4@crown.ovh"
+            },
+            "lines_items": [
+              {
+                "line_item": "Apples with a very long generic name",
+                "quantity": "10",
+                "unit": "Tons",
+                "ceiling": "48500",
+                "index": 0
+              },
+              {
+                "line_item": "Banan' ",
+                "quantity": 1,
+                "unit": "Tons",
+                "ceiling": "0050000",
+                "multiplier": 1,
+                "index": 1
+              }
+            ]
+          },
+          {
+            "supplier": {
+              "email": "supplier+5@crown.ovh"
+            },
+            "lines_items": [
+              {
+                "line_item": "Apples with a very long generic name",
+                "quantity": "10",
+                "unit": "Tons",
+                "ceiling": "49750",
+                "index": 0
+              },
+              {
+                "line_item": "Banan' ",
+                "quantity": 1,
+                "unit": "Tons",
+                "ceiling": "0050000",
+                "multiplier": 1,
+                "index": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Lot  2 with 3 suppliers, 1 item",
+        "duration": 5,
+        "baseline": "2700000",
+        "multiplier": true,
+        "rank_trigger": "all",
+        "min_bid_decr": "1",
+        "min_bid_decr_type": "EUR",
+        "max_bid_decr": "100000",
+        "max_bid_decr_type": "EUR",
+        "overtime_range": 1,
+        "suppliers": [
+          {
+            "email": "supplier+1@crown.ovh"
+          },
+          {
+            "email": "supplier+2@crown.ovh"
+          },
+          {
+            "email": "supplier+3@crown.ovh"
+          }
+        ],
+        "items": [
+          {
+            "line_item": "Yuzu",
+            "unit": "Kg",
+            "quantity": "950",
+            "supplier+1@crown.ovh": "3000",
+            "supplier+2@crown.ovh": "2999",
+            "supplier+3@crown.ovh": "2869"
+          }
+        ],
+        "awarding_principles": "<p>Supplier ranked #1 will be awarded with 100% of the lot.</p>",
+        "commercials_terms": "<p><strong>Offer validity:</strong> 90 days</p><p><strong>Payement terms:</strong> 60 days</p><p><strong>Incoterms:</strong> DDP</p>",
+        "commercials_docs": [],
+        "dutch_prebid_enabled": true,
+        "overtime_rule": "all",
+        "start_at": "2024-12-03T17:05:00.000Z",
+        "end_at": "2024-12-03T17:10:00.000Z",
+        "lot_number": 2,
+        "suppliers_prices": [
+          {
+            "supplier": {
+              "email": "supplier+1@crown.ovh"
+            },
+            "lines_items": [
+              {
+                "line_item": "Yuzu",
+                "quantity": "950",
+                "unit": "Kg",
+                "ceiling": "3000",
+                "index": 0
+              }
+            ]
+          },
+          {
+            "supplier": {
+              "email": "supplier+2@crown.ovh"
+            },
+            "lines_items": [
+              {
+                "line_item": "Yuzu",
+                "quantity": "950",
+                "unit": "Kg",
+                "ceiling": "2999",
+                "index": 0
+              }
+            ]
+          },
+          {
+            "supplier": {
+              "email": "supplier+3@crown.ovh"
+            },
+            "lines_items": [
+              {
+                "line_item": "Yuzu",
+                "quantity": "950",
+                "unit": "Kg",
+                "ceiling": "2869",
+                "index": 0
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Lot  3 with everyone and 1 item",
+        "duration": 5,
+        "baseline": "80000",
+        "multiplier": true,
+        "rank_trigger": "all",
+        "min_bid_decr": "1",
+        "min_bid_decr_type": "EUR",
+        "max_bid_decr": "100000",
+        "max_bid_decr_type": "EUR",
+        "overtime_range": 1,
+        "suppliers": [
+          {
+            "email": "supplier+1@crown.ovh"
+          },
+          {
+            "email": "supplier+2@crown.ovh"
+          },
+          {
+            "email": "supplier+3@crown.ovh"
+          },
+          {
+            "email": "supplier+4@crown.ovh"
+          },
+          {
+            "email": "supplier+5@crown.ovh"
+          }
+        ],
+        "items": [
+          {
+            "line_item": "Some fruits",
+            "unit": "Tons",
+            "quantity": 1,
+            "supplier+1@crown.ovh": "100000",
+            "supplier+2@crown.ovh": "99900",
+            "supplier+3@crown.ovh": "99800",
+            "supplier+4@crown.ovh": "99700",
+            "supplier+5@crown.ovh": "99600"
+          }
+        ],
+        "awarding_principles": "<p>Supplier ranked #1 will be awarded with 100% of the lot.</p>",
+        "commercials_terms": "<p><strong>Offer validity:</strong> 90 days</p><p><strong>Payement terms:</strong> 60 days</p><p><strong>Incoterms:</strong> DDP</p>",
+        "commercials_docs": [],
+        "dutch_prebid_enabled": true,
+        "overtime_rule": "all",
+        "start_at": "2024-12-03T17:10:00.000Z",
+        "end_at": "2024-12-03T17:15:00.000Z",
+        "lot_number": 3,
+        "suppliers_prices": [
+          {
+            "supplier": {
+              "email": "supplier+1@crown.ovh"
+            },
+            "lines_items": [
+              {
+                "line_item": "Some fruits",
+                "quantity": 1,
+                "unit": "Tons",
+                "ceiling": "100000",
+                "index": 0
+              }
+            ]
+          },
+          {
+            "supplier": {
+              "email": "supplier+2@crown.ovh"
+            },
+            "lines_items": [
+              {
+                "line_item": "Some fruits",
+                "quantity": 1,
+                "unit": "Tons",
+                "ceiling": "99900",
+                "index": 0
+              }
+            ]
+          },
+          {
+            "supplier": {
+              "email": "supplier+3@crown.ovh"
+            },
+            "lines_items": [
+              {
+                "line_item": "Some fruits",
+                "quantity": 1,
+                "unit": "Tons",
+                "ceiling": "99800",
+                "index": 0
+              }
+            ]
+          },
+          {
+            "supplier": {
+              "email": "supplier+4@crown.ovh"
+            },
+            "lines_items": [
+              {
+                "line_item": "Some fruits",
+                "quantity": 1,
+                "unit": "Tons",
+                "ceiling": "99700",
+                "index": 0
+              }
+            ]
+          },
+          {
+            "supplier": {
+              "email": "supplier+5@crown.ovh"
+            },
+            "lines_items": [
+              {
+                "line_item": "Some fruits",
+                "quantity": 1,
+                "unit": "Tons",
+                "ceiling": "99600",
+                "index": 0
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "type": "reverse"
+}

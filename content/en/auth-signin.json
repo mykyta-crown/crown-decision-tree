@@ -1,0 +1,16 @@
+{
+  "title": "Welcome back to CROWN",
+  "fields": {
+    "email": "Email*",
+    "password": "Password*"
+  },
+  "buttons": {
+    "login": "Log In",
+    "signup": "Create an account",
+    "forgotPassword": "Forgot your password ?"
+  },
+  "validation": {
+    "invalidEmail": "Invalid email address",
+    "required": "Required"
+  }
+}

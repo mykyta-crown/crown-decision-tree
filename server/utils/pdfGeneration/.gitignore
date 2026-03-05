@@ -1,0 +1,18 @@
+# Test outputs
+test-output.pdf
+debug-output.html
+*.log
+
+# Benchmark results
+benchmark-results.json
+
+# Coverage
+coverage/
+.nyc_output/
+
+# Node modules (if package.json exists)
+node_modules/
+
+# OS files
+.DS_Store
+Thumbs.db

@@ -1,0 +1,29 @@
+{
+  "auction": {
+    "start_at": "2024-05-31T15:00:00+02:00",
+    "end_at": "2024-05-31T15:18:00+02:00",
+    "duration": 18,
+    "name": "07WD - 300AA0062 Nickel Powder",
+    "description": "300AA0062 Nickel Powder",
+    "commercials_terms": "Each company agree to deliver the raw material referring to the specification enclosed. If a deviation is needed, R&D needs to agree participating to the eAuction. Contract and deliveries will stand from July 15th to December 15th 2024 MOQ mini 2000kg  12 000 kg call contract - 2 000kg per months + 2 000 security stock, total volume 14 000kg If the security stock is not called, it will be automatically delivered with the last order of December. Prices must be € currency Prices must be DDP Porte du Ried 68320 - 22 rue des americains Payment terms are determined for each supplier in Welding Alloys system and each participant agreed to apply the same condition as usual",
+    "timezone": "UTC+2",
+    "overtime_range": 0.5,
+    "max_bid_decr": 20,
+    "min_bid_decr": 1000,
+    "max_bid_decr_type": "EUR",
+    "min_bid_decr_type": "EUR",
+    "log_visibility": "own_rank_only",
+    "currency": "EUR",
+    "baseline": 322000,
+    "type": "dutch",
+    "test": false
+  },
+  "supplies": [
+    {
+      "name": "300AA0062 Nickel Powder",
+      "quantity": 14000,
+      "unit": "Kilo",
+      "price": 21.6
+    }
+  ]
+}

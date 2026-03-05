@@ -1,0 +1,49 @@
+{
+  "title": "Modifier votre profil",
+  "email": {
+    "label": "Email",
+    "readonly": "L'email est en lecture seule"
+  },
+  "password": {
+    "changeButton": "Voulez-vous changer votre mot de passe ?"
+  },
+  "snackbar": {
+    "message": "Vos informations ont été mises à jour.",
+    "close": "Fermer"
+  },
+  "profileForm": {
+    "title": "Remplissez vos informations personnelles",
+    "company": {
+      "label": "Entreprise*",
+      "placeholder": "Entrez le nom de l'entreprise"
+    },
+    "firstName": {
+      "label": "Prénom*",
+      "placeholder": "Entrez votre prénom"
+    },
+    "lastName": {
+      "label": "Nom*",
+      "placeholder": "Entrez votre nom"
+    },
+    "country": {
+      "label": "Pays*",
+      "placeholder": "Sélectionnez votre pays"
+    },
+    "address": {
+      "label": "Adresse*",
+      "placeholder": "Entrez l'adresse de votre entreprise"
+    },
+    "position": {
+      "label": "Poste*",
+      "placeholder": "Spécifiez votre poste"
+    },
+    "companyId": {
+      "label": "Numéro d'identification de l'entreprise*"
+    },
+    "phone": {
+      "label": "Téléphone*"
+    },
+    "save": "Enregistrer",
+    "required": "Requis"
+  }
+}

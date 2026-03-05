@@ -1,0 +1,1 @@
+  private.is_buyer(auction_id)

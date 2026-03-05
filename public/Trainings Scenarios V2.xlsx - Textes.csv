@@ -1,0 +1,183 @@
+,Sealed bid,English,Dutch,Dutch pref,Jap,Jap no award
+Part 1 - Slides,,,,,,
+How it works,"📘 How it works : In a Sealed Bid eAuction, participants submit confidential offers that remain hidden until the end. The most competitive bid wins.
+
+Before the event: Participants submit bids before the deadline.
+
+During the event: Bids remain undisclosed; participants may lower their offers until closure.
+
+Timing: No live ranking; results revealed after the deadline.
+
+Awarding: The most competitive bid secures the lot, based on awarding principles.","📘 How it works : An English Reverse eAuction starts from suppliers’ pre-bids. Participants see their ranking and can submit improved offers until time expires. The final rank determines the winner.
+
+Before the event: Participants submit a pre-bid that sets their initial rank.
+
+During the event: Ranking updates dynamically with each new bid.
+
+Timing: Runs for a limited time, with automatic extensions if bids are placed in the final minutes.
+
+Awarding: Lots are awarded according to final ranking and defined awarding principles.
+","📘 How it works : A Dutch Reverse eAuction starts at a low price that increases step by step. The first participant to accept the price wins immediately.
+
+Before the event: A pre-bid may be required.
+
+During the event: Price rises in fixed increments each round until a bid is accepted.
+
+Timing: Limited duration but ends instantly when a bid is placed.
+
+Awarding: The first accepted bid secures the lot.
+","📘 How it works : A Preferred Dutch Reverse eAuction works like a Dutch auction, but selected suppliers receive priority access to each price step before others. The first accepted bid wins.
+
+Before the event: Participants may submit pre-bids; preferred suppliers are designated.
+
+During the event: Price rises in steps; preferred suppliers get first option at each step.
+
+Timing: Limited duration but ends instantly when a bid is accepted.
+
+Awarding: The first accepted bid secures the lot.","📘 How it works : A Japanese Reverse eAuction starts at a high price that decreases in rounds. Participants must accept the new price each round to stay in the event. The last remaining bidder wins.
+
+Before the event: A pre-bid may be required.
+
+During the event: Price decreases in fixed steps; participants must stay active each round or exit the eAuction.
+
+Timing: Limited duration, ending when only one participant remains or the minimum price is reached.
+
+Awarding: The last active participant secures the lot.","📘 How it works : A Japanese No Rank eAuction decreases prices in rounds, with participants required to stay active each round. Unlike a standard Japanese auction, awarding is decided outside the auction.
+
+Before the event: A pre-bid may be required.
+
+During the event: Price decreases in fixed steps; participants confirm each round or exit, with their exit price recorded.
+
+Timing: Limited duration, ending once all rounds are complete.
+
+Awarding: The final decision combines eAuction results with external criteria."
+How to win,"🎯 How to win?
+
+Submit the most competitive bid, the supplier offering the best price for the agreed terms will win.","🎯 How to win?  
+
+In an English eAuction, the supplier who offers the lowest price by the end of the eAuction is awarded","🎯 How to win?  
+
+ In a Dutch eAuction, the fastest wins : be the first to accept the price that works for you to secure the lot.",,"🎯 How to win ?
+
+In a Japanese eAuction, you must remain active by accepting the price at each round.
+The last supplier to stay in the eAuction wins at the final accepted price.","🎯 How to win ? 
+
+In a Japanese No Rank eAuction, all suppliers must choose whether or not to accept the new price at each round to stay in the eAuction. 
+The event continues through all rounds, regardless of how many participants remain active. At the end, no winner is awardeded, the buyer will attribute the lot outside the eAuction."
+Timing,"⏱ eAuction Timing Explained
+
+The Sealed Bid eAuction has a fixed duration. During this time, you can update your bid as many times as you want.
+
+When the timer runs out, all bids are automatically locked and the eAuction closes.","⏱ eAuction Timing Explained
+
+The English eAuction has a fixed duration, for example, 5 minutes. During this time, suppliers can place live bids to improve their rank.
+
+To prevent last-second bidding, an additional period called Overtime is applied. If a bid is placed during this phase, the countdown automatically resets according to the chosen overtime setting (e.g., overtime 2mn).","⏱ eAuction Timing Explained
+
+In a Dutch eAuction, the price increases gradually, usually every 15, 30 or 60 seconds. You’ll see a countdown timer and the current price updating in real time.
+
+The eAuction ends immediately as soon as any supplier accepts a price.","⏱ eAuction Timing Explained
+
+The price goes up in rounds (every 15, 30, or 60 seconds). Preferred suppliers get early access at each round (e.g., first 30 seconds). 
+After that, all suppliers can bid. If no one bids, the eAuction moves to the next price step with the same priority.","⏱ eAuction Timing Explained
+
+The price drops step by step (every 15, 30, or 60 seconds). At each step, suppliers choose to stay or exit. Once you exit, your rank is shown. 
+The auction ends when all suppliers have left.","⏱ eAuction Timing Explained
+
+
+The price drops step by step (every 15, 30, or 60 seconds). At each step, suppliers choose to stay or exit. 
+The auction ends when all suppliers have left."
+Option : Prebid,,"⚙️ What is a pre-bid?
+
+A pre-bid in an English eAuction is the initial offer you submit before the auction starts. It determines your starting rank when the eAuction begins","⚙️ What is a pre-bid?
+
+A prebid is an offer you submit before the eAuction starts.
+
+When the eAuction reaches your prebid level, the system will automatically place your bid. You'll win automatically the eAuction even if a competitor wants to place a bid at the same time. Pre-bid prior bids.
+
+If two suppliers have placed the same pre-bid, the one who submitted it first will be awarded","⚙️ What is a pre-bid?
+
+A prebid is an offer you submit before the eAuction starts.
+
+When the eAuction reaches your prebid level, the system will automatically place your bid. You'll win automatically the eAuction even if a competitor wants to place a bid at the same time. Pre-bid prior bids.
+
+   -If you’re a preferred supplier, your pre-bid will be triggered during your exclusive access window, as soon as your target price is reached.
+
+   -If you’re not preferred, your pre-bid will be placed only once the round is open to all suppliers, and the price has reached your pre-set level.
+
+If two suppliers have placed the same pre-bid, the one who submitted it first will be awarded
+","⚙️ What is a pre-bid?
+
+A pre-bid is an offer you submit before the event begins. The system will automatically accept all rounds until it reaches your pre-bid.
+
+Once the eAuction reaches your pre-bid, you’ll need to manually confirm whether you want to stay in the eAuction.
+
+If two suppliers have placed the same pre-bid, the one who submitted it first will be awarded","⚙️ What is a pre-bid?
+
+A pre-bid is an offer you submit before the event begins. The system will automatically accept all rounds until it reaches your pre-bid.
+
+Once the eAuction reaches your pre-bid, you’ll need to manually confirm whether you want to stay in the eAuction."
+Option: Multilot,"🎰 What is a multi-lot ? :
+
+A multi-lot eAuction means the eAuction is split into several distinct lots .
+
+Each lot represents a specific item or products, and each lot is treated as an independent event :
+Each lot has its own ranking.
+",,,,,
+Option : Transfo,,"
+🔁 Transformation
+
+A transformation means that bids are adjusted using buyer-defined factors such as quality, logistics, or delivery. 
+
+These adjustments, called handicaps, can be either dynamic (applied once at the start) or fix (recalculated as bidding evolves). Suppliers only see the dynamic handicap.",,,,
+Scenarios (if prebid),"💡 2 different scenarios that ends the eAuction
+
+Win the eAuction : You're competing with other suppliers to offer the lowest price. You place a bid lower than all others.
+
+Lose the eAuction : You place your bid, but another supplier submits a lower price.","💡 2 different scenarios that ends the eAuction
+
+Win the eAuction : You're competing with other suppliers to offer the lowest price. You place a bid lower than all others.
+
+Lose the eAuction : You place your bid, but another supplier submits a lower price before time runs out.","💡 3 different scenarios that ends the eAuction
+
+Win with pre-bid : You set a pre-bid before the eAuction starts. When the price reaches your pre-bid, the system places your bid automatically and you win. 
+
+Lose : You placed a prebid, but another supplier made a bid before your price was reached.
+
+Win by a live bid : You set a pre-bid, but before the price reached it, you placed a live bid by clicking “Place bid”, and won the eAuction.","💡 4 different scenarios that ends the eAuction
+
+Win with pre-bid : You set a pre-bid before the eAuction. When the price reaches your level and access opens, the system places your bid automatically and you win. 
+
+Win by Placing a Bid : You set a pre-bid before the eAuction starts, but before the price reaches it, you place a live bid by clicking “Place bid” when access opens, and won the eAuction.
+
+Lose during restricted access : A preferred supplier bid during the restricted acces, you can't bid at the same time, you lose. 
+
+Lose during open access : No ones bid during the restricted access but at the end of it, another supplier places a bid, you lose. 
+","💡 3 different scenarios that ends the eAuction
+
+Win with pre-bid :Your pre-bid was the lowest among all suppliers. Since no one accepted a lower price, you win the eAuction with your pre-bid.
+
+Lose : You’ve reached your pre-bid price. Since you don’t want to accept a lower price, you exit the eAuction here, while other suppliers continue.
+
+Win with live bid : You’ve passed your pre-bid and kept accepting lower prices while others left. By staying in the eAuction longer, you win.","💡 2 different scenarios for the eAuction
+
+
+Pre-bid : You set a pre-bid. All prices are accepted until your pre-bid is reached, then you exit the eAuction
+
+Live bid : You set a pre-bid, but when it’s reached you keep accepting new prices and stay in until you decide to leave."
+Scenarios (no prebid),,,"💡 2 different scenarios that ends the eAuction
+
+Win with a live bid : You placed a live bid by clicking “Place bid”, and won the eAuction.
+
+Lose :  Another supplier made a live bid before you, you lose.","💡 3 different scenarios that ends the eAuction
+
+Win by Placing a Bid : You placed a live bid by clicking “Place bid” when access opens, and won the eAuction.
+
+Lose during restricted access : A preferred supplier bid during the restricted acces, you can't bid at the same time, you lose. 
+
+Lose during open access : No ones bid during the restricted access but at the end of it, another supplier places a bid, you lose. 
+","💡 2 different scenarios that ends the eAuction
+
+Win with live bid : You’ve accepted lower prices while others left. By staying in the eAuction longer, you win.
+
+Lose : You’ve reached your lowest price. Since you don’t want to accept a lower price, you exit the eAuction here, while other suppliers continue.",

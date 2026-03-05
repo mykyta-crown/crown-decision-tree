@@ -1,0 +1,32 @@
+{
+  "auction": {
+    "start_at": "2024-06-05T11:00:00+02:00",
+    "end_at": "2024-06-05T11:25:00+02:00",
+    "duration": 25,
+    "name": "06WD - 300BB0026 Ferro Chromium LC Powder",
+    "description": "300BB0026 Ferro Chromium LC Powder",
+    "commercials_terms": "Supplier ranked #1 get 100% of the volumes listed in the eAuction. Each company agree to deliver the raw material referring to the specification enclosed. If a deviation is needed, R&D needs to agree participating to the eAuction. Contract and deliveries will stand from July to November 2024 Delivery,  July / September /October/ November 10 000 per month with 10 000kg security stock, total volume 50 000kg If the security stock is not called, it will be automatically delivered with the last order. Prices must be € currency. Prices must be DAP Porte du Ried 68320 - 22 rue des americains Payment terms are determined for each supplier in Welding Alloys system and each participant agreed to apply the same condition as usual",
+    "timezone": "UTC+2",
+    "overtime_range": 0.5,
+    "max_bid_decr": 20,
+    "min_bid_decr": 1500,
+    "max_bid_decr_type": "EUR",
+    "min_bid_decr_type": "EUR",
+    "log_visibility": "own_rank_only",
+    "currency": "EUR",
+    "baseline": 279750,
+    "type": "dutch",
+    "attachments": [
+      { "url": "/documents/300BB0026_FERRO_CHROME_LC.pdf", "name": "300BB0026_FERRO_CHROME_LC" }
+    ],
+    "test": false
+  },
+  "supplies": [
+    {
+      "name": "300BB0026 Ferro Chromium LC Powder",
+      "quantity": 50000,
+      "unit": "Kilo",
+      "price": 5.09
+    }
+  ]
+}

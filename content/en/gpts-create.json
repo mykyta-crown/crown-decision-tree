@@ -1,0 +1,87 @@
+{
+  "title": "Prompt Builder",
+  "back": "Back",
+  "actions": {
+    "create": "Create",
+    "update": "Update",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "add_starter": "Add starter",
+    "upload_files": "Upload files"
+  },
+  "form": {
+    "name": "Name",
+    "name_placeholder": "Name your GPT",
+    "description": "Description",
+    "description_placeholder": "Briefly describe what this project can do",
+    "icon": "Icon",
+    "icon_placeholder": "Select an icon",
+    "instructions": "Instructions",
+    "instructions_placeholder": "Ex: Explain how the project should behave and respond",
+    "instructions_hint": "Be specific about the tone, expertise level, and response format you want.",
+    "conversation_starters": "Conversation starters",
+    "conversation_starters_placeholder": "Add example prompts users can start with",
+    "knowledge": "Knowledge",
+    "knowledge_hint": "Conversations with your GPT can potentially reveal part or all of the files uploaded.",
+    "files_pending": "Files will be uploaded after the GPT is created",
+    "words": "words",
+    "recommended_model": "Recommended Model",
+    "model_placeholder": "Select a model",
+    "premium_credits": "Premium",
+    "premium_hint": "Premium models consume more credits per message",
+    "reasoning_effort": "Reasoning Effort",
+    "reasoning_effort_hint": "Controls how much time the model spends reasoning before responding. Higher effort = more thorough analysis but slower and more expensive.",
+    "reasoning_effort_low": "Low - Quick responses",
+    "reasoning_effort_medium": "Medium - Balanced",
+    "reasoning_effort_high": "High - Deep analysis",
+    "show_reasoning": "Show thinking process",
+    "show_reasoning_hint": "Display the AI's reasoning steps during response generation (for supported models like Gemini 2.5)",
+    "added_users": "Added Users",
+    "added_companies": "Added Companies",
+    "none": "None",
+    "creator_note": "Note: {name} (creator) is always included"
+  },
+  "preview": {
+    "title": "Preview",
+    "instruction_label": "Instruction to AI:",
+    "instruction_empty": "Enter instructions to see preview...",
+    "input_placeholder": "Ask anything"
+  },
+  "icons": {
+    "diamond": "Diamond (Default)",
+    "ruby": "Ruby",
+    "emerald": "Emerald",
+    "sapphire": "Sapphire",
+    "topaz": "Topaz",
+    "heart": "Heart",
+    "crystal_blue": "Crystal Blue",
+    "crystal_purple": "Crystal Purple"
+  },
+  "validation": {
+    "name_required": "Name is required",
+    "instructions_required": "Instructions are required",
+    "model_required": "Recommended model is required"
+  },
+  "toast": {
+    "gpt_created": "GPT created successfully",
+    "gpt_updated": "GPT updated successfully",
+    "gpt_deleted": "GPT deleted successfully",
+    "gpt_created_with_files": "GPT created successfully with {count} file(s) uploaded",
+    "gpt_created_files_failed": "GPT created successfully, but some files failed to upload",
+    "files_added": "{count} file(s) added. They will be uploaded when you create the GPT.",
+    "files_uploaded": "{count} file(s) uploaded successfully",
+    "file_removed": "File removed",
+    "file_deleted": "File deleted successfully",
+    "failed_save": "Failed to save GPT",
+    "failed_delete": "Failed to delete GPT",
+    "failed_load": "Failed to load GPT",
+    "failed_upload": "Failed to upload files",
+    "failed_add_files": "Failed to add files",
+    "failed_delete_file": "Failed to delete file",
+    "failed_upload_file": "Failed to upload {name}"
+  },
+  "confirm": {
+    "delete_gpt": "Are you sure you want to delete this GPT? This action cannot be undone.",
+    "delete_file": "Are you sure you want to delete this file?"
+  }
+}

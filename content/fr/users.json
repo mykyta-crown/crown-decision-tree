@@ -1,0 +1,60 @@
+{
+  "title": "Utilisateurs",
+  "userManagement": {
+    "search": "Entrez le nom de l'utilisateur",
+    "tabs": {
+      "newUsers": "Nouveaux Utilisateurs",
+      "admins": "Administrateurs",
+      "buyers": "Acheteurs",
+      "superBuyers": "Super Acheteurs",
+      "suppliers": "Fournisseurs"
+    },
+    "profilesDataTable": {
+      "headers": {
+        "position": "Poste",
+        "status": "Statut",
+        "name": "Nom",
+        "companyName": "Nom",
+        "country": "Pays",
+        "phone": "Téléphone",
+        "buyers": "Acheteurs",
+        "superBuyers": "Super Acheteurs",
+        "suppliers": "Fournisseurs"
+      },
+      "menuItems": {
+        "assign": "Assigner",
+        "deactivate": "Désactiver",
+        "activate": "Activer"
+      }
+    },
+    "profileDeleteDialog": {
+      "title": "Supprimer l'Utilisateur",
+      "confirmMessage": "Êtes-vous sûr de vouloir supprimer cet utilisateur ?",
+      "cancel": "Annuler",
+      "delete": "Supprimer"
+    }
+  },
+  "dialog": {
+    "titles": {
+      "editCompany": "Modifier l'entreprise",
+      "createCompany": "Créer une entreprise"
+    },
+    "subtitles": {
+      "editCompanyDetails": "Mettre à jour les détails de l'entreprise",
+      "createNewCompany": "Créer une nouvelle entreprise"
+    },
+    "fields": {
+      "companyName": "Nom de l'entreprise",
+      "country": "Pays",
+      "legalId": "ID légal",
+      "phone": "Téléphone",
+      "address": "Adresse"
+    }
+  },
+  "buttons": {
+    "cancel": "Annuler",
+    "update": "Mettre à jour",
+    "create": "Créer"
+  },
+  "overrides": {}
+}

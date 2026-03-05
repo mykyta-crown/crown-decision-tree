@@ -1,0 +1,28 @@
+{
+  "auction": {
+    "start_at": "2024-05-21T10:00:00+02:00",
+    "end_at": "2024-05-21T10:5:00+02:00",
+    "duration": 5,
+    "description": "Contract and deliveries will stand from June 20th to November 20th - Delivery: June/September/November 20 000kg per month with 10 000kg security stock, total volume 70 000kg.",
+    "commercials_terms": "Each company agree to deliver the raw material refering to the specification enclosed. If a deviation is needed, R&D needs to agree before particpating to the eAuction.",
+    "timezone": "UTC+2",
+    "overtime_range": 3,
+    "max_bid_decr": 1,
+    "min_bid_decr": 0.02,
+    "max_bid_decr_type": "EUR",
+    "min_bid_decr_type": "EUR",
+    "log_visibility": "own_rank_only",
+    "currency": "EUR",
+    "name": "[TEST] 300BB0044 HC Ferro Chromium 8%C fine",
+    "baseline": 188300,
+    "test": true
+  },
+  "supplies": [
+    {
+      "name": "300BB0044  HC Ferro Chromium 8%C fine",
+      "quantity": 70000,
+      "unit": "KG",
+      "price": 3.2
+    }
+  ]
+}

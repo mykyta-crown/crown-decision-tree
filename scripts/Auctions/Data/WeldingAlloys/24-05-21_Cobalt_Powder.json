@@ -1,0 +1,58 @@
+{
+  "auction": {
+    "buyer_id": "3b1659ea-e446-4133-b9da-fd7ef4879a46",
+    "company_id": "bf8ef9af-6e7f-4151-87f5-403c5e664c11",
+    "start_at": "2024-05-21T15:00:00+02:00",
+    "end_at": "2024-05-21T15:15:00+02:00",
+    "duration": 15,
+    "description": "300AA0018AE  Cobalt Powder",
+    "commercials_terms": "500kg call in June w23 500kg call in July 500kg call in September 500kg call in November with 500 kg security stock, total volume 2 500kg. If the security stock is not called during the 4months, it will be automatically delivered with the last order. Each company agree to deliver the raw material referring to the specification enclosed. If a deviation is needed, R&D needs to agree before participating to the eAuction. Prices must be DAP Porte du Ried 68320 - 22 rue des americains. Prices must be € currency. Payment terms are determined for each supplier in Welding Alloys system and each participant agreed to apply the same condition as usual",
+    "timezone": "UTC+2",
+    "overtime_range": 3,
+    "max_bid_decr": 6,
+    "min_bid_decr": 0.1,
+    "max_bid_decr_type": "EUR",
+    "min_bid_decr_type": "EUR",
+    "log_visibility": "own_rank_only",
+    "currency": "EUR",
+    "name": "[TEST Cronimet] 300AA0018AE  Cobalt Powder",
+    "baseline": 101216,
+    "test": true
+  },
+  "supplies": [
+    {
+      "name": "300AA0018AE  Cobalt Powder",
+      "quantity": 2500,
+      "unit": "KG"
+    }
+  ],
+  "suppliers": [
+    {
+      "email": "supplier+1@crown.ovh",
+      "supplies": [
+        {
+          "name": "300AA0018AE  Cobalt Powder",
+          "price": 39
+        }
+      ]
+    },
+    {
+      "email": "buchholz.sebastian@cronimet.de",
+      "supplies": [
+        {
+          "name": "300AA0018AE  Cobalt Powder",
+          "price": 39.6
+        }
+      ]
+    },
+    {
+      "email": "supplier+2@crown.ovh",
+      "supplies": [
+        {
+          "name": "300AA0018AE  Cobalt Powder",
+          "price": 42.86
+        }
+      ]
+    }
+  ]
+}

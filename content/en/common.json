@@ -1,0 +1,413 @@
+{
+  "guidance": {
+    "showTips": "Show tips",
+    "gotIt": "Got it",
+    "terms": {
+      "acceptAllTerms": "Accept all Terms to continue",
+      "acceptAllTermsMessage": "Please, review and accept the Terms for each lot",
+      "acceptTerms": "Accept the terms",
+      "acceptTermsMessage": "Check the box to accept terms for this lot, then click Next Lot.",
+      "lotProgress": "Lot {current} of {total}",
+      "allTermsAccepted": "All terms accepted!",
+      "allTermsAcceptedMessage": "You've accepted terms for all lots. Click Participate to continue."
+    },
+    "prebid": {
+      "placeFirstPrebid": "Place your pre-bid",
+      "placeFirstPrebidMessage": "Enter your pre-bid amount for this lot. This is the price at which you're willing to accept.",
+      "submitPrebid": "Please, submit your pre-bid",
+      "submitPrebidMessage": "This initial bid is required to activate your participation.",
+      "prebidPlaced": "Pre-bid placed!",
+      "goToNextLot": "Go to the next lot and place your pre-bid.",
+      "switchToNextLot": "Switch to the next lot and place a pre-bid",
+      "switchToNextLotMessage": "Repeat for all lots to activate Start Training",
+      "allPrebidsPlaced": "All pre-bids placed!",
+      "allPrebidsPlacedMessage": "You can now start the training, or lower your pre-bids before the auction begins.",
+      "allSet": "You're all set!",
+      "allSetMessage": "You've completed all required pre-bids. Click Start Training to begin.",
+      "allSetSubMessage": "Until the eAuction starts, you can still lower your pre-bids if needed.",
+      "prebidProgress": "Pre-bids: {completed}/{total} lots"
+    },
+    "training": {
+      "startTraining": "Start Training",
+      "startTrainingMessage": "Click to start the training. All lots will run according to the configured timing.",
+      "trainingInProgress": "Training in progress",
+      "trainingInProgressMessage": "The auction is running. Lots will auto-advance based on the timing rule.",
+      "trainingComplete": "Training complete!",
+      "trainingCompleteMessage": "Click Reset to try different scenarios or adjust your pre-bids."
+    },
+    "nextLot": {
+      "goToNextLot": "Next lot needs pre-bid",
+      "goToNextLotMessage": "Click to navigate to this lot and place your pre-bid."
+    }
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "save": "Save",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "on": "On",
+    "off": "Off",
+    "delete": "Delete",
+    "edit": "Edit",
+    "all": "All",
+    "superBuyers": "Super Buyers",
+    "buyers": "Buyers",
+    "suppliers": "Suppliers",
+    "companies": "Companies",
+    "allCompanies": "All Companies",
+    "plannedAuctions": "Planned eAuctions",
+    "finishedAuctions": "Finished eAuctions",
+    "totalSavings": "Total Savings",
+    "calendar": "Calendar",
+    "savings": "Savings",
+    "dashboard": "Dashboard",
+    "and": "and",
+    "at": "at"
+  },
+  "forms": {
+    "fields": {
+      "name": "Name",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email",
+      "phone": "Phone",
+      "position": "Position",
+      "companyName": "Company Name",
+      "country": "Country",
+      "legalId": "Legal ID",
+      "address": "Address",
+      "fullName": "Full name",
+      "actions": "Actions"
+    },
+    "placeholders": {
+      "enterClientName": "Enter client name",
+      "email": "e.g. name@company.com",
+      "password": "Has at least 8 characters"
+    }
+  },
+  "months": {
+    "all": "All",
+    "january": "January",
+    "february": "February",
+    "march": "March",
+    "april": "April",
+    "may": "May",
+    "june": "June",
+    "july": "July",
+    "august": "August",
+    "september": "September",
+    "october": "October",
+    "november": "November",
+    "december": "December"
+  },
+  "weekdays": {
+    "monday": "Mon",
+    "tuesday": "Tue",
+    "wednesday": "Wed",
+    "thursday": "Thu",
+    "friday": "Fri",
+    "saturday": "Sat",
+    "sunday": "Sun"
+  },
+  "navigationdrawer": {
+    "dashboard": "Dashboard",
+    "eauctions": "eAuctions",
+    "onboarding": "Onboarding",
+    "users": "Users",
+    "decisionTree": "Decision Tree",
+    "clients": "Clients",
+    "trainings": "Trainings",
+    "companies": "Companies",
+    "editProfile": "Edit Profile",
+    "switchToEnglish": "Switch to English",
+    "switchToFrench": "Switch to French",
+    "logout": "Log out",
+    "termsOfUse": "Terms of Use",
+    "privacyPolicy": "Privacy Policy"
+  },
+  "status": {
+    "active": "Active",
+    "inactive": "Inactive",
+    "upcoming": "Upcoming",
+    "closed": "Closed",
+    "draft": "Draft"
+  },
+  "actions": {
+    "edit": "Edit",
+    "publish": "Publish",
+    "archive": "Archive",
+    "duplicate": "Duplicate",
+    "delete": "Delete",
+    "create": "Create"
+  },
+  "auction": {
+    "search": {
+      "placeholder": "Search for auction"
+    },
+    "type": {
+      "label": "Type",
+      "all": "All",
+      "dutch": "Dutch",
+      "english": "English",
+      "japanese": "Japanese",
+      "sealedBid": "Sealed Bid"
+    },
+    "usage": {
+      "label": "Usage",
+      "all": "All",
+      "real": "Real",
+      "training": "Training",
+      "test": "Test"
+    },
+    "status": {
+      "label": "Status",
+      "all": "All",
+      "upcoming": "Upcoming",
+      "active": "Active",
+      "draft": "Draft",
+      "closed": "Closed"
+    },
+    "sort": {
+      "label": "Sort by",
+      "default": "Default",
+      "newest": "Newest",
+      "oldest": "Oldest",
+      "atoz": "A to Z",
+      "ztoa": "Z to A",
+      "favorites": "Favorites"
+    }
+  },
+  "breadcrumbs": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "createEAuction": "Create eAuction",
+    "editEAuction": "Edit eAuction",
+    "clients": "Clients",
+    "users": "Users",
+    "profile": "Profile",
+    "editProfile": "Edit Profile"
+  },
+  "profileDialog": {
+    "editProfileInformations": "Edit Profile informations"
+  },
+  "termsPage": {
+    "eAuctionType": "eAuction Type",
+    "eAuctionName": "eAuction Name",
+    "description": "Description",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "time": "Time",
+    "timeZone": "Time zone",
+    "currency": "Currency",
+    "lotRules": "Lot rules",
+    "awardingPrinciples": "Awarding principles",
+    "commercialTerms": "Commercial terms",
+    "generalTerms": "General terms",
+    "durationOfCompetition": "Duration of competition",
+    "overtime": "Overtime",
+    "minBidDecrement": "Min bid decrement",
+    "maxBidDecrement": "Max bid decrement",
+    "roundDuration": "Round Duration",
+    "roundIncrement": "Round Increment",
+    "roundDecrement": "Round Decrement",
+    "startingPrice": "Starting Price",
+    "tooltips": {
+      "minBidDecrement": "Minimum reduction required from prior bid.",
+      "maxBidDecrement": "Maximum decrease possible from prior bid."
+    },
+    "defaultGeneralTerms": {
+      "term1": "Any bid placed during the eAuction must reflect the specifications, terms and conditions stated above.",
+      "term2": "Any bid placed during the eAuction is contractually binding and treated as a formal proposal.",
+      "term3": "Renegotiation is not possible post eAuction.",
+      "term4": "Winning bids and lots must be formalized in a contract with the client within thirthy (30) business days post eAuction."
+    },
+    "tabs": {
+      "terms": "Terms",
+      "status": "Status"
+    },
+    "buttons": {
+      "participate": "Participate",
+      "nextLot": "Next Lot",
+      "edit": "Edit"
+    },
+    "acceptTerms": "I confirm all the parameters of the eAuction listed above, and agree to the",
+    "termsOfService": "Terms of Service",
+    "privacyPolicy": "Privacy policy"
+  },
+  "ceilingSupplierPanel": {
+    "title": "Ceiling Price",
+    "headers": {
+      "lineItems": "Line items",
+      "unit": "Unit",
+      "quantity": "Quantity",
+      "ceilingPrice": "Ceiling Price",
+      "fixedHandicap": "Fixed handicap"
+    },
+    "tooltips": {
+      "fixedHandicap": "Calculations that will apply to every bid to ensure fair competition."
+    },
+    "total": "Total"
+  },
+  "dynamicHandicapPanel": {
+    "title": "Dynamic Handicap"
+  },
+  "termsTable": {
+    "headers": {
+      "lots": "Lots",
+      "status": "Status",
+      "startTime": "Start Time",
+      "acceptedTerms": "Accepted terms"
+    },
+    "termStatus": {
+      "approved": "Approved",
+      "pending": "Pending"
+    },
+    "dateFormat": {
+      "at": "at"
+    }
+  },
+  "userManagement": {
+    "search": "Search users",
+    "tabs": {
+      "newUsers": "New Users",
+      "admins": "Admins",
+      "buyers": "Buyers",
+      "suppliers": "Suppliers",
+      "companies": "Companies"
+    },
+    "profilesDataTable": {
+      "headers": {
+        "name": "Name",
+        "company": "Company",
+        "email": "Email",
+        "phone": "Phone",
+        "position": "Position",
+        "status": "Status",
+        "actions": "Actions"
+      },
+      "menuItems": {
+        "edit": "Edit",
+        "assign": "Assign",
+        "activate": "Activate",
+        "deactivate": "Deactivate",
+        "delete": "Delete"
+      }
+    }
+  },
+  "alert": {
+    "title": "Profile Incomplete",
+    "message": "Your profile information is incomplete.",
+    "registerText": "Please update your profile to continue.",
+    "linkText": "Complete Profile"
+  },
+  "header": {
+    "title": "eAuctions",
+    "createButton": "Create eAuction"
+  },
+  "empty": {
+    "title": "No auctions found",
+    "message": "There are no auctions matching your criteria.",
+    "noEAuctions": "No eAuctions available",
+    "noAuctionsMessage": "Currently, there are no auctions created. Once the auction owner sets up new eAuctions, it will appear here."
+  },
+  "auctionCard": {
+    "ownedBy": "Owned by:"
+  },
+  "title": "Users",
+  "components": {
+    "auctionsDatatable": {
+      "headers": {
+        "name": "Name",
+        "company": "Company",
+        "scheduledFor": "Date",
+        "type": "Type",
+        "usage": "Usage",
+        "owner": "Owner",
+        "status": "Status"
+      },
+      "selection": {
+        "single": "eAuction selected",
+        "multiple": "eAuctions selected"
+      },
+      "deleteButton": "Delete eAuctions",
+      "searchPlaceholder": "Search...",
+      "search": "Search",
+      "sortAscending": "Sort ascending",
+      "sortDescending": "Sort descending",
+      "sortAtoZ": "Sort A→Z",
+      "sortZtoA": "Sort Z→A",
+      "sortOldestFirst": "Sort Oldest First",
+      "sortNewestFirst": "Sort Newest First",
+      "resetSort": "Reset sort",
+      "dateFilterBefore": "Before",
+      "dateFilterAfter": "After",
+      "dateFilterBetween": "Between",
+      "dateFilterStartDate": "Start date",
+      "dateFilterEndDate": "End date",
+      "filterActive": "filter active",
+      "filtersActive": "filters active",
+      "clearAllFilters": "Clear All Filters",
+      "clearFilter": "Clear",
+      "auctionTypes": {
+        "preferredDutch": "Preferred Dutch",
+        "dutch": "Dutch",
+        "japaneseNoRank": "Japanese No Rank",
+        "japanese": "Japanese",
+        "english": "English",
+        "sealedBid": "Sealed Bid"
+      }
+    }
+  },
+  "auctionDescriptions": {
+    "english": {
+      "title": "English Reverse",
+      "description": "An English Reverse eAuction starts from suppliers’ pre-bids. Participants see their ranking and can submit improved offers until time expires. The final rank determines the winner.\n <br> • **Before the event:** Participants submit a pre-bid that sets their initial rank.\n \n  • **During the event:** Ranking updates dynamically with each new bid.\n \n  • **Timing:** Runs for a limited time, with automatic extensions if bids are placed in the final minutes.\n \n  • **Awarding:**  Lots are awarded according to final ranking and defined awarding principles.\n",
+      "trainings_description": "Suppliers compete by placing lower bids. The last one to bid before the timer ends wins. Stay alert and bid smart.\n"
+    },
+    "dutch": {
+      "title": "Dutch Reverse",
+      "description": "A Dutch Reverse eAuction starts at a low price that increases step by step. The first participant to accept the price wins immediately.\n <br> • **Before the event:** A pre-bid may be required.\n \n  • **During the event:** The price increases round by round in fixed increments; no live ranking is shown.\n \n  • **Timing:** Limited duration but ends instantly when a bid is accepted.\n \n  • **Awarding:** The first accepted bid secures the lot.\n",
+      "trainings_description": "Price goes up over time. The first supplier to accept the current price wins instantly. Timing is everything.\n"
+    },
+    "japanese": {
+      "title": "Japanese Reverse",
+      "description": "A Japanese Reverse eAuction starts at a high price that decreases in rounds. Participants must confirm their bid each round to stay in the event. The last remaining bidder wins.\n <br> • **Before the event:** A pre-bid may be required.\n \n  • **During the event:** Price decreases in fixed steps; participants must stay active each round or exit the auction.\n \n  • **Timing:** Limited duration, ending when only one participant remains or the minimum price is reached.\n \n  • **Awarding:** The last active participant secures the lot.\n",
+      "trainings_description": "The price decreases gradually. You must confirm you're staying in each round. The last supplier remaining wins.\n"
+    },
+    "sealedBid": {
+      "title": "Sealed Bid",
+      "description": "In a Sealed Bid eAuction, participants submit confidential offers that remain hidden until the end. The most competitive bid wins. \n <br> • **Before the event:** Participants submit bids before the deadline.\n \n  • **During the event:** Bids remain undisclosed; participants may revise offers until closure.\n \n  • **Timing:** No live ranking; results revealed after the deadline.\n \n  • **Awarding:** The most competitive bid secures the lot, based on awarding principles.\n",
+      "trainings_description": "Suppliers submit confidential bids and can update them until the eAuction ends. When the time is over, the lowest final bid wins.\n"
+    },
+    "preferredDutch": {
+      "title": "Dutch Preferred",
+      "description": "A Preferred Dutch Reverse eAuction works like a Dutch auction, but selected suppliers receive priority access to each price step before others. The first accepted bid wins.\n <br> • **Before the event:** Participants may submit pre-bids; preferred suppliers are designated.\n \n  • **During the event:** Price rises in steps; preferred suppliers get first option at each step.\n \n  • **Timing:** Limited duration but ends instantly when a bid is accepted.\n \n  • **Awarding:**  The first accepted bid secures the lot.\n",
+      "trainings_description": "Price goes up over time. The first supplier to accept the current price wins instantly. Timing is everything.\n"
+    },
+    "japaneseNoRank": {
+      "title": "Japanese No Rank",
+      "description": "A Japanese No Rank eAuction decreases prices in rounds, with participants required to stay active each round. Unlike a standard Japanese auction, awarding is decided outside the auction.\n <br> • **Before the event:** A pre-bid may be required.\n \n  • **During the event:** Price decreases in fixed steps; participants confirm each round or exit, with their exit price recorded.\n \n  • **Timing:** Limited duration, ending once all rounds are complete.\n \n  • **Awarding:** The final decision combines auction results with external criteria.\n",
+      "trainings_description": "The price decreases gradually. You must confirm you're staying in each round. The last supplier remaining wins.\n"
+    }
+  },
+  "rankCard": {
+    "title": "Your Current Rank",
+    "sealedBidMessage": "Your rank will appear when the eAuction time ends",
+    "upcomingMessage": "Your rank will appear when eAuction starts",
+    "hiddenMessage": "Your rank is not displayed",
+    "noRankDisplayed": "Your rank will appear when eAuction starts",
+    "noBidYet": "Place a bid to see your ranking"
+  },
+  "prebidTableSeller": {
+    "title": "Submission Table",
+    "ceilingPrice": "Ceiling price",
+    "currentBid": "Current",
+    "unitPrice": "Unit Price",
+    "changeBid": "Change",
+    "submitBid": "Submit",
+    "bidReducedBy": "Bid reduced by",
+    "bidMustBeLower": "Bid must be lower than",
+    "maxDecrementError": "maximum decrement is"
+  }
+}

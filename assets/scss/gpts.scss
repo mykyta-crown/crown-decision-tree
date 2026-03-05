@@ -1,0 +1,314 @@
+/**
+ * Styles for Crown GPT feature
+ * Based on Figma design specifications
+ */
+
+@use 'sass:color';
+
+// Colors from Figma design
+$primary-dark: #1d1d1b;
+$accent-green: #00d072;
+$background-light: #f8f8f8;
+$text-grey: #666666;
+$border-color: #e0e0e0;
+
+// Provider colors
+$openai-color: #10a37f;
+$anthropic-color: #cc785c;
+$gemini-color: #4285f4;
+
+// GPT Pages Layout
+.gpts-layout {
+  min-height: calc(100vh - 64px);
+  background-color: white;
+}
+
+// GPT Cards
+.gpt-card {
+  border-radius: 12px;
+  border-color: $border-color;
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: $accent-green;
+    box-shadow: 0 4px 12px rgba(0, 208, 114, 0.15);
+  }
+}
+
+// Chat Interface
+.chat-container {
+  height: 100%;
+
+  .sidebar-panel {
+    background-color: white;
+    border-right: 1px solid $border-color;
+  }
+
+  .chat-header {
+    background-color: white;
+    border-bottom: 1px solid $border-color;
+  }
+
+  .messages-area {
+    background-color: $background-light;
+
+    .chat-message {
+      &.message-user {
+        .message-content {
+          background-color: white;
+        }
+      }
+
+      &.message-assistant {
+        .message-content {
+          background-color: transparent;
+        }
+      }
+    }
+  }
+}
+
+// Empty State
+.empty-state {
+  .featured-card {
+    border-radius: 12px;
+    transition: all 0.2s ease;
+
+    &:hover {
+      border-color: $accent-green;
+      transform: translateY(-4px);
+      box-shadow: 0 4px 12px rgba(0, 208, 114, 0.1);
+    }
+  }
+}
+
+// Form Elements
+.gpt-form {
+  .v-text-field,
+  .v-textarea,
+  .v-select {
+    .v-field {
+      border-radius: 8px;
+      border-color: $border-color;
+
+      &:hover {
+        border-color: color.adjust($border-color, $lightness: -10%);
+      }
+
+      &.v-field--focused {
+        border-color: $accent-green;
+      }
+    }
+  }
+}
+
+// Preview Panel
+.gpt-preview {
+  border-radius: 12px;
+  border-color: $border-color;
+  max-height: calc(100vh - 180px);
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba($primary-dark, 0.2);
+    border-radius: 3px;
+  }
+}
+
+// Chat Input
+.chat-input {
+  .v-textarea {
+    .v-field {
+      border-radius: 12px;
+      background-color: white;
+    }
+  }
+}
+
+// Streaming Indicator
+.streaming-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px;
+  border-radius: 16px;
+  background-color: rgba($accent-green, 0.1);
+  color: $accent-green;
+  font-size: 12px;
+  font-weight: 500;
+
+  .pulsing-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: $accent-green;
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(0.8);
+  }
+}
+
+// Message Status
+.message-generating {
+  .message-body {
+    position: relative;
+
+    &::after {
+      content: '▋';
+      animation: blink 1s step-end infinite;
+      color: $accent-green;
+    }
+  }
+}
+
+@keyframes blink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  51%,
+  100% {
+    opacity: 0;
+  }
+}
+
+// Credits Badge
+.credits-badge {
+  &.credits-ok {
+    background-color: rgba($accent-green, 0.1);
+    color: color.adjust($accent-green, $lightness: -10%);
+  }
+
+  &.credits-low {
+    background-color: rgba(#ff9800, 0.1);
+    color: #f57c00;
+  }
+
+  &.credits-empty {
+    background-color: rgba(#f44336, 0.1);
+    color: #d32f2f;
+  }
+}
+
+// Provider Badges
+.provider-badge {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+
+  &.provider-openai {
+    background-color: rgba($openai-color, 0.1);
+    color: color.adjust($openai-color, $lightness: -10%);
+  }
+
+  &.provider-anthropic {
+    background-color: rgba($anthropic-color, 0.1);
+    color: color.adjust($anthropic-color, $lightness: -10%);
+  }
+
+  &.provider-gemini {
+    background-color: rgba($gemini-color, 0.1);
+    color: color.adjust($gemini-color, $lightness: -10%);
+  }
+}
+
+// Conversation List
+.conversation-item {
+  border-radius: 8px;
+  margin-bottom: 4px;
+
+  &:hover {
+    background-color: rgba($primary-dark, 0.04);
+  }
+
+  &.v-list-item--active {
+    background-color: rgba($accent-green, 0.1);
+    border-left: 3px solid $accent-green;
+  }
+}
+
+// GPT List
+.gpt-list-item {
+  border-radius: 8px;
+  margin-bottom: 4px;
+
+  &:hover {
+    background-color: rgba($primary-dark, 0.04);
+  }
+
+  &.v-list-item--active {
+    background-color: rgba($accent-green, 0.1);
+    border-left: 3px solid $accent-green;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 960px) {
+  .sidebar-panel {
+    position: fixed;
+    top: 64px;
+    left: 0;
+    bottom: 0;
+    width: 280px;
+    z-index: 100;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+
+    &.mobile-open {
+      transform: translateX(0);
+    }
+  }
+
+  .chat-area {
+    width: 100%;
+  }
+}
+
+// Loading states
+.loading-skeleton {
+  animation: shimmer 1.5s ease-in-out infinite;
+  background: linear-gradient(
+    90deg,
+    rgba($border-color, 0.2) 0%,
+    rgba($border-color, 0.3) 50%,
+    rgba($border-color, 0.2) 100%
+  );
+  background-size: 200% 100%;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+// Print styles
+@media print {
+  .sidebar-panel,
+  .chat-input-area,
+  .chat-header v-btn {
+    display: none;
+  }
+
+  .messages-area {
+    background-color: white !important;
+  }
+}

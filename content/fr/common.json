@@ -1,0 +1,413 @@
+{
+  "guidance": {
+    "showTips": "Afficher les conseils",
+    "gotIt": "Compris",
+    "terms": {
+      "acceptAllTerms": "Acceptez toutes les Conditions pour continuer",
+      "acceptAllTermsMessage": "Veuillez lire et accepter les Conditions pour chaque lot",
+      "acceptTerms": "Accepter les conditions",
+      "acceptTermsMessage": "Cochez la case pour accepter les conditions de ce lot, puis cliquez sur Lot suivant.",
+      "lotProgress": "Lot {current} sur {total}",
+      "allTermsAccepted": "Toutes les conditions acceptées !",
+      "allTermsAcceptedMessage": "Vous avez accepté les conditions pour tous les lots. Cliquez sur Participer pour continuer."
+    },
+    "prebid": {
+      "placeFirstPrebid": "Placez votre pré-offre",
+      "placeFirstPrebidMessage": "Entrez votre montant de pré-offre pour ce lot. C'est le prix auquel vous êtes prêt à accepter.",
+      "submitPrebid": "Veuillez soumettre votre pré-offre",
+      "submitPrebidMessage": "Cette offre initiale est nécessaire pour activer votre participation.",
+      "prebidPlaced": "Pré-offre placée !",
+      "goToNextLot": "Allez au lot suivant et placez votre pré-offre.",
+      "switchToNextLot": "Passez au lot suivant et placez une pré-offre",
+      "switchToNextLotMessage": "Répétez pour tous les lots pour activer Démarrer la formation",
+      "allPrebidsPlaced": "Toutes les pré-offres placées !",
+      "allPrebidsPlacedMessage": "Vous pouvez maintenant démarrer la formation, ou baisser vos pré-offres avant le début de l'enchère.",
+      "allSet": "Vous êtes prêt !",
+      "allSetMessage": "Vous avez complété toutes les pré-offres requises. Cliquez sur Démarrer la formation pour commencer.",
+      "allSetSubMessage": "Jusqu'au début de l'enchère, vous pouvez encore baisser vos pré-offres si nécessaire.",
+      "prebidProgress": "Pré-offres : {completed}/{total} lots"
+    },
+    "training": {
+      "startTraining": "Démarrer la formation",
+      "startTrainingMessage": "Cliquez pour démarrer la formation. Tous les lots seront exécutés selon le timing configuré.",
+      "trainingInProgress": "Formation en cours",
+      "trainingInProgressMessage": "L'enchère est en cours. Les lots avanceront automatiquement selon la règle de timing.",
+      "trainingComplete": "Formation terminée !",
+      "trainingCompleteMessage": "Cliquez sur Réinitialiser pour essayer différents scénarios ou ajuster vos pré-offres."
+    },
+    "nextLot": {
+      "goToNextLot": "Le lot suivant nécessite une pré-offre",
+      "goToNextLotMessage": "Cliquez pour accéder à ce lot et placer votre pré-offre."
+    }
+  },
+  "common": {
+    "loading": "Chargement...",
+    "error": "Une erreur s'est produite",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "confirm": "Confirmer",
+    "on": "Activé",
+    "off": "Désactivé",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "all": "Tout",
+    "superBuyers": "Super acheteurs",
+    "buyers": "Acheteurs",
+    "suppliers": "Fournisseurs",
+    "companies": "Entreprises",
+    "allCompanies": "Toutes entreprises",
+    "plannedAuctions": "eEnchères planifiées",
+    "finishedAuctions": "eEnchères terminées",
+    "totalSavings": "Économies totales",
+    "calendar": "Calendrier",
+    "savings": "Économies",
+    "dashboard": "Tableau de bord",
+    "and": "et",
+    "at": "à"
+  },
+  "forms": {
+    "fields": {
+      "name": "Nom",
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "email": "Email",
+      "phone": "Téléphone",
+      "position": "Poste",
+      "companyName": "Nom de l'entreprise",
+      "country": "Pays",
+      "legalId": "Numéro légal",
+      "address": "Adresse",
+      "fullName": "Nom complet",
+      "actions": "Actions"
+    },
+    "placeholders": {
+      "enterClientName": "Entrer le nom du client",
+      "email": "ex. nom@entreprise.com",
+      "password": "Au moins 8 caractères"
+    }
+  },
+  "months": {
+    "all": "Tout",
+    "january": "Janvier",
+    "february": "Février",
+    "march": "Mars",
+    "april": "Avril",
+    "may": "Mai",
+    "june": "Juin",
+    "july": "Juillet",
+    "august": "Août",
+    "september": "Septembre",
+    "october": "Octobre",
+    "november": "Novembre",
+    "december": "Décembre"
+  },
+  "weekdays": {
+    "monday": "Lun",
+    "tuesday": "Mar",
+    "wednesday": "Mer",
+    "thursday": "Jeu",
+    "friday": "Ven",
+    "saturday": "Sam",
+    "sunday": "Dim"
+  },
+  "navigationdrawer": {
+    "dashboard": "Tableau de bord",
+    "onboarding": "Prise en main",
+    "eauctions": "eAuctions",
+    "users": "Utilisateurs",
+    "decisionTree": "Arbre de décision",
+    "clients": "Clients",
+    "trainings": "Entrainements",
+    "companies": "Entreprises",
+    "editProfile": "Modifier le profil",
+    "switchToEnglish": "Passer à l'anglais",
+    "switchToFrench": "Passer au français",
+    "logout": "Se déconnecter",
+    "termsOfUse": "Conditions d'utilisation",
+    "privacyPolicy": "Politique de confidentialité"
+  },
+  "status": {
+    "active": "Actif",
+    "inactive": "Inactif",
+    "upcoming": "À venir",
+    "closed": "Fermé",
+    "draft": "Brouillon"
+  },
+  "actions": {
+    "edit": "Modifier",
+    "publish": "Publier",
+    "archive": "Archiver",
+    "duplicate": "Dupliquer",
+    "delete": "Supprimer",
+    "create": "Créer"
+  },
+  "auction": {
+    "search": {
+      "placeholder": "Rechercher une enchère"
+    },
+    "type": {
+      "label": "Type",
+      "all": "Tout",
+      "dutch": "Hollandaise",
+      "english": "Anglaise",
+      "japanese": "Japonaise",
+      "sealedBid": "Enchère Scellée"
+    },
+    "usage": {
+      "label": "Usage",
+      "all": "Tout",
+      "real": "Réel",
+      "training": "Formation",
+      "test": "Test"
+    },
+    "status": {
+      "label": "Statut",
+      "all": "Tout",
+      "upcoming": "À venir",
+      "active": "Actif",
+      "draft": "Brouillon",
+      "closed": "Fermé"
+    },
+    "sort": {
+      "label": "Trier par",
+      "default": "Par défaut",
+      "newest": "Plus récent",
+      "oldest": "Plus ancien",
+      "atoz": "A à Z",
+      "ztoa": "Z à A",
+      "favorites": "Favoris"
+    }
+  },
+  "breadcrumbs": {
+    "home": "Accueil",
+    "dashboard": "Tableau de bord",
+    "createEAuction": "Créer eAuction",
+    "editEAuction": "Modifier eAuction",
+    "clients": "Clients",
+    "users": "Utilisateurs",
+    "profile": "Profil",
+    "editProfile": "Modifier le profil"
+  },
+  "profileDialog": {
+    "editProfileInformations": "Modifier les informations du profil"
+  },
+  "termsPage": {
+    "eAuctionType": "Type d'eAuction",
+    "eAuctionName": "Nom de l'eAuction",
+    "description": "Description",
+    "startDate": "Date de début",
+    "endDate": "Date de fin",
+    "time": "Heure",
+    "timeZone": "Fuseau horaire",
+    "currency": "Devise",
+    "lotRules": "Règles du lot",
+    "awardingPrinciples": "Principes d'attribution",
+    "commercialTerms": "Conditions commerciales",
+    "generalTerms": "Conditions générales",
+    "durationOfCompetition": "Durée de la compétition",
+    "overtime": "Prolongation",
+    "minBidDecrement": "Décr. min. de l'offre",
+    "maxBidDecrement": "Décr. max. de l'offre",
+    "roundDuration": "Durée des paliers",
+    "roundIncrement": "Incrément par palier",
+    "roundDecrement": "Décrément par palier",
+    "startingPrice": "Prix de départ",
+    "tooltips": {
+      "minBidDecrement": "Réduction minimale requise par rapport à l'offre précédente.",
+      "maxBidDecrement": "Diminution maximale possible par rapport à l'offre précédente."
+    },
+    "defaultGeneralTerms": {
+      "term1": "Toute offre placée pendant l'eAuction doit refléter les spécifications, termes et conditions énoncés ci-dessus.",
+      "term2": "Toute offre placée pendant l'eAuction est contractuellement contraignante et traitée comme une proposition formelle.",
+      "term3": "La renégociation n'est pas possible après l'eAuction.",
+      "term4": "Les offres gagnantes et les lots doivent être formalisés dans un contrat avec le client dans les trente (30) jours ouvrables après l'eAuction."
+    },
+    "tabs": {
+      "terms": "Conditions",
+      "status": "Statut"
+    },
+    "buttons": {
+      "participate": "Participer",
+      "nextLot": "Lot Suivant",
+      "edit": "Modifier"
+    },
+    "acceptTerms": "Je confirme tous les paramètres de l'eAuction listés ci-dessus, et accepte les",
+    "termsOfService": "Conditions de Service",
+    "privacyPolicy": "Politique de Confidentialité"
+  },
+  "ceilingSupplierPanel": {
+    "title": "Prix plafond",
+    "headers": {
+      "lineItems": "Article(s)",
+      "unit": "Unité",
+      "quantity": "Quantité",
+      "ceilingPrice": "Prix plafond",
+      "fixedHandicap": "Handicap fixe"
+    },
+    "tooltips": {
+      "fixedHandicap": "Calculs qui s'appliqueront à chaque enchère pour assurer une concurrence équitable."
+    },
+    "total": "Total"
+  },
+  "dynamicHandicapPanel": {
+    "title": "Handicap dynamique"
+  },
+  "termsTable": {
+    "headers": {
+      "lots": "Lots",
+      "status": "Statut",
+      "startTime": "Heure de début",
+      "acceptedTerms": "Conditions acceptées"
+    },
+    "termStatus": {
+      "approved": "Approuvé",
+      "pending": "En attente"
+    },
+    "dateFormat": {
+      "at": "à"
+    }
+  },
+  "userManagement": {
+    "search": "Rechercher des utilisateurs",
+    "tabs": {
+      "newUsers": "Nouveaux utilisateurs",
+      "admins": "Administrateurs",
+      "buyers": "Acheteurs",
+      "suppliers": "Fournisseurs",
+      "companies": "Entreprises"
+    },
+    "profilesDataTable": {
+      "headers": {
+        "name": "Nom",
+        "company": "Entreprise",
+        "email": "Email",
+        "phone": "Téléphone",
+        "position": "Poste",
+        "status": "Statut",
+        "actions": "Actions"
+      },
+      "menuItems": {
+        "edit": "Modifier",
+        "assign": "Assigner",
+        "activate": "Activer",
+        "deactivate": "Désactiver",
+        "delete": "Supprimer"
+      }
+    }
+  },
+  "alert": {
+    "title": "Profil Incomplet",
+    "message": "Les informations de votre profil sont incomplètes.",
+    "registerText": "Veuillez mettre à jour votre profil pour continuer.",
+    "linkText": "Compléter le profil"
+  },
+  "header": {
+    "title": "eAuctions",
+    "createButton": "Créer une eAuction"
+  },
+  "empty": {
+    "title": "Aucune enchère trouvée",
+    "message": "Il n'y a aucune enchère correspondant à vos critères.",
+    "noEAuctions": "Aucune eAuction disponible",
+    "noAuctionsMessage": "Actuellement, il n'y a aucune enchère créée. Une fois que le propriétaire de l'enchère configurera de nouvelles eAuctions, elles apparaîtront ici."
+  },
+  "auctionCard": {
+    "ownedBy": "Propriétaire :"
+  },
+  "title": "Utilisateurs",
+  "components": {
+    "auctionsDatatable": {
+      "headers": {
+        "name": "Nom",
+        "company": "Entreprise",
+        "scheduledFor": "Date",
+        "type": "Type",
+        "usage": "Usage",
+        "owner": "Propriétaire",
+        "status": "Statut"
+      },
+      "selection": {
+        "single": "eAuction sélectionnée",
+        "multiple": "eAuctions sélectionnées"
+      },
+      "deleteButton": "Supprimer les eAuctions",
+      "searchPlaceholder": "Rechercher...",
+      "search": "Rechercher",
+      "sortAscending": "Tri croissant",
+      "sortDescending": "Tri décroissant",
+      "sortAtoZ": "Trier A→Z",
+      "sortZtoA": "Trier Z→A",
+      "sortOldestFirst": "Trier du plus ancien",
+      "sortNewestFirst": "Trier du plus récent",
+      "resetSort": "Réinitialiser le tri",
+      "dateFilterBefore": "Avant",
+      "dateFilterAfter": "Après",
+      "dateFilterBetween": "Entre",
+      "dateFilterStartDate": "Date de début",
+      "dateFilterEndDate": "Date de fin",
+      "filterActive": "filtre actif",
+      "filtersActive": "filtres actifs",
+      "clearAllFilters": "Effacer tous les filtres",
+      "clearFilter": "Effacer",
+      "auctionTypes": {
+        "preferredDutch": "Hollandaise préférée",
+        "dutch": "Hollandaise",
+        "japaneseNoRank": "Japonaise sans rang",
+        "japanese": "Japonaise",
+        "english": "Anglaise",
+        "sealedBid": "Enchère scellée"
+      }
+    }
+  },
+  "auctionDescriptions": {
+    "english": {
+      "title": "Anglaise inversée ",
+      "description": "Une enchère anglaise inversée démarre sur la base des pré-offres fournisseurs. Les participants voient leur classement et peuvent soumettre de nouvelles offres jusqu’à la fin. Le classement final détermine l’attribution.\n <br> • **Avant l'événement :**  Les participants déposent une pré-offre qui fixe leur rang initial.\n \n  • **Pendant l'événement :**  Le prix monte à intervalles fixes jusqu’à ce qu’une offre soit acceptée.\n \n  • **Durée :** L’événement est limité dans le temps mais se termine dès qu’une offre est validée.\n \n  • **Attribution :** Le premier participant qui accepte le prix obtient le lot.\n",
+      "trainings_description": "Les fournisseurs compétitionnent en soumettant des offres plus basses. Le dernier à soumettre une offre avant la fin du temps gagne.\n"
+    },
+    "dutch": {
+      "title": "Hollandaise inversée ",
+      "description": "Une enchère hollandaise inversée commence à un prix bas qui augmente par paliers. Le premier participant qui accepte le prix remporte immédiatement le lot.\n <br> • **Avant l'événement :** Une pré-offre peut être demandée.\n\n  • **Pendant l'événement :** Le prix augmente palier par palier par incréments fixes ; aucun classement en direct n'est affiché.\n \n  • **Durée :** Durée limitée mais se termine instantanément lorsqu'une offre est acceptée.\n \n  • **Attribution :** La première offre acceptée remporte le lot.\n",
+      "trainings_description": "Le prix augmente progressivement. Le premier fournisseur à accepter le prix actuel gagne instantanément. Le timing est essentiel.\n"
+    },
+    "japanese": {
+      "title": "Japonaise inversée",
+      "description": "Une enchère japonaise inversée démarre à un prix haut qui baisse par paliers. Les participants doivent confirmer leur présence à chaque palier pour rester dans l’enchère. Le dernier en lice remporte le lot.\n <br> • **Avant l'événement :**  Une pré-offre peut être demandée.\n \n  • **Pendant l'événement :** Le prix baisse par étapes fixes ; chaque participant doit confirmer sa participation à chaque palier ou quitter l’enchère.\n \n  • **Durée :**  L’événement dure un temps limité et s’arrête lorsqu’il ne reste qu’un participant ou lorsque le prix plancher est atteint.\n \n  • **Attribution :** Le dernier participant actif obtient le lot. \n",
+      "trainings_description": "Le prix baisse progressivement. Vous devez confirmer votre présence à chaque palier. Le dernier fournisseur en lice gagne.\n"
+    },
+    "sealedBid": {
+      "title": "Offre scellée",
+      "description": "Dans une enchère à offre scellée, chaque participant soumet une offre confidentielle non visible des concurrents. L’offre la plus compétitive l’emporte à la clôture. .\n <br> • **Avant l'événement :** Les participants déposent leurs offres avant la date limite.\n \n  • **Pendant l'événement :** Les offres restent confidentielles, mais peuvent être révisées jusqu’à la clôture. \n \n  • **Durée :** Aucun classement en direct ; les résultats sont révélés à la fin.\n \n  • **Attribution :** Le lot est attribué à l’offre la plus compétitive selon les principes définis.\n",
+      "trainings_description": "Les fournisseurs soumettent des offres confidentielles et peuvent les mettre à jour jusqu'à la fin de l'eAuction. Lorsque le temps est écoulé, le plus bas prix final gagne.\n"
+    },
+    "preferredDutch": {
+      "title": "Hollandaise préférentielle",
+      "description": "Une enchère hollandaise préférentielle fonctionne comme une enchère hollandaise classique, mais certains fournisseurs reçoivent la priorité sur chaque palier de prix avant les autres. Le premier à accepter remporte le lot.\n <br> • **Avant l'événement :** Une pré-offre peut être demandée ; certains fournisseurs sont désignés comme « préférés ».\n \n  • **Pendant l'événement :** Le prix monte par étapes ; les fournisseurs préférés ont l’opportunité d’accepter en premier.\n \n  • **Durée :** L’événement est limité dans le temps mais s’arrête dès qu’une offre est validée.\n \n  • **Attribution :** Le premier fournisseur qui accepte le prix obtient le lot.\n",
+      "trainings_description": "Le prix augmente progressivement. Le premier fournisseur à accepter le prix actuel gagne instantanément. Le timing est essentiel.\n"
+    },
+    "japaneseNoRank": {
+      "title": "Japonaise sans classement",
+      "description": "Une enchère japonaise sans classement suit le principe de l’enchère japonaise, mais l’attribution finale est décidée en dehors de l’événement selon d’autres critères.\n <br> • **Avant l'événement :** Une pré-offre peut être demandée.\n \n  • **Pendant l'événement :** Le prix baisse par étapes ; les participants doivent rester actifs à chaque palier ou sortir. Le prix de sortie de chaque participant est enregistré.\n \n  • **Durée :** L’événement est limité et prend fin après le dernier palier.\n \n  • **Attribution :** Le lot est attribué en combinant les résultats de l’enchère avec d’autres critères externes.\n",
+      "trainings_description": "Le prix baisse progressivement. Vous devez confirmer votre présence à chaque palier. Le dernier fournisseur en lice gagne.\n"
+    }
+  },
+  "rankCard": {
+    "title": "Votre rang actuel",
+    "sealedBidMessage": "Votre rang apparaîtra lorsque le temps de l'eAuction se terminera",
+    "upcomingMessage": "Votre rang apparaîtra lorsque l'eAuction commencera",
+    "hiddenMessage": "Votre rang n'est pas affiché",
+    "noRankDisplayed": "Votre rang apparaîtra lorsque l'eAuction commencera",
+    "noBidYet": "Faites une offre pour voir votre classement"
+  },
+  "prebidTableSeller": {
+    "title": "Tableau de soumission",
+    "ceilingPrice": "Prix plafond",
+    "currentBid": "Actuel",
+    "unitPrice": "Prix unitaire",
+    "changeBid": "Modifier",
+    "submitBid": "Soumettre",
+    "bidReducedBy": "Offre réduite de",
+    "bidMustBeLower": "L'offre doit être inférieure à",
+    "maxDecrementError": "la décrémentation maximale est de"
+  }
+}

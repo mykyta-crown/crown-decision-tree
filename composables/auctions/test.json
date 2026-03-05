@@ -1,0 +1,39 @@
+{
+  "auction": {
+    "duration": 15,
+    "description": "eAuction for Fruits Lot",
+    "commercials_terms": "Each company agree to deliver the material refering to the specification enclosed. Goods will be delivered on the date defined in the eAuction. Prices must be € currency. Incoterms must be DDP. Payment terms are 60 days from the order date.",
+    "timezone": "UTC+2",
+    "overtime_range": 3,
+    "max_bid_decr": 100,
+    "min_bid_decr": 2,
+    "max_bid_decr_type": "EUR",
+    "min_bid_decr_type": "EUR",
+    "log_visibility": "own_rank_only",
+    "currency": "EUR",
+    "name": "[ Test] Pommes",
+    "baseline": 1250000,
+    "type": "reverse",
+    "test": true
+  },
+  "supplies": [
+    {
+      "name": "Apples",
+      "quantity": 5000,
+      "unit": "Tonne",
+      "price": 500
+    },
+    {
+      "name": "Kiwis",
+      "quantity": 3000,
+      "unit": "Tonne",
+      "price": 600
+    },
+    {
+      "name": "Bananas",
+      "quantity": 2000,
+      "unit": "Tonne",
+      "price": 700
+    }
+  ]
+}

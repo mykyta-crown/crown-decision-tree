@@ -1,0 +1,88 @@
+{
+  "title": "Crown GPT",
+  "welcome": {
+    "heading": "Bienvenue sur Crown IA",
+    "description": "Veuillez d'abord sélectionner un type d'IA. Une fois vos fichiers téléchargés, l'IA les analysera et affichera les informations clés ici.",
+    "featured": "Assistants en vedette :"
+  },
+  "chat": {
+    "placeholder": "Tapez votre message...",
+    "generating": "Génération en cours...",
+    "thinking": "Réflexion...",
+    "failed": "Échec de la génération",
+    "send": "Envoyer",
+    "hint": "Appuyez sur Entrée pour envoyer, Maj + Entrée pour une nouvelle ligne",
+    "suggestions": "Suggestions :",
+    "uploading": "Téléchargement...",
+    "documents_uploaded": "Document(s) téléchargé(s)"
+  },
+  "credits": {
+    "label": "crédits",
+    "low": "Crédits faibles",
+    "empty": "Aucun crédit",
+    "remaining": "restants"
+  },
+  "conversations": {
+    "title": "DISCUSSIONS",
+    "new": "Nouvelle discussion",
+    "empty": "Aucune conversation pour le moment",
+    "rename": "Renommer",
+    "delete": "Supprimer",
+    "confirm_delete": "Êtes-vous sûr de vouloir supprimer cette conversation ?",
+    "rename_title": "RENOMMER LA DISCUSSION",
+    "rename_placeholder": "Discussion avec RFP",
+    "rename_label": "Titre de la discussion",
+    "delete_title": "SUPPRIMER LA DISCUSSION",
+    "delete_confirmation": "Êtes-vous sûr de vouloir supprimer cette discussion ?",
+    "delete_description": "La discussion \"{title}\" n'apparaîtra plus dans la liste"
+  },
+  "gpts": {
+    "title": "CROWN IA",
+    "search": "Rechercher des assistants...",
+    "no_results": "Aucun assistant trouvé",
+    "select": "Sélectionnez un assistant pour commencer",
+    "provider": "Fournisseur",
+    "model": "Modèle"
+  },
+  "menu": {
+    "download_pdf": "Télécharger PDF",
+    "update_credits": "Mettre à jour les crédits",
+    "edit": "Modifier",
+    "delete": "Supprimer"
+  },
+  "messages": {
+    "you": "Vous",
+    "assistant": "Assistant",
+    "system": "Système",
+    "tokens": "tokens"
+  },
+  "errors": {
+    "create_conversation": "Échec de la création de la conversation",
+    "fetch_conversations": "Échec de la récupération des conversations",
+    "fetch_messages": "Échec de la récupération des messages",
+    "send_message": "Échec de l'envoi du message",
+    "insufficient_credits": "Crédits insuffisants. Veuillez contacter votre administrateur.",
+    "fetch_credits": "Échec de la récupération des crédits",
+    "add_credits": "Échec de l'ajout de crédits",
+    "unauthorized": "Vous devez être connecté pour accéder à cette fonctionnalité",
+    "generic": "Une erreur s'est produite. Veuillez réessayer.",
+    "delete_gpt": "Échec de la suppression du GPT",
+    "rename_conversation": "Échec du renommage de la conversation",
+    "delete_conversation": "Échec de la suppression de la conversation"
+  },
+  "actions": {
+    "send": "Envoyer",
+    "cancel": "Annuler",
+    "confirm": "Confirmer",
+    "close": "Fermer",
+    "retry": "Réessayer",
+    "rename": "Renommer",
+    "delete": "Supprimer"
+  },
+  "toast": {
+    "conversation_renamed": "Conversation renommée",
+    "conversation_deleted": "Conversation supprimée avec succès",
+    "gpt_deleted": "GPT supprimé avec succès",
+    "pdf_coming_soon": "Téléchargement PDF bientôt disponible"
+  }
+}

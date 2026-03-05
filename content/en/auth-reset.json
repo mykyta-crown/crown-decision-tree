@@ -1,0 +1,7 @@
+{
+  "title": "Reset Password",
+  "messages": {
+    "success": "Reset link sent to your email",
+    "error": "Email not found"
+  }
+}

@@ -1,0 +1,161 @@
+{
+  "title": "Progression de l'intégration",
+  "steps": {
+    "step1": {
+      "title": "Sélection de la langue",
+      "description": "Avant de commencer"
+    },
+    "step2": {
+      "title": "Informations personnelles",
+      "description": "Configuration du profil"
+    },
+    "step3": {
+      "title": "Présentation de CROWN",
+      "description": "Vidéo rapide"
+    },
+    "step4": {
+      "title": "Visite de la plateforme",
+      "description": "Connaître les bases"
+    },
+    "step5": {
+      "title": "Prêt à l'essayer ?",
+      "description": "Pratiquez une eAuction"
+    }
+  },
+  "progress": {
+    "completion": "Progression de l'intégration",
+    "congratulations": "Félicitations ! Vous avez terminé l'intégration !",
+    "onYourWay": "Vous êtes en route pour recevoir votre Couronne !"
+  },
+  "profileForm": {
+    "title": "Ajoutons quelques détails pour configurer votre compte",
+    "saveAndContinue": "Enregistrer et continuer",
+    "email": {
+      "label": "Email*"
+    },
+    "changePassword": "Voulez-vous changer votre mot de passe ?",
+    "personalInfo": "Informations personnelles",
+    "companyInfo": "Informations de l'entreprise",
+    "addressInfo": "Adresse",
+    "firstName": {
+      "label": "Prénom*",
+      "placeholder": "Entrez votre prénom",
+      "required": "Le prénom est requis"
+    },
+    "lastName": {
+      "label": "Nom*",
+      "placeholder": "Entrez votre nom",
+      "required": "Le nom est requis"
+    },
+    "position": {
+      "label": "Poste*",
+      "placeholder": "ex. Responsable des achats",
+      "required": "Le poste est requis"
+    },
+    "phone": {
+      "label": "Numéro de téléphone*",
+      "placeholder": "+33 xx xxx xxxx",
+      "required": "Le téléphone est requis",
+      "tooShort": "Le téléphone est trop court",
+      "invalid": "Entrez un numéro de téléphone valide"
+    },
+    "company": {
+      "label": "Entreprise*",
+      "placeholder": "Entrez le nom de l'entreprise",
+      "required": "Le nom de l'entreprise est requis"
+    },
+    "country": {
+      "label": "Pays*",
+      "placeholder": "Entrez votre ville et adresse",
+      "required": "Le pays est requis"
+    },
+    "address": {
+      "label": "Adresse*",
+      "placeholder": "Adresse",
+      "required": "L'adresse est requise"
+    },
+    "companyRegistration": {
+      "label": "Numéro d'identification de l'entreprise",
+      "placeholder": "Numéro d'identification légale"
+    },
+    "validEmail": "Entrez un email valide"
+  },
+  "navigationForm": {
+    "navigation": [
+      {
+        "title": "Introduction rapide aux fonctionnalités de notre plateforme",
+        "description": "Utilisez le menu latéral pour accéder facilement à votre Tableau de bord, eAuctions, Démos, Formations, et plus — tout en un clic."
+      },
+      {
+        "title": "Tableau de bord",
+        "description": "Votre aperçu personnel — restez à jour avec vos eAuctions et performances."
+      },
+      {
+        "title": "Liste des eAuctions",
+        "description": "Parcourez, rejoignez ou gérez vos eAuctions actuelles et passées ici"
+      },
+      {
+        "title": "Intégration",
+        "description": "Suivez votre progression d'intégration. Complétez chaque étape pour débloquer l'accès aux vraies eAuctions."
+      },
+      {
+        "title": "Démo",
+        "description": "Pratiquez les eAuctions dans un environnement sûr pour apprendre comment le système fonctionne."
+      },
+      {
+        "title": "Formations",
+        "description": "Accédez aux tutoriels et ressources pour devenir un expert des eAuctions"
+      }
+    ]
+  },
+  "videoForm": {
+    "title": "Introduction rapide au fonctionnement des eAuctions",
+    "description": "Regardez une courte vidéo pour voir comment fonctionnent les enchères en ligne et pourquoi c'est plus rapide et plus transparent que les négociations traditionnelles."
+  },
+  "understandForm": {
+    "understand": [
+      {
+        "title": "Jetez un œil à une vraie eAuction",
+        "description": "<section><p>Voici ce qui se passe quand vous êtes invité à participer. Vous allez :</p><ul><li>Ouvrir l'eAuction depuis votre liste</li><li>Examiner les détails clés et les Conditions</li><li>Placer une pré-offre (votre première offre)</li><li>Rejoindre l'eAuction quand elle commence</li></ul><p>📝 Certaines enchères utilisent des minuteurs, des paliers ou des prolongations. Vous les essaierez bientôt — sans pression.</p><p>Passons en revue les bases ensemble 👉</p></section>"
+      },
+      {
+        "title": "Avant que l'eAuction commence",
+        "description": "<section><p>Si une eAuction contient plusieurs lots, assurez-vous de réviser et d'accepter les conditions pour chaque lot individuellement.</p><p>Vous ne pourrez participer à un lot qu'une fois ses conditions acceptées.</p></section>"
+      },
+      {
+        "title": "Examinez les détails de l'eAuction",
+        "description": "<section><p>Chaque eAuction commence par une page listant ses règles, tarifs, documents et conditions.</p><p>✅ Vous devez tout confirmer avant de pouvoir rejoindre.</p></section>"
+      },
+      {
+        "title": "Apprenez l'interface avant que l'eAuction commence",
+        "description": "<section><p>Prenez un moment pour explorer comment fonctionne l'interface de l'eAuction — cela vous aidera à vous sentir confiant pendant l'événement.</p><p>📄 Vous pouvez toujours réviser les conditions de l'enchère en cliquant sur l'icône de document dans le coin supérieur droit pendant l'eAuction.</p></section>"
+      },
+      {
+        "title": "Placez une pré-offre — votre première offre",
+        "description": "<section><p>Avant que l'eAuction commence, vous pouvez suggérer votre prix initial. Plus il est bas, meilleures sont vos chances de gagner — surtout si personne n'enchérit pendant l'événement.</p></section>"
+      }
+    ]
+  },
+  "readyForm": {
+    "title": "Maintenant essayez de jouer à la démo eAction",
+    "description": "Maintenant que vous êtes familier avec la plateforme, vous pouvez passer à la section démo et essayer de participer aux eAuctions",
+    "finishOnboarding": "Terminer l'intégration"
+  },
+  "languageForm": {
+    "welcome": "Bienvenue sur CROWN 👋",
+    "description": "Avant de commencer, veuillez choisir la langue que vous souhaitez utiliser sur la plateforme :",
+    "english": "English 🇬🇧",
+    "french": "Français 🇫🇷"
+  },
+  "finalForm": {
+    "title": "Une dernière étape - faisons un tour de la plateforme",
+    "description": "👉 Vous pouvez ignorer la visite à tout moment et y revenir plus tard depuis le menu de votre profil"
+  },
+  "buttons": {
+    "previous": "Précédent",
+    "previousStep": "Étape précédente",
+    "next": "Suivant",
+    "nextStep": "Étape suivante",
+    "finish": "Commencer la visite"
+  }
+}

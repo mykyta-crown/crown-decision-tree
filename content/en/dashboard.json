@@ -1,0 +1,55 @@
+{
+  "calendar": {
+    "title": "Calendar",
+    "description": "Calendar",
+    "date": "2025-01-01"
+  },
+  "savings": {
+    "title": "Savings",
+    "description": "Track your savings over time",
+    "chart": {
+      "label": "Savings Chart",
+      "tooltip": "Hover to see details"
+    }
+  },
+  "auctionTypes": {
+    "dutch": "Dutch",
+    "preferredDutch": "Preferred Dutch",
+    "english": "English",
+    "reverse": "Reverse",
+    "japanese": "Japanese",
+    "japaneseNoRank": "Japanese No Rank",
+    "sealedBid": "Sealed Bid"
+  },
+  "common": {
+    "allCompanies": "All companies",
+    "buyers": "Buyers",
+    "suppliers": "Suppliers",
+    "trainings": "Your Trainings",
+    "documents": "Documents"
+  },
+  "cards": {
+    "superBuyers": "Super Buyers",
+    "companies": "Companies",
+    "plannedAuctions": "Planned eAuctions",
+    "doneAuctions": "Done Auctions",
+    "totalSavings": "Total Savings",
+    "generalSaving": "General Saving",
+    "availableEauction": "Available eAuction",
+    "noSavingsYet": "No savings yet",
+    "spend": "Spend",
+    "savings": "Savings",
+    "allAuctions": "All"
+  },
+  "notifications": {
+    "title": "Notifications Panel",
+    "dateTime": "DATE / TIME",
+    "eAuctionDateSet": "date is set to",
+    "invitedToParticipate": "You are invited to participate in"
+  },
+  "supplier": {
+    "trainings": "Your Trainings",
+    "suppliers": "Suppliers",
+    "documents": "Documents"
+  }
+}

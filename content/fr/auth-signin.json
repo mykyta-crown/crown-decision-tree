@@ -1,0 +1,16 @@
+{
+  "title": "Bon retour sur CROWN",
+  "fields": {
+    "email": "Email*",
+    "password": "Mot de passe*"
+  },
+  "buttons": {
+    "login": "Se connecter",
+    "signup": "Créer un compte",
+    "forgotPassword": "Mot de passe oublié ?"
+  },
+  "validation": {
+    "invalidEmail": "Adresse email invalide",
+    "required": "Requis"
+  }
+}

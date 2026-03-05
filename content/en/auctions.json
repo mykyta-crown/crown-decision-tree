@@ -1,0 +1,394 @@
+{
+  "title": "Auction",
+  "tabs": {
+    "terms": "Terms",
+    "status": "Status",
+    "admin": "Admin"
+  },
+  "actions": {
+    "startEAuction": "Start eAuction",
+    "stillHere": "I'm still here !",
+    "resetTraining": "Restart Training",
+    "startTraining": "Start Training",
+    "trainingInProgress": "Training in Progress"
+  },
+  "pdfExport": {
+    "preparing": "Preparing export...",
+    "loadingLots": "Loading auction lots...",
+    "exportingLot": "Exporting Lot {current} of {total}...",
+    "uploading": "Uploading images...",
+    "generating": "Generating PDF...",
+    "downloading": "Starting download...",
+    "success": "Export completed!"
+  },
+  "messages": {
+    "connectionError": "Unable to update eAuction details. Please check your internet connection and refresh the page to stay in sync with other participants.",
+    "idleTitle": "👋 Are you still here ?",
+    "idleMessage": "Your session seems inactive. If you're still on the event, please interact with the page to continue.",
+    "noBidYet": "No bid yet"
+  },
+  "pricing": {
+    "baseline": "Baseline",
+    "lowestCurrentBid": "Lowest current Bid",
+    "priceSaving": "Price Saving",
+    "totalPrice": "Total price",
+    "pricePerUnit": "Price per unit",
+    "currentPrice": "Current Price",
+    "winningPrice": "Winning Price"
+  },
+  "activityLog": {
+    "title": "Activity Log",
+    "rank": "RANK",
+    "round": "ROUND",
+    "time": "TIME",
+    "you": "You",
+    "acceptedPriceOf": "accepted the price of",
+    "placedBidOf": "placed a bid of",
+    "auctionStarted": "eAuction has started!",
+    "auctionEnded": "eAuction has ended!",
+    "auctionDateSetTo": "eAuction date is set to",
+    "auctionClosesAt": "eAuction closes on",
+    "bidsBeingCollected": "Bids are being collected",
+    "finishedWithRank": "You have finished with rank",
+    "sellerFinishedWithRank": "finished with rank",
+    "priceWasAccepted": "The price of",
+    "wasAccepted": "was accepted",
+    "competitorBidChangedRank": "A bid from another participant changed your rank",
+    "newRoundStarted": "New round with the price of",
+    "hasStarted": "has started",
+    "yourCeilingPriceIs": "Your ceiling price is",
+    "bidsAutoAccepted": "Bids are auto-accepted until your pre-bid level",
+    "placePrebidToParticipate": "Please place a pre-bid to participate in the eAuction",
+    "startingPriceSetTo": "Starting price is set to",
+    "leftCompetitionAtPrice": "left competition at the price of",
+    "eAuctionStartsAtPrice": "eAuction starts at the price of",
+    "youNowParticipateIn": "You now participate in",
+    "eAuction": "eAuction",
+    "placedPrebidOf": "placed a pre-bid of",
+    "updatedPrebidTo": "updated the pre-bid to",
+    "on": "on"
+  },
+  "leaderboard": {
+    "title": "Leaderboard",
+    "rank": "RANK",
+    "name": "NAME",
+    "status": "STATUS",
+    "bidPrice": "BID PRICE",
+    "online": "online",
+    "offline": "offline"
+  },
+  "timer": {
+    "finishIn": "Finish in",
+    "nextRoundIn": "Next round in",
+    "startIn": "Start in",
+    "timer": "Timer",
+    "eAuctionTime": "eAuction time",
+    "minutes": "minutes",
+    "hours": "hours",
+    "days": "days",
+    "months": "months",
+    "min": "min",
+    "h": "h",
+    "s": "s"
+  },
+  "status": {
+    "active": "active",
+    "upcoming": "upcoming",
+    "closed": "closed"
+  },
+  "bidsTable": {
+    "title": "Bids Table",
+    "lineItems": "Lines items",
+    "quantity": "Quantity",
+    "total": "Total",
+    "totalPrice": "Total price",
+    "totalValue": "Total Value"
+  },
+  "dashboard": {
+    "supplier": "Supplier"
+  },
+  "bidding": {
+    "total": "Total",
+    "title": "Bids Submission Table",
+    "headers": {
+      "lineItems": "Line Items",
+      "quantity": "Quantity",
+      "previousBid": "Your Previous Bid",
+      "calculations": "Calculations",
+      "newBid": "Your New Bid"
+    },
+    "submitNewBid": "Submit New Bid",
+    "bidReducedBy": "Bid reduced by",
+    "validation": {
+      "cantBeEmpty": "Can't be empty",
+      "digitsOnly": "Digits only",
+      "digitOnly": "Digit only",
+      "minValue": "Min value 0",
+      "maxValue": "Max value",
+      "minBidDecrement": "Min bid decrement",
+      "maxBidDecrement": "Max bid decrement",
+      "handicapCannotIncrease": "Handicap cannot increase the price above your previous bid",
+      "handicapInfoMessage": "Dynamic handicap can only move downward. Once lowered, it cannot be increased again — please choose carefully."
+    }
+  },
+  "termsApproval": {
+    "title": "Terms Approval",
+    "headers": {
+      "company": "Company",
+      "phone": "Phone",
+      "email": "Email",
+      "contact": "Contact",
+      "position": "Position",
+      "lastConnection": "Last connection",
+      "status": "Status",
+      "action": "Action"
+    },
+    "status": {
+      "approved": "Approved",
+      "pending": "Pending"
+    },
+    "dialog": {
+      "removeSupplier": "Remove Supplier",
+      "confirmRemoval": "Are you sure you want to remove",
+      "remove": "Remove"
+    }
+  },
+  "prebid": {
+    "title": "Pre-bid",
+    "lineItems": "Line items",
+    "unit": "Unit",
+    "quantity": "Quantity",
+    "total": "Total",
+    "handicap": "Handicap"
+  },
+  "ceilingPrice": {
+    "title": "Ceiling Price",
+    "lineItems": "Line items",
+    "unit": "Unit",
+    "quantity": "Quantity",
+    "total": "Total"
+  },
+  "dutch": {
+    "roundTimer": {
+      "nextPriceIn": "Next price in",
+      "roundTime": "Round time",
+      "sec": "sec"
+    },
+    "supplyBidCard": {
+      "round": "Round:"
+    },
+    "currentStateCard": {
+      "yourPrebid": "Your Pre-bid",
+      "startingPrice": "Starting price",
+      "yourRank": "Your rank",
+      "currentOffer": "Current offer",
+      "noPrebidMessage": "You did not place a pre-bid"
+    },
+    "suppliesBidsTable": {
+      "lineItem": "LINE ITEM",
+      "unit": "UNIT",
+      "quantity": "QUANTITY",
+      "pricePerUnit": "PRICE PER UNIT",
+      "total": "TOTAL",
+      "rank": "RANK"
+    },
+    "dutchRoundsChart": {
+      "price": "Price",
+      "ceilingPrice": "Ceiling price",
+      "round": "Round",
+      "preBid": "Pre-bid ",
+      "allRounds": "All rounds",
+      "tenRounds": "10 rounds",
+      "twentyRounds": "20 rounds",
+      "graph": "Graph",
+      "blocks": "Blocks"
+    },
+    "participantsCard": {
+      "title": "Participants",
+      "name": "NAME",
+      "status": "STATUS",
+      "preBid": "PRE-BID",
+      "bestBid": "BEST BID",
+      "online": "online",
+      "offline": "offline"
+    }
+  },
+  "confirmBidDialog": {
+    "title": "BID PRICE",
+    "areYouSureSubmitBid": "Are you sure you want to submit the",
+    "areYouSureSubmitPrebid": "Are you sure you want to submit the pre-bid of",
+    "areYouSureApproveBid": "Are you sure you want to approve the bid of",
+    "bidOf": "bid of",
+    "prebidOf": "pre-bid of",
+    "prebidActivationMessage": "Your pre-bid will be activated once the price reaches this amount.",
+    "prebidWarningMessage": "If any participant, including yourself, accepts a price before this threshold is reached, the eAuction will end, and your bid will not be submitted. Please, note that pre-bid is prioritized over regular bid.",
+    "dutchBidEndMessage": "By clicking on the button 'Yes' you will put an end to the eAuction",
+    "prebidFinalMessage": "Your pre-bid will be considered as final bid if you do not make another offer. Please ensure that your current pre-bid is the desired amount, or take the opportunity to make another offer before the auction ends.",
+    "bidCannotChangeMessage": "Bids cannot be changed after submission.",
+    "cancel": "Cancel",
+    "yes": "Yes"
+  },
+  "admin": {
+    "bidDeleteBtn": {
+      "deleteLastBid": "Delete last bid",
+      "confirmMessage": "Are you sure you want to delete the last bid for",
+      "cancel": "Cancel",
+      "delete": "Delete"
+    },
+    "supplierDeleteDialog": {
+      "removeSupplier": "Remove Supplier",
+      "confirmMessage": "Are you sure you want to remove:",
+      "cancel": "Cancel",
+      "remove": "Remove"
+    }
+  },
+  "archiveDialog": {
+    "title": "Archive Auction",
+    "confirmMessage": "Are you sure you want to archive this auction?",
+    "warningMessage": "will no longer appear in the list of auctions",
+    "cancel": "Cancel",
+    "archive": "Archive"
+  },
+  "endDialog": {
+    "completed": "The eAuction is completed."
+  },
+  "deleteDialog": {
+    "title": "Delete Auction",
+    "confirmMessage": "Are you sure you want to delete the selected auctions?",
+    "warningMessage": "eAuctions will no longer appear in the list of auctions",
+    "irreversibleWarning": "This action is irreversible and all associated data will be permanently removed.",
+    "cancel": "Cancel",
+    "delete": "Delete"
+  },
+  "publishDialog": {
+    "title": "Publish Auction",
+    "confirmMessage": "Are you sure you want to publish this auction?",
+    "visibilityMessage": "will be visible by every invited suppliers",
+    "cancel": "Cancel",
+    "publish": "Publish"
+  },
+  "japanese": {
+    "leavingDialog": {
+      "title": "LEAVE EAUCTION",
+      "confirmMessage": "Are you sure you want to leave eAuction?",
+      "warningMessage": "By clicking the 'Leave eAuction' button, you will no longer be able to return or continue placing bids. The eAuction will be concluded for you at the last accepted price.",
+      "cancel": "Cancel",
+      "leave": "Leave eAuction"
+    }
+  },
+  "englishEndDialog": {
+    "finishedRank": "You finished <span class=\"font-weight-bold\">rank {rank}</span> bidding",
+    "biddingPrice": "at the price of <span class=\"font-weight-bold\">{price}</span>",
+    "noBid": "No one placed a bid"
+  },
+  "lineItemRanking": {
+    "enable": "Display rank per line item",
+    "enableTooltip": "Show supplier ranking for each line item individually instead of overall ranking",
+    "supplierDetails": "Supplier {rank} - {name}",
+    "itemRank": "Rank {rank}",
+    "overallTotal": "Overall Total",
+    "lineItems": "Line Items",
+    "expand": "Expand details",
+    "collapse": "Collapse details",
+    "rank": "Rank",
+    "name": "Name",
+    "bidPrice": "Bid Price"
+  },
+  "auctionResetDialog": {
+    "title": "Reset Training Auction",
+    "confirmMessage": "Are you sure you want to reset this training auction?",
+    "warningMessage": "This will delete all bids and restart the auction in one minute.",
+    "playAgainstBots": "Play against bots",
+    "botWarningEnglish": "Bots will react to your bids with competitive pricing throughout the auction.",
+    "botWarningDutchJapanese": "Bots will place prebids strategically after you submit your first bid.",
+    "botWarningDefault": "Bots will participate in the auction with automated bidding behavior.",
+    "cancel": "Cancel",
+    "reset": "Reset"
+  },
+  "endDialogBuyer": {
+    "competitionEnded": "The competition for {lotName} has ended!",
+    "table": {
+      "rank": "RANK",
+      "name": "NAME",
+      "bidPrice": "BID PRICE",
+      "lineItem": "LINE ITEM"
+    },
+    "noBid": "No one placed a bid",
+    "contactWinner": "Please, contact the winner to discuss further details and finalize the agreement.",
+    "contactParticipants": "Unfortunately, none of the suppliers placed a bid. Please contact the participants to get more details.",
+    "backToAuction": "Back to eAuction",
+    "nextLot": "Next lot",
+    "downloadReport": "Download report"
+  },
+  "endDialogSeller": {
+    "auctionEnded": "The eAuction has ended!",
+    "finishedRank": "You have finished with <span class=\"font-weight-bold\">rank {rank}</span> bidding at the price of <span class=\"font-weight-bold\">{price}</span>",
+    "finishedBidding": "You have finished bidding at the price of <span class=\"font-weight-bold\">{price}</span>",
+    "competitionEnded": "The competition for {lotName} has ended!",
+    "contactMessage": "Thank you for taking part in this event.",
+    "backToAuction": "Back to eAuction",
+    "nextLot": "Next lot",
+    "table": {
+      "rank": "RANK",
+      "lineItem": "LINE ITEM",
+      "bidPrice": "BID PRICE"
+    }
+  },
+  "dutchEndDialog": {
+    "winnerFinished": "<span class=\"font-weight-bold\">{winner}</span> has finished with <span class=\"font-weight-bold\">rank 1</span> bidding <br>at the price of <span class=\"font-weight-bold\">{price}</span> {currency}",
+    "noBid": "No one placed a bid",
+    "youFinishedRank1": "You finished <span class=\"font-weight-bold\">rank {rank}</span> bidding<br>at the price of <span class=\"font-weight-bold\">{price}</span> {currency}",
+    "contactParticipants": "Unfortunately, none of the suppliers placed a bid. Please contact the participants to get more details.",
+    "youFinishedRank": "You finished <span class=\"font-weight-bold\">rank {rank}</span>",
+    "anotherSupplierBid": "Unfortunately, another supplier put the bid before you",
+    "aParticipant": "A participant",
+    "endedAtPrice": "eAuction ended at the price of <span class=\"font-weight-bold\">{price}</span> {currency}"
+  },
+  "japaneseEndDialog": {
+    "winnerFinished": "<span class=\"font-weight-bold\">{winner}</span> finished with <span class=\"font-weight-bold\">rank 1</span> bidding <br>at the price of <span class=\"font-weight-bold\">{price}</span> {currency}",
+    "noBid": "No one placed a bid",
+    "youFinishedRank": "You finished <span class=\"font-weight-bold\">rank {rank}</span> bidding<br>at the price of <span class=\"font-weight-bold\">{price}</span> {currency}",
+    "youFinishedBidding": "You have finished bidding at the price of <span class=\"font-weight-bold\">{price}</span> {currency}"
+  },
+  "bidButton": {
+    "bidAtCurrentPrice": "Bid at current price",
+    "submitPrebid": "Submit pre-bid",
+    "changePrebid": "Change Pre-bid",
+    "leaveEAuction": "Leave eAuction",
+    "acceptOffer": "Accept offer",
+    "offerAccepted": "Offer Accepted"
+  },
+  "expansionPanel": {
+    "summary": "Summary",
+    "headers": {
+      "lots": "Lots",
+      "status": "Status",
+      "eAuctionTime": "eAuction Time",
+      "yourCurrentRank": "Your current rank",
+      "yourLastBid": "Your last bid",
+      "round": "Round",
+      "currentPrice": "Current price",
+      "leader": "Leader",
+      "lowestBid": "Lowest bid",
+      "savings": "Savings"
+    }
+  },
+  "timingRules": {
+    "title": "TIMING RULES",
+    "ok": "Ok",
+    "chooseTitle": "Choose your timing rules",
+    "description": "Define how multiple lots should be scheduled and timed during the auction.",
+    "serial": {
+      "title": "Serial",
+      "text": "A serial timing rule is an auction format in which multiple lots are auctioned sequentially, one after another, according to a predetermined schedule. Each lot has a fixed start time, regardless of whether the bidding for the previous lot concludes earlier. If an overtime rule is applied (for example, extending the auction duration due to active bidding near the end), it may cause the start time of the subsequent lot to be delayed."
+    },
+    "parallel": {
+      "title": "Parallel",
+      "text": "A parallel timing rule is an auction format in which multiple lots are auctioned simultaneously within a specified time frame. Each lot has its own independent bidding process and closing time. The progress or outcome of one lot does not affect the timing of others. If an overtime rule is applied to a specific lot, it does not influence the closing times of other lots."
+    },
+    "staggered": {
+      "title": "Staggered",
+      "text": "A staggered timing rule is an auction format in which multiple lots are auctioned sequentially but with overlapping time frames. Each lot starts at a predetermined interval after the previous one, even if the bidding for the earlier lot is still ongoing. This creates a cascading effect where multiple lots are active simultaneously at different stages of their bidding process. If an overtime rule is applied to a specific lot, it does not affect the start times of subsequent lots but may extend its own closing time."
+    }
+  }
+}

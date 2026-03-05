@@ -1,0 +1,45 @@
+{
+  "title": "Clients",
+  "table": {
+    "country": "Pays",
+    "status": "Statut",
+    "eAuctions": "eAuctions",
+    "superBuyers": "Super acheteurs"
+  },
+  "actions": {
+    "activate": "Activer",
+    "deactivate": "Désactiver"
+  },
+  "empty": {
+    "title": "Aucun client trouvé",
+    "message": "Commencez par ajouter votre premier client"
+  },
+  "forms": {
+    "placeholders": {
+      "enterClientName": "Entrez le nom du client"
+    }
+  },
+  "buttons": {
+    "createClient": "Créer un client",
+    "update": "Mettre à jour",
+    "cancel": "Annuler",
+    "create": "Créer"
+  },
+  "dialog": {
+    "titles": {
+      "editCompany": "Modifier l'entreprise",
+      "createCompany": "Créer une entreprise"
+    },
+    "subtitles": {
+      "editCompanyDetails": "Modifier les détails de l'entreprise",
+      "createNewCompany": "Créer une nouvelle entreprise"
+    },
+    "fields": {
+      "companyName": "Nom de l'entreprise",
+      "country": "Pays",
+      "legalId": "ID légal",
+      "address": "Adresse",
+      "phone": "Téléphone"
+    }
+  }
+}

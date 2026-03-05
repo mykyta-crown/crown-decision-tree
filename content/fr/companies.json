@@ -1,0 +1,15 @@
+{
+  "title": "Entreprises",
+  "actions": {
+    "add": "Ajouter une Entreprise"
+  },
+  "table": {
+    "name": "Nom de l'Entreprise",
+    "type": "Type",
+    "country": "Pays"
+  },
+  "empty": {
+    "title": "Aucune entreprise trouvée",
+    "message": "Commencez par ajouter votre première entreprise"
+  }
+}

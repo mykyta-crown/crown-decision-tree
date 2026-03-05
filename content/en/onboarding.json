@@ -1,0 +1,161 @@
+{
+  "title": "Onboarding progress",
+  "steps": {
+    "step1": {
+      "title": "Language selection",
+      "description": "Before you start"
+    },
+    "step2": {
+      "title": "Profile information",
+      "description": "Profile setup"
+    },
+    "step3": {
+      "title": "CROWN presentation",
+      "description": "Quick video"
+    },
+    "step4": {
+      "title": "Platform tour",
+      "description": "Know the basics"
+    },
+    "step5": {
+      "title": "Ready to try it out?",
+      "description": "Practice eAuction"
+    }
+  },
+  "progress": {
+    "completion": "Onboarding completion",
+    "congratulations": "Congratulations! You've completed onboarding!",
+    "onYourWay": "You're on your way to receiving your Crown!"
+  },
+  "profileForm": {
+    "title": "Let's complete your profile information",
+    "saveAndContinue": "Save and continue",
+    "email": {
+      "label": "Email*"
+    },
+    "changePassword": "Want to change your password?",
+    "personalInfo": "Personal information",
+    "companyInfo": "Company information",
+    "addressInfo": "Address",
+    "firstName": {
+      "label": "First name*",
+      "placeholder": "Enter your first name",
+      "required": "First name is required"
+    },
+    "lastName": {
+      "label": "Last name*",
+      "placeholder": "Enter your last name",
+      "required": "Last name is required"
+    },
+    "position": {
+      "label": "Position*",
+      "placeholder": "e.g. Procurement Manager",
+      "required": "Position is required"
+    },
+    "phone": {
+      "label": "Phone number*",
+      "placeholder": "+33 xx xxx xxxx",
+      "required": "Phone is required",
+      "tooShort": "Phone is too short",
+      "invalid": "Enter a valid phone number"
+    },
+    "company": {
+      "label": "Company*",
+      "placeholder": "Enter company name",
+      "required": "Company name is required"
+    },
+    "country": {
+      "label": "Country*",
+      "placeholder": "Enter your city and address",
+      "required": "Country is required"
+    },
+    "address": {
+      "label": "Address*",
+      "placeholder": "Address",
+      "required": "Address is required"
+    },
+    "companyRegistration": {
+      "label": "Company registration number",
+      "placeholder": "Legal ID"
+    },
+    "validEmail": "Enter a valid email"
+  },
+  "navigationForm": {
+    "navigation": [
+      {
+        "title": "Quick intro to the functionality of our platform",
+        "description": "Use the side menu to easily access your Dashboard, eAuctions, Demos, Trainings, and more — all just one click away."
+      },
+      {
+        "title": "Dashboard",
+        "description": "Your personal overview — stay up to date with your eAuctions and performance."
+      },
+      {
+        "title": "eAuctions list",
+        "description": "Browse, join or manage your current and past eAuctions here"
+      },
+      {
+        "title": "Onboarding",
+        "description": "Track your onboarding progress. Complete each step to unlock access to real eAuctions."
+      },
+      {
+        "title": "Demo",
+        "description": "Practice eAuctions in a safe environment to learn how the system works."
+      },
+      {
+        "title": "Trainings",
+        "description": "Access tutorials and resources to become an eAuction expert"
+      }
+    ]
+  },
+  "videoForm": {
+    "title": "Quick intro to how eAuctions work",
+    "description": "Watch short video to see how online bidding works and why it's faster and more transparent than traditional negotiations."
+  },
+  "understandForm": {
+    "understand": [
+      {
+        "title": "Have a look at a real eAuction",
+        "description": "<section><p>Here's what happens when you're invited to participate. You'll:</p><ul><li>Open the eAuction from your list</li><li>Review key details and Terms</li><li>Place a Pre-bid (your first offer)</li><li>Join the eAuction when it starts</li></ul><p>📝 Some auctions use timers, rounds or overtime. You'll try them out soon — no pressure.</p><p>Let's go through the basics together 👉</p></section>"
+      },
+      {
+        "title": "Before the eAuction begins",
+        "description": "<section><p>If an eAuction contains multiple lots, please make sure to review and accept the terms for each lot individually.</p><p>You'll only be able to participate in a lot once its terms have been accepted.</p></section>"
+      },
+      {
+        "title": "Review the eAuction details",
+        "description": "<section><p>Every eAuction begins with a page listing its rules, pricing, documents and conditions.</p><p>✅ You need to confirm everything before you can join.</p></section>"
+      },
+      {
+        "title": "Learn the interface before the eAuction begins",
+        "description": "<section><p>Take a moment to explore how the eAuction interface works — it will help you feel confident during the event.</p><p>📄 You can always review the auction terms by clicking the document icon in the top-right corner during the eAuction.</p></section>"
+      },
+      {
+        "title": "Place a Pre-bid — your first offer",
+        "description": "<section><p>Before the eAuction starts, you can suggest your initial price. The lower it is, the better chance you have to win — especially if no one bids during the event.</p></section>"
+      }
+    ]
+  },
+  "readyForm": {
+    "title": "Now try play demo eAction",
+    "description": "Now that you're familiar with the platform, you can move on to the demo section and try participating in eAuctions",
+    "finishOnboarding": "Finish onboarding"
+  },
+  "languageForm": {
+    "welcome": "Welcome to CROWN 👋",
+    "description": "Before you start, please choose the language you'd like to use on the platform:",
+    "english": "English 🇬🇧",
+    "french": "Français 🇫🇷"
+  },
+  "finalForm": {
+    "title": "One final step - let's have a tour of the platform",
+    "description": "👉 You can skip the tour anytime and come back to it later from your profile menu"
+  },
+  "buttons": {
+    "previous": "Previous",
+    "previousStep": "Previous step",
+    "next": "Next",
+    "nextStep": "Next step",
+    "finish": "Start tour"
+  }
+}

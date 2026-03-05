@@ -1,0 +1,54 @@
+{
+  "calendar": {
+    "title": "Calendrier",
+    "description": "Calendrier",
+    "date": "2025-01-01"
+  },
+  "savings": {
+    "title": "Économies",
+    "description": "Suivez vos économies dans le temps",
+    "chart": {
+      "label": "Graphique des économies",
+      "tooltip": "Survolez pour voir les détails"
+    }
+  },
+  "auctionTypes": {
+    "dutch": "Dutch",
+    "preferredDutch": "Dutch préférée",
+    "english": "Anglais",
+    "reverse": "Inversée",
+    "japanese": "Japonais",
+    "japaneseNoRank": "Japonais (sans rang)",
+    "sealedBid": "Enchère scellée"
+  },
+  "common": {
+    "buyers": "Acheteurs",
+    "suppliers": "Fournisseurs",
+    "trainings": "Vos formations",
+    "documents": "Documents"
+  },
+  "cards": {
+    "superBuyers": "Super acheteurs",
+    "companies": "Entreprises",
+    "plannedAuctions": "eAuctions planifiées",
+    "doneAuctions": "Enchères terminées",
+    "totalSavings": "Économies totales",
+    "generalSaving": "Économies générales",
+    "availableEauction": "eAuction disponible",
+    "noSavingsYet": "Aucune économie pour le moment",
+    "spend": "Dépenses",
+    "savings": "Économies",
+    "allAuctions": "Toutes"
+  },
+  "notifications": {
+    "title": "Panneau de notifications",
+    "dateTime": "DATE / HEURE",
+    "eAuctionDateSet": "la date est fixée au",
+    "invitedToParticipate": "Vous êtes invité à participer à"
+  },
+  "supplier": {
+    "trainings": "Vos formations",
+    "suppliers": "Fournisseurs",
+    "documents": "Documents"
+  }
+}

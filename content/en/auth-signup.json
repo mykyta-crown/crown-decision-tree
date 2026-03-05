@@ -1,0 +1,40 @@
+{
+  "title": "Welcome to CROWN",
+  "fields": {
+    "email": "Email*",
+    "password": "Password*",
+    "repeatPassword": "Repeat password*",
+    "emailPlaceholder": "e.g. name@company.com"
+  },
+  "passwordRequirements": {
+    "minLength": "Has at least 8 characters",
+    "caseLetters": "Contains both upper & lower case letters",
+    "number": "Contains at least 1 number",
+    "specialChar": "Contains at least 1 special character"
+  },
+  "terms": {
+    "accept": "I accept",
+    "privacyPolicy": "Privacy policy",
+    "and": "and",
+    "termsOfUse": "Terms of use"
+  },
+  "buttons": {
+    "signup": "Sign up",
+    "haveAccount": "Have an account?",
+    "forgotPassword": "Forgot your password ?"
+  },
+  "dialog": {
+    "title": "Check your inbox ✉️",
+    "message": "We've sent you a confirmation email. Please click the link inside to activate your account",
+    "goToSignin": "Go to Sign in"
+  },
+  "validation": {
+    "invalidEmail": "Invalid email address",
+    "minLength": "Need at least 8 characters",
+    "needNumber": "Need at least one number",
+    "needSpecial": "Need at least one special character",
+    "needLowercase": "Need at least one lower cased letter",
+    "needUppercase": "Need at least one upper cased letter",
+    "passwordMismatch": "Passwords are not the same"
+  }
+}

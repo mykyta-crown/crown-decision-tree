@@ -1,0 +1,195 @@
+{
+  "auction": {
+    "name": "Placeholder Japanese Auction",
+    "description": "",
+    "date": "2024-10-19T15:15:26.501Z",
+    "time": "17:15",
+    "currency": "EUR",
+    "timezone": "CEST",
+    "type": "japanese",
+    "test": true,
+    "company_id": "fbe426fb-a2e2-40a1-84c3-ce8428002f2a",
+    "buyer_id": "6adda705-d34f-41d8-ae35-d427c62eff83",
+    "log_visibility": "only_own",
+    "published": true,
+    "usage": "test",
+    "start_at": "2024-10-19T15:15:00.000Z",
+    "end_at": "2024-10-19T15:20:00.000Z",
+    "awarding_principles": "<p>Supplier ranked #1 will be awarded with 100% of the lot.</p>",
+    "commercials_terms": "<p><strong>Offer validity:</strong> 90 days</p><p><strong>Payement terms:</strong> 60 days</p><p><strong>Incoterms:</strong> DDP</p>",
+    "lots": [
+      {
+        "name": "Lot  1",
+        "duration": 5,
+        "baseline": "75000",
+        "multiplier": true,
+        "rank_trigger": "all",
+        "min_bid_decr": "5000",
+        "min_bid_decr_type": "EUR",
+        "max_bid_decr": "100000",
+        "max_bid_decr_type": "EUR",
+        "overtime_range": 0.25,
+        "suppliers": [
+          {
+            "phone": "0698676859",
+            "email": "supplier+1@crown.ovh",
+            "company": "Supplier 1",
+            "address": "Rue du chocolate",
+            "country": "France",
+            "contact": "John Doe",
+            "id": "123456",
+            "position": "CEO",
+            "isNew": false
+          },
+          {
+            "phone": "0698676859",
+            "email": "supplier+2@crown.ovh",
+            "company": "Supplier 2",
+            "address": "13 Rue des pommes",
+            "country": "France",
+            "contact": "John Doe",
+            "id": "TEST",
+            "position": "CEO",
+            "isNew": false
+          },
+          {
+            "phone": "0698676859",
+            "email": "supplier+3@crown.ovh",
+            "company": "Supplier 3",
+            "address": "43 Rue jean ",
+            "country": "France",
+            "contact": "John Doe",
+            "id": "900000000",
+            "position": "CEO",
+            "isNew": false
+          },
+          {
+            "phone": "060100200122",
+            "email": "supplier+4@crown.ovh",
+            "company": "Supplier 4",
+            "address": "Supplier 4",
+            "country": "France",
+            "contact": "Supplier 4 Supplier 4",
+            "id": "22222222",
+            "position": "Supplier 4",
+            "isNew": false
+          }
+        ],
+        "items": [
+          {
+            "line_item": "Item 1",
+            "unit": "Tons",
+            "quantity": 1,
+            "supplier+1@crown.ovh": 5000,
+            "mult_supplier+1@crown.ovh": 1,
+            "supplier+2@crown.ovh": "10000",
+            "mult_supplier+2@crown.ovh": 1,
+            "supplier+3@crown.ovh": "15000",
+            "mult_supplier+3@crown.ovh": 1,
+            "supplier+4@crown.ovh": "20000",
+            "mult_supplier+4@crown.ovh": 1
+          }
+        ],
+        "commercials_docs": [],
+        "awarding_principles": "<p>Supplier ranked #1 will be awarded with 100% of the lot.</p>",
+        "commercials_terms": "<p><strong>Offer validity:</strong> 90 days</p><p><strong>Payement terms:</strong> 60 days</p><p><strong>Incoterms:</strong> DDP</p>",
+        "dutch_prebid_enabled": true,
+        "suppliers_prices": [
+          {
+            "supplier": {
+              "phone": "0698676859",
+              "email": "supplier+1@crown.ovh",
+              "company": "Supplier 1",
+              "address": "Rue du chocolate",
+              "country": "France",
+              "contact": "John Doe",
+              "id": "123456",
+              "position": "CEO",
+              "isNew": false
+            },
+            "lines_items": [
+              {
+                "line_item": "Item 1",
+                "quantity": 1,
+                "unit": "Tons",
+                "ceiling": 5000,
+                "multiplier": 1,
+                "index": 0
+              }
+            ]
+          },
+          {
+            "supplier": {
+              "phone": "0698676859",
+              "email": "supplier+2@crown.ovh",
+              "company": "Supplier 2",
+              "address": "13 Rue des pommes",
+              "country": "France",
+              "contact": "John Doe",
+              "id": "TEST",
+              "position": "CEO",
+              "isNew": false
+            },
+            "lines_items": [
+              {
+                "line_item": "Item 1",
+                "quantity": 1,
+                "unit": "Tons",
+                "ceiling": "10000",
+                "multiplier": 1,
+                "index": 0
+              }
+            ]
+          },
+          {
+            "supplier": {
+              "phone": "0698676859",
+              "email": "supplier+3@crown.ovh",
+              "company": "Supplier 3",
+              "address": "43 Rue jean ",
+              "country": "France",
+              "contact": "John Doe",
+              "id": "900000000",
+              "position": "CEO",
+              "isNew": false
+            },
+            "lines_items": [
+              {
+                "line_item": "Item 1",
+                "quantity": 1,
+                "unit": "Tons",
+                "ceiling": "15000",
+                "multiplier": 1,
+                "index": 0
+              }
+            ]
+          },
+          {
+            "supplier": {
+              "phone": "060100200122",
+              "email": "supplier+4@crown.ovh",
+              "company": "Supplier 4",
+              "address": "Supplier 4",
+              "country": "France",
+              "contact": "Supplier 4 Supplier 4",
+              "id": "22222222",
+              "position": "Supplier 4",
+              "isNew": false
+            },
+            "lines_items": [
+              {
+                "line_item": "Item 1",
+                "quantity": 1,
+                "unit": "Tons",
+                "ceiling": "20000",
+                "multiplier": 1,
+                "index": 0
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "type": "japanese"
+}

@@ -1,0 +1,79 @@
+{
+  "alert": {
+    "title": "Your informations are incomplete.",
+    "message": "We need you to fill all you details to allow you into an eAuction.",
+    "linkText": "edit profile page",
+    "goToText": "Please go to the",
+    "registerText": "and register your company and personnal informations."
+  },
+  "header": {
+    "title": "eAuctions: ",
+    "createButton": "Create eAuction",
+    "searchPlaceholder": "Search"
+  },
+  "tabs": {
+    "all": "All",
+    "real": "Real",
+    "test": "Test",
+    "training": "Training"
+  },
+  "empty": {
+    "title": "No eAuctions available",
+    "message": "Currently, there are no auctions created. Once the auction owner sets up new eAuctions, it will appear here."
+  },
+  "deleteDialog": {
+    "title": "Delete Auction",
+    "confirmMessage": "Are you sure you want to delete the selected auctions?",
+    "warningMessage": "eAuctions will no longer appear in the list of auctions",
+    "irreversibleWarning": "This action is irreversible and all associated data will be permanently removed.",
+    "cancel": "Cancel",
+    "delete": "Delete"
+  },
+  "auctionCard": {
+    "usageFallback": "Test",
+    "ownedBy": "Owned by:"
+  },
+  "testButtons": {
+    "createDemo": "Create Demo Auction",
+    "tooltip": "Only visible on development environment"
+  },
+  "createDialog": {
+    "title": "Create Test Auction",
+    "tabs": {
+      "test": "Test eAuction",
+      "masterclass": "Masterclass eAuction"
+    },
+    "sections": {
+      "auctionType": "Auction Type",
+      "multiLot": "Multi Lot",
+      "prebid": "Prebid",
+      "multilotTiming": "Multilot timing",
+      "masterclassType": "Masterclass type"
+    },
+    "radioLabels": {
+      "serial": "Serial",
+      "parallel": "Parallel",
+      "staggered": "Staggered"
+    },
+    "switchLabels": {
+      "enabled": "Enabled",
+      "disabled": "Disabled"
+    },
+    "buttons": {
+      "createTest": "Create test eAuction",
+      "createMasterclass": "Create Masterclass"
+    }
+  },
+  "overrides": {},
+  "actions": {
+    "publish": "Publish",
+    "archive": "Archive",
+    "duplicate": "Duplicate"
+  },
+  "duplication": {
+    "title": "Duplicate Auction",
+    "simple": "Simple duplication of the current eAuction settings",
+    "training": "Duplicate the eAuction for all suppliers in case of training",
+    "chooseType": "Choose the type of duplication"
+  }
+}

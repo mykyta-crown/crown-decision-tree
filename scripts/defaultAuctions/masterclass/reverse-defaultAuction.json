@@ -1,0 +1,220 @@
+{
+  "auction": {
+    "group_id": "d9c36bb0-b11f-442e-bc43-49e8eabf5f61",
+    "name": "MAI YELLOW - eAuction Fruits 2024",
+    "description": "Pom'potes #5FPD - Quantities for 6 months of production.",
+    "date": "2024-12-03T18:15:48.016Z",
+    "time": "19:15",
+    "currency": "EUR",
+    "timezone": "CET",
+    "type": "reverse",
+    "test": true,
+    "company_id": "fbe426fb-a2e2-40a1-84c3-ce8428002f2a",
+    "buyer_id": "6adda705-d34f-41d8-ae35-d427c62eff83",
+    "log_visibility": "only_own",
+    "published": true,
+    "usage": "test",
+    "start_at": "2024-12-03T18:15:00.000Z",
+    "end_at": "2024-12-03T18:22:00.000Z",
+    "awarding_principles": "<p>Supplier ranked #1 will be awarded with 100% of the lot.</p>",
+    "commercials_terms": "<p><strong>Offer validity:</strong> 90 days</p><p><strong>Payement terms:</strong> 60 days</p><p><strong>Incoterms:</strong> DDP</p>",
+    "general_terms": "<ul><li>Any bid placed during the eAuction must reflect the specifications, terms and conditions stated above.</li><li>Any bid placed during the eAuction is contractually binding and treated as a formal proposal.</li><li>Renegotiation is not possible post eAuction.</li><li>Winning bids and lots must be formalized in a contract with the client within thirthy (30) business days post eAuction.</li></ul>",
+    "lots": [
+      {
+        "name": "Pom'potes #5FPD",
+        "duration": "7",
+        "baseline": "01600000",
+        "multiplier": true,
+        "rank_trigger": "all",
+        "min_bid_decr": "10000",
+        "min_bid_decr_type": "EUR",
+        "max_bid_decr": "100000",
+        "max_bid_decr_type": "EUR",
+        "overtime_range": 2,
+        "suppliers": [
+          {
+            "email": "supplier+1@crown.ovh"
+          },
+          {
+            "email": "supplier+2@crown.ovh"
+          },
+          {
+            "email": "supplier+3@crown.ovh"
+          },
+          {
+            "email": "supplier+4@crown.ovh"
+          }
+        ],
+        "items": [
+          {
+            "line_item": "Apples",
+            "unit": "Tons",
+            "quantity": "5000",
+            "supplier+1@crown.ovh": "150",
+            "supplier+2@crown.ovh": "150",
+            "supplier+3@crown.ovh": "150",
+            "supplier+4@crown.ovh": "150"
+          },
+          {
+            "line_item": "Kiwis",
+            "unit": "Tons",
+            "quantity": "3000",
+            "supplier+1@crown.ovh": "0200",
+            "mult_supplier+1@crown.ovh": 1,
+            "supplier+2@crown.ovh": "200",
+            "mult_supplier+2@crown.ovh": 1,
+            "supplier+3@crown.ovh": "200",
+            "mult_supplier+3@crown.ovh": 1,
+            "supplier+4@crown.ovh": "200",
+            "mult_supplier+4@crown.ovh": 1
+          },
+          {
+            "line_item": "Bananes",
+            "unit": "Tons",
+            "quantity": "1000",
+            "supplier+1@crown.ovh": "0250",
+            "mult_supplier+1@crown.ovh": 1,
+            "supplier+2@crown.ovh": "250",
+            "mult_supplier+2@crown.ovh": 1,
+            "supplier+3@crown.ovh": "250",
+            "mult_supplier+3@crown.ovh": 1,
+            "supplier+4@crown.ovh": "250",
+            "mult_supplier+4@crown.ovh": 1
+          }
+        ],
+        "commercials_docs": [],
+        "awarding_principles": "<p>Supplier ranked #1 will be awarded with 100% of the lot.</p>",
+        "commercials_terms": "<p><strong>Offer validity:</strong> 90 days</p><p><strong>Payement terms:</strong> 60 days</p><p><strong>Incoterms:</strong> DDP</p>",
+        "general_terms": "<ul><li>Any bid placed during the eAuction must reflect the specifications, terms and conditions stated above.</li><li>Any bid placed during the eAuction is contractually binding and treated as a formal proposal.</li><li>Renegotiation is not possible post eAuction.</li><li>Winning bids and lots must be formalized in a contract with the client within thirthy (30) business days post eAuction.</li></ul>",
+        "dutch_prebid_enabled": true,
+        "overtime_rule": "all",
+        "start_at": "2024-12-03T18:15:00.000Z",
+        "end_at": "2024-12-03T18:22:00.000Z",
+        "lot_number": 1,
+        "suppliers_prices": [
+          {
+            "supplier": {
+              "email": "supplier+1@crown.ovh"
+            },
+            "lines_items": [
+              {
+                "line_item": "Apples",
+                "quantity": "5000",
+                "unit": "Tons",
+                "ceiling": "150",
+                "index": 0
+              },
+              {
+                "line_item": "Kiwis",
+                "quantity": "3000",
+                "unit": "Tons",
+                "ceiling": "0200",
+                "multiplier": 1,
+                "index": 1
+              },
+              {
+                "line_item": "Bananes",
+                "quantity": "1000",
+                "unit": "Tons",
+                "ceiling": "0250",
+                "multiplier": 1,
+                "index": 2
+              }
+            ]
+          },
+          {
+            "supplier": {
+              "email": "supplier+2@crown.ovh"
+            },
+            "lines_items": [
+              {
+                "line_item": "Apples",
+                "quantity": "5000",
+                "unit": "Tons",
+                "ceiling": "150",
+                "index": 0
+              },
+              {
+                "line_item": "Kiwis",
+                "quantity": "3000",
+                "unit": "Tons",
+                "ceiling": "200",
+                "multiplier": 1,
+                "index": 1
+              },
+              {
+                "line_item": "Bananes",
+                "quantity": "1000",
+                "unit": "Tons",
+                "ceiling": "250",
+                "multiplier": 1,
+                "index": 2
+              }
+            ]
+          },
+          {
+            "supplier": {
+              "email": "supplier+3@crown.ovh"
+            },
+            "lines_items": [
+              {
+                "line_item": "Apples",
+                "quantity": "5000",
+                "unit": "Tons",
+                "ceiling": "150",
+                "index": 0
+              },
+              {
+                "line_item": "Kiwis",
+                "quantity": "3000",
+                "unit": "Tons",
+                "ceiling": "200",
+                "multiplier": 1,
+                "index": 1
+              },
+              {
+                "line_item": "Bananes",
+                "quantity": "1000",
+                "unit": "Tons",
+                "ceiling": "250",
+                "multiplier": 1,
+                "index": 2
+              }
+            ]
+          },
+          {
+            "supplier": {
+              "email": "supplier+4@crown.ovh"
+            },
+            "lines_items": [
+              {
+                "line_item": "Apples",
+                "quantity": "5000",
+                "unit": "Tons",
+                "ceiling": "150",
+                "index": 0
+              },
+              {
+                "line_item": "Kiwis",
+                "quantity": "3000",
+                "unit": "Tons",
+                "ceiling": "200",
+                "multiplier": 1,
+                "index": 1
+              },
+              {
+                "line_item": "Bananes",
+                "quantity": "1000",
+                "unit": "Tons",
+                "ceiling": "250",
+                "multiplier": 1,
+                "index": 2
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "type": "reverse"
+}

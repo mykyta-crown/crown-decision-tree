@@ -1,0 +1,244 @@
+{
+  "title": "Constructeur d'enchères",
+  "actions": {
+    "save": "Sauvegarder brouillon",
+    "publish": "Publier l'enchère"
+  },
+  "auctionTypes": {
+    "preferredDutch": "Hollandaise préférée",
+    "japaneseNoRank": "Japonaise sans rang"
+  },
+  "duplication": {
+    "title": "Dupliquer l'enchère",
+    "simple": "Duplication simple des paramètres actuels de l'eAuction",
+    "training": "Dupliquer l'eAuction pour tous les fournisseurs en cas de formation",
+    "chooseType": "Choisir le type de duplication",
+    "duplicateAndUpdate": "Dupliquer et mettre à jour",
+    "createTrainings": "Créer les formations",
+    "namePrefix": "Copie de l'enchère",
+    "nameHint": "Vous pouvez modifier le nom de l'enchère dupliquée",
+    "typeChangedWarning": "Type d'enchère modifié. Les paramètres de lot ont été réinitialisés."
+  },
+  "basics": {
+    "title": "Bases de l'enchère",
+    "auctionName": {
+      "label": "Nom de l'eAuction",
+      "placeholder": "Entrer le nom de l'enchère"
+    },
+    "description": {
+      "label": "Description",
+      "placeholder": "Entrer la description de l'événement"
+    },
+    "timezone": {
+      "label": "Fuseau horaire",
+      "placeholder": "Entrer le fuseau horaire"
+    },
+    "currency": {
+      "label": "Devise"
+    },
+    "auctionType": "Type d'eAuction*",
+    "auctionOwner": {
+      "label": "Propriétaire de l'eAuction"
+    },
+    "auctionUsage": {
+      "label": "Usage de l'eAuction"
+    },
+    "auctionStatus": {
+      "label": "Statut de l'eAuction"
+    },
+    "draft": "Brouillon",
+    "published": "Publié",
+    "date": {
+      "label": "Date"
+    },
+    "time": {
+      "label": "Heure"
+    },
+    "sealedDate": {
+      "label": "Date de fin"
+    },
+    "sealedTime": {
+      "label": "Heure de fin"
+    },
+    "usage": {
+      "real": "Réel",
+      "training": "Formation",
+      "test": "Test"
+    }
+  },
+  "suppliers": {
+    "title": "Fournisseurs",
+    "search": {
+      "placeholder": "Trouver un fournisseur existant"
+    },
+    "addNewSupplier": "Ajouter nouveau fournisseur",
+    "table": {
+      "noData": "Aucun fournisseur ajouté",
+      "notSpecified": "Non spécifié",
+      "willReceiveInvitation": "Le fournisseur recevra une invitation"
+    },
+    "actions": {
+      "edit": "Modifier",
+      "delete": "Supprimer"
+    },
+    "dialog": {
+      "invite": "INVITER FOURNISSEUR",
+      "modify": "MODIFIER FOURNISSEUR",
+      "email": {
+        "placeholder": "Entrer l'email du fournisseur"
+      },
+      "phone": {
+        "placeholder": "Entrer le numéro de téléphone du fournisseur"
+      },
+      "actions": {
+        "cancel": "Annuler",
+        "invite": "Inviter",
+        "modify": "Modifier"
+      }
+    },
+    "headers": {
+      "country": "Pays",
+      "address": "Adresse",
+      "position": "Poste"
+    }
+  },
+  "lotRules": {
+    "name": "Nom du lot",
+    "showRank": "Afficher le rang",
+    "bidDecrement": {
+      "placeholder": "Entrer le décrément d'offre"
+    },
+    "competitionDuration": "Durée de la compétition",
+    "competitionDurationPlaceholder": "Entrer la durée de la compétition",
+    "rounds": "paliers",
+    "startingPrice": {
+      "label": "Prix de départ",
+      "placeholder": "Entrer le prix de départ"
+    },
+    "endingPrice": {
+      "label": "Prix final",
+      "placeholder": "Entrer le prix final"
+    },
+    "baselinePrice": {
+      "label": "Prix de base*",
+      "placeholder": "Entrer le prix de base"
+    },
+    "roundDecrement": "Décrément par palier*",
+    "roundIncrement": "Incrément par palier*",
+    "duration": "Durée*",
+    "roundDuration": "Durée du palier*",
+    "minBidDecrement": "Décrément d'offre min*",
+    "maxBidDecrement": "Décrément d'offre max*",
+    "overtime": "Prolongation*",
+    "overtimeNone": "Aucune",
+    "ranksTriggering": "Rangs déclenchant prolongation*",
+    "prebid": "Pré-offre",
+    "minutes": "MIN",
+    "rankPerLineItem": "Rang par ligne",
+    "rankPerLineItemTooltip": "Afficher le classement des fournisseurs pour chaque ligne individuellement au lieu du classement global. Ce champ n'est actif que lorsqu'il y a plusieurs lignes.",
+    "maxRankDisplayed": "Rang maximum affiché",
+    "maxRankDisplayedTooltip": "Contrôle combien de rangs sont visibles pour les fournisseurs. Choisissez 'Aucun' pour masquer tous les rangs, 'Tous' pour tout afficher, ou un nombre spécifique.",
+    "noRank": "Aucun rang",
+    "enable": "Activer",
+    "no": "Non",
+    "yes": "Oui",
+    "all": "Tous",
+    "minBidDecrementTooltip": "Réduction minimale requise par rapport à l'offre précédente.",
+    "maxBidDecrementTooltip": "Diminution maximale possible par rapport à l'offre précédente."
+  },
+  "validation": {
+    "positiveNumber": "Doit être un nombre positif",
+    "required": "Requis",
+    "nameRequired": "Le nom est requis.",
+    "invalidEmail": "Adresse email invalide",
+    "atLeastOneSupplier": "Au moins un fournisseur est requis.",
+    "atLeastOneItem": "Au moins un article est requis.",
+    "item": "Article",
+    "fieldRequired": "Le champ est requis.",
+    "baselineRequired": "Le prix de base doit être supérieur à 0.",
+    "durationRequired": "La durée doit être supérieure à 0.",
+    "overtimeRequired": "La plage de prolongation doit être supérieure à 0.",
+    "minBidDecrementRequired": "Le décrément d'offre minimum doit être supérieur à 0.",
+    "maxBidDecrementRequired": "Le décrément d'offre maximum doit être supérieur à 0.",
+    "awardingPrinciplesRequired": "Les principes d'attribution sont requis.",
+    "commercialTermsRequired": "Les conditions commerciales sont requises.",
+    "fileTooBig": "Fichier trop volumineux",
+    "invalidFileType": "Type de fichier invalide"
+  },
+  "lots": {
+    "title": "Lots",
+    "addLot": "Ajouter lot",
+    "lot": "Lot",
+    "lotInformation": "Informations sur le lot",
+    "awardingPrinciples": "Principes d'attribution",
+    "commercialTerms": "Conditions commerciales",
+    "generalTerms": "Conditions générales",
+    "uploadDocuments": "Télécharger documents",
+    "clickToUpload": "Cliquer pour télécharger",
+    "lotSuppliers": "Fournisseurs du lot",
+    "addSuppliersToLot": "Ajouter des fournisseurs au lot",
+    "lotAndCeilingPrice": "Lot et prix plafond",
+    "addMoreValues": "Ajouter plus de valeurs",
+    "fixedHandicap": "Handicap fixe",
+    "dynamicHandicap": "Handicap dynamique",
+    "lineItem": "Article",
+    "lineItems": "Articles",
+    "unit": "Unité",
+    "quantity": "Quantité",
+    "addNewLineItem": "Ajouter nouvel article",
+    "total": "Total",
+    "defaultAwardingPrinciples": "<p>Vous devriez décrire ici les règles et la logique qui seront utilisées pour évaluer les propositions des fournisseurs et sélectionner le gagnant. Vous pouvez inclure :</p><ul><li>Les critères d'évaluation principaux (ex. prix, qualité, conditions de livraison)</li><li>Comment chaque critère sera pondéré</li><li>Toute exigence minimale ou condition disqualifiante</li><li>Processus de prise de décision (ex. gagnant unique, accord-cadre, etc.)</li></ul><p>Cette information aide les fournisseurs à comprendre comment leurs offres seront évaluées et assure la transparence dans le processus d'attribution.</p>",
+    "defaultCommercialTerms": "<p>Incluez les conditions clés telles que :</p><ul><li>Conditions de paiement</li><li>Délai de livraison</li><li>Durée du contrat</li><li>Garantie ou pénalités (le cas échéant)</li></ul><p>Cela aide les fournisseurs à comprendre vos attentes avant de soumettre une offre.</p>",
+    "defaultGeneralTerms": "<ul><li>Toute offre placée durant l'eAuction doit refléter les spécifications, termes et conditions énoncés ci-dessus.</li><li>Toute offre placée durant l'eAuction est contractuellement contraignante et traitée comme une proposition formelle.</li><li>La renégociation n'est pas possible après l'eAuction.</li><li>Les offres et lots gagnants doivent être formalisés dans un contrat avec le client dans les trente (30) jours ouvrables suivant l'eAuction.</li></ul>"
+  },
+  "timingRules": {
+    "title": "RÈGLES DE TIMING",
+    "chooseTitle": "Choisir les règles de timing de l'eAuction",
+    "description": "Sélectionnez les règles de timing pour votre eEnchère. Ces règles détermineront les heures de début et de fin pour chaque lot. Choisissez le timing qui correspond le mieux à votre stratégie et aux objectifs de votre eEnchère.",
+    "serial": {
+      "title": "Série"
+    },
+    "parallel": {
+      "title": "Parallèle"
+    },
+    "staggered": {
+      "title": "Échelonné"
+    }
+  },
+  "auctionDescriptions": {
+    "english": {
+      "title": "Anglaise inversée ",
+      "description": "Une enchère anglaise inversée démarre sur la base des pré-offres fournisseurs. Les participants voient leur classement et peuvent soumettre de nouvelles offres jusqu’à la fin. Le classement final détermine l’attribution.\n <br>  • **Avant l'événement :**  Les participants déposent une pré-offre qui fixe leur rang initial.\n \n  • **Pendant l'événement :**  Le prix monte à intervalles fixes jusqu’à ce qu’une offre soit acceptée.\n \n  • **Durée :** L’événement est limité dans le temps mais se termine dès qu’une offre est validée.\n \n  • **Attribution :** Le premier participant qui accepte le prix obtient le lot.\n"
+    },
+    "dutch": {
+      "title": "Hollandaise inversée ",
+      "description": "Une enchère hollandaise inversée commence à un prix bas qui augmente par paliers. Le premier participant qui accepte le prix remporte immédiatement le lot.\n <br> • **Avant l'événement :** Une pré-offre peut être demandée.\n\n  • **Pendant l'événement :** Le prix augmente palier par palier par incréments fixes ; aucun classement en direct n'est affiché.\n \n  • **Durée :** Durée limitée mais se termine instantanément lorsqu'une offre est acceptée.\n \n  • **Attribution :** La première offre acceptée remporte le lot.\n"
+    },
+    "japanese": {
+      "title": "Japonaise inversée",
+      "description": "Une enchère japonaise inversée démarre à un prix haut qui baisse par paliers. Les participants doivent confirmer leur présence à chaque palier pour rester dans l’enchère. Le dernier en lice remporte le lot.\n <br> • **Avant l'événement :**  Une pré-offre peut être demandée.\n \n  • **Pendant l'événement :** Le prix baisse par étapes fixes ; chaque participant doit confirmer sa participation à chaque palier ou quitter l’enchère.\n \n  • **Durée :**  L’événement dure un temps limité et s’arrête lorsqu’il ne reste qu’un participant ou lorsque le prix plancher est atteint.\n \n  • **Attribution :** Le dernier participant actif obtient le lot. \n"
+    },
+    "sealedBid": {
+      "title": "Offre scellée",
+      "description": "Dans une enchère à offre scellée, chaque participant soumet une offre confidentielle non visible des concurrents. L’offre la plus compétitive l’emporte à la clôture. .\n <br> • **Avant l'événement :** Les participants déposent leurs offres avant la date limite.\n \n  • **Pendant l'événement :** Les offres restent confidentielles, mais peuvent être révisées jusqu’à la clôture. \n \n  • **Durée :** Aucun classement en direct ; les résultats sont révélés à la fin.\n \n  • **Attribution :** Le lot est attribué à l’offre la plus compétitive selon les principes définis.\n"
+    },
+    "preferredDutch": {
+      "title": "Hollandaise préférentielle",
+      "description": "Une enchère hollandaise préférentielle fonctionne comme une enchère hollandaise classique, mais certains fournisseurs reçoivent la priorité sur chaque palier de prix avant les autres. Le premier à accepter remporte le lot.\n <br> • **Avant l'événement :** Une pré-offre peut être demandée ; certains fournisseurs sont désignés comme « préférés ».\n \n  • **Pendant l'événement :** Le prix monte par étapes ; les fournisseurs préférés ont l’opportunité d’accepter en premier.\n \n  • **Durée :** L’événement est limité dans le temps mais s’arrête dès qu’une offre est validée.\n \n  • **Attribution :** Le premier fournisseur qui accepte le prix obtient le lot.\n"
+    },
+    "japaneseNoRank": {
+      "title": "Japonaise sans classement",
+      "description": "Une enchère japonaise sans classement suit le principe de l’enchère japonaise, mais l’attribution finale est décidée en dehors de l’événement selon d’autres critères.\n <br> • **Avant l'événement :** Une pré-offre peut être demandée.\n \n  • **Pendant l'événement :** Le prix baisse par étapes ; les participants doivent rester actifs à chaque palier ou sortir. Le prix de sortie de chaque participant est enregistré.\n \n  • **Durée :** L’événement est limité et prend fin après le dernier palier.\n \n  • **Attribution :** Le lot est attribué en combinant les résultats de l’enchère avec d’autres critères externes.\n"
+    }
+  },
+  "breadcrumbs": {
+    "eAuctions": "eAuctions",
+    "createEAuction": "Créer eAuction"
+  },
+  "pageActions": {
+    "copyEAuction": "Copier eAuction",
+    "edit": "Enregistrer les modifications",
+    "createEAuction": "Créer eAuction",
+    "duplicateEAuction": "Dupliquer eAuction"
+  }
+}

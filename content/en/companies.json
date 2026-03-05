@@ -1,0 +1,15 @@
+{
+  "title": "Companies",
+  "actions": {
+    "add": "Add Company"
+  },
+  "table": {
+    "name": "Company Name",
+    "type": "Type",
+    "country": "Country"
+  },
+  "empty": {
+    "title": "No companies found",
+    "message": "Start by adding your first company"
+  }
+}

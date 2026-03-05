@@ -1,0 +1,27 @@
+{
+  "auction": {
+    "duration": 20,
+    "description": "eAuction for Apples",
+    "commercials_terms": "Each company agree to deliver the material refering to the specification enclosed. Goods will be delivered on the date defined in the eAuction. Prices must be € currency. Incoterms must be DDP. Payment terms are 60 days from the order date.",
+    "timezone": "UTC+2",
+    "overtime_range": 0.5,
+    "max_bid_decr": 100,
+    "min_bid_decr": 25000,
+    "max_bid_decr_type": "EUR",
+    "min_bid_decr_type": "EUR",
+    "log_visibility": "own_rank_only",
+    "currency": "EUR",
+    "name": "200123678 Apples",
+    "baseline": 2500000,
+    "type": "dutch",
+    "test": true
+  },
+  "supplies": [
+    {
+      "name": "Apples",
+      "quantity": 5000,
+      "unit": "Tonne",
+      "price": 500
+    }
+  ]
+}

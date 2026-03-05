@@ -1,0 +1,80 @@
+# Crown E-Auction Platform
+
+**IMPORTANT**: Avant de commencer toute tâche, lis systématiquement le fichier `CLAUDE.md` à la racine du projet. Ce fichier contient les instructions essentielles et pointe vers la documentation complète.
+
+## Documentation
+
+Toute la documentation du projet est dans `docs/` :
+
+- `CLAUDE.md` - Point d'entrée principal, conventions, architecture
+- `docs/DATABASE.md` - Schema complet, RLS policies, triggers
+- `docs/API.md` - Endpoints serveur, webhooks, Cloud Tasks
+- `docs/FRONTEND.md` - Composables, components, middleware, dependencies
+- `docs/SQL.md` - Functions PostgreSQL, triggers, calculs de prix/rang
+- `docs/SCRIPTS.md` - Scripts utilitaires
+- `docs/BROWSER_TESTING.md` - Credentials de test, flows d'authentification
+- `docs/BOT_BEHAVIOR.md` - Logique des bots d'entraînement
+
+## Quick Reference
+
+- **Stack**: Nuxt 3, Vue 3, Vuetify, Supabase, Google Cloud Tasks, Vercel
+- **Sellers identifiés par email** (pas user ID) : `auctions_sellers.seller_email`
+- **GCP Project**: `crown-476614` (europe-west1)
+
+## ⚠️ CRITIQUE: Types d'enchères en base de données
+
+**Le champ `type` en BDD ne correspond PAS aux noms affichés dans l'UI !**
+
+| Nom UI | Valeur `type` en BDD |
+|--------|---------------------|
+| English | `reverse` |
+| Sealed Bid | `sealed-bid` |
+| Dutch | `dutch` |
+| Japanese | `japanese` |
+
+**NE JAMAIS écrire `auction.type === 'english'`** - cette valeur n'existe pas !
+
+```javascript
+// ❌ FAUX - le type 'english' n'existe pas en BDD
+if (auction.type === 'english') { ... }
+
+// ✅ CORRECT - les enchères English utilisent le type 'reverse'
+if (auction.type === 'reverse') { ... }
+```
+
+## Code Style
+
+- Éviter TypeScript sauf si nécessaire
+- Composition API avec `<script setup>`
+- Commentaires en français acceptés
+- Composants en PascalCase (e.g., `AppHeader.vue`)
+- Grouper les composants liés dans des dossiers dédiés
+
+## Internationalization
+
+- Toujours utiliser `localePath` pour les liens internes
+- Import: `const localePath = useLocalePath()` (PAS `const { localePath } = useI18n()`)
+- Réutiliser les clés de traduction existantes avant d'en créer de nouvelles
+- Grouper les traductions par feature/page dans les fichiers JSON
+
+## Browser Testing E2E (OBLIGATOIRE)
+
+**IMPORTANT**: Après avoir terminé avec succès un test E2E via browser automation (MCP browser), tu **DOIS** mettre à jour `docs/BROWSER_TESTING.md` avec :
+
+1. **Instructions étape par étape** pour reproduire le parcours de test
+2. **Patterns JavaScript** qui ont fonctionné pour remplir les formulaires Vuetify
+3. **Sélecteurs CSS** ou valeurs `ref` qui ont correctement ciblé les éléments
+4. **Pièges courants** rencontrés et leurs solutions
+5. **Prérequis de validation** attendus par le formulaire
+6. **Étapes de vérification** du succès (quoi vérifier après soumission)
+
+**Pourquoi c'est obligatoire :**
+- L'automation browser pour Vuetify/Vue nécessite des patterns spécifiques
+- Documenter les sélecteurs évite aux futurs assistants de perdre du temps
+- Les pièges documentés font gagner des heures de debug
+- Cela crée un playbook réutilisable pour tester des features similaires
+
+**Sections existantes à suivre comme modèle** dans `docs/BROWSER_TESTING.md`:
+- `E2E: Create Dutch eAuction with MCP Browser`
+- `E2E: Create English eAuction with MCP Browser`
+- `E2E: Create Multi-Lot Multi-Item eAuction with MCP Browser`

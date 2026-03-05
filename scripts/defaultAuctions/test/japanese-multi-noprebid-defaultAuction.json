@@ -1,0 +1,353 @@
+{
+  "auction": {
+    "group_id": "2f44bc93-e8f9-4da7-9070-5f9a171a57b5",
+    "name": "Test default auction Japanese Multi",
+    "description": "Test default auction: Multilot Japanese",
+    "date": "2025-01-25T16:07:40.028Z",
+    "time": "17:07",
+    "currency": "EUR",
+    "timezone": "CEST",
+    "type": "japanese",
+    "test": true,
+    "company_id": "fbe426fb-a2e2-40a1-84c3-ce8428002f2a",
+    "buyer_id": "6adda705-d34f-41d8-ae35-d427c62eff83",
+    "log_visibility": "only_own",
+    "published": true,
+    "usage": "test",
+    "start_at": "2025-01-25T16:07:00.000Z",
+    "end_at": "2025-01-25T16:17:00.000Z",
+    "awarding_principles": "<p>Supplier ranked #1 will be awarded with 100% of the lot.</p>",
+    "commercials_terms": "<p><strong>Offer validity:</strong> 90 days</p><p><strong>Payement terms:</strong> 60 days</p><p><strong>Incoterms:</strong> DDP</p>",
+    "general_terms": "<ul><li>Any bid placed during the eAuction must reflect the specifications, terms and conditions stated above.</li><li>Any bid placed during the eAuction is contractually binding and treated as a formal proposal.</li><li>Renegotiation is not possible post eAuction.</li><li>Winning bids and lots must be formalized in a contract with the client within thirthy (30) business days post eAuction.</li></ul>",
+    "lots": [
+      {
+        "name": "Very long first lot name to display, all suppliers",
+        "duration": 10,
+        "baseline": "99500",
+        "multiplier": true,
+        "rank_trigger": "all",
+        "min_bid_decr": "500",
+        "min_bid_decr_type": "EUR",
+        "max_bid_decr": "0100000",
+        "max_bid_decr_type": "EUR",
+        "overtime_range": 0.25,
+        "suppliers": [
+          {
+            "email": "supplier+1@crown.ovh"
+          },
+          {
+            "email": "supplier+2@crown.ovh"
+          },
+          {
+            "email": "supplier+3@crown.ovh"
+          },
+          {
+            "email": "supplier+4@crown.ovh"
+          },
+          {
+            "email": "supplier+5@crown.ovh"
+          }
+        ],
+        "items": [
+          {
+            "line_item": "Yuzu's fur",
+            "unit": "Tons",
+            "quantity": 1,
+            "supplier+1@crown.ovh": "100000",
+            "supplier+4@crown.ovh": "100000",
+            "supplier+2@crown.ovh": "100000",
+            "supplier+5@crown.ovh": "100000",
+            "supplier+3@crown.ovh": "100000"
+          }
+        ],
+        "commercials_docs": [],
+        "awarding_principles": "<p>Supplier ranked #1 will be awarded with 100% of the lot.</p>",
+        "commercials_terms": "<p><strong>Offer validity:</strong> 90 days</p><p><strong>Payement terms:</strong> 60 days</p><p><strong>Incoterms:</strong> DDP</p>",
+        "general_terms": "<ul><li>Any bid placed during the eAuction must reflect the specifications, terms and conditions stated above.</li><li>Any bid placed during the eAuction is contractually binding and treated as a formal proposal.</li><li>Renegotiation is not possible post eAuction.</li><li>Winning bids and lots must be formalized in a contract with the client within thirthy (30) business days post eAuction.</li></ul>",
+        "dutch_prebid_enabled": false,
+        "start_at": "2025-01-25T16:07:00.000Z",
+        "end_at": "2025-01-25T16:17:00.000Z",
+        "lot_number": 1,
+        "suppliers_prices": [
+          {
+            "supplier": {
+              "email": "supplier+1@crown.ovh"
+            },
+            "lines_items": [
+              {
+                "line_item": "Yuzu's fur",
+                "quantity": 1,
+                "unit": "Tons",
+                "ceiling": "100000",
+                "index": 0
+              }
+            ]
+          },
+          {
+            "supplier": {
+              "email": "supplier+2@crown.ovh"
+            },
+            "lines_items": [
+              {
+                "line_item": "Yuzu's fur",
+                "quantity": 1,
+                "unit": "Tons",
+                "ceiling": "100000",
+                "index": 0
+              }
+            ]
+          },
+          {
+            "supplier": {
+              "email": "supplier+3@crown.ovh"
+            },
+            "lines_items": [
+              {
+                "line_item": "Yuzu's fur",
+                "quantity": 1,
+                "unit": "Tons",
+                "ceiling": "100000",
+                "index": 0
+              }
+            ]
+          },
+          {
+            "supplier": {
+              "email": "supplier+4@crown.ovh"
+            },
+            "lines_items": [
+              {
+                "line_item": "Yuzu's fur",
+                "quantity": 1,
+                "unit": "Tons",
+                "ceiling": "100000",
+                "index": 0
+              }
+            ]
+          },
+          {
+            "supplier": {
+              "email": "supplier+5@crown.ovh"
+            },
+            "lines_items": [
+              {
+                "line_item": "Yuzu's fur",
+                "quantity": 1,
+                "unit": "Tons",
+                "ceiling": "100000",
+                "index": 0
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Lot number 2 with only 3 suppliers and different quantities",
+        "duration": 5,
+        "baseline": "7400",
+        "multiplier": true,
+        "rank_trigger": "all",
+        "min_bid_decr": "300",
+        "min_bid_decr_type": "EUR",
+        "max_bid_decr": "08000",
+        "max_bid_decr_type": "EUR",
+        "overtime_range": 0.25,
+        "suppliers": [
+          {
+            "email": "supplier+1@crown.ovh"
+          },
+          {
+            "email": "supplier+2@crown.ovh"
+          },
+          {
+            "email": "supplier+3@crown.ovh"
+          }
+        ],
+        "items": [
+          {
+            "line_item": "Item 1",
+            "unit": "Tons",
+            "quantity": "50",
+            "supplier+1@crown.ovh": "160",
+            "supplier+2@crown.ovh": "160",
+            "supplier+3@crown.ovh": "160"
+          }
+        ],
+        "awarding_principles": "<p>Supplier ranked #1 will be awarded with 100% of the lot.</p>",
+        "commercials_terms": "<p><strong>Offer validity:</strong> 90 days</p><p><strong>Payement terms:</strong> 60 days</p><p><strong>Incoterms:</strong> DDP</p>",
+        "general_terms": "<ul><li>Any bid placed during the eAuction must reflect the specifications, terms and conditions stated above.</li><li>Any bid placed during the eAuction is contractually binding and treated as a formal proposal.</li><li>Renegotiation is not possible post eAuction.</li><li>Winning bids and lots must be formalized in a contract with the client within thirthy (30) business days post eAuction.</li></ul>",
+        "commercials_docs": [],
+        "dutch_prebid_enabled": false,
+        "start_at": "2025-01-25T16:17:00.000Z",
+        "end_at": "2025-01-25T16:22:00.000Z",
+        "lot_number": 2,
+        "suppliers_prices": [
+          {
+            "supplier": {
+              "email": "supplier+1@crown.ovh"
+            },
+            "lines_items": [
+              {
+                "line_item": "Item 1",
+                "quantity": "50",
+                "unit": "Tons",
+                "ceiling": "160",
+                "index": 0
+              }
+            ]
+          },
+          {
+            "supplier": {
+              "email": "supplier+2@crown.ovh"
+            },
+            "lines_items": [
+              {
+                "line_item": "Item 1",
+                "quantity": "50",
+                "unit": "Tons",
+                "ceiling": "160",
+                "index": 0
+              }
+            ]
+          },
+          {
+            "supplier": {
+              "email": "supplier+3@crown.ovh"
+            },
+            "lines_items": [
+              {
+                "line_item": "Item 1",
+                "quantity": "50",
+                "unit": "Tons",
+                "ceiling": "160",
+                "index": 0
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Lot  3",
+        "duration": 10,
+        "baseline": "244040",
+        "multiplier": true,
+        "rank_trigger": "all",
+        "min_bid_decr": "2980",
+        "min_bid_decr_type": "EUR",
+        "max_bid_decr": "250000",
+        "max_bid_decr_type": "EUR",
+        "overtime_range": 0.25,
+        "suppliers": [
+          {
+            "email": "supplier+1@crown.ovh"
+          },
+          {
+            "email": "supplier+2@crown.ovh"
+          },
+          {
+            "email": "supplier+3@crown.ovh"
+          },
+          {
+            "email": "supplier+4@crown.ovh"
+          },
+          {
+            "email": "supplier+5@crown.ovh"
+          }
+        ],
+        "items": [
+          {
+            "line_item": "Very long line item name, for a very complicated and expensive item",
+            "unit": "Tons",
+            "quantity": 1,
+            "supplier+1@crown.ovh": "250000",
+            "supplier+2@crown.ovh": "250000",
+            "supplier+3@crown.ovh": "250000",
+            "supplier+4@crown.ovh": "250000",
+            "supplier+5@crown.ovh": "250000"
+          }
+        ],
+        "awarding_principles": "<p>Supplier ranked #1 will be awarded with 100% of the lot.</p>",
+        "commercials_terms": "<p><strong>Offer validity:</strong> 90 days</p><p><strong>Payement terms:</strong> 60 days</p><p><strong>Incoterms:</strong> DDP</p>",
+        "general_terms": "<ul><li>Any bid placed during the eAuction must reflect the specifications, terms and conditions stated above.</li><li>Any bid placed during the eAuction is contractually binding and treated as a formal proposal.</li><li>Renegotiation is not possible post eAuction.</li><li>Winning bids and lots must be formalized in a contract with the client within thirthy (30) business days post eAuction.</li></ul>",
+        "commercials_docs": [],
+        "dutch_prebid_enabled": false,
+        "start_at": "2025-01-25T16:22:00.000Z",
+        "end_at": "2025-01-25T16:32:00.000Z",
+        "lot_number": 3,
+        "suppliers_prices": [
+          {
+            "supplier": {
+              "email": "supplier+1@crown.ovh"
+            },
+            "lines_items": [
+              {
+                "line_item": "Very long line item name, for a very complicated and expensive item",
+                "quantity": 1,
+                "unit": "Tons",
+                "ceiling": "250000",
+                "index": 0
+              }
+            ]
+          },
+          {
+            "supplier": {
+              "email": "supplier+2@crown.ovh"
+            },
+            "lines_items": [
+              {
+                "line_item": "Very long line item name, for a very complicated and expensive item",
+                "quantity": 1,
+                "unit": "Tons",
+                "ceiling": "250000",
+                "index": 0
+              }
+            ]
+          },
+          {
+            "supplier": {
+              "email": "supplier+3@crown.ovh"
+            },
+            "lines_items": [
+              {
+                "line_item": "Very long line item name, for a very complicated and expensive item",
+                "quantity": 1,
+                "unit": "Tons",
+                "ceiling": "250000",
+                "index": 0
+              }
+            ]
+          },
+          {
+            "supplier": {
+              "email": "supplier+4@crown.ovh"
+            },
+            "lines_items": [
+              {
+                "line_item": "Very long line item name, for a very complicated and expensive item",
+                "quantity": 1,
+                "unit": "Tons",
+                "ceiling": "250000",
+                "index": 0
+              }
+            ]
+          },
+          {
+            "supplier": {
+              "email": "supplier+5@crown.ovh"
+            },
+            "lines_items": [
+              {
+                "line_item": "Very long line item name, for a very complicated and expensive item",
+                "quantity": 1,
+                "unit": "Tons",
+                "ceiling": "250000",
+                "index": 0
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "type": "japanese"
+}

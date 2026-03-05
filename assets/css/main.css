@@ -1,0 +1,75 @@
+.v-btn {
+  font-size: 14px !important;
+  letter-spacing: normal !important;
+}
+body {
+  font-size: 14px;
+}
+
+.quill .ql-container > .ql-editor {
+  position: absolute !important;
+  height: 100% !important;
+  width: 100% !important;
+  cursor: text !important;
+}
+.quill .ql-container > .ql-blank {
+  cursor: text !important;
+}
+
+.primary-gradient {
+  background: linear-gradient(90.1deg, #0c7c4a 0%, #00d074 125.89%) !important;
+}
+
+.primary-reverse-gradient {
+  background: linear-gradient(90.1deg, #00d074 0%, #0c7c4a 125.89%) !important;
+}
+
+/* BTN */
+.v-theme--crownTheme.v-btn {
+  text-transform: none;
+}
+
+.btn--primary-gradient {
+  background: linear-gradient(95deg, #00d072 13.86%, #006a3a 157.37%) !important;
+}
+
+.btn--primary-gradient:hover {
+  background: #00d072 !important;
+}
+
+/* CARDS */
+.v-theme--crownTheme.v-card {
+  border-color: #e9eaec !important;
+}
+
+/* BORDER */
+.panel-border {
+  border: 1px solid #e9eaec !important;
+}
+
+/* TODO, try to reproduce with SASS variables */
+.v-selection-control--dirty .v-switch__track {
+  opacity: 1 !important;
+}
+
+.font-weight-semibold {
+  font-weight: 600 !important;
+}
+
+.v-input__details {
+  padding-left: 0 !important;
+}
+
+.v-field__input {
+  font-size: 14px !important;
+}
+
+.v-text-field__suffix__text {
+  font-size: 12px !important;
+  color: rgb(var(--v-theme-grey)) !important;
+}
+
+.chip-style {
+  width: 80px;
+  justify-content: center;
+}

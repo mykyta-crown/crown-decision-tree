@@ -1,0 +1,394 @@
+{
+  "title": "Enchère",
+  "tabs": {
+    "terms": "Conditions",
+    "status": "Statut",
+    "admin": "Admin"
+  },
+  "actions": {
+    "startEAuction": "Démarrer eAuction",
+    "stillHere": "Je suis encore là !",
+    "resetTraining": "Réinitialiser la Formation",
+    "startTraining": "Démarrer la Formation",
+    "trainingInProgress": "Formation en cours"
+  },
+  "pdfExport": {
+    "preparing": "Préparation de l'export...",
+    "loadingLots": "Chargement des lots...",
+    "exportingLot": "Export du lot {current} sur {total}...",
+    "uploading": "Téléversement des images...",
+    "generating": "Génération du PDF...",
+    "downloading": "Téléchargement du PDF...",
+    "success": "Export terminé !"
+  },
+  "messages": {
+    "connectionError": "Impossible de mettre à jour les détails de l'eAuction. Veuillez vérifier votre connexion Internet et actualiser la page pour rester synchronisé avec les autres participants.",
+    "idleTitle": "👋 Êtes-vous encore là ?",
+    "idleMessage": "Votre session semble inactive. Si vous participez encore à l'événement, veuillez interagir avec la page pour continuer.",
+    "noBidYet": "Aucune offre"
+  },
+  "pricing": {
+    "baseline": "Prix de base",
+    "lowestCurrentBid": "Offre la plus basse",
+    "priceSaving": "Économie de prix",
+    "totalPrice": "Prix total",
+    "pricePerUnit": "Prix par unité",
+    "currentPrice": "Prix Actuel",
+    "winningPrice": "Prix Gagnant"
+  },
+  "activityLog": {
+    "title": "Journal d'activité",
+    "rank": "RANG",
+    "round": "PALIER",
+    "time": "HEURE",
+    "you": "Vous",
+    "acceptedPriceOf": "a accepté le prix de",
+    "placedBidOf": "a fait une offre de",
+    "auctionStarted": "L'eAuction a commencé !",
+    "auctionEnded": "L'eAuction est terminée !",
+    "auctionDateSetTo": "La date de l'eAuction est fixée au",
+    "auctionClosesAt": "L'eAuction se termine le",
+    "bidsBeingCollected": "Les offres sont en cours de collecte",
+    "finishedWithRank": "Vous avez terminé avec le rang",
+    "sellerFinishedWithRank": "a terminé avec le rang",
+    "priceWasAccepted": "Le prix de",
+    "wasAccepted": "a été accepté",
+    "competitorBidChangedRank": "Une offre d'un autre participant a changé votre rang",
+    "newRoundStarted": "Nouveau palier avec le prix de",
+    "hasStarted": "a commencé",
+    "yourCeilingPriceIs": "Votre prix plafond est",
+    "bidsAutoAccepted": "Les offres sont automatiquement acceptées jusqu'à votre niveau de pré-offre",
+    "placePrebidToParticipate": "Veuillez placer une pré-offre pour participer à l'eAuction",
+    "startingPriceSetTo": "Le prix de départ est fixé à",
+    "leftCompetitionAtPrice": "a quitté la compétition au prix de",
+    "eAuctionStartsAtPrice": "L'eAuction commence au prix de",
+    "youNowParticipateIn": "Vous participez maintenant à",
+    "eAuction": "l'eAuction",
+    "placedPrebidOf": "avez placé une pré-offre de",
+    "updatedPrebidTo": "a mis à jour la pré-offre à",
+    "on": "le"
+  },
+  "leaderboard": {
+    "title": "Classement",
+    "rank": "RANG",
+    "name": "NOM",
+    "status": "STATUT",
+    "bidPrice": "PRIX OFFRE",
+    "online": "en ligne",
+    "offline": "hors ligne"
+  },
+  "timer": {
+    "finishIn": "Se termine dans",
+    "nextRoundIn": "Prochain palier dans",
+    "startIn": "Débute dans",
+    "timer": "Minuteur",
+    "eAuctionTime": "Durée eAuction",
+    "minutes": "minutes",
+    "hours": "heures",
+    "days": "jours",
+    "months": "mois",
+    "min": "min",
+    "h": "h",
+    "s": "s"
+  },
+  "status": {
+    "active": "actif",
+    "upcoming": "à venir",
+    "closed": "fermé"
+  },
+  "bidsTable": {
+    "lineItems": "Articles",
+    "title": "Tableau des offres",
+    "quantity": "Quantité",
+    "total": "Total",
+    "totalPrice": "Prix total",
+    "totalValue": "Valeur totale"
+  },
+  "dashboard": {
+    "supplier": "Fournisseur"
+  },
+  "bidding": {
+    "total": "Total",
+    "title": "Tableau de soumission d'offres",
+    "headers": {
+      "lineItems": "Articles",
+      "quantity": "Quantité",
+      "previousBid": "Votre offre précédente",
+      "calculations": "Calculs",
+      "newBid": "Votre nouvelle offre"
+    },
+    "submitNewBid": "Soumettre nouvelle offre",
+    "bidReducedBy": "Offre réduite de",
+    "validation": {
+      "cantBeEmpty": "Ne peut pas être vide",
+      "digitsOnly": "Chiffres uniquement",
+      "digitOnly": "Chiffre uniquement",
+      "minValue": "Valeur min 0",
+      "maxValue": "Valeur max",
+      "minBidDecrement": "Décrément min d'offre",
+      "maxBidDecrement": "Décrément max d'offre",
+      "handicapCannotIncrease": "Le handicap ne peut pas augmenter le prix au-dessus de votre offre précédente",
+      "handicapInfoMessage": "Le handicap dynamique ne peut évoluer qu'à la baisse. Une fois réduit, il ne peut plus être augmenté — veuillez choisir avec soin."
+    }
+  },
+  "termsApproval": {
+    "title": "Approbation des conditions",
+    "headers": {
+      "company": "Entreprise",
+      "phone": "Téléphone",
+      "email": "Email",
+      "contact": "Contact",
+      "position": "Poste",
+      "lastConnection": "Dernière connexion",
+      "status": "Statut",
+      "action": "Action"
+    },
+    "status": {
+      "approved": "Approuvé",
+      "pending": "En attente"
+    },
+    "dialog": {
+      "removeSupplier": "Supprimer le fournisseur",
+      "confirmRemoval": "Êtes-vous sûr de vouloir supprimer",
+      "remove": "Supprimer"
+    }
+  },
+  "prebid": {
+    "lineItems": "Articles",
+    "title": "Pré-offre",
+    "unit": "Unité",
+    "quantity": "Quantité",
+    "total": "Total",
+    "handicap": "Handicap"
+  },
+  "ceilingPrice": {
+    "lineItems": "Articles",
+    "title": "Prix plafond",
+    "unit": "Unité",
+    "quantity": "Quantité",
+    "total": "Total"
+  },
+  "dutch": {
+    "roundTimer": {
+      "nextPriceIn": "Prochain prix dans",
+      "roundTime": "Temps du palier",
+      "sec": "sec"
+    },
+    "supplyBidCard": {
+      "round": "Palier :"
+    },
+    "currentStateCard": {
+      "yourPrebid": "Votre pré-offre",
+      "startingPrice": "Prix de départ",
+      "yourRank": "Votre rang",
+      "currentOffer": "Offre actuelle",
+      "noPrebidMessage": "Vous n'avez pas placé de pré-offre"
+    },
+    "suppliesBidsTable": {
+      "lineItem": "ARTICLES",
+      "unit": "UNITÉ",
+      "quantity": "QUANTITÉ",
+      "pricePerUnit": "PRIX PAR UNITÉ",
+      "total": "TOTAL",
+      "rank": "RANG"
+    },
+    "dutchRoundsChart": {
+      "price": "Prix",
+      "ceilingPrice": "Prix plafond",
+      "round": "Palier",
+      "preBid": "Pré-offre ",
+      "allRounds": "Tous les paliers",
+      "tenRounds": "10 paliers",
+      "twentyRounds": "20 paliers",
+      "graph": "Graphique",
+      "blocks": "Blocs"
+    },
+    "participantsCard": {
+      "title": "Participants",
+      "name": "NOM",
+      "status": "STATUT",
+      "preBid": "PRÉ-OFFRE",
+      "bestBid": "MEILLEURE OFFRE",
+      "online": "en ligne",
+      "offline": "hors ligne"
+    }
+  },
+  "confirmBidDialog": {
+    "title": "PRIX DE L'OFFRE",
+    "areYouSureSubmitBid": "Êtes-vous sûr de vouloir soumettre l'",
+    "areYouSureSubmitPrebid": "Êtes-vous sûr de vouloir soumettre la pré-offre de",
+    "areYouSureApproveBid": "Êtes-vous sûr de vouloir approuver l'offre de",
+    "bidOf": "offre de",
+    "prebidOf": "pré-offre de",
+    "prebidActivationMessage": "Votre pré-offre sera activée une fois que le prix atteindra ce montant.",
+    "prebidWarningMessage": "Si un participant, y compris vous-même, accepte un prix avant que ce seuil ne soit atteint, l'eAuction se terminera et votre pré-offre ne sera pas soumise. Veuillez noter que la pré-offre est prioritaire sur les offres normales.",
+    "dutchBidEndMessage": "En cliquant sur le bouton 'Oui', vous mettrez fin à l'eAuction",
+    "prebidFinalMessage": "Votre pré-offre sera considérée comme une offre finale si vous ne faites pas d'autre offre. Veuillez vous assurer que votre pré-offre actuelle correspond au montant souhaité, ou profitez de l'occasion pour faire une autre offre avant la fin de l'enchère.",
+    "bidCannotChangeMessage": "Les offres ne peuvent pas être modifiées après soumission.",
+    "cancel": "Annuler",
+    "yes": "Oui"
+  },
+  "admin": {
+    "bidDeleteBtn": {
+      "deleteLastBid": "Supprimer la dernière offre",
+      "confirmMessage": "Êtes-vous sûr de vouloir supprimer la dernière offre de",
+      "cancel": "Annuler",
+      "delete": "Supprimer"
+    },
+    "supplierDeleteDialog": {
+      "removeSupplier": "Supprimer le fournisseur",
+      "confirmMessage": "Êtes-vous sûr de vouloir supprimer :",
+      "cancel": "Annuler",
+      "remove": "Supprimer"
+    }
+  },
+  "archiveDialog": {
+    "title": "Archiver l'enchère",
+    "confirmMessage": "Êtes-vous sûr de vouloir archiver cette enchère ?",
+    "warningMessage": "n'apparaîtra plus dans la liste des enchères",
+    "cancel": "Annuler",
+    "archive": "Archiver"
+  },
+  "endDialog": {
+    "completed": "L'eAuction est terminée."
+  },
+  "deleteDialog": {
+    "title": "Supprimer l'enchère",
+    "confirmMessage": "Êtes-vous sûr de vouloir supprimer les enchères sélectionnées ?",
+    "warningMessage": "eAuctions n'apparaîtront plus dans la liste des enchères",
+    "irreversibleWarning": "Cette action est irréversible et toutes les données associées seront supprimées de manière permanente.",
+    "cancel": "Annuler",
+    "delete": "Supprimer"
+  },
+  "publishDialog": {
+    "title": "Publier l'enchère",
+    "confirmMessage": "Êtes-vous sûr de vouloir publier cette enchère ?",
+    "visibilityMessage": "sera visible par tous les fournisseurs invités",
+    "cancel": "Annuler",
+    "publish": "Publier"
+  },
+  "japanese": {
+    "leavingDialog": {
+      "title": "QUITTER L'eAuction",
+      "confirmMessage": "Êtes-vous sûr de vouloir quitter l'eAuction ?",
+      "warningMessage": "En cliquant sur le bouton 'Quitter l'eAuction', vous ne pourrez plus revenir ou continuer à placer des offres. L'eAuction sera conclue pour vous au dernier prix accepté.",
+      "cancel": "Annuler",
+      "leave": "Quitter l'eAuction"
+    }
+  },
+  "englishEndDialog": {
+    "finishedRank": "Vous avez terminé <span class=\"font-weight-bold\">rang {rank}</span> en enchérissant",
+    "biddingPrice": "au prix de <span class=\"font-weight-bold\">{price}</span>",
+    "noBid": "Personne n'a fait d'offre"
+  },
+  "lineItemRanking": {
+    "enable": "Afficher le rang par ligne",
+    "enableTooltip": "Afficher le classement des fournisseurs pour chaque ligne individuellement au lieu du classement global",
+    "supplierDetails": "Fournisseur {rank} - {name}",
+    "itemRank": "Rang {rank}",
+    "overallTotal": "Total Global",
+    "lineItems": "Lignes",
+    "expand": "Développer les détails",
+    "collapse": "Réduire les détails",
+    "rank": "Rang",
+    "name": "Nom",
+    "bidPrice": "Prix de l'offre"
+  },
+  "auctionResetDialog": {
+    "title": "Réinitialiser l'Enchère de Formation",
+    "confirmMessage": "Êtes-vous sûr de vouloir réinitialiser cette enchère de formation ?",
+    "warningMessage": "Cela supprimera toutes les offres et redémarrera l'enchère dans une minute.",
+    "playAgainstBots": "Jouer contre des robots",
+    "botWarningEnglish": "Les robots réagiront à vos offres avec des prix compétitifs tout au long de l'enchère.",
+    "botWarningDutchJapanese": "Les robots placeront des pré-offres stratégiques après votre première soumission.",
+    "botWarningDefault": "Les robots participeront à l'enchère avec un comportement d'enchères automatisé.",
+    "cancel": "Annuler",
+    "reset": "Réinitialiser"
+  },
+  "endDialogBuyer": {
+    "competitionEnded": "La compétition pour {lotName} est terminée !",
+    "table": {
+      "rank": "RANG",
+      "name": "NOM",
+      "bidPrice": "PRIX OFFRE",
+      "lineItem": "LIGNE D'ARTICLE"
+    },
+    "noBid": "Personne n'a fait d'offre",
+    "contactWinner": "Veuillez contacter le gagnant pour discuter des détails et finaliser l'accord.",
+    "contactParticipants": "Malheureusement, aucun des fournisseurs n'a fait d'offre. Veuillez contacter les participants pour obtenir plus de détails.",
+    "backToAuction": "Retour à l'eAuction",
+    "nextLot": "Lot suivant",
+    "downloadReport": "Télécharger le rapport"
+  },
+  "endDialogSeller": {
+    "auctionEnded": "L'eAuction est terminée !",
+    "finishedRank": "Vous avez terminé avec le <span class=\"font-weight-bold\">rang {rank}</span> en enchérissant au prix de <span class=\"font-weight-bold\">{price}</span>",
+    "finishedBidding": "Vous avez terminé d'enchérir au prix de <span class=\"font-weight-bold\">{price}</span>",
+    "competitionEnded": "La compétition pour {lotName} est terminée !",
+    "contactMessage": "Merci d'avoir participé à cette évènement.",
+    "backToAuction": "Retour à l'eAuction",
+    "nextLot": "Lot suivant",
+    "table": {
+      "rank": "RANG",
+      "lineItem": "LIGNE D'ARTICLE",
+      "bidPrice": "PRIX DE L'OFFRE"
+    }
+  },
+  "dutchEndDialog": {
+    "winnerFinished": "<span class=\"font-weight-bold\">{winner}</span> a terminé avec le <span class=\"font-weight-bold\">rang 1</span> en enchérissant <br>au prix de <span class=\"font-weight-bold\">{price}</span> {currency}",
+    "noBid": "Personne n'a fait d'offre",
+    "youFinishedRank1": "Vous avez terminé <span class=\"font-weight-bold\">rang {rank}</span> en enchérissant<br>au prix de <span class=\"font-weight-bold\">{price}</span> {currency}",
+    "contactParticipants": "Malheureusement, aucun des fournisseurs n'a fait d'offre. Veuillez contacter les participants pour obtenir plus de détails.",
+    "youFinishedRank": "Vous avez terminé <span class=\"font-weight-bold\">rang {rank}</span>",
+    "anotherSupplierBid": "Malheureusement, un autre fournisseur a fait une offre avant vous",
+    "aParticipant": "Un participant",
+    "endedAtPrice": "L'enchère s'est terminée au prix de <span class=\"font-weight-bold\">{price}</span> {currency}"
+  },
+  "japaneseEndDialog": {
+    "winnerFinished": "<span class=\"font-weight-bold\">{winner}</span> a terminé avec le <span class=\"font-weight-bold\">rang 1</span> en enchérissant <br>au prix de <span class=\"font-weight-bold\">{price}</span> {currency}",
+    "noBid": "Personne n'a fait d'offre",
+    "youFinishedRank": "Vous avez terminé <span class=\"font-weight-bold\">rang {rank}</span> en enchérissant<br>au prix de <span class=\"font-weight-bold\">{price}</span> {currency}",
+    "youFinishedBidding": "Vous avez terminé d'enchérir au prix de <span class=\"font-weight-bold\">{price}</span> {currency}"
+  },
+  "bidButton": {
+    "bidAtCurrentPrice": "Enchérir au prix actuel",
+    "submitPrebid": "Soumettre pré-offre",
+    "changePrebid": "Modifier pré-offre",
+    "leaveEAuction": "Quitter l'eAuction",
+    "acceptOffer": "Accepter l'offre",
+    "offerAccepted": "Offre acceptée"
+  },
+  "expansionPanel": {
+    "summary": "Résumé",
+    "headers": {
+      "lots": "Lots",
+      "status": "Statut",
+      "eAuctionTime": "Durée eEnchère",
+      "yourCurrentRank": "Votre rang actuel",
+      "yourLastBid": "Votre dernière offre",
+      "round": "Palier",
+      "currentPrice": "Prix actuel",
+      "leader": "Leader",
+      "lowestBid": "Offre la plus basse",
+      "savings": "Économies"
+    }
+  },
+  "timingRules": {
+    "title": "RÈGLES DE TIMING",
+    "ok": "Ok",
+    "chooseTitle": "Choisissez vos règles de timing",
+    "description": "Définissez comment plusieurs lots doivent être planifiés et programmés pendant l'enchère.",
+    "serial": {
+      "title": "Série",
+      "text": "Une règle de timing série est un format d'enchères dans lequel plusieurs lots sont vendus aux enchères séquentiellement, l'un après l'autre, selon un calendrier prédéterminé. Chaque lot a une heure de début fixe, indépendamment de savoir si les enchères pour le lot précédent se terminent plus tôt. Si une règle de prolongation est appliquée (par exemple, prolonger la durée de l'enchère en raison d'enchères actives vers la fin), cela peut provoquer un retard de l'heure de début du lot suivant."
+    },
+    "parallel": {
+      "title": "Parallèle",
+      "text": "Une règle de timing parallèle est un format d'enchères dans lequel plusieurs lots sont vendus aux enchères simultanément dans un délai spécifié. Chaque lot a son propre processus d'enchères indépendant et son heure de clôture. Le progrès ou le résultat d'un lot n'affecte pas le timing des autres. Si une règle de prolongation est appliquée à un lot spécifique, cela n'influence pas les heures de clôture des autres lots."
+    },
+    "staggered": {
+      "title": "Décalé",
+      "text": "Une règle de timing décalée est un format d'enchères dans lequel plusieurs lots sont vendus aux enchères séquentiellement mais avec des délais qui se chevauchent. Chaque lot commence à un intervalle prédéterminé après le précédent, même si les enchères pour le lot précédent sont encore en cours. Cela crée un effet en cascade où plusieurs lots sont actifs simultanément à différents stades de leur processus d'enchères. Si une règle de prolongation est appliquée à un lot spécifique, cela n'affecte pas les heures de début des lots suivants mais peut prolonger sa propre heure de clôture."
+    }
+  }
+}

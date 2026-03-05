@@ -1,0 +1,149 @@
+/* Print-specific styles for PDF generation - Optimized */
+
+/* Common print elements to hide - more efficient selector grouping */
+@media print {
+  @page {
+    size: A4;
+    margin: 2cm;
+  }
+
+  /* Reset body for print */
+  body {
+    background: white !important;
+    color: black !important;
+  }
+
+  /* Hide all interactive and navigation elements in one rule */
+  nav,
+  header,
+  footer,
+  button,
+  [role='button'],
+  .v-app-bar,
+  .v-navigation-drawer,
+  .v-btn,
+  .v-menu,
+  .v-tooltip,
+  .v-dialog,
+  .v-overlay,
+  .v-tabs,
+  .v-pagination,
+  .v-snackbar {
+    display: none !important;
+  }
+
+  /* Hide scrollbars - combined for efficiency */
+  ::-webkit-scrollbar,
+  ::-webkit-scrollbar-thumb,
+  ::-webkit-scrollbar-track {
+    display: none !important;
+  }
+
+  * {
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+  }
+
+  /* Content layout optimizations */
+  .v-main,
+  .v-container {
+    padding: 0 !important;
+  }
+
+  .v-container {
+    max-width: 100% !important;
+  }
+
+  /* Table print optimizations */
+  table {
+    page-break-inside: auto;
+  }
+
+  thead {
+    display: table-header-group;
+  }
+
+  tfoot {
+    display: table-footer-group;
+  }
+
+  tbody tr,
+  .v-card,
+  canvas,
+  .avoid-break {
+    page-break-inside: avoid;
+  }
+
+  tr {
+    page-break-after: auto;
+  }
+
+  /* Charts and canvas elements */
+  canvas {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+
+  /* Card styling for print */
+  .v-card {
+    box-shadow: none !important;
+    border: 1px solid #ddd !important;
+  }
+
+  /* Remove all hover effects */
+  *:hover {
+    background-color: transparent !important;
+  }
+
+  /* Color reset for print - more specific selectors */
+  body *:not(.v-card):not(.v-sheet):not(thead) {
+    color: #000 !important;
+    background: transparent !important;
+  }
+
+  /* Allow specific backgrounds for readability */
+  .v-card,
+  .v-sheet,
+  table thead {
+    background: #f5f5f5 !important;
+  }
+
+  /* Page break utilities */
+  .page-break {
+    page-break-before: always;
+  }
+
+  .page-break-after {
+    page-break-after: always;
+  }
+
+  /* Headers and footers for each page */
+  @page {
+    @top-center {
+      content: 'eAuction Results';
+    }
+    @bottom-center {
+      content: counter(page) ' / ' counter(pages);
+    }
+  }
+}
+
+/* Styles for the print view (not just @media print) - Optimized */
+.print-layout {
+  background: white;
+  color: #000;
+}
+
+/* Hide interactive elements in print layout */
+.print-layout button,
+.print-layout [role='button'],
+.print-layout .v-btn,
+.print-layout .v-menu {
+  display: none !important;
+}
+
+/* Canvas sizing in print layout */
+.print-layout canvas {
+  max-width: 100%;
+  height: auto;
+}

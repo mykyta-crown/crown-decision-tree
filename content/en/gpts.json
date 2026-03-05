@@ -1,0 +1,36 @@
+{
+  "title": "GPT Assistants",
+  "subtitle": "Explore and interact with AI-powered assistants",
+  "header": {
+    "title": "AI Assistants",
+    "searchPlaceholder": "Search assistants..."
+  },
+  "empty": {
+    "title": "No assistants available",
+    "message": "Currently, there are no GPT assistants available. Please contact your administrator."
+  },
+  "filters": {
+    "all": "All",
+    "openai": "OpenAI",
+    "anthropic": "Anthropic",
+    "gemini": "Google Gemini"
+  },
+  "card": {
+    "provider": "Provider",
+    "model": "Model",
+    "startChat": "Start chat",
+    "createdBy": "Created by"
+  },
+  "actions": {
+    "create": "Create assistant",
+    "edit": "Edit",
+    "delete": "Delete",
+    "manage": "Manage access"
+  },
+  "errors": {
+    "fetch": "Failed to fetch assistants",
+    "create": "Failed to create assistant",
+    "update": "Failed to update assistant",
+    "delete": "Failed to delete assistant"
+  }
+}

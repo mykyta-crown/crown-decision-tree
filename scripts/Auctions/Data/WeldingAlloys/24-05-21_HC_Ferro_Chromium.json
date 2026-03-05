@@ -1,0 +1,49 @@
+{
+  "auction": {
+    "buyer_id": "6050eb8a-6a5a-4762-b536-474252e90b58",
+    "company_id": "d5141dd4-0a5e-4035-b77e-4f882793b498",
+    "start_at": "2024-05-21T10:00:00+02:00",
+    "end_at": "2024-05-21T10:15:00+02:00",
+    "duration": 15,
+    "description": "Contract and deliveries will stand from June 20th to November 20th - Delivery: June/September/November 20 000kg per month with 10 000kg security stock, total volume 70 000kg.",
+    "commercials_terms": "Contract and deliveries will stand from June 20th to November 20th.\nEach company agree to deliver the raw material referring to the specification enclosed.\nIf a deviation is needed, R&D needs to agree before participating to the eAuction.\nDelivery,  June/September/November 20 000kg per month with 10 000kg security stock, total volume 70 000kg.\nIf the security stock is not called during the 4months, it will be automatically delivered with the last order of September.\nPrices must be € currency.\nPrices must be DAP Porte du Ried 68320 - 22 rue des americains.\nPayment terms are determined for each supplier in Welding Alloys system and each participant agreed to apply the same condition as usual",
+    "timezone": "UTC+2",
+    "overtime_range": 3,
+    "max_bid_decr": 0.5,
+    "min_bid_decr": 0.02,
+    "max_bid_decr_type": "EUR",
+    "min_bid_decr_type": "EUR",
+    "log_visibility": "own_rank_only",
+    "currency": "EUR",
+    "name": "WE02 - 300BB0044 HC Ferro Chromium 8%C fine",
+    "baseline": 209650,
+    "test": false
+  },
+  "supplies": [
+    {
+      "name": "300BB0044  HC Ferro Chromium 8%C fine",
+      "quantity": 70000,
+      "unit": "KG"
+    }
+  ],
+  "suppliers": [
+    {
+      "email": "richard.oliver@metalpowdergroup.com",
+      "supplies": [
+        {
+          "name": "300BB0044  HC Ferro Chromium 8%C fine",
+          "price": 3.2
+        }
+      ]
+    },
+    {
+      "email": "h.alam@rces.co.uk",
+      "supplies": [
+        {
+          "name": "300BB0044  HC Ferro Chromium 8%C fine",
+          "price": 2.79
+        }
+      ]
+    }
+  ]
+}

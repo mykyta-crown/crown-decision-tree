@@ -1,0 +1,79 @@
+{
+  "alert": {
+    "title": "Vos informations sont incomplètes.",
+    "message": "Nous avons besoin que vous remplissiez tous vos détails pour vous permettre d'accéder à une eAuction.",
+    "linkText": "page de modification du profil",
+    "goToText": "Veuillez aller à la",
+    "registerText": "et enregistrer vos informations d'entreprise et personnelles."
+  },
+  "header": {
+    "title": "eAuctions :",
+    "createButton": "Créer une eAuction",
+    "searchPlaceholder": "Rechercher"
+  },
+  "tabs": {
+    "all": "Toutes",
+    "real": "Réelles",
+    "test": "Test",
+    "training": "Formation"
+  },
+  "empty": {
+    "title": "Aucune eAuction disponible",
+    "message": "Actuellement, aucune enchère n'a été créée. Une fois que le propriétaire de l'enchère configurera de nouvelles eAuctions, elles apparaîtront ici."
+  },
+  "auctionCard": {
+    "usageFallback": "Test",
+    "ownedBy": "Propriétaire :"
+  },
+  "testButtons": {
+    "createDemo": "Créer une enchère démo",
+    "tooltip": "Visible uniquement en environnement de développement"
+  },
+  "deleteDialog": {
+    "title": "Supprimer l'enchère",
+    "confirmMessage": "Êtes-vous sûr de vouloir supprimer les enchères sélectionnées ?",
+    "warningMessage": "eAuctions n'apparaîtront plus dans la liste des enchères",
+    "irreversibleWarning": "Cette action est irréversible et toutes les données associées seront supprimées de manière permanente.",
+    "cancel": "Annuler",
+    "delete": "Supprimer"
+  },
+  "createDialog": {
+    "title": "Créer une enchère de test",
+    "tabs": {
+      "test": "eAuction de Test",
+      "masterclass": "eAuction Masterclass"
+    },
+    "sections": {
+      "auctionType": "Type d'enchère",
+      "multiLot": "Multi-Lot",
+      "prebid": "Pré-offre",
+      "multilotTiming": "Timing Multi-Lot",
+      "masterclassType": "Type de masterclass"
+    },
+    "radioLabels": {
+      "serial": "Sériel",
+      "parallel": "Parallèle",
+      "staggered": "Échelonné"
+    },
+    "switchLabels": {
+      "enabled": "Activé",
+      "disabled": "Désactivé"
+    },
+    "buttons": {
+      "createTest": "Créer une eAuction de test",
+      "createMasterclass": "Créer une Masterclass"
+    }
+  },
+  "overrides": {},
+  "actions": {
+    "publish": "Publier",
+    "archive": "Archiver",
+    "duplicate": "Dupliquer"
+  },
+  "duplication": {
+    "title": "Dupliquer l'enchère",
+    "simple": "Duplication simple des paramètres actuels de l'eAuction",
+    "training": "Dupliquer l'eAuction pour tous les fournisseurs en cas de formation",
+    "chooseType": "Choisir le type de duplication"
+  }
+}

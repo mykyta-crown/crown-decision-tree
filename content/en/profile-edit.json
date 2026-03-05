@@ -1,0 +1,49 @@
+{
+  "title": "Edit your profile",
+  "email": {
+    "label": "Email",
+    "readonly": "Email is read-only"
+  },
+  "password": {
+    "changeButton": "Want to change your password ?"
+  },
+  "snackbar": {
+    "message": "Your informations has been updated.",
+    "close": "Close"
+  },
+  "profileForm": {
+    "title": "Fill in personal information",
+    "company": {
+      "label": "Company*",
+      "placeholder": "Enter company name"
+    },
+    "firstName": {
+      "label": "First name*",
+      "placeholder": "Enter your name"
+    },
+    "lastName": {
+      "label": "Last name*",
+      "placeholder": "Enter your last name"
+    },
+    "country": {
+      "label": "Country*",
+      "placeholder": "Select you country"
+    },
+    "address": {
+      "label": "Address*",
+      "placeholder": "Enter the address of your comany"
+    },
+    "position": {
+      "label": "Position*",
+      "placeholder": "Specify your position"
+    },
+    "companyId": {
+      "label": "Company registration number*"
+    },
+    "phone": {
+      "label": "Phone*"
+    },
+    "save": "Save",
+    "required": "Required"
+  }
+}

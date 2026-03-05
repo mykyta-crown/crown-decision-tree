@@ -1,0 +1,402 @@
+{
+  "title": "Demo eAuctions",
+  "guidance": {
+    "showTips": "Show tips",
+    "gotIt": "Got it",
+    "terms": {
+      "acceptTerms": "Accept the terms",
+      "acceptTermsMessage": "Check the box to accept terms for this lot, then click Next Lot.",
+      "lotProgress": "Lot {current} of {total}",
+      "allTermsAccepted": "All terms accepted!",
+      "allTermsAcceptedMessage": "You've accepted terms for all lots. Click Participate to continue."
+    },
+    "prebid": {
+      "placeFirstPrebid": "Place your pre-bid",
+      "placeFirstPrebidMessage": "Enter your pre-bid amount for this lot. This is the price at which you're willing to accept.",
+      "prebidPlaced": "Pre-bid placed!",
+      "goToNextLot": "Go to the next lot and place your pre-bid.",
+      "allPrebidsPlaced": "All pre-bids placed!",
+      "allPrebidsPlacedMessage": "You can now start the training, or lower your pre-bids before the auction begins.",
+      "prebidProgress": "Pre-bids: {completed}/{total} lots"
+    },
+    "training": {
+      "startTraining": "Start Training",
+      "startTrainingMessage": "Click to start the training. All lots will run according to the configured timing.",
+      "trainingInProgress": "Training in progress",
+      "trainingInProgressMessage": "The auction is running. Lots will auto-advance based on the timing rule.",
+      "trainingComplete": "Training complete!",
+      "trainingCompleteMessage": "Click Reset to try different scenarios or adjust your pre-bids."
+    },
+    "nextLot": {
+      "goToNextLot": "Next lot needs pre-bid",
+      "goToNextLotMessage": "Click to navigate to this lot and place your pre-bid."
+    }
+  },
+  "actions": {
+    "continue": "Continue",
+    "endButton": "Next step",
+    "publish": "Publish Auction",
+    "videoCTA": "Watch video",
+    "tryNowCTA": "Try now"
+  },
+  "auctionTypes": {
+    "preferredDutch": "Preferred Dutch",
+    "japaneseNoRank": "Japanese No Rank"
+  },
+  "stepper": {
+    "firstStep": "Understand eAuction",
+    "secondStep": "Accept Terms",
+    "thirdStep": "Explore functionality",
+    "fourthStepPlay": "Play eAuction",
+    "fourthStepStart": "Start Training",
+    "fourthStepReset": "Reset Training",
+    "trainingInProgress": "Training in progress"
+  },
+  "scenarios": {
+    "english": {
+      "first": "Finish at rank #1",
+      "second": "Finish at rank #2 or lower"
+    },
+    "dutch": {
+      "first": "Finish at rank #1 with a pre-bid",
+      "second": "Finish at rank #1 with a live bid",
+      "third": "Finish at rank #2"
+    },
+    "dutch-preferred": {
+      "first": "Finish at rank #1 with a pre-bid",
+      "second": "Finish at rank #1 with a live bid",
+      "third": "Finish at rank #2"
+    },
+    "japanese": {
+      "first": "Finish at rank #1",
+      "second": "Finish at rank #2 or lower"
+    },
+    "japanese-no-rank": {
+      "first": "Finish the event"
+    },
+    "sealed-bid": {
+      "first": "Finish at rank #1",
+      "second": "Finish at rank #2 or lower"
+    }
+  },
+  "auctionDescriptions": {
+    "demoItemSharedText": {
+      "description": "To better understand the eAuction, go through {scenarioCount} scenarios that simulate different possible outcomes:",
+      "scenarios": "Scenarios",
+      "prebid": "with pre-bid"
+    },
+    "sealed-bid": {
+      "title": "Demo Sealed Bid eAuction",
+      "demoItem": {
+        "title": "Sealed bid eAuction",
+        "description": "A hidden-bid event where participants submit their best offers without live ranking."
+      },
+      "howItWorkPanel": {
+        "title": "📘 Definition",
+        "subtitle": "A hidden-bid event where participants submit their best offers without live ranking.",
+        "description": "**During the event:** Participants place bids. Bids remain undisclosed; participants may lower and resubmit their offer any number of times.\n\n**End of the event:** Ranks are disclosed depending on final submitted offers."
+      },
+      "howToWinPanel": {
+        "title": "🎯 Awarding",
+        "subtitle": "At the end of the eAuction, each supplier receives a final rank. The lot is awarded according to the final ranking and the eAuction’s awarding principles.",
+        "description": "*(eg. For example, if a supplier finishes in Rank #1 and the awarding principles specify that the top-ranked supplier is awarded 70% of the lot volume, then that supplier will be granted 70% of the volume.)*"
+      },
+      "timingPanel": {
+        "title": "⏱️ Timing",
+        "subtitle": "The eAuction runs for a fixed duration. Once the countdown reaches zero, the eAuction ends and participants are informed of their ranks.",
+        "description": ""
+      },
+      "prebidPanel": {
+        "title": "⚙️ Option : Prebid",
+        "subtitle": "",
+        "description": ""
+      },
+      "multilotPanel": {
+        "title": "🎰 Option: Multi-lot ",
+        "subtitle": "Indicates that the eAuction includes several lots.",
+        "description": "Each lot represents a specific item or product and is treated as an independent event with its own ranking, parameters, and awarding rules."
+      },
+      "handicapPanel": {
+        "title": "🔁 Option : Transformation",
+        "subtitle": "A transformation means that **bids are adjusted using buyer-defined factors** such as quality, logistics, or delivery.",
+        "description": "These adjustments, called **handicaps**, can be either **dynamic** (applied once at the start) or **fix** (recalculated as bidding evolves). Suppliers only see the dynamic handicap."
+      },
+      "scenarioPanel": {
+        "title": "💡 {scenarioCount} different outcome at the end of the eAuction",
+        "firstScenario": "Rank #1: You are ranked #1 at the end of the eAuction.",
+        "secondScenario": "Rank #2  You are ranked #2 or less at the end of the eAuction."
+      },
+      "examplePanel": {
+        "title": "🧺 Specifics of the eAuction",
+        "extraTitle": "",
+        "lot": "**Lots**",
+        "line_item": "**Line item**",
+        "quantity": "**Quantity**",
+        "startingPrice": "**Starting price**",
+        "eAuctionTime": "**eAuction time**"
+      }
+    },
+    "english": {
+      "title": "Demo English eAuction",
+      "demoItem": {
+        "title": "English eAuction",
+        "description": "A real-time competitive event with live ranking after an initial pre-bid."
+      },
+      "howItWorkPanel": {
+        "title": "📘 Definition",
+        "subtitle": "A real-time competitive event with live ranking after an initial pre-bid.",
+        "description": "**Before the event:** Participants must submit a pre-bid before the start of the event.\n\n**During the event:** Participants see live ranking and can improve their offers in real time.\n\n**End of the event:** Ranks are defined depending on final submitted offers."
+      },
+      "multilotPanel": {
+        "title": "🎰 Option: Multi-lot ",
+        "subtitle": "Indicates that the eAuction includes several lots.",
+        "description": "Each lot represents a specific item or product and is treated as an independent event with its own ranking, parameters, and awarding rules."
+      },
+      "howToWinPanel": {
+        "title": "🎯 Awarding",
+        "subtitle": "At the end of the eAuction, each supplier receives a final rank. The lot is awarded according to the final ranking and the eAuction’s awarding principles.",
+        "description": "*(eg. For example, if a supplier finishes in Rank #1 and the awarding principles specify that the top-ranked supplier is awarded 70% of the lot volume, then that supplier will be granted 70% of the volume.)*"
+      },
+      "handicapPanel": {
+        "title": "🔁 Option : Transformation",
+        "subtitle": "Adjusts bids based on buyer's evaluation criteria, giving participants fixed or dynamic advantages to ensure qualitative comparison between offers.",
+        "description": ""
+      },
+      "examplePanel": {
+        "title": "🧺 Specifics of the eAuction",
+        "extraTitle": "",
+        "lot": "**Lots**",
+        "line_item": "**Line item**",
+        "quantity": "**Quantity**",
+        "startingPrice": "**Starting price**",
+        "eAuctionTime": "**eAuction time**"
+      },
+      "timingPanel": {
+        "title": "⏱️ Timing",
+        "subtitle": "Runs for a limited time with the possibility of an **overtime** period. The eAuction ends when the timer reaches zero.",
+        "description": "**Overtime:** If a bid is placed during the final minutes (e.g., last 1, 2, or 3 minutes), the timer resets to the corresponding overtime value."
+      },
+      "prebidPanel": {
+        "title": "⚙️ Option : Prebid",
+        "subtitle": "Initial offer submitted before the eAuction begins. Defines the supplier starting rank at the beginning of the eAuction.",
+        "description": ""
+      },
+      "scenarioPanel": {
+        "title": "💡 {scenarioCount} different outcome at the end of the eAuction",
+        "firstScenario": "Rank #1: You are ranked #1 at the end of the eAuction.",
+        "secondScenario": "Rank #2  You are ranked #2 or less at the end of the eAuction."
+      }
+    },
+    "dutch": {
+      "title": "Dutch Reverse",
+      "demoItem": {
+        "title": "Dutch eAuction",
+        "description": "A first-accepts format where price rises in steps until someone accepts."
+      },
+      "howItWorkPanel": {
+        "title": "📘 Definition",
+        "subtitle": "A first-accepts format where price rises in steps until someone accepts.",
+        "description": "**Before the event:** Participants may submit a pre-bid before the start of the event.\n\n**During the event:** The price increases round by round in fixed increments; no live ranking is shown.\n\n**End of the event:** The first participant to accept the current price ends the event and secures the lot. Other participants are informed of the end of the lot."
+      },
+      "howToWinPanel": {
+        "title": "🎯 Awarding",
+        "subtitle": "The first participant to accept a price ends the eAuction and is ranked #1. All other participants are ranked #2. The lot is awarded according to the final ranking and the eAuction’s awarding principles.",
+        "description": ""
+      },
+      "handicapPanel": {
+        "title": "🔁 Option : Transformation",
+        "subtitle": "A transformation means that **bids are adjusted using buyer-defined factors** such as quality, logistics, or delivery.",
+        "description": "These adjustments, called **handicaps**, can be either **dynamic** (applied once at the start) or **fix** (recalculated as bidding evolves). Suppliers only see the dynamic handicap."
+      },
+      "multilotPanel": {
+        "title": "🎰 Option: Multi-lot ",
+        "subtitle": "Indicates that the eAuction includes several lots.",
+        "description": "Each lot represents a specific item or product and is treated as an independent event with its own ranking, parameters, and awarding rules."
+      },
+      "examplePanel": {
+        "title": "🧺 Specifics of the eAuction",
+        "extraTitle": "",
+        "lot": "**Lots**",
+        "roundIncrement": "**Round Increment**",
+        "roundNumber": "**Number of rounds** ",
+        "quantity": "**Quantity**",
+        "startingPrice": "**Starting price** ",
+        "eAuctionTime": "**eAuction time**"
+      },
+      "timingPanel": {
+        "title": "⏱️ Timing",
+        "subtitle": "Runs in fixed-duration **rounds** within a defined overall time period.",
+        "description": "**Rounds:** Fixed time intervals, each with an associated price that changes from one round to the next. The price increases at each interval by a fixed and predefined increment."
+      },
+      "prebidPanel": {
+        "title": "⚙️ Option : Prebid",
+        "subtitle": "Offer placed before the eAuction begins. Sets the price level at which the system will automatically place the bid for the participant.\n\n",
+        "description": "Priority will be given to participant placing first a pre-bid, and then to participants placing a live bid."
+      },
+      "scenarioPanel": {
+        "title": "💡 {scenarioCount} different outcome at the end of the eAuction",
+        "firstScenario": "Rank #1 with pre-bid: You placed a pre-bid, and no other participants accepted a price before your pre-bid was reached. You end the eAuction ranked #1.",
+        "secondScenario": "Rank #1 with live bid: You placed a pre-bid, but before the eAuction reached your price, you submitted a live bid by clicking “Place a bid”. You end the eAuction ranked #1.",
+        "thirdScenario": "Rank #2: Another participants accepted a price before you. The eAuction ends, and you are ranked #2.",
+        "fourthScenario": "Rank #1: You accepted a price level by clicking “Place a bid”. You end the eAuction ranked #1."
+      }
+    },
+    "dutch-preferred": {
+      "title": "Dutch Preferred",
+      "demoItem": {
+        "title": "Dutch Preferred eAuction",
+        "description": "A first-accepts format where price rises in steps until someone accepts. Priority access is given to selected participants each round."
+      },
+      "howItWorkPanel": {
+        "title": "📘 Definition",
+        "subtitle": "A first-accepts format where price rises in steps until someone accepts. Priority access is given to selected participants each round.",
+        "description": "**Before the event:** Participants may submit a pre-bid before the start of the event.\n\n**During the event:** The price increases round by round in fixed increments; no live ranking is shown. Selected participants receive priority access to each new round before others.\n\n**End of the event:** The first participant to accept the current price ends the event and secures the lot. Other participants are informed of the end of the lot."
+      },
+      "howToWinPanel": {
+        "title": "🎯 Awarding",
+        "subtitle": "The first participant to accept a price ends the eAuction and is ranked #1. All other participants are ranked #2. The lot is awarded according to the final ranking and the eAuction’s awarding principles.",
+        "description": ""
+      },
+      "handicapPanel": {
+        "title": "🔁 Option : Transformation",
+        "subtitle": "A transformation means that **bids are adjusted using buyer-defined factors** such as quality, logistics, or delivery.",
+        "description": "These adjustments, called **handicaps**, can be either **dynamic** (applied once at the start) or **fix** (recalculated as bidding evolves). Suppliers only see the dynamic handicap."
+      },
+      "timingPanel": {
+        "title": "⏱️ Timing",
+        "subtitle": "Runs in fixed-duration **rounds** within a defined overall time period but with different access periods. Preferred participants get early access while other must wait.",
+        "description": "**Rounds:** Fixed time intervals, each with an associated price that changes from one round to the next. The price increases at each interval by a fixed and predefined increment."
+      },
+      "prebidPanel": {
+        "title": "⚙️ Option : Prebid",
+        "subtitle": "Offer placed before the eAuction begins. Sets the price level at which the system will automatically place the bid for the participant.\n\nPriority will be given to participant placing first a pre-bid, and then to participants placing a live bid.",
+        "description": ""
+      },
+      "multilotPanel": {
+        "title": "🎰 Option: Multi-lot ",
+        "subtitle": "Indicates that the eAuction includes several lots.",
+        "description": "Each lot represents a specific item or product and is treated as an independent event with its own ranking, parameters, and awarding rules."
+      },
+      "scenarioPanel": {
+        "title": "💡 {scenarioCount} different outcome at the end of the eAuction",
+        "firstScenario": "Rank #1 with pre-bid: You placed a pre-bid, and no other participants accepted a price before your pre-bid was reached. You end the eAuction ranked #1.",
+        "secondScenario": "Rank #1 with live bid: You placed a pre-bid, but before the eAuction reached your price, you submitted a live bid by clicking “Place a bid”. You end the eAuction ranked #1.",
+        "thirdScenario": "Rank #2: Another participants accepted a price before you. The eAuction ends, and you are ranked #2.",
+        "fourthScenario": "Rank #1: You accepted a price level by clicking “Place a bid”. You end the eAuction ranked #1."
+      },
+      "examplePanel": {
+        "title": "🧺 Specifics of the eAuction",
+        "extraTitle": "",
+        "lot": "**Lots**",
+        "roundIncrement": "**Round Increment**",
+        "roundNumber": "**Number of rounds** ",
+        "quantity": "**Quantity**",
+        "startingPrice": "**Starting price** ",
+        "eAuctionTime": "**eAuction time**"
+      }
+    },
+    "japanese": {
+      "title": "Japanese Reverse",
+      "demoItem": {
+        "title": "Japanese eAuction",
+        "description": "An elimination format where price drops in steps and exits are final."
+      },
+      "howItWorkPanel": {
+        "title": "📘 Definition",
+        "subtitle": "An elimination format where price drops in steps and exits are final.",
+        "description": "**Before the event:** Participants may submit a pre-bid before the start of the event.\n\n**During the event:** The price decreases round by round; participants must accept each new price to stay active; no live ranking is shown. Exits are final. \n\n**End of the event:** Upon exit, each participant is informed of their final rank."
+      },
+      "howToWinPanel": {
+        "title": "🎯 Awarding",
+        "subtitle": "When a supplier exits the eAuction, he receives his final rank. The lot is awarded according to the final ranking and the eAuction’s awarding principles.",
+        "description": "*(eg. For example, if a supplier finishes in Rank #1 and the awarding principles specify that the top-ranked supplier is awarded 70% of the lot volume, then that supplier will be granted 70% of the volume.)*"
+      },
+      "multilotPanel": {
+        "title": "🎰 Option: Multi-lot ",
+        "subtitle": "Indicates that the eAuction includes several lots.",
+        "description": "Each lot represents a specific item or product and is treated as an independent event with its own ranking, parameters, and awarding rules."
+      },
+      "handicapPanel": {
+        "title": "🔁 Option : Transformation",
+        "subtitle": "A transformation means that **bids are adjusted using buyer-defined factors** such as quality, logistics, or delivery.",
+        "description": "These adjustments, called **handicaps**, can be either **dynamic** (applied once at the start) or **fix** (recalculated as bidding evolves). Suppliers only see the dynamic handicap."
+      },
+      "examplePanel": {
+        "title": "🧺 Specifics of the eAuction",
+        "extraTitle": "",
+        "lot": "**Lots**",
+        "roundDecrement": "**Round decrement**",
+        "roundNumber": "**Number of rounds** ",
+        "quantity": "**Quantity**",
+        "startingPrice": "**Starting price** ",
+        "eAuctionTime": "**eAuction time**"
+      },
+      "timingPanel": {
+        "title": "⏱️ Timing",
+        "subtitle": "Runs in fixed-duration **rounds** within a defined overall time period.",
+        "description": "**Rounds:** Fixed time intervals, each with an associated price that changes from one round to the next. The price decreases at each interval by a fixed and predefined increment."
+      },
+      "prebidPanel": {
+        "title": "⚙️ Option : Prebid",
+        "subtitle": "Offer placed before the eAuction begins. The system automatically accepts each round until the price reaches the supplier’s pre-bid level",
+        "description": ""
+      },
+      "scenarioPanel": {
+        "title": "💡 {scenarioCount} different outcome at the end of the eAuction",
+        "firstScenario": "Rank #1: You are ranked #1 at the end of the eAuction.",
+        "secondScenario": "Rank #2  You are ranked #2 or less at the end of the eAuction."
+      }
+    },
+    "japanese-no-rank": {
+      "title": "Japanese No Rank Reverse",
+      "demoItem": {
+        "title": "Japanese No Rank eAuction",
+        "description": "A price discovery format with elimination rounds and no automatic award at the end of the event."
+      },
+      "howItWorkPanel": {
+        "title": "📘 Definition",
+        "subtitle": "A price discovery format with elimination rounds and no automatic award at the end of the event.",
+        "description": "**Before the event:** Participants may submit a pre-bid before the start of the event.\n\n**During the event:** The price decreases round by round; participants must accept each new price to stay active; no live ranking is shown. Exits are final. \n\n**End of the event:** The buyer may decide later to award the lot at that final price, with no renegotiation of price after the event."
+      },
+      "howToWinPanel": {
+        "title": "🎯 Awarding",
+        "subtitle": "The lot is awarded outside the eAuction based on the supplier’s final price and the buyer’s evaluation criterias.",
+        "description": ""
+      },
+      "multilotPanel": {
+        "title": "🎰 Option: Multi-lot ",
+        "subtitle": "Indicates that the eAuction includes several lots.",
+        "description": "Each lot represents a specific item or product and is treated as an independent event with its own ranking, parameters, and awarding rules."
+      },
+      "handicapPanel": {
+        "title": "🔁 Option : Transformation",
+        "subtitle": "A transformation means that **bids are adjusted using buyer-defined factors** such as quality, logistics, or delivery.",
+        "description": "These adjustments, called **handicaps**, can be either **dynamic** (applied once at the start) or **fix** (recalculated as bidding evolves). Suppliers only see the dynamic handicap."
+      },
+      "examplePanel": {
+        "title": "🧺 Specifics of the eAuction",
+        "extraTitle": "",
+        "lot": "**Lots**",
+        "roundDecrement": "**Round decrement**",
+        "roundNumber": "**Number of rounds** ",
+        "quantity": "**Quantity**",
+        "startingPrice": "**Starting price** ",
+        "eAuctionTime": "**eAuction time**"
+      },
+      "timingPanel": {
+        "title": "⏱️ Timing",
+        "subtitle": "Runs in fixed-duration **rounds** within a defined overall time period.",
+        "description": "**Rounds:** Fixed time intervals, each with an associated price that changes from one round to the next. The price decreases at each interval by a fixed and predefined increment."
+      },
+      "prebidPanel": {
+        "title": "⚙️ Option : Prebid",
+        "subtitle": "Offer placed before the eAuction begins. The system automatically accepts each round until the price reaches the supplier’s pre-bid level",
+        "description": ""
+      },
+      "scenarioPanel": {
+        "title": "💡 {scenarioCount} different scenarios for the eAuction",
+        "firstScenario": "You exit the eAuction at the price level that suits you; either at your pre-bid level or later by staying active for additional rounds."
+      }
+    }
+  }
+}

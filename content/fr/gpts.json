@@ -1,0 +1,36 @@
+{
+  "title": "Assistants GPT",
+  "subtitle": "Explorez et interagissez avec des assistants IA",
+  "header": {
+    "title": "Assistants IA",
+    "searchPlaceholder": "Rechercher un assistant..."
+  },
+  "empty": {
+    "title": "Aucun assistant disponible",
+    "message": "Actuellement, aucun assistant GPT n'est disponible. Veuillez contacter votre administrateur."
+  },
+  "filters": {
+    "all": "Tous",
+    "openai": "OpenAI",
+    "anthropic": "Anthropic",
+    "gemini": "Google Gemini"
+  },
+  "card": {
+    "provider": "Fournisseur",
+    "model": "Modèle",
+    "startChat": "Démarrer le chat",
+    "createdBy": "Créé par"
+  },
+  "actions": {
+    "create": "Créer un assistant",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "manage": "Gérer les accès"
+  },
+  "errors": {
+    "fetch": "Échec du chargement des assistants",
+    "create": "Échec de la création de l'assistant",
+    "update": "Échec de la mise à jour de l'assistant",
+    "delete": "Échec de la suppression de l'assistant"
+  }
+}

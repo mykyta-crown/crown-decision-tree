@@ -1,0 +1,7 @@
+{
+  "title": "Profil",
+  "actions": {
+    "edit": "Modifier le profil",
+    "changePassword": "Changer le mot de passe"
+  }
+}

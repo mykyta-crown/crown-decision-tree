@@ -1,0 +1,87 @@
+{
+  "title": "Générateur de Prompt",
+  "back": "Retour",
+  "actions": {
+    "create": "Créer",
+    "update": "Mettre à jour",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "add_starter": "Ajouter une suggestion",
+    "upload_files": "Télécharger des fichiers"
+  },
+  "form": {
+    "name": "Nom",
+    "name_placeholder": "Nommez votre GPT",
+    "description": "Description",
+    "description_placeholder": "Décrivez brièvement ce que ce projet peut faire",
+    "icon": "Icône",
+    "icon_placeholder": "Sélectionnez une icône",
+    "instructions": "Instructions",
+    "instructions_placeholder": "Ex : Expliquez comment le projet doit se comporter et répondre",
+    "instructions_hint": "Soyez précis sur le ton, le niveau d'expertise et le format de réponse souhaité.",
+    "conversation_starters": "Suggestions de conversation",
+    "conversation_starters_placeholder": "Ajoutez des exemples de prompts pour commencer",
+    "knowledge": "Base de connaissances",
+    "knowledge_hint": "Les conversations avec votre GPT peuvent potentiellement révéler une partie ou la totalité des fichiers téléchargés.",
+    "files_pending": "Les fichiers seront téléchargés après la création du GPT",
+    "words": "mots",
+    "recommended_model": "Modèle recommandé",
+    "model_placeholder": "Sélectionnez un modèle",
+    "premium_credits": "Premium",
+    "premium_hint": "Les modèles premium consomment plus de crédits par message",
+    "reasoning_effort": "Niveau d'effort",
+    "reasoning_effort_hint": "Contrôle le temps que le modèle consacre au raisonnement avant de répondre. Plus l'effort est élevé = analyse plus approfondie mais plus lent et plus coûteux.",
+    "reasoning_effort_low": "Faible - Réponses rapides",
+    "reasoning_effort_medium": "Moyen - Équilibré",
+    "reasoning_effort_high": "Élevé - Analyse approfondie",
+    "show_reasoning": "Afficher le processus de réflexion",
+    "show_reasoning_hint": "Affiche les étapes de raisonnement de l'IA pendant la génération de la réponse (pour les modèles compatibles comme Gemini 2.5)",
+    "added_users": "Utilisateurs ajoutés",
+    "added_companies": "Entreprises ajoutées",
+    "none": "Aucun",
+    "creator_note": "Note : {name} (créateur) est toujours inclus"
+  },
+  "preview": {
+    "title": "Aperçu",
+    "instruction_label": "Instruction à l'IA :",
+    "instruction_empty": "Entrez des instructions pour voir l'aperçu...",
+    "input_placeholder": "Posez une question"
+  },
+  "icons": {
+    "diamond": "Diamant (Par défaut)",
+    "ruby": "Rubis",
+    "emerald": "Émeraude",
+    "sapphire": "Saphir",
+    "topaz": "Topaze",
+    "heart": "Cœur",
+    "crystal_blue": "Cristal Bleu",
+    "crystal_purple": "Cristal Violet"
+  },
+  "validation": {
+    "name_required": "Le nom est requis",
+    "instructions_required": "Les instructions sont requises",
+    "model_required": "Le modèle recommandé est requis"
+  },
+  "toast": {
+    "gpt_created": "GPT créé avec succès",
+    "gpt_updated": "GPT mis à jour avec succès",
+    "gpt_deleted": "GPT supprimé avec succès",
+    "gpt_created_with_files": "GPT créé avec succès avec {count} fichier(s) téléchargé(s)",
+    "gpt_created_files_failed": "GPT créé avec succès, mais certains fichiers n'ont pas pu être téléchargés",
+    "files_added": "{count} fichier(s) ajouté(s). Ils seront téléchargés lors de la création du GPT.",
+    "files_uploaded": "{count} fichier(s) téléchargé(s) avec succès",
+    "file_removed": "Fichier supprimé",
+    "file_deleted": "Fichier supprimé avec succès",
+    "failed_save": "Échec de l'enregistrement du GPT",
+    "failed_delete": "Échec de la suppression du GPT",
+    "failed_load": "Échec du chargement du GPT",
+    "failed_upload": "Échec du téléchargement des fichiers",
+    "failed_add_files": "Échec de l'ajout des fichiers",
+    "failed_delete_file": "Échec de la suppression du fichier",
+    "failed_upload_file": "Échec du téléchargement de {name}"
+  },
+  "confirm": {
+    "delete_gpt": "Êtes-vous sûr de vouloir supprimer ce GPT ? Cette action est irréversible.",
+    "delete_file": "Êtes-vous sûr de vouloir supprimer ce fichier ?"
+  }
+}

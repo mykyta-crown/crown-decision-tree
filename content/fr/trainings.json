@@ -1,0 +1,402 @@
+{
+  "title": "Démo eAuctions",
+  "guidance": {
+    "showTips": "Afficher les conseils",
+    "gotIt": "Compris",
+    "terms": {
+      "acceptTerms": "Accepter les conditions",
+      "acceptTermsMessage": "Cochez la case pour accepter les conditions de ce lot, puis cliquez sur Lot suivant.",
+      "lotProgress": "Lot {current} sur {total}",
+      "allTermsAccepted": "Toutes les conditions acceptées !",
+      "allTermsAcceptedMessage": "Vous avez accepté les conditions de tous les lots. Cliquez sur Participer pour continuer."
+    },
+    "prebid": {
+      "placeFirstPrebid": "Placez votre pré-enchère",
+      "placeFirstPrebidMessage": "Entrez le montant de votre pré-enchère pour ce lot. C'est le prix auquel vous êtes prêt à accepter.",
+      "prebidPlaced": "Pré-enchère placée !",
+      "goToNextLot": "Passez au lot suivant et placez votre pré-enchère.",
+      "allPrebidsPlaced": "Toutes les pré-enchères placées !",
+      "allPrebidsPlacedMessage": "Vous pouvez maintenant lancer l'entraînement, ou ajuster vos pré-enchères avant le début.",
+      "prebidProgress": "Pré-enchères : {completed}/{total} lots"
+    },
+    "training": {
+      "startTraining": "Lancer l'entraînement",
+      "startTrainingMessage": "Cliquez pour lancer l'entraînement. Tous les lots se dérouleront selon le timing configuré.",
+      "trainingInProgress": "Entraînement en cours",
+      "trainingInProgressMessage": "L'enchère est en cours. Les lots avanceront automatiquement selon la règle de timing.",
+      "trainingComplete": "Entraînement terminé !",
+      "trainingCompleteMessage": "Cliquez sur Relancer pour essayer différents scénarios ou ajuster vos pré-enchères."
+    },
+    "nextLot": {
+      "goToNextLot": "Le lot suivant nécessite une pré-enchère",
+      "goToNextLotMessage": "Cliquez pour accéder à ce lot et placer votre pré-enchère."
+    }
+  },
+  "actions": {
+    "continue": "Continuer",
+    "endButton": "Étape suivante",
+    "publish": "Publier l'Enchère",
+    "videoCTA": "Regarder la vidéo",
+    "tryNowCTA": "Essayer maintenant"
+  },
+  "auctionTypes": {
+    "preferredDutch": "Hollandaise Préférée",
+    "japaneseNoRank": "Japonaise Sans Rang"
+  },
+  "stepper": {
+    "firstStep": "Comprendre l'eAuction",
+    "secondStep": "Accepter les Conditions",
+    "thirdStep": "Explorer les fonctionnalités",
+    "fourthStepPlay": "Jouer l'eAuction",
+    "fourthStepStart": "Lancer l'entraînement",
+    "fourthStepReset": "Relancer l'entraînement",
+    "trainingInProgress": "Entraînement en cours"
+  },
+  "scenarios": {
+    "english": {
+      "first": "Terminer au rang n°1",
+      "second": "Terminer au rang n°2 ou inférieur"
+    },
+    "dutch": {
+      "first": "Terminer au rang n°1 avec une enchère pré-enregistrée",
+      "second": "Terminer au rang n°1 avec une enchère en direct",
+      "third": "Terminer au rang n°2"
+    },
+    "dutch-preferred": {
+      "first": "Terminer au rang n°1 avec une enchère pré-enregistrée",
+      "second": "Terminer au rang n°1 avec une enchère en direct",
+      "third": "Terminer au rang n°2"
+    },
+    "japanese": {
+      "first": "Terminer au rang n°1",
+      "second": "Terminer au rang n°2 ou inférieur"
+    },
+    "japanese-no-rank": {
+      "first": "Terminer l'événement"
+    },
+    "sealed-bid": {
+      "first": "Terminer au rang n°1",
+      "second": "Terminer au rang n°2 ou inférieur"
+    }
+  },
+  "auctionDescriptions": {
+    "demoItemSharedText": {
+      "description": "Pour mieux comprendre l'eAuction, parcourez {scenarioCount} scénarios qui simulent différents résultats possibles :",
+      "scenarios": "Scénarios",
+      "prebid": "avec pré-offre"
+    },
+    "english": {
+      "title": "Démo eAuction Anglaise",
+      "demoItem": {
+        "title": "eAuction Anglaise",
+        "description": "Un événement compétitif en temps réel avec classement en direct après une pré-offre initiale."
+      },
+      "howItWorkPanel": {
+        "title": "📘 Définition",
+        "subtitle": "Un événement compétitif en temps réel avec classement en direct après une pré-offre initiale.",
+        "description": "**Avant l'événement :** Les participants doivent soumettre une pré-offre avant le début de l'événement.\n\n**Pendant l'événement :** Les participants voient le classement en direct et peuvent améliorer leurs offres en temps réel.\n\n**Fin de l'événement :** Les rangs sont définis selon les offres finales soumises."
+      },
+      "multilotPanel": {
+        "title": "🎰 Option: Multi-lot",
+        "subtitle": "Indique que l'eAuction comprend plusieurs lots.",
+        "description": "Chaque lot représente un article ou un produit spécifique et est traité comme un événement indépendant avec son propre classement, ses paramètres et ses règles d'attribution."
+      },
+      "howToWinPanel": {
+        "title": "🎯 Attribution",
+        "subtitle": "À la fin de l'eAuction, chaque fournisseur reçoit un rang final. Le lot est attribué selon le classement final et les principes d'attribution de l'eAuction.",
+        "description": "*(ex. Par exemple, si un fournisseur termine Rang n°1 et que les principes d'attribution prévoient que le premier est attribué à 70 % du volume du lot, alors ce fournisseur recevra 70 % du volume.)*"
+      },
+      "handicapPanel": {
+        "title": "🔁 Option: Transformation",
+        "subtitle": "Ajuste les enchères selon les critères d’évaluation de l’acheteur, offrant des avantages fixes ou dynamiques pour assurer une comparaison qualitative des offres.",
+        "description": ""
+      },
+      "examplePanel": {
+        "title": "🧺 Spécificités de l'eAuction",
+        "extraTitle": "",
+        "lot": "**Lots**",
+        "line_item": "**Article de ligne**",
+        "quantity": "**Quantité**",
+        "startingPrice": "**Prix de départ**",
+        "eAuctionTime": "**Temps d'eAuction**"
+      },
+      "timingPanel": {
+        "title": "⏱️ Chronométrage",
+        "subtitle": "Se déroule pendant un temps limité avec possibilité d’**Overtime**. L'eAuction se termine quand le minuteur atteint zéro.",
+        "description": "**Overtime :** Si une enchère est placée dans les dernières minutes (ex. 1, 2 ou 3 minutes), le minuteur se réinitialise à la valeur d’overtime correspondante."
+      },
+      "prebidPanel": {
+        "title": "⚙️ Option: Pré-offre",
+        "subtitle": "Offre initiale soumise avant le début de l'eAuction. Définit le classement de départ du fournisseur au début de l'eAuction.",
+        "description": ""
+      },
+      "scenarioPanel": {
+        "title": "💡 {scenarioCount} résultats différents à la fin de l'eAuction",
+        "firstScenario": "Rang n°1 : Vous êtes classé n°1 à la fin de l'eAuction.",
+        "secondScenario": "Rang n°2 : Vous êtes classé n°2 ou moins à la fin de l'eAuction."
+      }
+    },
+    "dutch": {
+      "title": "Hollandaise Inversée",
+      "demoItem": {
+        "title": "eAuction Hollandaise",
+        "description": "Un format « premier à accepter » où le prix augmente par paliers jusqu’à acceptation."
+      },
+      "howItWorkPanel": {
+        "title": "📘 Définition",
+        "subtitle": "Un format « premier à accepter » où le prix augmente par paliers jusqu’à acceptation.",
+        "description": "**Avant l'événement :** Les participants peuvent soumettre une pré-offre avant le début.\n\n**Pendant l'événement :** Le prix augmente palier par palier selon des incréments fixes ; aucun classement en direct n’est affiché.\n\n**Fin de l'événement :** Le premier participant à accepter le prix met fin à l’événement et sécurise le lot. Les autres participants sont informés de la fin du lot."
+      },
+      "multilotPanel": {
+        "title": "🎰 Option: Multi-lot",
+        "subtitle": "Indique que l'eAuction comprend plusieurs lots.",
+        "description": "Chaque lot représente un article ou un produit spécifique et est traité comme un événement indépendant avec son propre classement, ses paramètres et ses règles d'attribution."
+      },
+      "howToWinPanel": {
+        "title": "🎯 Attribution",
+        "subtitle": "Le premier participant à accepter un prix termine l’eAuction et est classé n°1. Tous les autres sont classés n°2. Le lot est attribué selon le classement final et les principes d’attribution de l’eAuction.",
+        "description": ""
+      },
+      "handicapPanel": {
+        "title": "🔁 Option: Transformation",
+        "subtitle": "Une transformation signifie que **les enchères sont ajustées en utilisant des facteurs définis par l'acheteur** tels que la qualité, la logistique ou la livraison.",
+        "description": "Ces ajustements, appelés **handicaps**, peuvent être soit **dynamiques** (appliqués une fois au début) soit **fixes** (recalculés au fur et à mesure que les enchères évoluent). Les fournisseurs ne voient que le handicap dynamique."
+      },
+      "examplePanel": {
+        "title": "🧺 Spécificités de l'eAuction",
+        "extraTitle": "",
+        "lot": "**Lots**",
+        "roundIncrement": "**Incrément par palier**",
+        "roundNumber": "**Nombre de paliers** ",
+        "quantity": "**Quantité**",
+        "startingPrice": "**Prix de départ** ",
+        "eAuctionTime": "**Temps d'eAuction**"
+      },
+      "timingPanel": {
+        "title": "⏱️ Chronométrage",
+        "subtitle": "Fonctionne par **paliers** de durée fixe dans une période globale définie.",
+        "description": "**Paliers :** Intervalles de temps fixes, chacun associé à un prix qui change d’un palier à l’autre. Le prix augmente à chaque intervalle selon un incrément prédéfini."
+      },
+      "prebidPanel": {
+        "title": "⚙️ Option: Pré-offre",
+        "subtitle": "Offre placée avant le début de l'eAuction. Définit le niveau de prix auquel le système placera automatiquement l'enchère pour le participant.\n\n",
+        "description": "La priorité sera donnée au participant ayant d'abord placé une pré-offre, puis aux participants plaçant une enchère en direct."
+      },
+      "scenarioPanel": {
+        "title": "💡 {scenarioCount} scénarios différents qui terminent l'eAuction",
+        "firstScenario": "Rang n°1 avec pré-offre : Vous avez placé une pré-offre et aucun autre participant n’a accepté un prix avant que votre niveau soit atteint. Vous terminez l’eAuction classé n°1.",
+        "secondScenario": "Rang n°1 avec enchère en direct : Vous avez placé une pré-offre, mais avant que l'eAuction atteigne ce prix, vous avez soumis une enchère en direct en cliquant sur \"Placer une enchère\". Vous terminez l’eAuction classé n°1.",
+        "thirdScenario": "Rang n°2 : Un autre participant a accepté un prix avant vous. L’eAuction se termine et vous êtes classé n°2.",
+        "fourthScenario": "Rang n°1 : Vous avez accepté un niveau de prix en cliquant sur 'Placer une enchère'. Vous terminez la vente aux enchères électronique classé n°1."
+      }
+    },
+    "japanese": {
+      "title": "Japonaise Inversée",
+      "demoItem": {
+        "title": "eAuction Japonaise",
+        "description": "Un format d’élimination où le prix baisse par paliers et les sorties sont finales."
+      },
+      "howItWorkPanel": {
+        "title": "📘 Définition",
+        "subtitle": "Un format d’élimination où le prix baisse par paliers et les sorties sont finales.",
+        "description": "**Avant l'événement :** Les participants peuvent soumettre une pré-offre avant le début.\n\n**Pendant l'événement :** Le prix baisse palier par palier ; les participants doivent accepter chaque nouveau prix pour rester actifs ; aucun classement en direct n’est affiché. Les sorties sont finales.\n\n**Fin de l'événement :** À la sortie, chaque participant est informé de son rang final."
+      },
+      "howToWinPanel": {
+        "title": "🎯 Attribution",
+        "subtitle": "Lorsqu’un fournisseur quitte l’eAuction, il reçoit son rang final. Le lot est attribué selon le classement final et les principes d’attribution de l’eAuction.",
+        "description": "*(ex. Par exemple, si un fournisseur termine Rang n°1 et que les principes d'attribution prévoient que le premier est attribué à 70 % du volume du lot, alors ce fournisseur recevra 70 % du volume.)*"
+      },
+      "multilotPanel": {
+        "title": "🎰 Option: Multi-lot",
+        "subtitle": "Indique que l'eAuction comprend plusieurs lots.",
+        "description": "Chaque lot représente un article ou un produit spécifique et est traité comme un événement indépendant avec son propre classement, ses paramètres et ses règles d'attribution."
+      },
+      "handicapPanel": {
+        "title": "🔁 Option: Transformation",
+        "subtitle": "Une transformation signifie que **les enchères sont ajustées en utilisant des facteurs définis par l'acheteur** tels que la qualité, la logistique ou la livraison.",
+        "description": "Ces ajustements, appelés **handicaps**, peuvent être soit **dynamiques** (appliqués une fois au début) soit **fixes** (recalculés au fur et à mesure que les enchères évoluent). Les fournisseurs ne voient que le handicap dynamique."
+      },
+      "examplePanel": {
+        "title": "🧺 Spécificités de l'eAuction",
+        "extraTitle": "",
+        "lot": "**Lots**",
+        "roundDecrement": "**Décrément par palier**",
+        "roundNumber": "**Nombre de paliers** ",
+        "quantity": "**Quantité**",
+        "startingPrice": "**Prix de départ** ",
+        "eAuctionTime": "**Temps d'eAuction**"
+      },
+      "timingPanel": {
+        "title": "⏱️ Chronométrage",
+        "subtitle": "Fonctionne par **paliers** de durée fixe dans une période globale définie.",
+        "description": "**Paliers :** Intervalles de temps fixes, chacun associé à un prix qui change d’un palier à l’autre. Le prix diminue à chaque intervalle selon un décrément prédéfini."
+      },
+      "prebidPanel": {
+        "title": "⚙️ Option: Pré-offre",
+        "subtitle": "Offre placée avant le début de l'événement. Le système accepte automatiquement chaque palier jusqu’à atteindre le niveau de pré-offre du fournisseur",
+        "description": ""
+      },
+      "scenarioPanel": {
+        "title": "💡 {scenarioCount} scénarios différents qui terminent l'eAuction",
+        "firstScenario": "Rang n°1 : Vous êtes classé n°1 à la fin de l'eAuction.",
+        "secondScenario": "Rang n°2 : Vous êtes classé n°2 ou moins à la fin de l'eAuction."
+      }
+    },
+    "dutch-preferred": {
+      "title": "Hollandaise Préférée",
+      "demoItem": {
+        "title": "eAuction Hollandaise Préférée",
+        "description": "Un format « premier à accepter » où le prix augmente par paliers jusqu’à acceptation. Un accès prioritaire est donné aux participants sélectionnés à chaque palier."
+      },
+      "howItWorkPanel": {
+        "title": "📘 Définition",
+        "subtitle": "Un format « premier à accepter » où le prix augmente par paliers jusqu’à acceptation. Un accès prioritaire est donné aux participants sélectionnés à chaque palier.",
+        "description": "**Avant l'événement :** Les participants peuvent soumettre une pré-offre avant le début ; des fournisseurs préférés sont désignés.\n\n**Pendant l'événement :** Le prix augmente palier par palier selon des incréments fixes ; aucun classement en direct n’est affiché. Les fournisseurs préférés ont un accès prioritaire à chaque nouveau palier.\n\n**Fin de l'événement :** Le premier participant à accepter le prix met fin à l’événement et sécurise le lot. Les autres participants sont informés de la fin du lot."
+      },
+      "howToWinPanel": {
+        "title": "🎯 Attribution",
+        "subtitle": "Le premier participant à accepter un prix termine l’eAuction et est classé n°1. Tous les autres sont classés n°2. Le lot est attribué selon le classement final et les principes d’attribution de l’eAuction.",
+        "description": ""
+      },
+      "handicapPanel": {
+        "title": "🔁 Option: Transformation",
+        "subtitle": "Une transformation signifie que **les enchères sont ajustées en utilisant des facteurs définis par l'acheteur** tels que la qualité, la logistique ou la livraison.",
+        "description": "Ces ajustements, appelés **handicaps**, peuvent être soit **dynamiques** (appliqués une fois au début) soit **fixes** (recalculés au fur et à mesure que les enchères évoluent). Les fournisseurs ne voient que le handicap dynamique."
+      },
+      "timingPanel": {
+        "title": "⏱️ Chronométrage",
+        "subtitle": "Fonctionne par **paliers** de durée fixe dans une période globale définie, avec des périodes d’accès différentes. Les participants préférés bénéficient d’un accès anticipé, les autres doivent attendre.",
+        "description": "**Paliers :** Intervalles de temps fixes, chacun associé à un prix qui change d’un palier à l’autre. Le prix augmente à chaque intervalle selon un incrément prédéfini."
+      },
+      "prebidPanel": {
+        "title": "⚙️ Option: Pré-offre",
+        "subtitle": "Offre placée avant le début de l'eAuction. Définit le niveau de prix auquel le système placera automatiquement l'enchère pour le participant.\n\nLa priorité sera donnée au participant ayant d'abord placé une pré-offre, puis aux participants plaçant une enchère en direct.",
+        "description": ""
+      },
+      "multilotPanel": {
+        "title": "🎰 Option: Multi-lot",
+        "subtitle": "Indique que l'eAuction comprend plusieurs lots.",
+        "description": "Chaque lot représente un article ou un produit spécifique et est traité comme un événement indépendant avec son propre classement, ses paramètres et ses règles d'attribution."
+      },
+      "scenarioPanel": {
+        "title": "💡 {scenarioCount} scénarios différents qui terminent l'eAuction",
+        "firstScenario": "Rang n°1 avec pré-offre : Vous avez placé une pré-offre et aucun autre participant n’a accepté un prix avant que votre niveau soit atteint. Vous terminez l’eAuction classé n°1.",
+        "secondScenario": "Rang n°1 avec enchère en direct : Vous avez placé une pré-offre, mais avant que l'eAuction atteigne ce prix, vous avez soumis une enchère en direct en cliquant sur \"Placer une enchère\". Vous terminez l’eAuction classé n°1.",
+        "thirdScenario": "Rang n°2 : Un autre participant a accepté un prix avant vous. L’eAuction se termine et vous êtes classé n°2.",
+        "fourthScenario": "Rang n°1 : Vous avez accepté un niveau de prix en cliquant sur 'Placer une enchère'. Vous terminez la vente aux enchères électronique classé n°1."
+      },
+      "examplePanel": {
+        "title": "🧺 Spécificités de l'eAuction",
+        "extraTitle": "",
+        "lot": "**Lots**",
+        "roundIncrement": "**Incrément par palier**",
+        "roundNumber": "**Nombre de paliers** ",
+        "quantity": "**Quantité**",
+        "startingPrice": "**Prix de départ** ",
+        "eAuctionTime": "**Temps d'eAuction**"
+      }
+    },
+    "japanese-no-rank": {
+      "title": "Japonaise Sans Rang Inversée",
+      "demoItem": {
+        "title": "eAuction Japonaise Sans Rang",
+        "description": "Un format de découverte des prix avec paliers d’élimination et sans attribution automatique à la fin de l’événement."
+      },
+      "howItWorkPanel": {
+        "title": "📘 Définition",
+        "subtitle": "Un format de découverte des prix avec paliers d’élimination et sans attribution automatique à la fin de l’événement.",
+        "description": "**Avant l'événement :** Les participants peuvent soumettre une pré-offre avant le début.\n\n**Pendant l'événement :** Le prix baisse palier par palier ; les participants doivent accepter chaque nouveau prix pour rester actifs ; aucun classement en direct n’est affiché. Les sorties sont finales.\n\n**Fin de l'événement :** L’acheteur peut décider plus tard d’attribuer le lot à ce prix final, sans renégociation après l’événement."
+      },
+      "howToWinPanel": {
+        "title": "🎯 Attribution",
+        "subtitle": "Le lot est attribué en dehors de l’eAuction sur la base du prix final du fournisseur et des critères d’évaluation de l’acheteur.",
+        "description": ""
+      },
+      "multilotPanel": {
+        "title": "🎰 Option: Multi-lot",
+        "subtitle": "Indique que l'eAuction comprend plusieurs lots.",
+        "description": "Chaque lot représente un article ou un produit spécifique et est traité comme un événement indépendant avec son propre classement, ses paramètres et ses règles d'attribution."
+      },
+      "handicapPanel": {
+        "title": "🔁 Option: Transformation",
+        "subtitle": "Une transformation signifie que **les enchères sont ajustées en utilisant des facteurs définis par l'acheteur** tels que la qualité, la logistique ou la livraison.",
+        "description": "Ces ajustements, appelés **handicaps**, peuvent être soit **dynamiques** (appliqués une fois au début) soit **fixes** (recalculés au fur et à mesure que les enchères évoluent). Les fournisseurs ne voient que le handicap dynamique."
+      },
+      "examplePanel": {
+        "title": "🧺 Spécificités de l'eAuction",
+        "extraTitle": "",
+        "lot": "**Lots**",
+        "roundDecrement": "**Décrément par palier**",
+        "roundNumber": "**Nombre de paliers** ",
+        "quantity": "**Quantité**",
+        "startingPrice": "**Prix de départ** ",
+        "eAuctionTime": "**Temps d'eAuction**"
+      },
+      "timingPanel": {
+        "title": "⏱️ Chronométrage",
+        "subtitle": "Fonctionne par **paliers** de durée fixe dans une période globale définie.",
+        "description": "**Paliers :** Intervalles de temps fixes, chacun associé à un prix qui change d’un palier à l’autre. Le prix diminue à chaque intervalle selon un décrément prédéfini."
+      },
+      "prebidPanel": {
+        "title": "⚙️ Option: Pré-offre",
+        "subtitle": "Offre placée avant le début de l'événement. Le système accepte automatiquement chaque palier jusqu’à atteindre le niveau de pré-offre du fournisseur",
+        "description": ""
+      },
+      "scenarioPanel": {
+        "title": "💡 {scenarioCount} scénarios différents pour l'eAuction",
+        "firstScenario": "Vous sortez de l’eAuction au niveau de prix qui vous convient ; soit à votre niveau de pré-offre, soit plus tard en restant actif pendant des paliers supplémentaires."
+      }
+    },
+    "sealed-bid": {
+      "title": "Démo eAuction Sous Pli Scellé",
+      "demoItem": {
+        "title": "eAuction sous pli scellé",
+        "description": "Un événement à offres cachées où les participants soumettent leur meilleure offre sans classement en direct."
+      },
+      "howItWorkPanel": {
+        "title": "📘 Définition",
+        "subtitle": "Un événement à offres cachées où les participants soumettent leur meilleure offre sans classement en direct.",
+        "description": "**Pendant l'événement :** Les participants soumettent des offres. Les offres restent non divulguées ; les participants peuvent baisser et renvoyer leur offre autant de fois qu'ils le souhaitent.\n\n**Fin de l'événement :** Les rangs sont communiqués en fonction des offres finales soumises."
+      },
+      "howToWinPanel": {
+        "title": "🎯 Attribution",
+        "subtitle": "À la fin de l'eAuction, chaque fournisseur reçoit un rang final. Le lot est attribué selon le classement final et les principes d'attribution de l'eAuction.",
+        "description": "*(ex. Par exemple, si un fournisseur termine Rang n°1 et que les principes d'attribution prévoient que le premier est attribué à 70 % du volume du lot, alors ce fournisseur recevra 70 % du volume.)*"
+      },
+      "timingPanel": {
+        "title": "⏱️ Chronométrage",
+        "subtitle": "L'eAuction se déroule pendant une durée fixe. Une fois le compte à rebours à zéro, l'eAuction se termine et les participants sont informés de leurs rangs.",
+        "description": ""
+      },
+      "prebidPanel": {
+        "title": "⚙️ Option: Pré-offre",
+        "subtitle": "",
+        "description": ""
+      },
+      "multilotPanel": {
+        "title": "🎰 Option: Multi-lot",
+        "subtitle": "Indique que l'eAuction comprend plusieurs lots.",
+        "description": "Chaque lot représente un article ou un produit spécifique et est traité comme un événement indépendant avec son propre classement, ses paramètres et ses règles d'attribution."
+      },
+      "handicapPanel": {
+        "title": "🔁 Option: Transformation",
+        "subtitle": "Une transformation signifie que **les enchères sont ajustées en utilisant des facteurs définis par l'acheteur** tels que la qualité, la logistique ou la livraison.",
+        "description": "Ces ajustements, appelés **handicaps**, peuvent être soit **dynamiques** (appliqués une fois au début) soit **fixes** (recalculés au fur et à mesure que les enchères évoluent). Les fournisseurs ne voient que le handicap dynamique."
+      },
+      "scenarioPanel": {
+        "title": "💡 {scenarioCount} scénarios différents qui terminent l'eAuction",
+        "firstScenario": "Rang n°1 : Vous êtes classé n°1 à la fin de l'eAuction.",
+        "secondScenario": "Rang n°2 : Vous êtes classé n°2 ou moins à la fin de l'eAuction."
+      },
+      "examplePanel": {
+        "title": "🧺 Spécificités de l'eAuction",
+        "extraTitle": "",
+        "lot": "**Lots**",
+        "line_item": "**Article de ligne**",
+        "quantity": "**Quantité**",
+        "startingPrice": "**Prix de départ**",
+        "eAuctionTime": "**Temps d'eAuction**"
+      }
+    }
+  }
+}

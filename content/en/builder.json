@@ -1,0 +1,247 @@
+{
+  "title": "Auction Builder",
+  "actions": {
+    "save": "Save Draft",
+    "publish": "Publish Auction"
+  },
+  "auctionTypes": {
+    "preferredDutch": "Preferred Dutch",
+    "japaneseNoRank": "Japanese No Rank"
+  },
+  "duplication": {
+    "title": "Duplicate Auction",
+    "simple": "Simple duplication of the current eAuction settings",
+    "training": "Duplicate the eAuction for all suppliers in case of training",
+    "chooseType": "Choose the type of duplication",
+    "duplicateAndUpdate": "Duplicate and update",
+    "createTrainings": "Create trainings",
+    "namePrefix": "Copy of auction",
+    "nameHint": "You can edit the duplicated auction name",
+    "typeChangedWarning": "Auction type changed. Lot settings have been reset."
+  },
+  "basics": {
+    "title": "Auction Basics",
+    "auctionName": {
+      "label": "eAuction Name",
+      "placeholder": "Enter Auction name"
+    },
+    "description": {
+      "label": "Description",
+      "placeholder": "Enter event description"
+    },
+    "timezone": {
+      "label": "Timezone",
+      "placeholder": "Enter the timezone"
+    },
+    "currency": {
+      "label": "Currency"
+    },
+    "auctionType": "eAuction type*",
+    "auctionOwner": {
+      "label": "eAuction owner"
+    },
+    "auctionUsage": {
+      "label": "eAuction Usage"
+    },
+    "auctionStatus": {
+      "label": "eAuction Status"
+    },
+    "draft": "Draft",
+    "published": "Published",
+    "date": {
+      "label": "Date"
+    },
+    "time": {
+      "label": "Time"
+    },
+    "sealedDate": {
+      "label": "End date"
+    },
+    "sealedTime": {
+      "label": "End time"
+    },
+    "usage": {
+      "real": "Real",
+      "training": "Training",
+      "test": "Test"
+    }
+  },
+  "suppliers": {
+    "title": "Suppliers",
+    "search": {
+      "placeholder": "Find an existing supplier"
+    },
+    "addNewSupplier": "Add New Supplier",
+    "table": {
+      "noData": "No suppliers added",
+      "notSpecified": "Not Specified",
+      "willReceiveInvitation": "Supplier is going to receive invitation"
+    },
+    "actions": {
+      "edit": "Edit",
+      "delete": "Delete"
+    },
+    "dialog": {
+      "invite": "INVITE SUPPLIER",
+      "modify": "MODIFY SUPPLIER",
+      "email": {
+        "placeholder": "Enter the supplier email"
+      },
+      "phone": {
+        "placeholder": "Enter supplier phone number"
+      },
+      "actions": {
+        "cancel": "Cancel",
+        "invite": "Invite",
+        "modify": "Modify"
+      }
+    },
+    "headers": {
+      "country": "Country",
+      "address": "Address",
+      "position": "Position"
+    }
+  },
+  "lotRules": {
+    "name": "Lot Name",
+    "showRank": "Show Rank",
+    "bidDecrement": {
+      "placeholder": "Enter bid decrement"
+    },
+    "competitionDuration": "Competition Duration",
+    "competitionDurationPlaceholder": "Enter competition duration",
+    "rounds": "Rounds",
+    "startingPrice": {
+      "label": "Starting Price",
+      "placeholder": "Enter starting price"
+    },
+    "endingPrice": {
+      "label": "Ending Price",
+      "placeholder": "Enter ending price"
+    },
+    "baselinePrice": {
+      "label": "Baseline price*",
+      "placeholder": "Enter baseline price"
+    },
+    "roundDecrement": "Round Decrement*",
+    "roundIncrement": "Round Increment*",
+    "duration": "Duration*",
+    "roundDuration": "Round Duration*",
+    "minBidDecrement": "Min bid decrement*",
+    "maxBidDecrement": "Max bid decrement*",
+    "overtime": "Overtime*",
+    "overtimeNone": "None",
+    "ranksTriggering": "Ranks triggering overtime*",
+    "prebid": "Pre-bid",
+    "minutes": "MIN",
+    "rankPerLineItem": "Line items rank",
+    "rankPerLineItemTooltip": "Show supplier ranking for each line item individually instead of overall ranking. This field is only active when there are multiple line items.",
+    "maxRankDisplayed": "Max rank displayed",
+    "maxRankDisplayedTooltip": "Controls how many ranks are visible to suppliers. Choose 'No rank' to hide all ranks, 'All' to show everything, or a specific number.",
+    "noRank": "No rank",
+    "enable": "Enable",
+    "no": "No",
+    "yes": "Yes",
+    "all": "All",
+    "minBidDecrementTooltip": "Minimum reduction required from prior bid.",
+    "maxBidDecrementTooltip": "Maximum decrease possible from prior bid."
+  },
+  "validation": {
+    "positiveNumber": "Must be a positive number",
+    "required": "Required",
+    "nameRequired": "Name is required.",
+    "invalidEmail": "Invalid email address",
+    "atLeastOneSupplier": "At least one supplier is required.",
+    "atLeastOneItem": "At least one item is required.",
+    "item": "Item",
+    "fieldRequired": "Field is required.",
+    "baselineRequired": "Baseline must be greater than 0.",
+    "durationRequired": "Duration must be greater than 0.",
+    "overtimeRequired": "Overtime range must be greater than 0.",
+    "minBidDecrementRequired": "Minimum bid decrement must be greater than 0.",
+    "maxBidDecrementRequired": "Maximum bid decrement must be greater than 0.",
+    "awardingPrinciplesRequired": "Awarding principles are required.",
+    "commercialTermsRequired": "Commercial terms are required.",
+    "fileTooBig": "File too big",
+    "invalidFileType": "Invalid file type"
+  },
+  "lots": {
+    "title": "Lots",
+    "addLot": "Add Lot",
+    "lot": "Lot",
+    "lotInformation": "Lot information",
+    "awardingPrinciples": "Awarding principles",
+    "commercialTerms": "Commercial terms",
+    "generalTerms": "General terms",
+    "uploadDocuments": "Upload documents",
+    "clickToUpload": "Click to upload",
+    "lotSuppliers": "Lot Suppliers",
+    "addSuppliersToLot": "Add suppliers to the lot",
+    "lotAndCeilingPrice": "Lot and Ceiling price",
+    "preferredSuppliersTitle": "Preferred suppliers",
+    "preferredSuppliersTableTitle": "Supplier name",
+    "preferredSuppliersTableRowTitle": "Lot Time (for non preferred)",
+    "addMoreValues": "Add more values",
+    "fixedHandicap": "Fixed handicap",
+    "dynamicHandicap": "Dynamic handicap",
+    "lineItem": "Line item",
+    "lineItems": "Line items",
+    "unit": "Unit",
+    "quantity": "Quantity",
+    "addNewLineItem": "Add new line item",
+    "total": "Total",
+    "defaultAwardingPrinciples": "<p>Here you should describe the rules and logic that will be used to evaluate supplier proposals and select the winner. You can include:</p><ul><li>The main evaluation criteria (e.g. price, quality, delivery terms)</li><li>How each criterion will be weighted</li><li>Any minimum requirements or disqualifying conditions</li><li>Decision-making process (e.g. single winner, framework agreement, etc.)</li></ul><p>This information helps suppliers understand how their offers will be assessed and ensures transparency in the awarding process.</p>",
+    "defaultCommercialTerms": "<p>Include key conditions such as:</p><ul><li>Payment terms</li><li>Delivery timeline</li><li>Contract duration</li><li>Warranty or penalties (if any)</li></ul><p>This helps suppliers understand your expectations before submitting an offer.</p>",
+    "defaultGeneralTerms": "<ul><li>Any bid placed during the eAuction must reflect the specifications, terms and conditions stated above.</li><li>Any bid placed during the eAuction is contractually binding and treated as a formal proposal.</li><li>Renegotiation is not possible post eAuction.</li><li>Winning bids and lots must be formalized in a contract with the client within thirty (30) business days post eAuction.</li></ul>"
+  },
+  "timingRules": {
+    "title": "TIMING RULES",
+    "chooseTitle": "Choose eAuction timing rules",
+    "description": "Select the timing rules for your eAuction. These rules will determine the start and end times for each lot. Choose the timing that best fits your strategy and eAuction goals.",
+    "serial": {
+      "title": "Serial"
+    },
+    "parallel": {
+      "title": "Parallel"
+    },
+    "staggered": {
+      "title": "Staggered"
+    }
+  },
+  "auctionDescriptions": {
+    "english": {
+      "title": "English Reverse",
+      "description": "An English Reverse eAuction starts from suppliers’ pre-bids. Participants see their ranking and can submit improved offers until time expires. The final rank determines the winner.\n <br>  • **Before the event:** Participants submit a pre-bid that sets their initial rank.\n \n  • **During the event:** Ranking updates dynamically with each new bid.\n \n  • **Timing:** Runs for a limited time, with automatic extensions if bids are placed in the final minutes.\n \n  • **Awarding:**  Lots are awarded according to final ranking and defined awarding principles.\n"
+    },
+    "dutch": {
+      "title": "Dutch Reverse",
+      "description": "A Dutch Reverse eAuction starts at a low price that increases step by step. The first participant to accept the price wins immediately.\n <br> • **Before the event:** A pre-bid may be required.\n \n  • **During the event:** The price increases round by round in fixed increments; no live ranking is shown.\n \n  • **Timing:** Limited duration but ends instantly when a bid is accepted.\n \n  • **Awarding:** The first accepted bid secures the lot.\n"
+    },
+    "japanese": {
+      "title": "Japanese Reverse",
+      "description": "A Japanese Reverse eAuction starts at a high price that decreases in rounds. Participants must confirm their bid each round to stay in the event. The last remaining bidder wins.\n <br>  • **Before the event:** A pre-bid may be required.\n \n  • **During the event:** Price decreases in fixed steps; participants must stay active each round or exit the auction.\n \n  • **Timing:** Limited duration, ending when only one participant remains or the minimum price is reached.\n \n  • **Awarding:** The last active participant secures the lot.\n"
+    },
+    "sealedBid": {
+      "title": "Sealed Bid",
+      "description": "In a Sealed Bid eAuction, participants submit confidential offers that remain hidden until the end. The most competitive bid wins. \n <br> • **Before the event:** Participants submit bids before the deadline.\n \n  • **During the event:** Bids remain undisclosed; participants may revise offers until closure.\n \n  • **Timing:** No live ranking; results revealed after the deadline.\n \n  • **Awarding:** The most competitive bid secures the lot, based on awarding principles.\n"
+    },
+    "preferredDutch": {
+      "title": "Dutch Preferred",
+      "description": "A Preferred Dutch Reverse eAuction works like a Dutch auction, but selected suppliers receive priority access to each price step before others. The first accepted bid wins.\n <br>  • **Before the event:** Participants may submit pre-bids; preferred suppliers are designated.\n \n  • **During the event:** Price rises in steps; preferred suppliers get first option at each step.\n \n  • **Timing:** Limited duration but ends instantly when a bid is accepted.\n \n  • **Awarding:**  The first accepted bid secures the lot.\n"
+    },
+    "japaneseNoRank": {
+      "title": "Japanese No Rank",
+      "description": "A Japanese No Rank eAuction decreases prices in rounds, with participants required to stay active each round. Unlike a standard Japanese auction, awarding is decided outside the auction.\n <br>  • **Before the event:** A pre-bid may be required.\n \n  • **During the event:** Price decreases in fixed steps; participants confirm each round or exit, with their exit price recorded.\n \n  • **Timing:** Limited duration, ending once all rounds are complete.\n \n  • **Awarding:** The final decision combines auction results with external criteria.\n"
+    }
+  },
+  "breadcrumbs": {
+    "eAuctions": "eAuctions",
+    "createEAuction": "Create eAuction"
+  },
+  "pageActions": {
+    "copyEAuction": "Copy eAuction",
+    "edit": "Save changes",
+    "createEAuction": "Create eAuction",
+    "duplicateEAuction": "Duplicate eAuction"
+  }
+}

@@ -1,0 +1,88 @@
+{
+  "title": "Crown GPT",
+  "welcome": {
+    "heading": "Welcome to Crown AI",
+    "description": "Please select AI type first. Once you upload your files, the AI will analyze them and show key insights here.",
+    "featured": "Featured assistants:"
+  },
+  "chat": {
+    "placeholder": "Type your message...",
+    "generating": "Generating response...",
+    "thinking": "Thinking...",
+    "failed": "Generation failed",
+    "send": "Send",
+    "hint": "Press Enter to send, Shift + Enter for new line",
+    "suggestions": "Suggestions:",
+    "uploading": "Uploading...",
+    "documents_uploaded": "Document(s) uploaded"
+  },
+  "credits": {
+    "label": "credits",
+    "low": "Low credits",
+    "empty": "No credits",
+    "remaining": "remaining"
+  },
+  "conversations": {
+    "title": "CHATS",
+    "new": "New chat",
+    "empty": "No conversations yet",
+    "rename": "Rename",
+    "delete": "Delete",
+    "confirm_delete": "Are you sure you want to delete this conversation?",
+    "rename_title": "RENAME CHAT",
+    "rename_placeholder": "Chat with RFP",
+    "rename_label": "Chat title",
+    "delete_title": "DELETE CHAT",
+    "delete_confirmation": "Are you sure you want to delete this chat?",
+    "delete_description": "Chat \"{title}\" will no longer appear in the list"
+  },
+  "gpts": {
+    "title": "CROWN AI",
+    "search": "Search assistants...",
+    "no_results": "No assistants found",
+    "select": "Select an assistant to start",
+    "provider": "Provider",
+    "model": "Model"
+  },
+  "menu": {
+    "download_pdf": "Download PDF",
+    "update_credits": "Update credits",
+    "edit": "Edit",
+    "delete": "Delete"
+  },
+  "messages": {
+    "you": "You",
+    "assistant": "Assistant",
+    "system": "System",
+    "tokens": "tokens"
+  },
+  "errors": {
+    "create_conversation": "Failed to create conversation",
+    "fetch_conversations": "Failed to fetch conversations",
+    "fetch_messages": "Failed to fetch messages",
+    "send_message": "Failed to send message",
+    "insufficient_credits": "Insufficient credits. Please contact your administrator.",
+    "fetch_credits": "Failed to fetch credits",
+    "add_credits": "Failed to add credits",
+    "unauthorized": "You must be logged in to access this feature",
+    "generic": "An error occurred. Please try again.",
+    "delete_gpt": "Failed to delete GPT",
+    "rename_conversation": "Failed to rename conversation",
+    "delete_conversation": "Failed to delete conversation"
+  },
+  "actions": {
+    "send": "Send",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "close": "Close",
+    "retry": "Retry",
+    "rename": "Rename",
+    "delete": "Delete"
+  },
+  "toast": {
+    "conversation_renamed": "Conversation renamed",
+    "conversation_deleted": "Conversation deleted successfully",
+    "gpt_deleted": "GPT deleted successfully",
+    "pdf_coming_soon": "PDF download coming soon"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "title": "Réinitialiser le mot de passe",
+  "messages": {
+    "success": "Lien de réinitialisation envoyé à votre email",
+    "error": "Email non trouvé"
+  }
+}
