@@ -5,7 +5,6 @@
   "scripts": {
     "test-engine": "node scripts/engineCall.js",
     "migrate": "npx supabase db push --db-url \"$PG_URL\"",
-    "prebuild": "npm run migrate",
     "build": "nuxt build",
     "build:skip-migrate": "nuxt build",
     "build:local": "NITRO_PRESET=node-server nuxt build",
