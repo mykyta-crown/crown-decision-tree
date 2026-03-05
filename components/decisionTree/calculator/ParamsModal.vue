@@ -89,6 +89,7 @@
               </tr>
             </tbody>
           </table>
+      </div>
     </v-card>
   </v-dialog>
 </template>
