@@ -325,6 +325,7 @@ function exportReport() {
    ---------------------------------------------------------------- */
 .lot-col {
   padding-top: 4px;
+  min-width: 0;
 }
 
 .lot-index {
@@ -401,13 +402,14 @@ function exportReport() {
 .rec-card {
   border-radius: 4px;
   overflow: hidden;
+  min-width: 0;
 }
 
 .rec-card--expanded {
 }
 
 .rec-empty {
-  /* placeholder for missing recommendations */
+  min-width: 0;
 }
 
 /* Chip header (always visible) */

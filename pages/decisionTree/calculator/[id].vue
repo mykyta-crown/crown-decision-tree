@@ -195,11 +195,12 @@ function onEvNameInput(val: string) {
                       <div class="d-flex align-center ga-3" @click.stop>
                         <v-text-field
                           :model-value="store.evName"
-                          placeholder="Event name"
+                          label="Scenario name"
+                          placeholder="e.g. IT Hardware Q2"
                           density="compact"
                           variant="outlined"
                           hide-details
-                          style="max-width: 200px"
+                          style="min-width: 260px"
                           :error="store.evNameErr && !store.evName.trim()"
                           @update:model-value="onEvNameInput"
                         >
@@ -209,11 +210,12 @@ function onEvNameInput(val: string) {
                         </v-text-field>
                         <v-text-field
                           :model-value="projectsStore.userName"
-                          placeholder="Your name"
+                          label="Your name"
+                          placeholder="e.g. John Doe"
                           density="compact"
                           variant="outlined"
                           hide-details
-                          style="max-width: 200px"
+                          style="min-width: 220px"
                           :error="store.userNameErr && !projectsStore.userName.trim()"
                           @update:model-value="onUserNameInput"
                         >
