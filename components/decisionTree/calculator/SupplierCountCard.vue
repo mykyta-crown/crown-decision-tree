@@ -2,8 +2,8 @@
   <v-card
     variant="outlined"
     class="d-flex flex-column fill-height pa-5"
-    :class="{ 'border-green': store.nSup > 0 }"
-    min-height="320"
+    :class="{ 'border-green': store.nSup > 0, 'border-red-shake': store.nSupErr && store.nSup <= 0 }"
+    min-height="270"
   >
     <div class="mb-1">
       <div class="d-flex align-center ga-2 mb-1">
@@ -51,6 +51,19 @@ function increment() {
 <style scoped>
 .border-green {
   border: 2px solid rgb(var(--v-theme-green)) !important;
+}
+
+.border-red-shake {
+  border: 2px solid #EF4444 !important;
+  animation: card-shake 0.5s ease;
+}
+
+@keyframes card-shake {
+  0%, 100% { transform: translateX(0); }
+  15% { transform: translateX(-4px); }
+  30% { transform: translateX(3px); }
+  45% { transform: translateX(-2px); }
+  60% { transform: translateX(1px); }
 }
 
 .pill-counter {

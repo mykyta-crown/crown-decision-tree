@@ -1,65 +1,65 @@
 <template>
   <div class="chart-container">
-    <svg viewBox="0 0 210 88" preserveAspectRatio="none">
-      <!-- Y-axis label -->
-      <text x="4" y="8" class="chart-label">{{ pL }}</text>
-
-      <!-- Dashed divider -->
-      <line x1="107" y1="6" x2="107" y2="82" stroke="#D1D5DB" stroke-width="0.5" stroke-dasharray="2 2" />
+    <svg viewBox="0 0 280 130" fill="none">
+      <!-- Phase divider -->
+      <line x1="140" y1="18" x2="140" y2="112" stroke="#D1D5DB" stroke-width="0.8" stroke-dasharray="3 3" />
 
       <!-- Phase labels -->
-      <text x="55" y="84" class="phase-label">English Phase</text>
-      <text x="133" y="84" class="phase-label">Dutch Phase</text>
+      <rect x="30" y="4" width="76" height="14" rx="4" fill="#EFF6FF" />
+      <text x="68" y="14" text-anchor="middle" class="phase-label" fill="#1E40AF">Phase 1: English</text>
 
-      <!-- LEFT: English phase — descending dashed line (Supplier A) -->
-      <path
-        d="M12 20L38 32L65 44L92 52"
-        fill="none"
-        stroke="#60A5FA"
-        stroke-width="1.3"
-        stroke-dasharray="3 2"
-      />
-      <circle cx="12" cy="20" r="2" fill="#60A5FA" />
-      <circle cx="38" cy="32" r="2" fill="#60A5FA" />
-      <circle cx="65" cy="44" r="2" fill="#60A5FA" />
-      <circle cx="92" cy="52" r="2" fill="#60A5FA" />
+      <rect x="158" y="4" width="68" height="14" rx="4" fill="#F5F3FF" />
+      <text x="192" y="14" text-anchor="middle" class="phase-label" fill="#5B21B6">Phase 2: Dutch</text>
 
-      <!-- LEFT: English phase — descending solid line (Supplier B) -->
-      <path
-        d="M12 15L38 30L65 48L92 58"
-        fill="none"
-        stroke="#374151"
-        stroke-width="1.3"
-      />
-      <circle cx="12" cy="15" r="2" fill="#374151" />
-      <circle cx="38" cy="30" r="2" fill="#374151" />
-      <circle cx="65" cy="48" r="2" fill="#374151" />
-      <circle cx="92" cy="58" r="2" fill="#374151" />
+      <!-- Y-axis -->
+      <line x1="18" y1="22" x2="18" y2="112" stroke="#E5E7EB" stroke-width="0.6" />
+      <text x="6" y="24" class="axis-label">Price</text>
 
-      <!-- RIGHT: Dutch phase — staircase -->
-      <path
-        d="M112 40H127V52H142V64H157V74"
-        fill="none"
-        stroke="#A78BFA"
-        stroke-width="1.5"
-      />
+      <!-- X-axis -->
+      <line x1="18" y1="112" x2="268" y2="112" stroke="#E5E7EB" stroke-width="0.6" />
 
-      <!-- Acceptance circles in Dutch phase -->
-      <circle cx="127" cy="52" r="3" fill="#EF4444" opacity="0.85" />
-      <circle cx="150" cy="72" r="3" fill="#34D399" opacity="0.85" />
+      <!-- Grid -->
+      <line x1="18" y1="46" x2="268" y2="46" stroke="#F3F4F6" stroke-width="0.4" stroke-dasharray="2 3" />
+      <line x1="18" y1="68" x2="268" y2="68" stroke="#F3F4F6" stroke-width="0.4" stroke-dasharray="2 3" />
+      <line x1="18" y1="90" x2="268" y2="90" stroke="#F3F4F6" stroke-width="0.4" stroke-dasharray="2 3" />
 
-      <!-- Legend -->
-      <rect x="163" y="18" width="6" height="3" rx="1" fill="#60A5FA" />
-      <text x="172" y="21" class="chart-label">Supplier A</text>
+      <!-- Phase 1: English - 3 lines competing down -->
+      <path d="M26 34 L52 46 L78 58 L104 72 L130 82" :stroke="color" stroke-width="1.8" stroke-linecap="round" />
+      <circle cx="26" cy="34" r="2.5" fill="#FFF" :stroke="color" stroke-width="1.2" />
+      <circle cx="78" cy="58" r="2.5" fill="#FFF" :stroke="color" stroke-width="1.2" />
+      <circle cx="130" cy="82" r="2.5" :fill="color" />
 
-      <rect x="163" y="28" width="6" height="3" rx="1" fill="#374151" />
-      <text x="172" y="31" class="chart-label">Supplier B</text>
+      <path d="M26 30 L52 50 L78 68 L104 82 L130 90" stroke="#F59E0B" stroke-width="1.8" stroke-linecap="round" />
+      <circle cx="26" cy="30" r="2.5" fill="#FFF" stroke="#F59E0B" stroke-width="1.2" />
+      <circle cx="78" cy="68" r="2.5" fill="#FFF" stroke="#F59E0B" stroke-width="1.2" />
+      <circle cx="130" cy="90" r="2.5" fill="#F59E0B" />
 
-      <circle cx="166" cy="40" r="2.5" fill="#EF4444" />
-      <text x="172" y="42" class="chart-label">Rejected</text>
+      <path d="M26 26 L52 52 L78 76 L104 94 L130 100" stroke="#9CA3AF" stroke-width="1.8" stroke-linecap="round" />
+      <circle cx="26" cy="26" r="2.5" fill="#FFF" stroke="#9CA3AF" stroke-width="1.2" />
+      <circle cx="78" cy="76" r="2.5" fill="#FFF" stroke="#9CA3AF" stroke-width="1.2" />
+      <circle cx="130" cy="100" r="2.5" fill="#9CA3AF" />
 
-      <circle cx="166" cy="50" r="2.5" fill="#34D399" />
-      <text x="172" y="52" class="chart-label">Accepted</text>
+      <!-- Phase 2: Dutch - ascending staircase -->
+      <rect x="150" y="98" width="26" height="14" rx="1" fill="#7C3AED" opacity="0.06" />
+      <line x1="150" y1="98" x2="176" y2="98" stroke="#7C3AED" stroke-width="2" stroke-linecap="round" />
+
+      <rect x="180" y="84" width="26" height="28" rx="1" fill="#7C3AED" opacity="0.08" />
+      <line x1="180" y1="84" x2="206" y2="84" stroke="#7C3AED" stroke-width="2" stroke-linecap="round" />
+
+      <rect x="210" y="70" width="26" height="42" rx="1" fill="#7C3AED" opacity="0.1" />
+      <line x1="210" y1="70" x2="236" y2="70" stroke="#7C3AED" stroke-width="2" stroke-linecap="round" />
+
+      <rect x="240" y="56" width="24" height="56" rx="1" fill="#F3F4F6" opacity="0.3" />
+      <line x1="240" y1="56" x2="264" y2="56" stroke="#D1D5DB" stroke-width="2" stroke-linecap="round" stroke-dasharray="4 3" />
+
+      <!-- Vertical risers -->
+      <line x1="176" y1="98" x2="180" y2="84" stroke="#7C3AED" stroke-width="1" stroke-dasharray="2 2" />
+      <line x1="206" y1="84" x2="210" y2="70" stroke="#7C3AED" stroke-width="1" stroke-dasharray="2 2" />
+      <line x1="236" y1="70" x2="240" y2="56" stroke="#D1D5DB" stroke-width="1" stroke-dasharray="2 2" />
+
+      <!-- Accept marker -->
+      <circle cx="226" cy="70" r="5.5" fill="#DCFCE7" stroke="#16A34A" stroke-width="1.2" />
+      <path d="M223 70 L225.5 72.5 L229 67.5" fill="none" stroke="#16A34A" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
     </svg>
   </div>
 </template>
@@ -80,11 +80,12 @@ const pL = computed(() => `Price (${props.ccy})`)
 <style scoped>
 .chart-container {
   width: 100%;
-  height: 130px;
-  border-radius: 4px;
-  background: #F8F8F8;
+  height: 140px;
+  border-radius: 8px;
+  background: #FAFAFA;
   border: 1px solid #E9EAEC;
   overflow: hidden;
+  padding: 4px;
 }
 
 .chart-container svg {
@@ -92,16 +93,15 @@ const pL = computed(() => `Price (${props.ccy})`)
   height: 100%;
 }
 
-.chart-label {
-  font-size: 4.5px;
-  fill: #6B7280;
+.phase-label {
+  font-size: 5.5px;
+  font-weight: 600;
   font-family: Inter, system-ui, sans-serif;
 }
 
-.phase-label {
-  font-size: 4px;
+.axis-label {
+  font-size: 5.5px;
   fill: #9CA3AF;
-  text-anchor: middle;
   font-family: Inter, system-ui, sans-serif;
 }
 </style>

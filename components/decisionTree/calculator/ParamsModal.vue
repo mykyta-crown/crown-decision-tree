@@ -9,7 +9,7 @@
       <v-card-title class="d-flex align-center justify-space-between py-4 px-6">
         <span class="text-subtitle-1 font-weight-bold">Scoring Parameters</span>
         <div class="d-flex align-center ga-3">
-          <v-btn variant="outlined" size="small" @click="store.resetParams()">Reset defaults</v-btn>
+          <v-btn v-if="isAdmin" variant="outlined" size="small" @click="store.resetParams()">Reset defaults</v-btn>
           <v-btn icon variant="text" size="small" @click="store.showParams = false">
             <v-icon>mdi-close</v-icon>
           </v-btn>
@@ -57,6 +57,7 @@
                     type="number"
                     class="cell-input"
                     :value="store.params.bases[i]"
+                    :disabled="!isAdmin"
                     @input="onBaseInput(i, $event)"
                   />
                 </td>
@@ -66,6 +67,7 @@
                     type="number"
                     class="cell-input"
                     :value="store.params.savings[i]"
+                    :disabled="!isAdmin"
                     @input="onSavingsInput(i, $event)"
                   />
                   <span class="pct-suffix">%</span>
@@ -82,6 +84,7 @@
                       type="number"
                       class="cell-input"
                       :value="store.params.matrix[i][q - 1][o - 1]"
+                      :disabled="!isAdmin"
                       @input="onMatrixInput(i, q - 1, o - 1, $event)"
                     />
                   </td>
@@ -99,6 +102,7 @@ import { useCalculatorStore } from '~/stores/decisionTree/calculator'
 import { SC, Q_LABELS, Q_OPTS } from '~/utils/decisionTree/scoring-engine'
 
 const store = useCalculatorStore()
+const { isAdmin } = useUser()
 
 function cellBg(value: number): Record<string, string> {
   if (value === -999) return { background: '#FFCDD2' }
@@ -265,6 +269,13 @@ thead .sticky-col {
 .cell-input:focus {
   border-color: #3b82f6;
   background: #fff;
+}
+
+.cell-input:disabled {
+  color: #1D1D1B;
+  cursor: default;
+  opacity: 1;
+  -webkit-text-fill-color: #1D1D1B;
 }
 
 /* ── Data rows ── */

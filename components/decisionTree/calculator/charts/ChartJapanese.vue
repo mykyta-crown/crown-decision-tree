@@ -1,47 +1,67 @@
 <template>
   <div class="chart-container">
-    <svg viewBox="0 0 210 88" preserveAspectRatio="none">
-      <!-- Y-axis label -->
-      <text x="4" y="8" class="chart-label">{{ pL }}</text>
+    <svg viewBox="0 0 280 130" fill="none">
+      <!-- Y-axis -->
+      <text x="8" y="20" class="axis-label">{{ pL }}</text>
+      <line x1="28" y1="14" x2="28" y2="112" stroke="#E5E7EB" stroke-width="0.8" />
 
-      <!-- Horizontal price-level lines -->
-      <line x1="30" y1="22" x2="160" y2="22" stroke="#E5E7EB" stroke-width="0.4" stroke-dasharray="2 2" />
-      <line x1="30" y1="38" x2="160" y2="38" stroke="#E5E7EB" stroke-width="0.4" stroke-dasharray="2 2" />
-      <line x1="30" y1="54" x2="160" y2="54" stroke="#E5E7EB" stroke-width="0.4" stroke-dasharray="2 2" />
-      <line x1="30" y1="70" x2="160" y2="70" stroke="#E5E7EB" stroke-width="0.4" stroke-dasharray="2 2" />
-
-      <!-- R1: green, blue, yellow circles -->
-      <circle cx="44" cy="22" r="3" fill="#34D399" />
-      <circle cx="44" cy="38" r="3" fill="#60A5FA" />
-      <circle cx="44" cy="54" r="3" fill="#FBBF24" />
-
-      <!-- R2: green, blue circles + red X -->
-      <circle cx="80" cy="38" r="3" fill="#34D399" />
-      <circle cx="80" cy="54" r="3" fill="#60A5FA" />
-      <text x="73" y="60" class="elim-x">X</text>
-
-      <!-- R3: green circle + red X -->
-      <circle cx="116" cy="54" r="3" fill="#34D399" />
-      <text x="109" y="44" class="elim-x">X</text>
-
-      <!-- R4: green winner circle -->
-      <circle cx="152" cy="70" r="4" fill="#34D399" stroke="#059669" stroke-width="1.2" />
+      <!-- X-axis -->
+      <line x1="28" y1="112" x2="250" y2="112" stroke="#E5E7EB" stroke-width="0.8" />
 
       <!-- Round labels -->
-      <text x="42" y="82" class="round-label">R1</text>
-      <text x="78" y="82" class="round-label">R2</text>
-      <text x="114" y="82" class="round-label">R3</text>
-      <text x="150" y="82" class="round-label">R4</text>
+      <text x="56" y="124" class="round-label">R1</text>
+      <text x="100" y="124" class="round-label">R2</text>
+      <text x="144" y="124" class="round-label">R3</text>
+      <text x="188" y="124" class="round-label">R4</text>
+      <text x="232" y="124" class="round-label">R5</text>
 
-      <!-- Legend -->
-      <circle cx="173" cy="22" r="2.5" fill="#34D399" />
-      <text x="178" y="24" class="chart-label">Supplier A</text>
+      <!-- Grid lines -->
+      <line x1="28" y1="36" x2="250" y2="36" stroke="#F3F4F6" stroke-width="0.5" stroke-dasharray="3 3" />
+      <line x1="28" y1="58" x2="250" y2="58" stroke="#F3F4F6" stroke-width="0.5" stroke-dasharray="3 3" />
+      <line x1="28" y1="80" x2="250" y2="80" stroke="#F3F4F6" stroke-width="0.5" stroke-dasharray="3 3" />
 
-      <circle cx="173" cy="32" r="2.5" fill="#60A5FA" />
-      <text x="178" y="34" class="chart-label">Supplier B</text>
+      <!-- Descending staircase (price drops each round) -->
+      <line x1="36" y1="24" x2="78" y2="24" :stroke="color" stroke-width="2" stroke-linecap="round" />
+      <line x1="80" y1="42" x2="122" y2="42" :stroke="color" stroke-width="2" stroke-linecap="round" />
+      <line x1="124" y1="60" x2="166" y2="60" :stroke="color" stroke-width="2" stroke-linecap="round" />
+      <line x1="168" y1="78" x2="210" y2="78" :stroke="color" stroke-width="2" stroke-linecap="round" />
+      <line x1="212" y1="96" x2="250" y2="96" stroke="#D1D5DB" stroke-width="2" stroke-linecap="round" stroke-dasharray="4 3" />
 
-      <circle cx="173" cy="42" r="2.5" fill="#FBBF24" />
-      <text x="178" y="44" class="chart-label">Supplier C</text>
+      <!-- Vertical drops -->
+      <line x1="78" y1="24" x2="80" y2="42" :stroke="color" stroke-width="1.2" stroke-dasharray="2 2" />
+      <line x1="122" y1="42" x2="124" y2="60" :stroke="color" stroke-width="1.2" stroke-dasharray="2 2" />
+      <line x1="166" y1="60" x2="168" y2="78" :stroke="color" stroke-width="1.2" stroke-dasharray="2 2" />
+      <line x1="210" y1="78" x2="212" y2="96" stroke="#D1D5DB" stroke-width="1" stroke-dasharray="2 2" />
+
+      <!-- R1: all 3 suppliers present -->
+      <circle cx="50" cy="18" r="3.5" fill="#FFF" :stroke="color" stroke-width="1.3" />
+      <circle cx="58" cy="18" r="3.5" fill="#FFF" stroke="#F59E0B" stroke-width="1.3" />
+      <circle cx="66" cy="18" r="3.5" fill="#FFF" stroke="#9CA3AF" stroke-width="1.3" />
+
+      <!-- R2: all present -->
+      <circle cx="94" cy="36" r="3.5" fill="#FFF" :stroke="color" stroke-width="1.3" />
+      <circle cx="102" cy="36" r="3.5" fill="#FFF" stroke="#F59E0B" stroke-width="1.3" />
+      <circle cx="110" cy="36" r="3.5" fill="#FFF" stroke="#9CA3AF" stroke-width="1.3" />
+
+      <!-- R3: C exits -->
+      <circle cx="138" cy="54" r="3.5" fill="#FFF" :stroke="color" stroke-width="1.3" />
+      <circle cx="146" cy="54" r="3.5" fill="#FFF" stroke="#F59E0B" stroke-width="1.3" />
+      <circle cx="154" cy="54" r="3.5" fill="#FEE2E2" stroke="#EF4444" stroke-width="1.3" />
+      <path d="M151.5 51.5 L156.5 56.5 M156.5 51.5 L151.5 56.5" stroke="#EF4444" stroke-width="1" stroke-linecap="round" />
+
+      <!-- R4: B exits, A wins (last standing) -->
+      <circle cx="182" cy="72" r="3.5" fill="#FFF" :stroke="color" stroke-width="1.3" />
+      <circle cx="190" cy="72" r="3.5" fill="#FEE2E2" stroke="#EF4444" stroke-width="1.3" />
+      <path d="M187.5 69.5 L192.5 74.5 M192.5 69.5 L187.5 74.5" stroke="#EF4444" stroke-width="1" stroke-linecap="round" />
+
+      <!-- Winner marker -->
+      <circle cx="182" cy="72" r="6" fill="none" stroke="#16A34A" stroke-width="1.5" />
+      <text x="182" y="66" text-anchor="middle" class="winner-text">Last standing</text>
+
+      <!-- Down arrow -->
+      <path d="M260 20 L260 100" stroke="#D1D5DB" stroke-width="0.8" />
+      <path d="M257 94 L260 100 L263 94" fill="none" stroke="#D1D5DB" stroke-width="0.8" stroke-linecap="round" />
+      <text x="260" y="16" text-anchor="middle" class="arrow-label">Price</text>
     </svg>
   </div>
 </template>
@@ -62,11 +82,12 @@ const pL = computed(() => `Price (${props.ccy})`)
 <style scoped>
 .chart-container {
   width: 100%;
-  height: 130px;
-  border-radius: 4px;
-  background: #F8F8F8;
+  height: 140px;
+  border-radius: 8px;
+  background: #FAFAFA;
   border: 1px solid #E9EAEC;
   overflow: hidden;
+  padding: 4px;
 }
 
 .chart-container svg {
@@ -74,23 +95,30 @@ const pL = computed(() => `Price (${props.ccy})`)
   height: 100%;
 }
 
-.chart-label {
-  font-size: 4.5px;
-  fill: #6B7280;
+.axis-label {
+  font-size: 6px;
+  fill: #9CA3AF;
   font-family: Inter, system-ui, sans-serif;
 }
 
 .round-label {
-  font-size: 4px;
+  font-size: 6px;
   fill: #9CA3AF;
   text-anchor: middle;
+  font-weight: 600;
   font-family: Inter, system-ui, sans-serif;
 }
 
-.elim-x {
-  font-size: 7px;
-  fill: #EF4444;
-  font-weight: 700;
+.winner-text {
+  font-size: 5.5px;
+  fill: #16A34A;
+  font-weight: 600;
+  font-family: Inter, system-ui, sans-serif;
+}
+
+.arrow-label {
+  font-size: 5.5px;
+  fill: #9CA3AF;
   font-family: Inter, system-ui, sans-serif;
 }
 </style>

@@ -25,10 +25,25 @@ export const PREF_LABELS: Record<number, string> = {
   3: 'Financial',
 }
 
+export const AWARD_LABELS: Record<number, string> = {
+  1: 'Award',
+  2: 'Rank',
+  3: 'No Rank',
+}
+
 export const CCY: Record<string, { sym: string; code: string }> = {
   EUR: { sym: '€', code: 'EUR' },
   USD: { sym: '$', code: 'USD' },
   GBP: { sym: '£', code: 'GBP' },
+  CHF: { sym: 'CHF', code: 'CHF' },
+  JPY: { sym: '¥', code: 'JPY' },
+  CNY: { sym: '¥', code: 'CNY' },
+  CAD: { sym: 'C$', code: 'CAD' },
+  AUD: { sym: 'A$', code: 'AUD' },
+  SEK: { sym: 'kr', code: 'SEK' },
+  NOK: { sym: 'kr', code: 'NOK' },
+  DKK: { sym: 'kr', code: 'DKK' },
+  PLN: { sym: 'zł', code: 'PLN' },
 }
 
 export const DISP_NAMES: Record<string, string> = {
@@ -45,8 +60,8 @@ export function getFamilyOptions(f: string): { security: string[] | null; prefer
     'English': { security: ['Pre-bid', 'No Pre-bid'], preference: ['None', 'Non-Financial', 'Financial'], awarding: ['Award', 'Rank'] },
     'Dutch': { security: ['Pre-bid', 'No Pre-bid'], preference: ['None', 'Non-Financial', 'Financial'], awarding: ['Award'] },
     'Sealed Bid': { security: ['No Pre-bid'], preference: ['None', 'Non-Financial', 'Financial'], awarding: ['Award', 'Rank', 'No Rank'] },
-    'Japanese': { security: ['Pre-bid', 'No Pre-bid'], preference: null, awarding: ['Award', 'Rank', 'No Rank'] },
-    'Double Scenario': { security: ['Pre-bid', 'No Pre-bid'], preference: ['None', 'Non-Financial', 'Financial'], awarding: ['Award', 'Rank'] },
+    'Japanese': { security: ['Pre-bid', 'No Pre-bid'], preference: ['None', 'Financial'], awarding: ['Award', 'Rank', 'No Rank'] },
+    'Double Scenario': { security: ['Pre-bid', 'No Pre-bid'], preference: ['None', 'Non-Financial', 'Financial'], awarding: ['Award'] },
   }
   return map[f] || { security: null, preference: null, awarding: null }
 }

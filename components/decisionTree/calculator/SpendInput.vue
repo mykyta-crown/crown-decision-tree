@@ -58,23 +58,26 @@ function commit() {
 </script>
 
 <style scoped>
-.spend-edit {
-  border: none;
-  outline: none;
-  font-size: 18px;
-  font-weight: 600;
-  width: 130px;
-  text-align: right;
-  font-family: inherit;
-  background: transparent;
-}
-
+.spend-edit,
 .spend-display {
   font-size: 18px;
   font-weight: 600;
-  width: 130px;
+  width: 140px;
+  height: 28px;
+  line-height: 28px;
   text-align: right;
-  cursor: text;
   font-family: inherit;
+  white-space: nowrap;
+}
+
+.spend-edit {
+  border: none;
+  outline: none;
+  background: transparent;
+  padding: 0;
+}
+
+.spend-display {
+  cursor: text;
 }
 </style>

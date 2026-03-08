@@ -1,7 +1,10 @@
 import { defineStore } from 'pinia'
 import { ref, computed, watch } from 'vue'
 import { getScores, DEF_BASES, DEF_SAVINGS, DEF_MATRIX, deepCloneMatrix, type ScoringParams } from '~/utils/decisionTree/scoring-engine'
+import { createSnapshot, parseSnapshot } from '~/utils/decisionTree/snapshot-schema'
 import type { DemoPreset } from '~/utils/decisionTree/demo-presets'
+
+let _paramsSaveTimer: ReturnType<typeof setTimeout> | null = null
 
 export interface Lot {
   id: number
@@ -10,6 +13,7 @@ export interface Lot {
   qty: number
   pref: number
   intens: number
+  award: number
   prices: number[]
   excl: boolean[]
 }
@@ -24,6 +28,7 @@ function defaultLot(sc: number = 2): Lot {
     qty: 1,
     pref: 1,
     intens: 50,
+    award: 1,
     prices: Array(sc).fill(0),
     excl: Array(sc).fill(false),
   }
@@ -31,6 +36,7 @@ function defaultLot(sc: number = 2): Lot {
 
 export const useCalculatorStore = defineStore('calculator', () => {
   // ─── Editor state ───
+  const mode = ref<'standard' | 'guided'>('standard')
   const phase = ref(1)
   const spend = ref(0)
   const nSup = ref(0)
@@ -39,6 +45,9 @@ export const useCalculatorStore = defineStore('calculator', () => {
   const evName = ref('')
   const evNameErr = ref(false)
   const userNameErr = ref(false)
+  const spendErr = ref(false)
+  const nSupErr = ref(false)
+  const awardErr = ref(false)
   const lots = ref<Lot[]>([defaultLot()])
   const sc = ref(2)
   const supNames = ref(['Supplier 1', 'Supplier 2'])
@@ -46,6 +55,7 @@ export const useCalculatorStore = defineStore('calculator', () => {
   const expLot = ref(-1)
   const showParams = ref(false)
   const visitedPhase3 = ref(false)
+  const lotHeaderH = ref(0)
   const params = ref<ScoringParams>({
     bases: [...DEF_BASES],
     savings: [...DEF_SAVINGS],
@@ -55,12 +65,16 @@ export const useCalculatorStore = defineStore('calculator', () => {
   // ─── Computed scoring ───
   const v1 = computed(() => spend.value < 100000 ? 1 : spend.value <= 500000 ? 2 : 3)
   const v3 = computed(() => award.value || 1)
-  const p1Ok = computed(() => spend.value > 0 && nSup.value > 0 && award.value !== null)
+  const p1Ok = computed(() => {
+    if (mode.value === 'guided') return spend.value > 0 && nSup.value > 0
+    return spend.value > 0 && nSup.value > 0 && award.value !== null
+  })
 
   const p1Sc = computed(() => {
     if (!p1Ok.value) return []
     const nSupVal = nSup.value === 1 ? 1 : nSup.value === 2 ? 2 : 3
-    return getScores(params.value, v1.value, nSupVal, v3.value, 1, 2, 1)
+    const awardVal = mode.value === 'guided' ? 1 : v3.value
+    return getScores(params.value, v1.value, nSupVal, awardVal, 1, 2, 1)
   })
 
   const hasAuction = computed(() => p1Sc.value.some(s => !s.eliminated && s.family !== 'Traditional'))
@@ -83,7 +97,8 @@ export const useCalculatorStore = defineStore('calculator', () => {
         v6 = g <= 7 ? 1 : g <= 10 ? 2 : 3
       }
     }
-    return getScores(params.value, v1.value, v2, v3.value, l.pref, v5, v6)
+    const lotAward = mode.value === 'guided' ? (l.award || 1) : v3.value
+    return getScores(params.value, v1.value, v2, lotAward, l.pref, v5, v6)
   }))
 
   function lotBaseline(l: Lot): number {
@@ -102,6 +117,12 @@ export const useCalculatorStore = defineStore('calculator', () => {
 
   // ─── Progress ───
   const p1Pct = computed(() => {
+    if (mode.value === 'guided') {
+      let d = 0
+      if (spend.value > 0) d++
+      if (nSup.value > 0) d++
+      return Math.round(d / 2 * 100)
+    }
     let d = 0
     if (spend.value > 0) d++
     if (nSup.value > 0) d++
@@ -118,8 +139,50 @@ export const useCalculatorStore = defineStore('calculator', () => {
     return t > 0 ? Math.round(d / t * 100) : 0
   })
 
+  // Clear error states when values change
+  watch(spend, (v) => { if (v > 0) spendErr.value = false })
+  watch(nSup, (v) => { if (v > 0) nSupErr.value = false })
+  watch(award, (v) => { if (v !== null) awardErr.value = false })
+
   // Track if user has ever opened Phase 3
-  watch(phase, (v) => { if (v >= 3) visitedPhase3.value = true })
+  watch(phase, (v) => {
+    if (v >= 3) visitedPhase3.value = true
+    // Sync sc/supNames with nSup when entering Phase 2 in guided mode
+    if (v === 2 && mode.value === 'guided') syncGuidedSuppliers()
+  })
+
+  // Keep sc in sync when nSup changes in guided mode (even while in Phase 2)
+  watch(nSup, () => {
+    if (mode.value === 'guided' && phase.value >= 2) syncGuidedSuppliers()
+  })
+
+  function syncGuidedSuppliers() {
+    const target = Math.max(1, nSup.value)
+    if (sc.value === target) return
+    if (target > sc.value) {
+      // Add suppliers
+      const toAdd = target - sc.value
+      const oldSc = sc.value
+      const newNames = Array.from({ length: toAdd }, (_, i) => 'Supplier ' + (oldSc + i + 1))
+      supNames.value = [...supNames.value, ...newNames]
+      lots.value = lots.value.map(l => ({
+        ...l,
+        prices: [...l.prices, ...Array(toAdd).fill(0)],
+        excl: [...l.excl, ...Array(toAdd).fill(false)],
+      }))
+      sc.value = target
+    } else {
+      // Remove suppliers from the end
+      const newSc = target
+      supNames.value = supNames.value.slice(0, newSc)
+      lots.value = lots.value.map(l => ({
+        ...l,
+        prices: l.prices.slice(0, newSc),
+        excl: l.excl.slice(0, newSc),
+      }))
+      sc.value = newSc
+    }
+  }
   const p3Pct = computed(() => (phase.value >= 3 || visitedPhase3.value) ? 100 : 0)
 
   const statusLabel = computed(() => {
@@ -152,6 +215,7 @@ export const useCalculatorStore = defineStore('calculator', () => {
       qty: 1,
       pref: 1,
       intens: 50,
+      award: 1,
       prices: Array(sc.value).fill(0),
       excl: Array(sc.value).fill(false),
     }]
@@ -164,7 +228,7 @@ export const useCalculatorStore = defineStore('calculator', () => {
   }
 
   function addSupplier() {
-    if (sc.value >= 6) return
+    if (sc.value >= 20) return
     const n = sc.value + 1
     sc.value = n
     supNames.value = [...supNames.value, 'Supplier ' + n]
@@ -212,13 +276,24 @@ export const useCalculatorStore = defineStore('calculator', () => {
       qty: l.qty,
       pref: l.pref,
       intens: l.intens,
+      award: (l as any).award || 1,
       prices: [...l.prices],
       excl: l.prices.map(() => false),
     }))
     selLot.value = 0
+    // In guided mode, sync spend/nSup from preset data
+    if (mode.value === 'guided') {
+      nSup.value = n
+      const totalSpend = preset.lots.reduce((sum, l) => {
+        const avg = l.prices.reduce((s, p) => s + p, 0) / l.prices.length
+        return sum + avg * l.qty
+      }, 0)
+      spend.value = Math.round(totalSpend)
+    }
   }
 
   function resetEditor() {
+    mode.value = 'standard'
     phase.value = 1
     spend.value = 0
     nSup.value = 0
@@ -227,6 +302,9 @@ export const useCalculatorStore = defineStore('calculator', () => {
     evName.value = ''
     evNameErr.value = false
     userNameErr.value = false
+    spendErr.value = false
+    nSupErr.value = false
+    awardErr.value = false
     lots.value = [defaultLot()]
     sc.value = 2
     supNames.value = ['Supplier 1', 'Supplier 2']
@@ -243,62 +321,117 @@ export const useCalculatorStore = defineStore('calculator', () => {
     }
   }
 
+  // ─── Supabase scoring params ───
+  const paramsLoaded = ref(false)
+
+  async function loadScoringParams() {
+    try {
+      const supabase = useSupabaseClient()
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) return
+
+      const { data, error } = await supabase
+        .from('dt_scoring_params')
+        .select('bases, savings, matrix')
+        .eq('user_id', user.id)
+        .maybeSingle()
+
+      if (error) throw error
+      if (data) {
+        params.value = {
+          bases: Array.isArray(data.bases) ? data.bases : [...DEF_BASES],
+          savings: Array.isArray(data.savings) ? data.savings : [...DEF_SAVINGS],
+          matrix: Array.isArray(data.matrix) ? data.matrix : deepCloneMatrix(DEF_MATRIX),
+        }
+      }
+    } catch (e) {
+      console.error('[DT] Failed to load scoring params:', e)
+    } finally {
+      paramsLoaded.value = true
+    }
+  }
+
+  async function saveScoringParams() {
+    try {
+      const supabase = useSupabaseClient()
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) return
+
+      const { error } = await supabase
+        .from('dt_scoring_params')
+        .upsert({
+          user_id: user.id,
+          bases: params.value.bases,
+          savings: params.value.savings,
+          matrix: params.value.matrix,
+        }, { onConflict: 'user_id' })
+
+      if (error) throw error
+    } catch (e) {
+      console.error('[DT] Failed to save scoring params:', e)
+    }
+  }
+
+  // Debounced auto-save when params change
+  watch(params, () => {
+    if (!paramsLoaded.value) return
+    if (_paramsSaveTimer) clearTimeout(_paramsSaveTimer)
+    _paramsSaveTimer = setTimeout(() => saveScoringParams(), 1500)
+  }, { deep: true })
+
   function getSnapshot() {
-    return {
+    return createSnapshot({
+      mode: mode.value,
       phase: phase.value,
       spend: spend.value,
       nSup: nSup.value,
       award: award.value,
       ccy: ccy.value,
       evName: evName.value,
-      lots: JSON.parse(JSON.stringify(lots.value)),
+      lots: lots.value,
       sc: sc.value,
       supNames: [...supNames.value],
       selLot: selLot.value,
       expLot: expLot.value,
       params: JSON.parse(JSON.stringify(params.value)),
-    }
+    })
   }
 
-  function hydrateFromState(s: any) {
+  function hydrateFromState(raw: any) {
+    if (!raw) { resetEditor(); return }
+
+    // Parse and migrate snapshot (handles v1 → v2, validation, defaults)
+    const s = parseSnapshot(raw)
     if (!s) { resetEditor(); return }
-    phase.value = s.phase ?? 1
-    spend.value = s.spend ?? 0
-    nSup.value = s.nSup ?? 1
-    award.value = s.award ?? 'Award'
-    ccy.value = s.ccy ?? 'EUR'
-    evName.value = s.evName ?? ''
+
+    mode.value = s.mode
+    phase.value = s.phase
+    spend.value = s.spend
+    nSup.value = s.nSup
+    award.value = s.award
+    ccy.value = s.ccy
+    evName.value = s.evName
     evNameErr.value = false
     userNameErr.value = false
-    sc.value = s.sc ?? 2
-    // Validate lots: ensure prices/excl arrays have correct length
-    if (Array.isArray(s.lots) && s.lots.length > 0) {
-      lots.value = s.lots.map((l: any) => ({
-        ...l,
-        prices: Array.isArray(l.prices) ? l.prices.slice(0, sc.value).concat(Array(Math.max(0, sc.value - (l.prices?.length || 0))).fill(0)) : Array(sc.value).fill(0),
-        excl: Array.isArray(l.excl) ? l.excl.slice(0, sc.value).concat(Array(Math.max(0, sc.value - (l.excl?.length || 0))).fill(false)) : Array(sc.value).fill(false),
-      }))
-    } else {
-      lots.value = [defaultLot()]
-    }
-    supNames.value = s.supNames || Array.from({ length: sc.value }, (_, i) => 'Supplier ' + (i + 1))
+    spendErr.value = false
+    nSupErr.value = false
+    awardErr.value = false
+    sc.value = s.sc
+    lots.value = s.lots
+    supNames.value = s.supNames
     selLot.value = 0
     expLot.value = -1
-    visitedPhase3.value = (s.phase ?? 0) >= 3
+    visitedPhase3.value = s.phase >= 3
     // Restore custom scoring params if saved
     if (s.params) {
-      params.value = {
-        bases: Array.isArray(s.params.bases) ? s.params.bases : [...DEF_BASES],
-        savings: Array.isArray(s.params.savings) ? s.params.savings : [...DEF_SAVINGS],
-        matrix: Array.isArray(s.params.matrix) ? s.params.matrix : deepCloneMatrix(DEF_MATRIX),
-      }
+      params.value = s.params
     }
   }
 
   return {
     // State
-    phase, spend, nSup, award, ccy, evName, evNameErr, userNameErr,
-    lots, sc, supNames, selLot, expLot, showParams, params,
+    mode, phase, spend, nSup, award, ccy, evName, evNameErr, userNameErr, spendErr, nSupErr, awardErr,
+    lots, sc, supNames, selLot, expLot, showParams, params, lotHeaderH,
     // Computed
     v1, v3, p1Ok, p1Sc, hasAuction, eligible, notRec, status,
     lotSc, lotBaseline, totBase, lotTop3,
@@ -308,5 +441,6 @@ export const useCalculatorStore = defineStore('calculator', () => {
     addSupplier, removeSupplierAt, renameSupplier, toggleExclude,
     applyDemoPreset, resetEditor, resetParams,
     getSnapshot, hydrateFromState,
+    paramsLoaded, loadScoringParams, saveScoringParams,
   }
 })

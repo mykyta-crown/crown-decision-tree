@@ -47,19 +47,17 @@ interface Breakpoint {
 
 const bp: Breakpoint[] = [
   { p: 0, v: 0 },
-  { p: 5, v: 100000 },
-  { p: 25, v: 2000000 },
-  { p: 50, v: 5000000 },
-  { p: 75, v: 7000000 },
+  { p: 25, v: 500000 },
+  { p: 50, v: 1000000 },
+  { p: 75, v: 5000000 },
   { p: 100, v: 10000000 },
 ]
 
 const ticks = [
   { p: 0, l: '0' },
-  { p: 5, l: '100K' },
-  { p: 25, l: '2M' },
-  { p: 50, l: '5M' },
-  { p: 75, l: '7M' },
+  { p: 25, l: '500K' },
+  { p: 50, l: '1M' },
+  { p: 75, l: '5M' },
   { p: 100, l: '10M+' },
 ]
 
@@ -87,7 +85,8 @@ function p2v(p: number): number {
       const a = bp[i - 1]
       const raw = a.v + ((p - a.p) / (bp[i].p - a.p)) * (bp[i].v - a.v)
       // Smart rounding based on magnitude
-      if (raw < 200000) return Math.round(raw / 10000) * 10000
+      if (raw < 100000) return Math.round(raw / 10000) * 10000
+      if (raw < 500000) return Math.round(raw / 25000) * 25000
       if (raw < 1000000) return Math.round(raw / 50000) * 50000
       return Math.round(raw / 100000) * 100000
     }

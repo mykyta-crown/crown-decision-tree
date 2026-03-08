@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref, computed, watch } from 'vue'
+import { ref, computed } from 'vue'
 
 export interface Project {
   id: number
@@ -13,30 +13,53 @@ export interface Project {
   client: string
   category: string
   favorite: boolean
-  hidden: boolean
-  archived: boolean
   topFamily: string | null
   state: any | null
 }
 
-function normalizeProject(p: Partial<Project>): Project {
+interface DbRow {
+  id: number
+  name: string
+  owner_name: string
+  client: string
+  status: string
+  baseline: number
+  ccy: string
+  category: string
+  favorite: boolean
+  top_family: string | null
+  state: any | null
+  created_at: string
+  updated_at: string
+}
+
+export interface DateFilter {
+  type: 'before' | 'after' | 'between' | null
+  date: string | null
+  startDate: string | null
+  endDate: string | null
+}
+
+export interface SortEntry {
+  key: string
+  order: 'asc' | 'desc'
+}
+
+function rowToProject(r: DbRow): Project {
   return {
-    id: 0,
-    name: 'Untitled',
-    created: new Date().toISOString(),
-    lastActive: new Date().toISOString(),
-    baseline: 0,
-    ccy: 'EUR',
-    status: 'Draft',
-    owner: 'You',
-    client: 'Crown',
-    category: 'Real',
-    favorite: false,
-    hidden: false,
-    archived: false,
-    topFamily: null,
-    state: null,
-    ...p,
+    id: r.id,
+    name: r.name,
+    created: r.created_at,
+    lastActive: r.updated_at,
+    baseline: Number(r.baseline) || 0,
+    ccy: r.ccy || 'EUR',
+    status: r.status,
+    owner: r.owner_name || '',
+    client: r.client || 'Crown',
+    category: r.category || 'Real',
+    favorite: r.favorite ?? false,
+    topFamily: r.top_family,
+    state: r.state,
   }
 }
 
@@ -46,39 +69,200 @@ export const useProjectsStore = defineStore('projects', () => {
   const listFilter = ref('All')
   const openMenuId = ref<number | null>(null)
   const userName = ref('')
-  const storageReady = ref(false)
+  const loading = ref(false)
+  const loaded = ref(false)
 
-  // Load from localStorage on init
-  function loadFromStorage() {
-    try {
-      const raw = localStorage.getItem('crown:projects')
-      if (raw) projects.value = JSON.parse(raw).map(normalizeProject)
-      const name = localStorage.getItem('crown:user_name')
-      if (name) userName.value = name
-    } catch (e) { /* first load */ }
-    storageReady.value = true
+  // ─── Filters ───
+  const dropdownFilters = ref<{
+    owners: string[]
+    statuses: string[]
+    types: string[]       // topFamily
+    clients: string[]
+    createdDateFilter: DateFilter
+    modifiedDateFilter: DateFilter
+  }>({
+    owners: [],
+    statuses: [],
+    types: [],
+    clients: [],
+    createdDateFilter: { type: null, date: null, startDate: null, endDate: null },
+    modifiedDateFilter: { type: null, date: null, startDate: null, endDate: null },
+  })
+
+  const sortBy = ref<SortEntry[]>([])
+
+  // ─── Unique values for filter dropdowns ───
+  const uniqueOwners = computed(() => {
+    const set = new Set(allActive.value.map(p => p.owner).filter(Boolean))
+    return [...set].sort()
+  })
+
+  const uniqueStatuses = computed(() => {
+    const set = new Set(allActive.value.map(p => p.status).filter(Boolean))
+    return [...set].sort()
+  })
+
+  const uniqueTypes = computed(() => {
+    const set = new Set(allActive.value.map(p => p.topFamily).filter(Boolean) as string[])
+    return [...set].sort()
+  })
+
+  const uniqueClients = computed(() => {
+    const set = new Set(allActive.value.map(p => p.client).filter(Boolean))
+    return [...set].sort()
+  })
+
+  // ─── Active filter count ───
+  const activeFilterCount = computed(() => {
+    let count = 0
+    if (dropdownFilters.value.owners.length) count++
+    if (dropdownFilters.value.statuses.length) count++
+    if (dropdownFilters.value.types.length) count++
+    if (dropdownFilters.value.clients.length) count++
+    if (dropdownFilters.value.createdDateFilter.type) count++
+    if (dropdownFilters.value.modifiedDateFilter.type) count++
+    if (sortBy.value.length) count++
+    return count
+  })
+
+  // ─── Supabase helpers ───
+  function getClient() {
+    return useSupabaseClient()
   }
 
-  // Persist to localStorage
-  function saveToStorage() {
-    if (!storageReady.value) return
-    try {
-      localStorage.setItem('crown:projects', JSON.stringify(projects.value))
-      localStorage.setItem('crown:user_name', userName.value)
-    } catch (e) { /* storage full */ }
+  async function getUserId(): Promise<string | null> {
+    const supabase = getClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    return user?.id ?? null
   }
 
-  // Watchers for auto-save
-  watch([projects, userName], saveToStorage, { deep: true })
+  // ─── Load projects from Supabase ───
+  async function loadProjects() {
+    const uid = await getUserId()
+    if (!uid) return
+    loading.value = true
+    try {
+      const { data, error } = await getClient()
+        .from('dt_projects')
+        .select('*')
+        .order('updated_at', { ascending: false })
 
-  // Computed
-  const allActive = computed(() => projects.value.filter(p => !p.hidden && !p.archived))
+      if (error) throw error
+      projects.value = (data || []).map(rowToProject)
 
-  const visibleProjects = computed(() =>
-    allActive.value
-      .filter(p => listFilter.value === 'All' || p.category === listFilter.value)
-      .filter(p => !search.value || p.name.toLowerCase().includes(search.value.toLowerCase()))
-  )
+      // Load user name from profile
+      if (!userName.value) {
+        const { data: profile } = await getClient()
+          .from('profiles')
+          .select('first_name, last_name')
+          .eq('id', uid)
+          .single()
+        if (profile) {
+          userName.value = [profile.first_name, profile.last_name].filter(Boolean).join(' ')
+        }
+      }
+    } catch (e) {
+      console.error('[DT] Failed to load projects:', e)
+    } finally {
+      loading.value = false
+      loaded.value = true
+    }
+  }
+
+  // ─── Computed ───
+  const allActive = computed(() => projects.value.filter(p => p.status !== 'Archived'))
+
+  // ─── Date filter helper ───
+  function matchesDateFilter(dateStr: string | null | undefined, filter: DateFilter): boolean {
+    if (!filter.type) return true
+    if (!dateStr) return false
+    const d = new Date(dateStr).getTime()
+    if (filter.type === 'before' && filter.date) {
+      return d <= new Date(filter.date).getTime() + 86400000 // end of day
+    }
+    if (filter.type === 'after' && filter.date) {
+      return d >= new Date(filter.date).getTime()
+    }
+    if (filter.type === 'between' && filter.startDate && filter.endDate) {
+      return d >= new Date(filter.startDate).getTime() && d <= new Date(filter.endDate).getTime() + 86400000
+    }
+    return true
+  }
+
+  // ─── Sorting helper ───
+  function compareProjects(a: Project, b: Project, key: string, order: 'asc' | 'desc'): number {
+    const dir = order === 'asc' ? 1 : -1
+    switch (key) {
+      case 'name':
+        return dir * (a.name || '').localeCompare(b.name || '')
+      case 'client':
+        return dir * (a.client || '').localeCompare(b.client || '')
+      case 'created':
+        return dir * (new Date(a.created).getTime() - new Date(b.created).getTime())
+      case 'lastActive':
+        return dir * (new Date(a.lastActive).getTime() - new Date(b.lastActive).getTime())
+      case 'type':
+        return dir * (a.topFamily || '').localeCompare(b.topFamily || '')
+      case 'owner':
+        return dir * (a.owner || '').localeCompare(b.owner || '')
+      case 'status':
+        return dir * (a.status || '').localeCompare(b.status || '')
+      default:
+        return 0
+    }
+  }
+
+  const visibleProjects = computed(() => {
+    let list = allActive.value
+
+    // Category filter
+    if (listFilter.value !== 'All') {
+      list = list.filter(p => p.category === listFilter.value)
+    }
+
+    // Global search
+    if (search.value) {
+      const q = search.value.toLowerCase()
+      list = list.filter(p =>
+        p.name.toLowerCase().includes(q) ||
+        p.owner.toLowerCase().includes(q) ||
+        p.client.toLowerCase().includes(q) ||
+        (p.topFamily || '').toLowerCase().includes(q)
+      )
+    }
+
+    // Dropdown filters
+    const f = dropdownFilters.value
+    if (f.owners.length) {
+      list = list.filter(p => f.owners.includes(p.owner))
+    }
+    if (f.statuses.length) {
+      list = list.filter(p => f.statuses.includes(p.status))
+    }
+    if (f.types.length) {
+      list = list.filter(p => p.topFamily && f.types.includes(p.topFamily))
+    }
+    if (f.clients.length) {
+      list = list.filter(p => f.clients.includes(p.client))
+    }
+
+    // Date filters
+    list = list.filter(p => matchesDateFilter(p.created, f.createdDateFilter))
+    list = list.filter(p => matchesDateFilter(p.lastActive, f.modifiedDateFilter))
+
+    // Sorting
+    if (sortBy.value.length) {
+      list = [...list].sort((a, b) => {
+        for (const s of sortBy.value) {
+          const cmp = compareProjects(a, b, s.key, s.order)
+          if (cmp !== 0) return cmp
+        }
+        return 0
+      })
+    }
+
+    return list
+  })
 
   const headerCount = computed(() =>
     listFilter.value === 'All'
@@ -86,64 +270,171 @@ export const useProjectsStore = defineStore('projects', () => {
       : allActive.value.filter(p => p.category === listFilter.value).length
   )
 
-  // Actions
-  function createProject(): number {
-    const id = Date.now()
-    const now = new Date().toISOString()
-    projects.value = [...projects.value, normalizeProject({
-      id,
-      name: 'Untitled',
-      created: now,
-      lastActive: now,
-      owner: userName.value || 'You',
-    })]
-    return id
+  // ─── Sort action ───
+  function toggleSort(key: string, order: 'asc' | 'desc') {
+    const existing = sortBy.value.findIndex(s => s.key === key)
+    if (existing >= 0) {
+      const current = sortBy.value[existing]
+      if (current.order === order) {
+        // Remove this sort
+        sortBy.value = sortBy.value.filter((_, i) => i !== existing)
+      } else {
+        // Update order
+        sortBy.value = sortBy.value.map((s, i) => i === existing ? { ...s, order } : s)
+      }
+    } else {
+      // Add as top priority
+      sortBy.value = [{ key, order }, ...sortBy.value]
+    }
   }
 
-  function saveProject(activeId: number, snapshot: any, meta: { evName: string; totBase: number; ccy: string; statusLabel: string; topFamily: string | null }) {
-    projects.value = projects.value.map(p => p.id === activeId ? {
-      ...p,
+  function clearFilters() {
+    dropdownFilters.value = {
+      owners: [],
+      statuses: [],
+      types: [],
+      clients: [],
+      createdDateFilter: { type: null, date: null, startDate: null, endDate: null },
+      modifiedDateFilter: { type: null, date: null, startDate: null, endDate: null },
+    }
+    sortBy.value = []
+    search.value = ''
+  }
+
+  // ─── Actions ───
+  async function createProject(): Promise<number | null> {
+    const uid = await getUserId()
+    if (!uid) { console.error('[DT] No user logged in'); return null }
+
+    // Get company_id from profile
+    const { data: profile } = await getClient()
+      .from('profiles')
+      .select('company_id')
+      .eq('id', uid)
+      .single()
+
+    const { data, error } = await getClient()
+      .from('dt_projects')
+      .insert({
+        user_id: uid,
+        company_id: profile?.company_id ?? null,
+        name: 'Untitled',
+        owner_name: userName.value || '',
+      })
+      .select()
+      .single()
+
+    if (error || !data) {
+      console.error('[DT] Failed to create project:', error)
+      return null
+    }
+
+    return data.id
+  }
+
+  async function saveProject(
+    activeId: number,
+    snapshot: any,
+    meta: { evName: string; totBase: number; ccy: string; statusLabel: string; topFamily: string | null }
+  ) {
+    const update = {
       name: meta.evName || 'Untitled',
-      lastActive: new Date().toISOString(),
       baseline: meta.totBase,
       ccy: meta.ccy,
       status: meta.statusLabel,
-      owner: userName.value || p.owner || 'You',
-      topFamily: meta.topFamily,
+      owner_name: userName.value || '',
+      top_family: meta.topFamily,
       state: snapshot,
+    }
+
+    // Optimistic local update
+    projects.value = projects.value.map(p => p.id === activeId ? {
+      ...p,
+      name: update.name,
+      lastActive: new Date().toISOString(),
+      baseline: update.baseline,
+      ccy: update.ccy,
+      status: update.status,
+      owner: update.owner_name,
+      topFamily: update.top_family,
+      state: update.state,
     } : p)
+
+    // Persist to DB
+    const { error } = await getClient()
+      .from('dt_projects')
+      .update(update)
+      .eq('id', activeId)
+
+    if (error) {
+      console.error('[DT] Failed to save project:', error)
+      throw error
+    }
   }
 
-  function deleteProject(id: number) {
-    projects.value = projects.value.map(p => p.id === id ? { ...p, hidden: true } : p)
+  async function deleteProject(id: number) {
+    // Soft delete → archive
+    const { error } = await getClient()
+      .from('dt_projects')
+      .update({ status: 'Archived' })
+      .eq('id', id)
+
+    if (!error) {
+      projects.value = projects.value.map(p => p.id === id ? { ...p, status: 'Archived' } : p)
+    }
     openMenuId.value = null
   }
 
-  function archiveProject(id: number) {
-    projects.value = projects.value.map(p => p.id === id ? { ...p, archived: true } : p)
-    openMenuId.value = null
+  async function archiveProject(id: number) {
+    return deleteProject(id)
   }
 
-  function duplicateProject(id: number) {
+  async function duplicateProject(id: number) {
     const proj = projects.value.find(p => p.id === id)
     if (!proj) return
-    const newId = Date.now() + Math.floor(Math.random() * 10000)
-    const now = new Date().toISOString()
-    projects.value = [...projects.value, {
-      ...proj,
-      id: newId,
-      name: 'Copy of ' + proj.name,
-      created: now,
-      lastActive: now,
-      favorite: false,
-      hidden: false,
-      archived: false,
-    }]
+
+    const uid = await getUserId()
+    if (!uid) return
+
+    const { data: profile } = await getClient()
+      .from('profiles')
+      .select('company_id')
+      .eq('id', uid)
+      .single()
+
+    const { data, error } = await getClient()
+      .from('dt_projects')
+      .insert({
+        user_id: uid,
+        company_id: profile?.company_id ?? null,
+        name: 'Copy of ' + proj.name,
+        owner_name: proj.owner,
+        client: proj.client,
+        category: proj.category,
+        baseline: proj.baseline,
+        ccy: proj.ccy,
+        state: proj.state,
+      })
+      .select()
+      .single()
+
+    if (!error && data) {
+      projects.value = [rowToProject(data), ...projects.value]
+    }
     openMenuId.value = null
   }
 
-  function toggleFavorite(id: number) {
-    projects.value = projects.value.map(p => p.id === id ? { ...p, favorite: !p.favorite } : p)
+  async function toggleFavorite(id: number) {
+    const proj = projects.value.find(p => p.id === id)
+    if (!proj) return
+
+    const newVal = !proj.favorite
+    projects.value = projects.value.map(p => p.id === id ? { ...p, favorite: newVal } : p)
+
+    await getClient()
+      .from('dt_projects')
+      .update({ favorite: newVal })
+      .eq('id', id)
   }
 
   function getProject(id: number): Project | undefined {
@@ -151,9 +442,12 @@ export const useProjectsStore = defineStore('projects', () => {
   }
 
   return {
-    projects, search, listFilter, openMenuId, userName, storageReady,
+    projects, search, listFilter, openMenuId, userName, loading, loaded,
+    dropdownFilters, sortBy, activeFilterCount,
+    uniqueOwners, uniqueStatuses, uniqueTypes, uniqueClients,
     allActive, visibleProjects, headerCount,
-    loadFromStorage, createProject, saveProject,
+    loadProjects, createProject, saveProject,
     deleteProject, archiveProject, duplicateProject, toggleFavorite, getProject,
+    toggleSort, clearFilters,
   }
 })

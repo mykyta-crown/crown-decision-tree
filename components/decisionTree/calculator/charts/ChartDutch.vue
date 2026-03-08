@@ -1,31 +1,52 @@
 <template>
   <div class="chart-container">
-    <svg viewBox="0 0 210 88" preserveAspectRatio="none">
-      <!-- Y-axis label -->
-      <text x="4" y="8" class="chart-label">{{ pL }}</text>
+    <svg viewBox="0 0 280 130" fill="none">
+      <!-- Y-axis -->
+      <text x="8" y="20" class="axis-label">{{ pL }}</text>
+      <line x1="28" y1="14" x2="28" y2="112" stroke="#E5E7EB" stroke-width="0.8" />
 
-      <!-- Descending staircase -->
-      <path
-        d="M8 17H36V30H68V45H102V60H130V74"
-        fill="none"
-        stroke="#A78BFA"
-        stroke-width="1.8"
-      />
+      <!-- X-axis -->
+      <line x1="28" y1="112" x2="250" y2="112" stroke="#E5E7EB" stroke-width="0.8" />
+      <text x="140" y="126" class="axis-label" text-anchor="middle">Time</text>
 
-      <!-- Acceptance circles -->
-      <circle cx="36" cy="30" r="3.5" fill="#EF4444" opacity="0.85" />
-      <circle cx="68" cy="45" r="3.5" fill="#FBBF24" opacity="0.85" />
-      <circle cx="102" cy="60" r="3.5" fill="#34D399" opacity="0.85" />
+      <!-- Grid lines -->
+      <line x1="28" y1="36" x2="250" y2="36" stroke="#F3F4F6" stroke-width="0.5" stroke-dasharray="3 3" />
+      <line x1="28" y1="58" x2="250" y2="58" stroke="#F3F4F6" stroke-width="0.5" stroke-dasharray="3 3" />
+      <line x1="28" y1="80" x2="250" y2="80" stroke="#F3F4F6" stroke-width="0.5" stroke-dasharray="3 3" />
 
-      <!-- Legend -->
-      <circle cx="152" cy="22" r="3" fill="#EF4444" />
-      <text x="158" y="24" class="chart-label">Supplier A</text>
+      <!-- Ascending staircase blocks -->
+      <rect x="38" y="92" width="38" height="20" rx="2" :fill="color" opacity="0.08" />
+      <line x1="38" y1="92" x2="76" y2="92" :stroke="color" stroke-width="2" stroke-linecap="round" />
 
-      <circle cx="152" cy="34" r="3" fill="#FBBF24" />
-      <text x="158" y="36" class="chart-label">Supplier B</text>
+      <rect x="80" y="74" width="38" height="38" rx="2" :fill="color" opacity="0.1" />
+      <line x1="80" y1="74" x2="118" y2="74" :stroke="color" stroke-width="2" stroke-linecap="round" />
 
-      <circle cx="152" cy="46" r="3" fill="#34D399" />
-      <text x="158" y="48" class="chart-label">Supplier C</text>
+      <rect x="122" y="56" width="38" height="56" rx="2" :fill="color" opacity="0.12" />
+      <line x1="122" y1="56" x2="160" y2="56" :stroke="color" stroke-width="2" stroke-linecap="round" />
+
+      <rect x="164" y="38" width="38" height="74" rx="2" :fill="color" opacity="0.15" />
+      <line x1="164" y1="38" x2="202" y2="38" :stroke="color" stroke-width="2" stroke-linecap="round" />
+
+      <rect x="206" y="22" width="38" height="90" rx="2" fill="#F3F4F6" opacity="0.3" />
+      <line x1="206" y1="22" x2="244" y2="22" stroke="#D1D5DB" stroke-width="2" stroke-linecap="round" stroke-dasharray="4 3" />
+
+      <!-- Vertical risers -->
+      <line x1="76" y1="92" x2="80" y2="74" :stroke="color" stroke-width="1.2" stroke-dasharray="2 2" />
+      <line x1="118" y1="74" x2="122" y2="56" :stroke="color" stroke-width="1.2" stroke-dasharray="2 2" />
+      <line x1="160" y1="56" x2="164" y2="38" :stroke="color" stroke-width="1.2" stroke-dasharray="2 2" />
+      <line x1="202" y1="38" x2="206" y2="22" stroke="#D1D5DB" stroke-width="1" stroke-dasharray="2 2" />
+
+      <!-- Accept marker on step 4 -->
+      <circle cx="183" cy="38" r="7" fill="#DCFCE7" stroke="#16A34A" stroke-width="1.5" />
+      <path d="M179.5 38 L182 40.5 L186.5 35.5" fill="none" stroke="#16A34A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+
+      <!-- First to accept label -->
+      <text x="183" y="28" text-anchor="middle" class="accept-text">First to accept</text>
+
+      <!-- Up arrow -->
+      <path d="M258 100 L258 26" stroke="#D1D5DB" stroke-width="0.8" />
+      <path d="M255 32 L258 26 L261 32" fill="none" stroke="#D1D5DB" stroke-width="0.8" stroke-linecap="round" />
+      <text x="258" y="112" text-anchor="middle" class="arrow-label">Price rises</text>
     </svg>
   </div>
 </template>
@@ -46,11 +67,12 @@ const pL = computed(() => `Price (${props.ccy})`)
 <style scoped>
 .chart-container {
   width: 100%;
-  height: 130px;
-  border-radius: 4px;
-  background: #F8F8F8;
+  height: 140px;
+  border-radius: 8px;
+  background: #FAFAFA;
   border: 1px solid #E9EAEC;
   overflow: hidden;
+  padding: 4px;
 }
 
 .chart-container svg {
@@ -58,9 +80,22 @@ const pL = computed(() => `Price (${props.ccy})`)
   height: 100%;
 }
 
-.chart-label {
-  font-size: 4.5px;
-  fill: #6B7280;
+.axis-label {
+  font-size: 6px;
+  fill: #9CA3AF;
+  font-family: Inter, system-ui, sans-serif;
+}
+
+.accept-text {
+  font-size: 5.5px;
+  fill: #16A34A;
+  font-weight: 600;
+  font-family: Inter, system-ui, sans-serif;
+}
+
+.arrow-label {
+  font-size: 5px;
+  fill: #9CA3AF;
   font-family: Inter, system-ui, sans-serif;
 }
 </style>

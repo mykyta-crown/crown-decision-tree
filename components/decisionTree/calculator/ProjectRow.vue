@@ -11,6 +11,7 @@ interface Project {
   id: string | number
   name: string
   client?: string
+  created?: string | null
   lastActive?: string | null
   topFamily?: string
   owner?: string
@@ -92,30 +93,35 @@ function onMenuAction(action: 'edit' | 'archive' | 'duplicate' | 'delete') {
       {{ project.client || 'Crown' }}
     </div>
 
-    <!-- Col 4: Last active date -->
+    <!-- Col 4: Created date -->
+    <div class="col-cell">
+      {{ fmtDate(project.created) }}
+    </div>
+
+    <!-- Col 5: Last modified date -->
     <div class="col-cell">
       {{ fmtDate(project.lastActive) }}
     </div>
 
-    <!-- Col 5: Top family -->
+    <!-- Col 6: Top family -->
     <div class="col-cell col-family">
       <span>{{ project.topFamily || '\u2014' }}</span>
       <v-icon v-if="hasMultipleLots" size="14" color="grey-ligthen-1">mdi-view-grid-outline</v-icon>
     </div>
 
-    <!-- Col 6: Owner -->
+    <!-- Col 7: Owner -->
     <div class="col-cell">
       {{ project.owner || 'You' }}
     </div>
 
-    <!-- Col 7: Status chip -->
+    <!-- Col 8: Status chip -->
     <div class="col-status">
       <v-chip size="small" :style="statusStyle">
         {{ project.status || 'Draft' }}
       </v-chip>
     </div>
 
-    <!-- Col 8: Star / Favorite -->
+    <!-- Col 9: Star / Favorite -->
     <div class="col-star" @click="onToggleFavorite">
       <v-icon
         :icon="project.favorite ? 'mdi-star' : 'mdi-star-outline'"
@@ -125,7 +131,7 @@ function onMenuAction(action: 'edit' | 'archive' | 'duplicate' | 'delete') {
       />
     </div>
 
-    <!-- Col 9: Three-dot menu -->
+    <!-- Col 10: Three-dot menu -->
     <div class="col-menu" @click.stop>
       <v-menu location="bottom end">
         <template #activator="{ props: menuProps }">
@@ -154,20 +160,15 @@ function onMenuAction(action: 'edit' | 'archive' | 'duplicate' | 'delete') {
 </template>
 
 <style scoped>
-/* ================================================================
-   PROJECT ROW — Premium SaaS table row
-   ================================================================ */
-
 .project-row {
   display: grid;
-  grid-template-columns: 48px 2fr 1fr 1fr 1fr 1fr 140px 40px 44px;
+  grid-template-columns: 48px 2fr 1fr 1fr 1fr 1fr 1fr 140px 40px 44px;
   align-items: center;
   padding: 0 20px;
   height: 48px;
   border-bottom: 1px solid #F3F4F6;
   cursor: pointer;
-  transition:
-    background-color 0.15s ease;
+  transition: background-color 0.15s ease;
 }
 
 .project-row:last-child {
@@ -178,19 +179,11 @@ function onMenuAction(action: 'edit' | 'archive' | 'duplicate' | 'delete') {
   background-color: #FAFAFA;
 }
 
-/* ----------------------------------------------------------------
-   Checkbox
-   ---------------------------------------------------------------- */
-
 .col-checkbox {
   display: flex;
   align-items: center;
   justify-content: center;
 }
-
-/* ----------------------------------------------------------------
-   Name column
-   ---------------------------------------------------------------- */
 
 .col-name {
   overflow: hidden;
@@ -207,10 +200,6 @@ function onMenuAction(action: 'edit' | 'archive' | 'duplicate' | 'delete') {
   display: block;
 }
 
-/* ----------------------------------------------------------------
-   Data cells
-   ---------------------------------------------------------------- */
-
 .col-cell {
   font-size: 14px;
   color: #1D1D1B;
@@ -226,24 +215,10 @@ function onMenuAction(action: 'edit' | 'archive' | 'duplicate' | 'delete') {
   gap: 6px;
 }
 
-.multi-lot-icon {
-  flex-shrink: 0;
-  color: #8E8E8E;
-  opacity: 0.6;
-}
-
-/* ----------------------------------------------------------------
-   Status chip
-   ---------------------------------------------------------------- */
-
 .col-status {
   display: flex;
   align-items: center;
 }
-
-/* ----------------------------------------------------------------
-   Favorite star
-   ---------------------------------------------------------------- */
 
 .col-star {
   display: flex;
@@ -263,10 +238,6 @@ function onMenuAction(action: 'edit' | 'archive' | 'duplicate' | 'delete') {
 .star-animating {
   animation: star-spring 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
-
-/* ----------------------------------------------------------------
-   Three-dot menu
-   ---------------------------------------------------------------- */
 
 .col-menu {
   display: flex;

@@ -2,8 +2,8 @@
   <v-card
     variant="outlined"
     class="d-flex flex-column fill-height pa-5"
-    :class="{ 'border-green': store.spend > 0 }"
-    min-height="320"
+    :class="{ 'border-green': store.spend > 0, 'border-red-shake': store.spendErr && store.spend <= 0 }"
+    min-height="270"
   >
     <div class="mb-1">
       <div class="d-flex align-center ga-2 mb-1">
@@ -19,7 +19,7 @@
           <v-divider vertical class="mx-2" />
           <v-select
             v-model="store.ccy"
-            :items="['EUR', 'USD', 'GBP']"
+            :items="['EUR', 'USD', 'GBP', 'CHF', 'JPY', 'CNY', 'CAD', 'AUD', 'SEK', 'NOK', 'DKK', 'PLN']"
             variant="plain"
             density="compact"
             hide-details
@@ -45,6 +45,19 @@ const store = useCalculatorStore()
   border: 2px solid rgb(var(--v-theme-green)) !important;
 }
 
+.border-red-shake {
+  border: 2px solid #EF4444 !important;
+  animation: card-shake 0.5s ease;
+}
+
+@keyframes card-shake {
+  0%, 100% { transform: translateX(0); }
+  15% { transform: translateX(-4px); }
+  30% { transform: translateX(3px); }
+  45% { transform: translateX(-2px); }
+  60% { transform: translateX(1px); }
+}
+
 .spend-input-wrap {
   display: inline-flex;
   align-items: center;
@@ -55,7 +68,8 @@ const store = useCalculatorStore()
 }
 
 .ccy-select {
-  max-width: 80px;
+  width: 70px;
+  flex: 0 0 70px;
   font-weight: 600;
 }
 
@@ -67,5 +81,10 @@ const store = useCalculatorStore()
 
 .ccy-select :deep(.v-field) {
   padding: 0;
+}
+
+.ccy-select :deep(.v-field__append-inner) {
+  padding: 0;
+  margin: 0;
 }
 </style>

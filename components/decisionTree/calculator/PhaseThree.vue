@@ -4,9 +4,18 @@
       <!-- Column headers -->
       <div class="results-header">
         <span class="header-label">Lot</span>
-        <span class="header-label center">Recommendation 1</span>
-        <span class="header-label center">Recommendation 2</span>
-        <span class="header-label center">Recommendation 3</span>
+        <div class="header-rec">
+          <span class="header-rank header-rank--1">1st</span>
+          <span class="header-rec-text">Best Match</span>
+        </div>
+        <div class="header-rec">
+          <span class="header-rank header-rank--2">2nd</span>
+          <span class="header-rec-text">Alternative</span>
+        </div>
+        <div class="header-rec">
+          <span class="header-rank header-rank--3">3rd</span>
+          <span class="header-rec-text">Option</span>
+        </div>
       </div>
 
       <!-- Lot blocks -->
@@ -19,8 +28,17 @@
         <div class="lot-grid" @click="toggleExpand(li)">
           <!-- Col 1: Lot info -->
           <div class="lot-col">
-            <div class="lot-index">Lot {{ li + 1 }}</div>
-            <div class="lot-name">{{ lot.name }}</div>
+            <div class="lot-top-row">
+              <div>
+                <div class="lot-index">Lot {{ li + 1 }}</div>
+                <div class="lot-name">{{ lot.name }}</div>
+              </div>
+              <div class="lot-chevron" :class="{ 'lot-chevron--open': store.expLot === li }">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                  <path d="M6 7.5L9 10.5L12 7.5" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </div>
+            </div>
 
             <!-- Stats expand smoothly below lot name -->
             <div class="lot-stats-anim" :class="{ open: store.expLot === li }">
@@ -57,16 +75,17 @@
             </div>
           </div>
 
-          <!-- Col 2–4: Recommendation cards (seamless chip + body) -->
+          <!-- Col 2–4: Recommendation cards -->
           <template v-for="ri in 3" :key="ri">
             <div
               v-if="getTop3(li)[ri - 1]"
               class="rec-card"
               :class="{ 'rec-card--expanded': store.expLot === li }"
             >
-              <!-- Chip header (always visible) -->
+              <!-- Accent bar spanning full card height -->
+              <div class="card-accent" :style="accentBg(li, ri - 1)" />
+              <!-- Chip header (always visible — collapsed summary) -->
               <div class="rec-chip" :style="chipBg(li, ri - 1)">
-                <div class="chip-accent" :style="accentBg(li, ri - 1)" />
                 <div class="chip-top">
                   <span class="chip-family" :style="chipText(li, ri - 1)">
                     {{ displayName(li, ri - 1) }}
@@ -80,23 +99,11 @@
                 </div>
               </div>
 
-              <!-- Expandable body (seamless below chip) -->
+              <!-- Expandable body (designer card layout) -->
               <div class="rec-expand" :class="{ open: store.expLot === li }">
                 <div class="rec-body">
-                  <div class="body-accent" :style="accentBg(li, ri - 1)" />
-
-                  <!-- Chart -->
-                  <div class="body-chart">
-                    <DecisionTreeCalculatorChartsAChart
-                      :family="getTop3(li)[ri - 1].family"
-                      :color="chartColor(li, ri - 1)"
-                      :ccy="store.ccy"
-                    />
-                  </div>
-
-                  <!-- Est. Savings -->
-                  <div class="body-savings">
-                    <span class="savings-label">Est. Savings:</span>
+                  <!-- Savings row -->
+                  <div class="card-savings">
                     <span class="savings-chip">+{{ getTop3(li)[ri - 1].saving }}%</span>
                     <span
                       v-if="store.lotBaseline(lot) > 0"
@@ -106,8 +113,17 @@
                     </span>
                   </div>
 
+                  <!-- Chart illustration -->
+                  <div class="card-chart">
+                    <DecisionTreeCalculatorChartsAChart
+                      :family="getTop3(li)[ri - 1].family"
+                      :color="chartColor(li, ri - 1)"
+                      :ccy="store.ccy"
+                    />
+                  </div>
+
                   <!-- Option pills -->
-                  <div class="body-options">
+                  <div class="card-options">
                     <DecisionTreeCalculatorOptionRow
                       v-if="getFamilyOptions(getTop3(li)[ri - 1].family).security"
                       label="Security"
@@ -124,22 +140,19 @@
                       v-if="getFamilyOptions(getTop3(li)[ri - 1].family).awarding"
                       label="Awarding"
                       :options="getFamilyOptions(getTop3(li)[ri - 1].family).awarding!"
-                      :selected="getTop3(li)[ri - 1].aw"
+                      :selected="getAwardingSelected(li, ri - 1)"
                     />
-                    <DecisionTreeCalculatorIntensityBar :value="lot.intens" />
+                    <DecisionTreeCalculatorIntensityBar :family="getTop3(li)[ri - 1].family" />
                   </div>
 
-                  <!-- Go to Configuration -->
-                  <div class="body-btn-wrap">
-                    <v-btn
-                      color="primary"
-                      variant="flat"
-                      block
-                      append-icon="mdi-arrow-right"
-                      @click.stop="goToConfig"
-                    >
-                      Go to Configuration
-                    </v-btn>
+                  <!-- Configure button -->
+                  <div class="card-btn-wrap">
+                    <button class="card-btn" @click.stop="goToConfig">
+                      Configure
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M3.5 8h9M8.5 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                      </svg>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -175,18 +188,28 @@
 
 <script setup lang="ts">
 import { useCalculatorStore } from '~/stores/decisionTree/calculator'
+import { useProjectsStore } from '~/stores/decisionTree/projects'
 import { FC, gfc, PREF_LABELS, getFamilyOptions } from '~/utils/decisionTree/constants'
 import { fmtE } from '~/utils/decisionTree/formatting'
+import { exportDecisionTreePdf } from '~/utils/decisionTree/exportPdf'
 import type { Lot } from '~/stores/decisionTree/calculator'
 import type { ScoreResult } from '~/utils/decisionTree/scoring-engine'
 
 const store = useCalculatorStore()
+const projectsStore = useProjectsStore()
 
 const engC = FC['English']
 const dutC = FC['Dutch']
 
 function getTop3(li: number): ScoreResult[] {
   return store.lotTop3[li] || []
+}
+
+function getAwardingSelected(li: number, ri: number): string {
+  const rec = getTop3(li)[ri]
+  if (!rec) return 'Award'
+  if (rec.family === 'Double Scenario') return 'Award'
+  return rec.aw && rec.aw !== '—' ? rec.aw : 'Award'
 }
 
 function activeSupplierCount(lot: Lot): number {
@@ -199,7 +222,7 @@ function getColors(li: number, ri: number) {
   return { c: gfc(rec.family), isDbl: rec.family === 'Double Scenario' }
 }
 
-// --- Chip styles ---
+// --- Collapsed chip styles ---
 function chipBg(li: number, ri: number) {
   const { c, isDbl } = getColors(li, ri)
   return {
@@ -237,14 +260,34 @@ function barFill(li: number, ri: number) {
 function displayName(li: number, ri: number): string {
   const rec = getTop3(li)[ri]
   if (!rec) return ''
-  const names: Record<string, string> = {
-    English: 'English Reverse',
-    Dutch: 'Dutch Reverse',
+
+  const familyNames: Record<string, string> = {
+    English: 'English',
+    Dutch: 'Dutch',
     'Sealed Bid': 'Sealed Bid',
     Japanese: 'Japanese',
     'Double Scenario': 'Double Scenario',
+    Traditional: 'Traditional Negotiation',
   }
-  return names[rec.family] || rec.family
+
+  const base = familyNames[rec.family] || rec.family
+  if (rec.family === 'Traditional' || rec.family === 'Double Scenario') return base
+
+  const tfLabels: Record<string, string> = {
+    'Fixed+Dynamic': 'Transfo',
+    Ceiling: 'Ceiling',
+    Preference: 'Preferred',
+    'Ceiling+Pref': 'Ceiling + Preferred',
+  }
+
+  const parts = [base]
+  if (rec.tf && rec.tf !== 'None' && rec.tf !== '—') {
+    parts.push(tfLabels[rec.tf] || rec.tf)
+  }
+  if (rec.aw && rec.aw !== '—') {
+    parts.push(rec.aw)
+  }
+  return parts.join(' - ')
 }
 
 function chartColor(li: number, ri: number): string {
@@ -268,7 +311,22 @@ function editInputs() {
 }
 
 function exportReport() {
-  window.print()
+  exportDecisionTreePdf({
+    evName: store.evName,
+    userName: projectsStore.userName,
+    mode: store.mode,
+    spend: store.spend,
+    nSup: store.nSup,
+    award: store.award,
+    ccy: store.ccy,
+    totBase: store.totBase,
+    supNames: store.supNames,
+    lots: store.lots.map((lot, i) => ({
+      ...lot,
+      baseline: store.lotBaseline(lot),
+      top3: getTop3(i),
+    })),
+  })
 }
 </script>
 
@@ -285,14 +343,50 @@ function exportReport() {
 }
 
 .header-label {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 500;
   color: #61615F;
   letter-spacing: 0.03em;
 }
 
-.header-label.center {
-  text-align: center;
+.header-rec {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.header-rank {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.header-rank--1 {
+  background: #D1FAE5;
+  color: #065F46;
+}
+
+.header-rank--2 {
+  background: #FEF3C7;
+  color: #92400E;
+}
+
+.header-rank--3 {
+  background: #F3F4F6;
+  color: #6B7280;
+}
+
+.header-rec-text {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1D1D1B;
 }
 
 /* ----------------------------------------------------------------
@@ -317,7 +411,7 @@ function exportReport() {
   grid-template-columns: 160px 1fr 1fr 1fr;
   gap: 12px;
   padding: 14px 28px;
-  align-items: start;
+  align-items: stretch;
 }
 
 /* ----------------------------------------------------------------
@@ -333,6 +427,32 @@ function exportReport() {
   color: #61615F;
   font-weight: 500;
   margin-bottom: 2px;
+}
+
+.lot-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.lot-chevron {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), background 0.15s;
+  flex-shrink: 0;
+}
+
+.lot-chevron:hover {
+  background: #F3F4F6;
+}
+
+.lot-chevron--open {
+  transform: rotate(180deg);
 }
 
 .lot-name {
@@ -397,22 +517,36 @@ function exportReport() {
 }
 
 /* ----------------------------------------------------------------
-   Recommendation card — seamless chip + body
+   Recommendation card — collapsed chip + expandable body
    ---------------------------------------------------------------- */
 .rec-card {
-  border-radius: 4px;
+  border-radius: 8px;
   overflow: hidden;
   min-width: 0;
+  background: #FFF;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.card-accent {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  z-index: 1;
 }
 
 .rec-card--expanded {
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
 }
 
 .rec-empty {
   min-width: 0;
 }
 
-/* Chip header (always visible) */
+/* Chip header (collapsed summary) */
 .rec-chip {
   padding: 11px 14px 11px 18px;
   position: relative;
@@ -424,14 +558,6 @@ function exportReport() {
   opacity: 0.9;
 }
 
-.chip-accent {
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 4px;
-}
-
 .chip-top {
   display: flex;
   justify-content: space-between;
@@ -440,13 +566,13 @@ function exportReport() {
 }
 
 .chip-family {
-  font-size: 12px;
-  font-weight: 500;
+  font-size: 14px;
+  font-weight: 600;
 }
 
 .chip-pct {
-  font-size: 12px;
-  font-weight: 500;
+  font-size: 14px;
+  font-weight: 600;
 }
 
 .chip-bar-track {
@@ -462,7 +588,7 @@ function exportReport() {
 }
 
 /* ----------------------------------------------------------------
-   Expandable body — roll/unroll animation
+   Expandable body — designer card layout
    ---------------------------------------------------------------- */
 .rec-expand {
   display: grid;
@@ -472,70 +598,78 @@ function exportReport() {
 
 .rec-expand.open {
   grid-template-rows: 1fr;
+  flex: 1;
 }
 
 .rec-body {
   overflow: hidden;
   min-height: 0;
   background: #fff;
-  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
 
-.body-accent {
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 4px;
-}
-
-/* Chart */
-.body-chart {
-  padding: 16px 16px 0 20px;
-}
-
-/* Savings row */
-.body-savings {
+/* ── Savings row ── */
+.card-savings {
   display: flex;
   align-items: center;
   gap: 8px;
-  flex-wrap: wrap;
-  padding: 12px 16px 0 20px;
-}
-
-.savings-label {
-  font-size: 13px;
-  color: #61615F;
-  font-weight: 500;
+  padding: 10px 16px 0;
 }
 
 .savings-chip {
   background: #D1FAE5;
   color: #065F46;
   border-radius: 4px;
-  padding: 4px 8px;
-  font-size: 12px;
-  font-weight: 500;
+  padding: 4px 10px;
+  font-size: 13px;
+  font-weight: 600;
 }
 
 .savings-amount {
-  font-size: 13px;
+  font-size: 14px;
   color: #374151;
   font-weight: 500;
 }
 
-/* Option pills */
-.body-options {
+/* ── Chart illustration ── */
+.card-chart {
+  margin: 12px 16px 0;
+}
+
+/* ── Option pills ── */
+.card-options {
   display: flex;
   flex-direction: column;
   gap: 9px;
-  border-top: 1px solid #E9EAEC;
-  margin: 14px 16px 0 20px;
-  padding-top: 14px;
+  padding: 14px 16px 0;
 }
 
-/* Go to Configuration button */
-.body-btn-wrap {
-  padding: 14px 16px 18px 20px;
+/* ── Configure button (black, full width) ── */
+.card-btn-wrap {
+  padding: 14px 16px 16px;
+  margin-top: auto;
+}
+
+.card-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px 0;
+  border-radius: 8px;
+  background: #1D1D1B;
+  color: #FFF;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.card-btn:hover {
+  background: #333;
 }
 </style>

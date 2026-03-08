@@ -19,11 +19,6 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     return
   }
 
-  // Decision Tree module is public
-  if (to.path.startsWith('/decisionTree')) {
-    return
-  }
-
   const supabase = useSupabaseClient()
   const user = useSupabaseUser()
 

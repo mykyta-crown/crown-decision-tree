@@ -14,13 +14,45 @@ interface LotCard {
   lotId: number
   index: number
   family: string | null
+  displayName: string
   ok: boolean
   isDouble: boolean
   subtitle: string
   bg: string
   borderCol: string
+  borderImage: string | null
   outlineCol: string
   titleCol: string
+}
+
+function strategyDisplayName(rec: { family: string; tf: string; aw: string } | null): string {
+  if (!rec) return 'No suggestion'
+  const familyNames: Record<string, string> = {
+    English: 'English',
+    Dutch: 'Dutch',
+    'Sealed Bid': 'Sealed Bid',
+    Japanese: 'Japanese',
+    'Double Scenario': 'Double Scenario',
+    Traditional: 'Traditional Negotiation',
+  }
+  const base = familyNames[rec.family] || rec.family
+  if (rec.family === 'Traditional' || rec.family === 'Double Scenario') return base
+
+  const tfLabels: Record<string, string> = {
+    'Fixed+Dynamic': 'Transfo',
+    Ceiling: 'Ceiling',
+    Preference: 'Preferred',
+    'Ceiling+Pref': 'Ceiling + Preferred',
+  }
+
+  const parts = [base]
+  if (rec.tf && rec.tf !== 'None' && rec.tf !== '—') {
+    parts.push(tfLabels[rec.tf] || rec.tf)
+  }
+  if (rec.aw && rec.aw !== '—') {
+    parts.push(rec.aw)
+  }
+  return parts.join(' - ')
 }
 
 const lotCards = computed<LotCard[]>(() => {
@@ -33,13 +65,19 @@ const lotCards = computed<LotCard[]>(() => {
     const oc = Math.max(0, top.length - 1)
     const isDouble = f === 'Double Scenario'
 
+    // In guided mode, warn if filled prices < nSup
+    const filledCount = lot.prices.filter((p, i) => p > 0 && !lot.excl[i]).length
+    const supMismatch = store.mode === 'guided' && ok && filledCount < store.nSup
+
     const subtitle = !ok
       ? 'Complete inputs'
-      : isDouble
-        ? 'English and Dutch eAuctions'
-        : oc > 0
-          ? `${oc} other option${oc > 1 ? 's' : ''} available`
-          : 'Best match'
+      : supMismatch
+        ? `${filledCount}/${store.nSup} suppliers filled`
+        : isDouble
+          ? 'English and Dutch eAuctions'
+          : oc > 0
+            ? `${oc} other option${oc > 1 ? 's' : ''} available`
+            : 'Best match'
 
     const bg = ok
       ? isDouble
@@ -67,15 +105,21 @@ const lotCards = computed<LotCard[]>(() => {
         : c.text
       : '#8E8E8E'
 
+    const borderImage = ok && isDouble
+      ? `linear-gradient(180deg, ${engC.border} 0%, ${dutC.border} 100%) 1`
+      : null
+
     return {
       lotId: lot.id,
       index: li,
       family: f,
+      displayName: ok ? strategyDisplayName(ti) : 'No suggestion',
       ok,
       isDouble,
       subtitle,
       bg,
       borderCol,
+      borderImage,
       outlineCol,
       titleCol,
     }
@@ -96,16 +140,22 @@ function seeDetails() {
     store.userNameErr = true
     hasErr = true
   }
-  if (hasErr) return
+  if (hasErr) {
+    // Force Phase 2 open so the user can see the error fields
+    store.phase = 2
+    return
+  }
   store.phase = 3
   store.expLot = 0
 }
 </script>
 
 <template>
-  <v-card variant="outlined" class="rec-panel pa-5">
-    <div class="text-subtitle-1 font-weight-bold mb-1">AI Recommendation</div>
-    <p class="text-caption text-grey-darken-1 mb-4">Best fit strategy based on your lot inputs</p>
+  <v-card variant="outlined" class="rec-panel pa-4">
+    <div class="rec-header" :style="{ height: store.lotHeaderH ? (store.lotHeaderH - 17) + 'px' : 'auto' }">
+      <div class="rec-title">AI Recommendation</div>
+      <p class="rec-subtitle">Best fit strategy based on your lot inputs</p>
+    </div>
 
     <div class="rec-cards">
       <div
@@ -116,19 +166,13 @@ function seeDetails() {
         :style="{
           background: card.bg,
           borderLeftColor: card.borderCol,
+          borderImage: card.borderImage,
           outlineColor: store.selLot === card.index ? card.outlineCol : 'transparent',
         }"
         @click="selectLot(card.index)"
       >
-        <div
-          v-if="card.isDouble && card.ok"
-          class="double-accent"
-          :style="{
-            background: `linear-gradient(180deg, ${engC.border} 0%, ${dutC.border} 100%)`,
-          }"
-        />
         <div class="rec-card-title" :style="{ color: card.titleCol }">
-          {{ card.ok ? card.family : 'No suggestion' }}
+          {{ card.displayName }}
         </div>
         <div class="rec-card-sub text-caption text-grey-darken-1">{{ card.subtitle }}</div>
       </div>
@@ -156,26 +200,45 @@ function seeDetails() {
   display: flex;
   flex-direction: column;
 }
+.rec-header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
 .rec-cards {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 1px;
   flex: 1;
   overflow-y: auto;
   padding-right: 4px;
   margin-right: -4px;
+  scrollbar-width: thin;
+  scrollbar-color: #D0D0D0 transparent;
+}
+.rec-cards::-webkit-scrollbar {
+  width: 3px;
+}
+.rec-cards::-webkit-scrollbar-thumb {
+  background: #D0D0D0;
+  border-radius: 2px;
 }
 .rec-card {
-  padding: 12px 14px;
+  padding: 8px 12px;
   border-radius: 4px;
   border-left: 3px solid #E9EAEC;
   cursor: pointer;
   transition: opacity 0.15s, background 0.15s;
   flex-shrink: 0;
+  height: 52px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   outline: 1.5px solid transparent;
   outline-offset: -1px;
   position: relative;
   overflow: hidden;
+  box-sizing: border-box;
 }
 .rec-card.active {
   opacity: 1;
@@ -183,15 +246,20 @@ function seeDetails() {
 .rec-card.dimmed {
   opacity: 0.65;
 }
-.double-accent {
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 3px;
+.rec-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1D1D1B;
+  margin-bottom: 2px;
+}
+.rec-subtitle {
+  font-size: 11px;
+  color: #8E8E8E;
+  margin: 0;
+  line-height: 1.3;
 }
 .rec-card-title {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -199,7 +267,7 @@ function seeDetails() {
   line-height: 1.3;
 }
 .rec-card-sub {
-  font-size: 11px;
+  font-size: 10px;
   color: #61615F;
   font-weight: 500;
   margin-top: 2px;

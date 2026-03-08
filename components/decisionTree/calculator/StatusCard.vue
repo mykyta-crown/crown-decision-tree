@@ -2,9 +2,10 @@
   <v-card
     variant="flat"
     class="d-flex flex-column fill-height pa-5"
+    :class="{ 'border-green': store.status === 'eligible' }"
     :color="cfg.bgColor"
-    :style="{ border: '2px solid ' + cfg.br }"
-    min-height="320"
+    :style="store.status !== 'eligible' ? { border: '2px solid ' + cfg.br } : {}"
+    min-height="270"
   >
     <!-- Icon -->
     <div class="mb-4">
@@ -88,3 +89,9 @@ function goNext() {
   store.phase = 2
 }
 </script>
+
+<style scoped>
+.border-green {
+  border: 2px solid rgb(var(--v-theme-green)) !important;
+}
+</style>
