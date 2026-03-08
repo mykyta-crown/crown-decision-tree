@@ -1,126 +1,77 @@
 <template>
   <div class="guided-p1">
-    <!-- Top row: How it works + two input cards -->
+    <!-- Two input cards side by side -->
     <div class="p1-grid">
-      <!-- How does it work — left column -->
-      <div class="how-card">
-        <div class="how-header">
-          <div class="how-icon-wrap">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+      <!-- Spend card -->
+      <div class="p1-card" :class="{ 'p1-card--done': store.spend > 0 }">
+        <div class="p1-card-header">
+          <div class="p1-card-badge" :class="{ 'p1-card-badge--done': store.spend > 0 }">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
               <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.6" />
-              <path d="M12 17h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+              <path d="M12 6v12M9 8.5c0-1.4 1.3-2.5 3-2.5s3 1.1 3 2.5-1.2 2-3 2.8c-1.8.8-3 1.4-3 2.7s1.3 2.5 3 2.5 3-1.1 3-2.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
             </svg>
           </div>
-          <span class="how-title">How does it work?</span>
+          <span class="p1-card-label">Total spend</span>
+          <Transition name="check-fade">
+            <svg v-if="store.spend > 0" class="p1-card-check" width="18" height="18" viewBox="0 0 16 16" fill="none">
+              <path d="M3 8.5L6.5 12L13 4" stroke="#34D399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </Transition>
         </div>
-
-        <div class="how-steps">
-          <div class="how-step" :class="{ 'how-step--active': activeHowStep === 0 }" @mouseenter="activeHowStep = 0">
-            <div class="how-step-num">1</div>
-            <div class="how-step-body">
-              <div class="how-step-label">Feasibility Check</div>
-              <div class="how-step-desc">Enter your spend and supplier count to check if an eAuction is suitable for your category.</div>
-            </div>
+        <div class="p1-card-body">
+          <div class="spend-ccy-row">
+            <v-select
+              v-model="store.ccy"
+              :items="['EUR', 'USD', 'GBP', 'CHF', 'JPY', 'CNY', 'CAD', 'AUD', 'SEK', 'NOK', 'DKK', 'PLN']"
+              variant="plain"
+              density="compact"
+              hide-details
+              class="ccy-select"
+            />
           </div>
-          <div class="how-step" :class="{ 'how-step--active': activeHowStep === 1 }" @mouseenter="activeHowStep = 1">
-            <div class="how-step-num">2</div>
-            <div class="how-step-body">
-              <div class="how-step-label">Lot Configuration</div>
-              <div class="how-step-desc">Define your lots with quantities, supplier prices, and strategic preferences to model your scenario.</div>
-            </div>
+          <div class="spend-input-wrap">
+            <SpendInput v-model="store.spend" />
           </div>
-          <div class="how-step" :class="{ 'how-step--active': activeHowStep === 2 }" @mouseenter="activeHowStep = 2">
-            <div class="how-step-num">3</div>
-            <div class="how-step-body">
-              <div class="how-step-label">Get Recommendations</div>
-              <div class="how-step-desc">Our algorithm scores 22 auction strategies and recommends the best eAuction type for each lot.</div>
-            </div>
+          <div class="spend-slider">
+            <NLSlider v-model="store.spend" />
           </div>
-        </div>
-
-        <div class="how-footer">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-            <path d="M8 1v14M1 8h14" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" opacity="0.3" />
-            <circle cx="8" cy="8" r="3" stroke="currentColor" stroke-width="1.2" />
-          </svg>
-          <span>Guided mode walks you through each step</span>
         </div>
       </div>
 
-      <!-- Right column: two input cards stacked -->
-      <div class="p1-inputs">
-        <!-- Spend card -->
-        <div class="p1-card" :class="{ 'p1-card--done': store.spend > 0 }">
-          <div class="p1-card-header">
-            <div class="p1-card-badge" :class="{ 'p1-card-badge--done': store.spend > 0 }">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.6" />
-                <path d="M12 6v12M9 8.5c0-1.4 1.3-2.5 3-2.5s3 1.1 3 2.5-1.2 2-3 2.8c-1.8.8-3 1.4-3 2.7s1.3 2.5 3 2.5 3-1.1 3-2.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
-              </svg>
-            </div>
-            <span class="p1-card-label">Total spend</span>
-            <Transition name="check-fade">
-              <svg v-if="store.spend > 0" class="p1-card-check" width="18" height="18" viewBox="0 0 16 16" fill="none">
-                <path d="M3 8.5L6.5 12L13 4" stroke="#34D399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
-            </Transition>
+      <!-- Suppliers card -->
+      <div class="p1-card" :class="{ 'p1-card--done': store.nSup > 0 }">
+        <div class="p1-card-header">
+          <div class="p1-card-badge" :class="{ 'p1-card-badge--done': store.nSup > 0 }">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <circle cx="8" cy="7" r="3" stroke="currentColor" stroke-width="1.5" />
+              <circle cx="16" cy="7" r="3" stroke="currentColor" stroke-width="1.5" />
+              <path d="M2 20c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+              <path d="M14 14.5c1-.6 2.2-1 3.5-1 3 0 5.5 2.7 5.5 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+            </svg>
           </div>
-          <div class="p1-card-body">
-            <div class="spend-ccy-row">
-              <v-select
-                v-model="store.ccy"
-                :items="['EUR', 'USD', 'GBP', 'CHF', 'JPY', 'CNY', 'CAD', 'AUD', 'SEK', 'NOK', 'DKK', 'PLN']"
-                variant="plain"
-                density="compact"
-                hide-details
-                class="ccy-select"
-              />
-            </div>
-            <div class="spend-input-wrap">
-              <SpendInput v-model="store.spend" />
-            </div>
-            <div class="spend-slider">
-              <NLSlider v-model="store.spend" />
-            </div>
-          </div>
+          <span class="p1-card-label">Suppliers</span>
+          <Transition name="check-fade">
+            <svg v-if="store.nSup > 0" class="p1-card-check" width="18" height="18" viewBox="0 0 16 16" fill="none">
+              <path d="M3 8.5L6.5 12L13 4" stroke="#34D399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </Transition>
         </div>
-
-        <!-- Suppliers card -->
-        <div class="p1-card" :class="{ 'p1-card--done': store.nSup > 0 }">
-          <div class="p1-card-header">
-            <div class="p1-card-badge" :class="{ 'p1-card-badge--done': store.nSup > 0 }">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                <circle cx="8" cy="7" r="3" stroke="currentColor" stroke-width="1.5" />
-                <circle cx="16" cy="7" r="3" stroke="currentColor" stroke-width="1.5" />
-                <path d="M2 20c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-                <path d="M14 14.5c1-.6 2.2-1 3.5-1 3 0 5.5 2.7 5.5 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+        <div class="p1-card-body p1-card-body--center">
+          <div class="sup-controls">
+            <button class="sup-btn" aria-label="Remove supplier" @click="store.nSup = Math.max(0, store.nSup - 1)">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path d="M3 7h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
               </svg>
-            </div>
-            <span class="p1-card-label">Suppliers</span>
-            <Transition name="check-fade">
-              <svg v-if="store.nSup > 0" class="p1-card-check" width="18" height="18" viewBox="0 0 16 16" fill="none">
-                <path d="M3 8.5L6.5 12L13 4" stroke="#34D399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </button>
+            <span class="sup-value">{{ store.nSup }}</span>
+            <button class="sup-btn" aria-label="Add supplier" @click="store.nSup = Math.min(20, store.nSup + 1)">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path d="M7 3v8M3 7h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
               </svg>
-            </Transition>
+            </button>
           </div>
-          <div class="p1-card-body p1-card-body--center">
-            <div class="sup-controls">
-              <button class="sup-btn" aria-label="Remove supplier" @click="store.nSup = Math.max(0, store.nSup - 1)">
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                  <path d="M3 7h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-                </svg>
-              </button>
-              <span class="sup-value">{{ store.nSup }}</span>
-              <button class="sup-btn" aria-label="Add supplier" @click="store.nSup = Math.min(20, store.nSup + 1)">
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                  <path d="M7 3v8M3 7h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-                </svg>
-              </button>
-            </div>
-            <div class="sup-hint">
-              {{ store.nSup === 0 ? 'Add at least 1 supplier' : store.nSup === 1 ? '1 supplier selected' : store.nSup + ' suppliers selected' }}
-            </div>
+          <div class="sup-hint">
+            {{ store.nSup === 0 ? 'Add at least 1 supplier' : store.nSup === 1 ? '1 supplier selected' : store.nSup + ' suppliers selected' }}
           </div>
         </div>
       </div>
@@ -140,15 +91,14 @@
         </div>
         <v-btn
           v-if="verdictLevel !== 'stop'"
-          color="white"
+          color="#1D1D1B"
           variant="flat"
-          size="small"
+          size="default"
           class="verdict-btn"
-          :class="'verdict-btn--' + verdictLevel"
           append-icon="mdi-arrow-right"
           @click="store.phase = 2"
         >
-          Continue
+          Next step
         </v-btn>
       </div>
     </Transition>
@@ -167,14 +117,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { computed } from 'vue'
 import { useCalculatorStore } from '~/stores/decisionTree/calculator'
 import SpendInput from '~/components/decisionTree/calculator/SpendInput.vue'
 import NLSlider from '~/components/decisionTree/calculator/NLSlider.vue'
 
 const store = useCalculatorStore()
-
-const activeHowStep = ref(0)
 
 const verdictLevel = computed<'perfect' | 'ok' | 'stop'>(() => {
   if (store.spend < 100000 && store.nSup <= 1) return 'stop'
@@ -204,157 +152,21 @@ const verdictDesc = computed(() => {
   padding: 32px 32px 36px;
 }
 
-/* ── Main grid: how-card left, inputs right ── */
+/* ── Main grid: two cards side by side ── */
 .p1-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 24px;
-  min-height: 380px;
+  gap: 20px;
 }
 
-@media (max-width: 860px) {
+@media (max-width: 700px) {
   .p1-grid {
     grid-template-columns: 1fr;
   }
 }
 
-/* ── How does it work card ── */
-.how-card {
-  background: linear-gradient(160deg, #F0FDF4 0%, #ECFDF5 40%, #F9FEFB 100%);
-  border: 1.5px solid #D1FAE5;
-  border-radius: 16px;
-  padding: 28px 26px 22px;
-  display: flex;
-  flex-direction: column;
-}
-
-.how-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 28px;
-}
-
-.how-icon-wrap {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  background: #FFF;
-  border: 1.5px solid #D1FAE5;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  color: #10B981;
-}
-
-.how-title {
-  font-size: 17px;
-  font-weight: 700;
-  color: #065F46;
-}
-
-/* ── How steps ── */
-.how-steps {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  flex: 1;
-}
-
-.how-step {
-  display: flex;
-  align-items: flex-start;
-  gap: 14px;
-  padding: 14px 16px;
-  border-radius: 12px;
-  cursor: default;
-  transition: all 0.25s ease;
-  border: 1.5px solid transparent;
-}
-
-.how-step--active {
-  background: #FFF;
-  border-color: #D1FAE5;
-  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.08);
-}
-
-.how-step-num {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: #D1FAE5;
-  color: #065F46;
-  font-size: 13px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  transition: all 0.25s ease;
-}
-
-.how-step--active .how-step-num {
-  background: #10B981;
-  color: #FFF;
-}
-
-.how-step-body {
-  flex: 1;
-  min-width: 0;
-}
-
-.how-step-label {
-  font-size: 14px;
-  font-weight: 600;
-  color: #1D1D1B;
-  margin-bottom: 3px;
-}
-
-.how-step-desc {
-  font-size: 12px;
-  color: #6B7280;
-  line-height: 1.5;
-  max-height: 0;
-  overflow: hidden;
-  opacity: 0;
-  transition: max-height 0.3s ease, opacity 0.25s ease, margin 0.3s ease;
-}
-
-.how-step--active .how-step-desc {
-  max-height: 60px;
-  opacity: 1;
-  margin-top: 2px;
-}
-
-/* ── How footer ── */
-.how-footer {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 20px;
-  padding-top: 16px;
-  border-top: 1px solid #D1FAE5;
-  font-size: 12px;
-  color: #6B7280;
-}
-
-.how-footer svg {
-  color: #10B981;
-  flex-shrink: 0;
-}
-
-/* ── Right column: inputs ── */
-.p1-inputs {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
 /* ── Individual card ── */
 .p1-card {
-  flex: 1;
-  min-height: 0;
   border: 1.5px solid #E9EAEC;
   border-radius: 14px;
   background: #FAFAFA;
@@ -567,14 +379,7 @@ const verdictDesc = computed(() => {
 .verdict-btn {
   font-weight: 600;
   flex-shrink: 0;
-}
-
-.verdict-btn--perfect {
-  color: #065F46 !important;
-}
-
-.verdict-btn--ok {
-  color: #1E40AF !important;
+  letter-spacing: 0.02em;
 }
 
 /* ── Hint ── */
