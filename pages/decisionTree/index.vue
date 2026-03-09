@@ -3,16 +3,25 @@
     <!-- Header -->
     <v-row align="center" class="mb-2">
       <v-col cols="auto" class="d-flex align-center ga-3">
-        <h1 class="text-h5 font-weight-bold">Scenarios:</h1>
+        <h1 class="text-h5 font-weight-bold">{{ t('page.title') }}</h1>
         <v-chip size="small" color="primary" variant="flat" label>
           {{ projectsStore.allActive.length }}
         </v-chip>
       </v-col>
       <v-spacer />
       <v-col cols="auto" class="d-flex align-center ga-3">
+        <v-btn
+          variant="text"
+          color="#6B7280"
+          prepend-icon="mdi-help-circle-outline"
+          class="how-btn"
+          @click="showHowItWorks = true"
+        >
+          {{ t('page.howItWorks') }}
+        </v-btn>
         <v-text-field
           v-model="projectsStore.search"
-          placeholder="Search"
+          :placeholder="t('page.search')"
           density="compact"
           variant="outlined"
           hide-details
@@ -23,6 +32,67 @@
       </v-col>
     </v-row>
 
+    <!-- How does it work dialog -->
+    <v-dialog v-model="showHowItWorks" max-width="580" content-class="hiw-dialog">
+      <v-card class="hiw-card">
+        <v-btn
+          icon="mdi-close"
+          variant="text"
+          size="small"
+          class="hiw-close"
+          @click="showHowItWorks = false"
+        />
+        <div class="hiw-header">
+          <div class="hiw-icon-wrap">
+            <v-icon size="28" color="#1D1D1B">mdi-lightbulb-outline</v-icon>
+          </div>
+          <h2 class="hiw-title">{{ t('page.howItWorks') }}</h2>
+          <p class="hiw-intro">{{ t('page.howIntro') }}</p>
+        </div>
+
+        <div class="hiw-steps">
+          <div class="hiw-step">
+            <div class="hiw-step-num">1</div>
+            <div class="hiw-step-body">
+              <div class="hiw-step-title">{{ t('page.step1Title') }}</div>
+              <div class="hiw-step-desc">{{ t('page.step1Desc') }}</div>
+            </div>
+          </div>
+
+          <div class="hiw-step-line" />
+
+          <div class="hiw-step">
+            <div class="hiw-step-num">2</div>
+            <div class="hiw-step-body">
+              <div class="hiw-step-title">{{ t('page.step2Title') }}</div>
+              <div class="hiw-step-desc">{{ t('page.step2Desc') }}</div>
+            </div>
+          </div>
+
+          <div class="hiw-step-line" />
+
+          <div class="hiw-step">
+            <div class="hiw-step-num">3</div>
+            <div class="hiw-step-body">
+              <div class="hiw-step-title">{{ t('page.step3Title') }}</div>
+              <div class="hiw-step-desc">{{ t('page.step3Desc') }}</div>
+            </div>
+          </div>
+        </div>
+
+        <v-btn
+          color="#1D1D1B"
+          variant="flat"
+          block
+          class="hiw-start-btn"
+          append-icon="mdi-arrow-right"
+          @click="showHowItWorks = false; createNewGuided()"
+        >
+          {{ t('page.startScenario') }}
+        </v-btn>
+      </v-card>
+    </v-dialog>
+
     <!-- Toolbar -->
     <v-row align="center" class="mb-6">
       <v-col cols="auto" class="d-flex align-center ga-2">
@@ -32,7 +102,7 @@
           prepend-icon="mdi-file-tree"
           @click="showTreeV1 = true"
         >
-          Decision Tree 1
+          {{ t('page.dt1') }}
         </v-btn>
         <v-btn
           variant="outlined"
@@ -40,7 +110,7 @@
           prepend-icon="mdi-waterfall"
           @click="showTreeV2 = true"
         >
-          Decision Tree 2
+          {{ t('page.dt2') }}
         </v-btn>
         <v-btn
           variant="outlined"
@@ -48,7 +118,7 @@
           prepend-icon="mdi-table-check"
           @click="showTreeV3 = true"
         >
-          Decision Tree 3
+          {{ t('page.dt3') }}
         </v-btn>
         <v-btn
           variant="outlined"
@@ -56,7 +126,7 @@
           prepend-icon="mdi-tune-variant"
           @click="showTreeV4 = true"
         >
-          Quick Selector
+          {{ t('page.quickSelector') }}
         </v-btn>
       </v-col>
       <v-spacer />
@@ -67,7 +137,7 @@
           prepend-icon="mdi-plus"
           @click="createNew"
         >
-          New Scenario
+          {{ t('page.newScenario') }}
         </v-btn>
         <v-btn
           color="#34D399"
@@ -76,7 +146,7 @@
           class="guided-btn"
           @click="createNewGuided"
         >
-          New Scenario
+          {{ t('page.newScenario') }}
         </v-btn>
       </v-col>
     </v-row>
@@ -95,7 +165,7 @@
         </svg>
       </div>
       <button class="clear-all-btn" @click="projectsStore.clearFilters()">
-        Clear all
+        {{ t('calc.clearAll') }}
       </button>
     </div>
 
@@ -109,7 +179,7 @@
       prepend-icon="mdi-tune-vertical"
       @click="calcStore.showParams = true"
     >
-      Base Table
+      {{ t('page.baseTable') }}
     </v-btn>
 
     <DecisionTreeCalculatorParamsModal v-if="calcStore.showParams" />
@@ -120,13 +190,50 @@
 
     <!-- Table -->
     <v-card variant="outlined">
+      <!-- Bulk action bar / Column headers (instant swap, no transition) -->
+      <div v-if="projectsStore.selectedIds.size > 0" class="bulk-bar">
+        <div class="bulk-check">
+          <v-checkbox
+            :model-value="true"
+            hide-details
+            density="compact"
+            color="#1D1D1B"
+            @click="projectsStore.deselectAll()"
+          />
+        </div>
+        <div class="bulk-info">
+          <span class="bulk-count">
+            {{ projectsStore.selectedIds.size }} {{ t('page.selected') }}
+          </span>
+        </div>
+        <v-btn
+          variant="flat"
+          color="#EF4444"
+          size="small"
+          prepend-icon="mdi-delete-outline"
+          class="bulk-delete-btn"
+          @click="confirmBulkDelete"
+        >
+          {{ t('page.deleteSelected') }}
+        </v-btn>
+      </div>
+
       <!-- Column headers -->
-      <div class="table-header">
-        <div class="th th-check" />
+      <div v-else class="table-header">
+        <div class="th th-check">
+          <v-checkbox
+            :model-value="projectsStore.allVisibleSelected"
+            :indeterminate="projectsStore.someVisibleSelected"
+            hide-details
+            density="compact"
+            color="#1D1D1B"
+            @click="projectsStore.allVisibleSelected ? projectsStore.deselectAll() : projectsStore.selectAllVisible()"
+          />
+        </div>
 
         <!-- Name — sort only -->
         <HomeColumnHeaderFilter
-          :column="{ title: 'Name', key: 'name' }"
+          :column="{ title: t('calc.columns.name'), key: 'name' }"
           :is-active="isSorted('name')"
           :is-sorted-asc="isSortedDir('name', 'asc')"
           :is-sorted-desc="isSortedDir('name', 'desc')"
@@ -134,15 +241,15 @@
           :items="[]"
           sort-asc-icon="mdi-sort-alphabetical-ascending"
           sort-desc-icon="mdi-sort-alphabetical-descending"
-          sort-asc-label="A → Z"
-          sort-desc-label="Z → A"
+          :sort-asc-label="t('calc.sort.az')"
+          :sort-desc-label="t('calc.sort.za')"
           @sort="onSort"
           @clear="clearColumnFilter('name')"
         />
 
         <!-- Client -->
         <HomeColumnHeaderFilter
-          :column="{ title: 'Company', key: 'client' }"
+          :column="{ title: t('calc.columns.company'), key: 'client' }"
           :is-active="isSorted('client') || projectsStore.dropdownFilters.clients.length > 0"
           :is-sorted-asc="isSortedDir('client', 'asc')"
           :is-sorted-desc="isSortedDir('client', 'desc')"
@@ -153,8 +260,8 @@
           :selected-items="projectsStore.dropdownFilters.clients"
           sort-asc-icon="mdi-sort-alphabetical-ascending"
           sort-desc-icon="mdi-sort-alphabetical-descending"
-          sort-asc-label="A → Z"
-          sort-desc-label="Z → A"
+          :sort-asc-label="t('calc.sort.az')"
+          :sort-desc-label="t('calc.sort.za')"
           @sort="onSort"
           @update:search-value="clientSearch = $event || ''"
           @update:selected-items="projectsStore.dropdownFilters.clients = $event || []"
@@ -163,7 +270,7 @@
 
         <!-- Created date -->
         <HomeColumnHeaderFilter
-          :column="{ title: 'Created', key: 'created' }"
+          :column="{ title: t('calc.columns.created'), key: 'created' }"
           :is-active="isSorted('created') || projectsStore.dropdownFilters.createdDateFilter.type !== null"
           :is-sorted-asc="isSortedDir('created', 'asc')"
           :is-sorted-desc="isSortedDir('created', 'desc')"
@@ -171,8 +278,8 @@
           :date-filter="projectsStore.dropdownFilters.createdDateFilter"
           sort-asc-icon="mdi-sort-calendar-ascending"
           sort-desc-icon="mdi-sort-calendar-descending"
-          sort-asc-label="Oldest first"
-          sort-desc-label="Newest first"
+          :sort-asc-label="t('calc.sort.oldestFirst')"
+          :sort-desc-label="t('calc.sort.newestFirst')"
           @sort="onSort"
           @update:date-filter="projectsStore.dropdownFilters.createdDateFilter = $event"
           @clear="clearColumnFilter('created')"
@@ -180,7 +287,7 @@
 
         <!-- Modified date -->
         <HomeColumnHeaderFilter
-          :column="{ title: 'Modified', key: 'lastActive' }"
+          :column="{ title: t('calc.columns.modified'), key: 'lastActive' }"
           :is-active="isSorted('lastActive') || projectsStore.dropdownFilters.modifiedDateFilter.type !== null"
           :is-sorted-asc="isSortedDir('lastActive', 'asc')"
           :is-sorted-desc="isSortedDir('lastActive', 'desc')"
@@ -188,8 +295,8 @@
           :date-filter="projectsStore.dropdownFilters.modifiedDateFilter"
           sort-asc-icon="mdi-sort-calendar-ascending"
           sort-desc-icon="mdi-sort-calendar-descending"
-          sort-asc-label="Oldest first"
-          sort-desc-label="Newest first"
+          :sort-asc-label="t('calc.sort.oldestFirst')"
+          :sort-desc-label="t('calc.sort.newestFirst')"
           @sort="onSort"
           @update:date-filter="projectsStore.dropdownFilters.modifiedDateFilter = $event"
           @clear="clearColumnFilter('lastActive')"
@@ -197,7 +304,7 @@
 
         <!-- Type (topFamily) -->
         <HomeColumnHeaderFilter
-          :column="{ title: 'Type', key: 'type' }"
+          :column="{ title: t('calc.columns.type'), key: 'type' }"
           :is-active="isSorted('type') || projectsStore.dropdownFilters.types.length > 0"
           :is-sorted-asc="isSortedDir('type', 'asc')"
           :is-sorted-desc="isSortedDir('type', 'desc')"
@@ -206,8 +313,8 @@
           :selected-items="projectsStore.dropdownFilters.types"
           sort-asc-icon="mdi-sort-alphabetical-ascending"
           sort-desc-icon="mdi-sort-alphabetical-descending"
-          sort-asc-label="A → Z"
-          sort-desc-label="Z → A"
+          :sort-asc-label="t('calc.sort.az')"
+          :sort-desc-label="t('calc.sort.za')"
           @sort="onSort"
           @update:selected-items="projectsStore.dropdownFilters.types = $event || []"
           @clear="clearColumnFilter('type')"
@@ -215,7 +322,7 @@
 
         <!-- Owner -->
         <HomeColumnHeaderFilter
-          :column="{ title: 'Owner', key: 'owner' }"
+          :column="{ title: t('calc.columns.owner'), key: 'owner' }"
           :is-active="isSorted('owner') || projectsStore.dropdownFilters.owners.length > 0"
           :is-sorted-asc="isSortedDir('owner', 'asc')"
           :is-sorted-desc="isSortedDir('owner', 'desc')"
@@ -226,8 +333,8 @@
           :selected-items="projectsStore.dropdownFilters.owners"
           sort-asc-icon="mdi-sort-alphabetical-ascending"
           sort-desc-icon="mdi-sort-alphabetical-descending"
-          sort-asc-label="A → Z"
-          sort-desc-label="Z → A"
+          :sort-asc-label="t('calc.sort.az')"
+          :sort-desc-label="t('calc.sort.za')"
           @sort="onSort"
           @update:search-value="ownerSearch = $event || ''"
           @update:selected-items="projectsStore.dropdownFilters.owners = $event || []"
@@ -236,7 +343,7 @@
 
         <!-- Status -->
         <HomeColumnHeaderFilter
-          :column="{ title: 'Status', key: 'status' }"
+          :column="{ title: t('calc.columns.status'), key: 'status' }"
           :is-active="isSorted('status') || projectsStore.dropdownFilters.statuses.length > 0"
           :is-sorted-asc="isSortedDir('status', 'asc')"
           :is-sorted-desc="isSortedDir('status', 'desc')"
@@ -245,8 +352,8 @@
           :selected-items="projectsStore.dropdownFilters.statuses"
           sort-asc-icon="mdi-sort-alphabetical-ascending"
           sort-desc-icon="mdi-sort-alphabetical-descending"
-          sort-asc-label="A → Z"
-          sort-desc-label="Z → A"
+          :sort-asc-label="t('calc.sort.az')"
+          :sort-desc-label="t('calc.sort.za')"
           @sort="onSort"
           @update:selected-items="projectsStore.dropdownFilters.statuses = $event || []"
           @clear="clearColumnFilter('status')"
@@ -263,26 +370,28 @@
       />
 
       <!-- Empty state: filter/search has no results -->
-      <div v-else-if="projectsStore.visibleProjects.length === 0" class="d-flex flex-column align-center justify-center pa-16 text-center">
+      <div v-else-if="projectsStore.paginatedProjects.length === 0" class="d-flex flex-column align-center justify-center pa-16 text-center">
         <v-avatar size="72" color="grey-ligthen-3" class="mb-5">
           <v-icon size="32" color="grey-ligthen-1">mdi-magnify</v-icon>
         </v-avatar>
-        <div class="text-subtitle-1 font-weight-bold mb-2">No scenarios found</div>
+        <div class="text-subtitle-1 font-weight-bold mb-2">{{ t('page.noScenariosFound') }}</div>
         <div class="text-body-2 text-grey mb-5">
-          No results match your current filters
+          {{ t('page.noResultsMatch') }}
         </div>
         <v-btn variant="outlined" size="small" @click="projectsStore.clearFilters()">
-          Clear all filters
+          {{ t('page.clearAllFilters') }}
         </v-btn>
       </div>
 
       <!-- Project rows -->
       <TransitionGroup name="row" tag="div">
         <DecisionTreeCalculatorProjectRow
-          v-for="proj in projectsStore.visibleProjects"
+          v-for="proj in projectsStore.paginatedProjects"
           :key="proj.id"
           :project="proj"
+          :selected="projectsStore.selectedIds.has(proj.id)"
           @click="openProject(proj)"
+          @toggle-select="projectsStore.toggleSelect(proj.id)"
           @toggle-favorite="projectsStore.toggleFavorite(proj.id)"
           @edit="openProject(proj)"
           @archive="projectsStore.archiveProject(proj.id)"
@@ -292,12 +401,56 @@
       </TransitionGroup>
     </v-card>
 
-    <!-- Table footer -->
-    <div v-if="projectsStore.visibleProjects.length > 0" class="pa-3">
-      <span class="text-caption text-grey">
-        {{ projectsStore.visibleProjects.length }}
-        {{ projectsStore.visibleProjects.length === 1 ? 'project' : 'projects' }}
-      </span>
+    <!-- Pagination footer -->
+    <div v-if="projectsStore.visibleProjects.length > 0" class="pagination-footer">
+      <div class="pagination-info">
+        <span class="pagination-count">
+          {{ paginationRange }} {{ t('page.of') }} {{ projectsStore.visibleProjects.length }}
+          {{ projectsStore.visibleProjects.length === 1 ? t('page.project') : t('page.projects') }}
+        </span>
+      </div>
+
+      <div class="pagination-controls">
+        <v-btn
+          icon
+          variant="text"
+          size="x-small"
+          :disabled="projectsStore.page <= 1"
+          @click="projectsStore.page--"
+        >
+          <v-icon size="18">mdi-chevron-left</v-icon>
+        </v-btn>
+        <span class="pagination-pages">
+          {{ projectsStore.page }} / {{ projectsStore.totalPages }}
+        </span>
+        <v-btn
+          icon
+          variant="text"
+          size="x-small"
+          :disabled="projectsStore.page >= projectsStore.totalPages"
+          @click="projectsStore.page++"
+        >
+          <v-icon size="18">mdi-chevron-right</v-icon>
+        </v-btn>
+      </div>
+
+      <div class="pagination-size">
+        <span class="pagination-size-label">{{ t('page.perPage') }}</span>
+        <v-btn-toggle
+          :model-value="projectsStore.pageSize"
+          mandatory
+          density="compact"
+          variant="outlined"
+          divided
+          class="page-size-toggle"
+          @update:model-value="projectsStore.pageSize = $event; projectsStore.page = 1"
+        >
+          <v-btn :value="20" size="x-small">20</v-btn>
+          <v-btn :value="50" size="x-small">50</v-btn>
+          <v-btn :value="100" size="x-small">100</v-btn>
+          <v-btn :value="0" size="x-small">{{ t('page.all') }}</v-btn>
+        </v-btn-toggle>
+      </div>
     </div>
   </v-container>
 </template>
@@ -306,9 +459,11 @@
 import { ref, computed, onMounted } from 'vue'
 import { useProjectsStore } from '~/stores/decisionTree/projects'
 import { useCalculatorStore } from '~/stores/decisionTree/calculator'
+import useTranslations from '~/composables/useTranslations'
 
 definePageMeta({ middleware: ['user-role'] })
 
+const { t } = useTranslations('decisiontree')
 const router = useRouter()
 const projectsStore = useProjectsStore()
 const calcStore = useCalculatorStore()
@@ -318,6 +473,7 @@ const showTreeV1 = ref(false)
 const showTreeV2 = ref(false)
 const showTreeV3 = ref(false)
 const showTreeV4 = ref(false)
+const showHowItWorks = ref(false)
 
 // Column search fields
 const clientSearch = ref('')
@@ -352,21 +508,21 @@ const activeFilters = computed<ActiveFilter[]>(() => {
   const list: ActiveFilter[] = []
   const f = projectsStore.dropdownFilters
 
-  f.clients.forEach(c => list.push({ type: 'clients', label: `Company: ${c}`, value: c }))
-  f.owners.forEach(o => list.push({ type: 'owners', label: `Owner: ${o}`, value: o }))
-  f.statuses.forEach(s => list.push({ type: 'statuses', label: `Status: ${s}`, value: s }))
-  f.types.forEach(t => list.push({ type: 'types', label: `Type: ${t}`, value: t }))
+  f.clients.forEach(c => list.push({ type: 'clients', label: t('calc.columns.company') + ': ' + c, value: c }))
+  f.owners.forEach(o => list.push({ type: 'owners', label: t('calc.columns.owner') + ': ' + o, value: o }))
+  f.statuses.forEach(s => list.push({ type: 'statuses', label: t('calc.columns.status') + ': ' + s, value: s }))
+  f.types.forEach(tp => list.push({ type: 'types', label: t('calc.columns.type') + ': ' + tp, value: tp }))
 
   if (f.createdDateFilter.type) {
-    list.push({ type: 'createdDateFilter', label: `Created: ${f.createdDateFilter.type}` })
+    list.push({ type: 'createdDateFilter', label: t('calc.columns.created') + ': ' + f.createdDateFilter.type })
   }
   if (f.modifiedDateFilter.type) {
-    list.push({ type: 'modifiedDateFilter', label: `Modified: ${f.modifiedDateFilter.type}` })
+    list.push({ type: 'modifiedDateFilter', label: t('calc.columns.modified') + ': ' + f.modifiedDateFilter.type })
   }
 
   projectsStore.sortBy.forEach(s => {
     const dir = s.order === 'asc' ? 'ascending' : 'descending'
-    list.push({ type: 'sort', label: `Sort: ${s.key} ${dir}`, value: s.key })
+    list.push({ type: 'sort', label: 'Sort: ' + s.key + ' ' + dir, value: s.key })
   })
 
   return list
@@ -434,20 +590,36 @@ function clearColumnFilter(key: string) {
   }
 }
 
-// ─── Actions ───
-async function createNew() {
-  const id = await projectsStore.createProject()
-  if (!id) return
-  calcStore.resetEditor()
-  router.push(`/decisionTree/calculator/${id}`)
+// ─── Pagination range label ───
+const paginationRange = computed(() => {
+  const ps = projectsStore.pageSize
+  const total = projectsStore.visibleProjects.length
+  if (!ps) return `1–${total}` // All
+  const start = (projectsStore.page - 1) * ps + 1
+  const end = Math.min(projectsStore.page * ps, total)
+  return `${start}–${end}`
+})
+
+// ─── Bulk delete ───
+async function confirmBulkDelete() {
+  const count = projectsStore.selectedIds.size
+  if (!count) return
+  // Simple confirm
+  if (confirm(t('page.confirmBulkDelete', { count }))) {
+    await projectsStore.bulkDelete()
+  }
 }
 
-async function createNewGuided() {
-  const id = await projectsStore.createProject()
-  if (!id) return
+// ─── Actions ───
+function createNew() {
+  calcStore.resetEditor()
+  router.push('/decisionTree/calculator/new')
+}
+
+function createNewGuided() {
   calcStore.resetEditor()
   calcStore.mode = 'guided'
-  router.push(`/decisionTree/calculator/${id}`)
+  router.push('/decisionTree/calculator/new')
 }
 
 function openProject(proj: any) {
@@ -491,7 +663,9 @@ function openProject(proj: any) {
 
 .th-check,
 .th-icon {
-  /* empty columns */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Align header filter button text flush with row cell text below */
@@ -586,5 +760,197 @@ function openProject(proj: any) {
 /* ── Guided button ── */
 .guided-btn {
   color: #065F46 !important;
+}
+
+/* ── How does it work button ── */
+.how-btn {
+  text-transform: none;
+  font-weight: 500;
+  font-size: 13px;
+  letter-spacing: 0;
+}
+
+/* ── How it works dialog ── */
+.hiw-card {
+  padding: 32px;
+  border-radius: 16px !important;
+  position: relative;
+}
+.hiw-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+}
+.hiw-header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+.hiw-icon-wrap {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: #F3F4F6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 14px;
+}
+.hiw-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1D1D1B;
+  margin-bottom: 8px;
+}
+.hiw-intro {
+  font-size: 13px;
+  color: #6B7280;
+  line-height: 1.5;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+/* Steps */
+.hiw-steps {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 24px;
+}
+.hiw-step {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+.hiw-step-num {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #1D1D1B;
+  color: #FFF;
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.hiw-step-body {
+  flex: 1;
+  min-width: 0;
+}
+.hiw-step-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1D1D1B;
+  margin-bottom: 4px;
+}
+.hiw-step-desc {
+  font-size: 13px;
+  color: #6B7280;
+  line-height: 1.5;
+}
+.hiw-step-line {
+  width: 1.5px;
+  height: 16px;
+  background: #E5E7EB;
+  margin: 6px 0 6px 14px;
+}
+.hiw-start-btn {
+  font-weight: 600;
+  text-transform: none;
+  border-radius: 10px;
+  font-size: 14px;
+  height: 44px !important;
+  letter-spacing: 0.01em;
+}
+
+/* ─── Bulk action bar ─── */
+.bulk-bar {
+  display: grid;
+  grid-template-columns: 48px 1fr auto;
+  align-items: center;
+  padding: 0 20px;
+  height: 48px;
+  background: #F9FAFB;
+  border-bottom: 1px solid #E9EAEC;
+}
+
+.bulk-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bulk-check {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bulk-count {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1D1D1B;
+}
+
+.bulk-delete-btn {
+  text-transform: none;
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0;
+  border-radius: 8px;
+}
+
+/* ─── Pagination footer ─── */
+.pagination-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  border-top: 1px solid #E9EAEC;
+}
+
+.pagination-count {
+  font-size: 13px;
+  color: #6B7280;
+}
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pagination-pages {
+  font-size: 13px;
+  font-weight: 500;
+  color: #1D1D1B;
+  min-width: 48px;
+  text-align: center;
+}
+
+.pagination-size {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pagination-size-label {
+  font-size: 12px;
+  color: #9CA3AF;
+  white-space: nowrap;
+}
+
+.page-size-toggle {
+  height: 28px !important;
+}
+
+.page-size-toggle .v-btn {
+  text-transform: none !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0 !important;
+  min-width: 36px !important;
+  height: 28px !important;
 }
 </style>

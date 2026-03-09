@@ -7,9 +7,9 @@
     <v-card max-height="90vh" class="d-flex flex-column">
       <!-- Header -->
       <v-card-title class="d-flex align-center justify-space-between py-4 px-6">
-        <span class="text-subtitle-1 font-weight-bold">Scoring Parameters</span>
+        <span class="text-subtitle-1 font-weight-bold">{{ t('calc.params.title') }}</span>
         <div class="d-flex align-center ga-3">
-          <v-btn v-if="isAdmin" variant="outlined" size="small" @click="store.resetParams()">Reset defaults</v-btn>
+          <v-btn v-if="isAdmin" variant="outlined" size="small" @click="store.resetParams()">{{ t('calc.params.resetDefaults') }}</v-btn>
           <v-btn icon variant="text" size="small" @click="store.showParams = false">
             <v-icon>mdi-close</v-icon>
           </v-btn>
@@ -23,9 +23,9 @@
             <thead>
               <!-- Row 1: main group headers -->
               <tr class="header-row-1">
-                <th class="sticky-col strategy-header" rowspan="2">Strategy</th>
-                <th class="num-header" rowspan="2">Base</th>
-                <th class="num-header" rowspan="2">Savings</th>
+                <th class="sticky-col strategy-header" rowspan="2">{{ t('calc.params.strategy') }}</th>
+                <th class="num-header" rowspan="2">{{ t('calc.params.base') }}</th>
+                <th class="num-header" rowspan="2">{{ t('calc.params.savings') }}</th>
                 <th
                   v-for="(label, q) in Q_LABELS"
                   :key="'qh-' + q"
@@ -98,9 +98,11 @@
 </template>
 
 <script setup lang="ts">
+import useTranslations from '~/composables/useTranslations'
 import { useCalculatorStore } from '~/stores/decisionTree/calculator'
 import { SC, Q_LABELS, Q_OPTS } from '~/utils/decisionTree/scoring-engine'
 
+const { t } = useTranslations('decisiontree')
 const store = useCalculatorStore()
 const { isAdmin } = useUser()
 

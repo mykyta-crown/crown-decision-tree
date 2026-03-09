@@ -1,13 +1,19 @@
 <template>
   <div class="chart-container">
     <svg viewBox="0 0 280 130" fill="none">
-      <!-- Y-axis -->
-      <text x="8" y="20" class="axis-label">{{ pL }}</text>
-      <line x1="28" y1="14" x2="28" y2="112" stroke="#E5E7EB" stroke-width="0.8" />
+      <defs>
+        <marker id="axisArrowDu" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+          <path d="M0 1 L5 3 L0 5" fill="#D1D5DB" />
+        </marker>
+      </defs>
 
-      <!-- X-axis -->
-      <line x1="28" y1="112" x2="250" y2="112" stroke="#E5E7EB" stroke-width="0.8" />
-      <text x="140" y="126" class="axis-label" text-anchor="middle">Time</text>
+      <!-- Y-axis with arrow -->
+      <line x1="28" y1="112" x2="28" y2="10" stroke="#E5E7EB" stroke-width="0.8" marker-end="url(#axisArrowDu)" />
+      <text x="24" y="8" class="axis-label" text-anchor="end">Price</text>
+
+      <!-- X-axis with arrow -->
+      <line x1="28" y1="112" x2="254" y2="112" stroke="#E5E7EB" stroke-width="0.8" marker-end="url(#axisArrowDu)" />
+      <text x="248" y="124" class="axis-label" text-anchor="end">Time</text>
 
       <!-- Grid lines -->
       <line x1="28" y1="36" x2="250" y2="36" stroke="#F3F4F6" stroke-width="0.5" stroke-dasharray="3 3" />
@@ -43,25 +49,21 @@
       <!-- First to accept label -->
       <text x="183" y="28" text-anchor="middle" class="accept-text">First to accept</text>
 
-      <!-- Up arrow -->
-      <path d="M258 100 L258 26" stroke="#D1D5DB" stroke-width="0.8" />
-      <path d="M255 32 L258 26 L261 32" fill="none" stroke="#D1D5DB" stroke-width="0.8" stroke-linecap="round" />
-      <text x="258" y="112" text-anchor="middle" class="arrow-label">Price rises</text>
+      <!-- Up arrow annotation -->
+      <path d="M262 100 L262 26" stroke="#D1D5DB" stroke-width="0.8" />
+      <path d="M259 32 L262 26 L265 32" fill="none" stroke="#D1D5DB" stroke-width="0.8" stroke-linecap="round" />
+      <text x="262" y="112" text-anchor="middle" class="arrow-label">Price rises</text>
     </svg>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-
-const props = withDefaults(defineProps<{
+withDefaults(defineProps<{
   color: string
   ccy?: string
 }>(), {
   ccy: 'EUR',
 })
-
-const pL = computed(() => `Price (${props.ccy})`)
 </script>
 
 <style scoped>

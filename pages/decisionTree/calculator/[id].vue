@@ -2,6 +2,7 @@
 import { ref, watch, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useCalculatorStore } from '~/stores/decisionTree/calculator'
 import { useProjectsStore } from '~/stores/decisionTree/projects'
+import useTranslations from '~/composables/useTranslations'
 
 definePageMeta({ middleware: ['user-role'] })
 
@@ -9,10 +10,13 @@ const route = useRoute()
 const router = useRouter()
 const store = useCalculatorStore()
 const projectsStore = useProjectsStore()
+const { t } = useTranslations('decisiontree')
 
-const activeId = computed(() => Number(route.params.id))
+const isNew = computed(() => route.params.id === 'new')
+const activeId = ref<number | null>(isNew.value ? null : Number(route.params.id))
 const saveStatus = ref<'' | 'saving' | 'saved' | 'error'>('')
 let saveTimer: ReturnType<typeof setTimeout> | null = null
+const isMounted = ref(true)
 
 // ─── Steps definition ───
 // p2Pct from store counts evName + lot prices; we add userName as an extra requirement
@@ -29,9 +33,9 @@ const p2PctFull = computed(() => {
 })
 
 const steps = computed(() => [
-  { n: 1, title: 'eAuction Feasibility Check', pct: store.p1Pct },
-  { n: 2, title: 'Lot Configuration', pct: p2PctFull.value },
-  { n: 3, title: 'Recommended eAuction Types', pct: store.p3Pct },
+  { n: 1, title: t('calc.steps.step1'), pct: store.p1Pct },
+  { n: 2, title: t('calc.steps.step2'), pct: p2PctFull.value },
+  { n: 3, title: t('calc.steps.step3'), pct: store.p3Pct },
 ])
 
 // ─── Expansion panel state (maps to store.phase) ───
@@ -53,6 +57,11 @@ const activePanel = computed({
     if (target >= 1 && !step1Valid.value) {
       flashErrors(0)
       return
+    }
+
+    // Create project in DB when first entering Phase 2
+    if (target >= 1 && !activeId.value) {
+      ensureProjectCreated()
     }
 
     // Going to Phase 3 requires Phase 2 fields complete
@@ -95,8 +104,8 @@ function stepValid(si: number): boolean {
 
 // ─── Breadcrumbs ───
 const breadcrumbs = computed(() => [
-  { title: 'Scenarios', to: '/decisionTree' },
-  { title: store.evName || 'New Scenario', disabled: true },
+  { title: t('calc.breadcrumb.scenarios'), to: '/decisionTree' },
+  { title: store.evName || t('calc.breadcrumb.newScenario'), disabled: true },
 ])
 
 // ─── Load project on mount ───
@@ -107,17 +116,21 @@ onMounted(async () => {
   if (!store.paramsLoaded) {
     await store.loadScoringParams()
   }
-  const proj = projectsStore.getProject(activeId.value)
-  if (proj) {
-    store.hydrateFromState(proj.state)
-    if (proj.owner) {
-      projectsStore.userName = proj.owner
+  if (activeId.value) {
+    const proj = projectsStore.getProject(activeId.value)
+    if (proj) {
+      store.hydrateFromState(proj.state)
+      if (proj.owner) {
+        projectsStore.userName = proj.owner
+      }
     }
   }
 })
 
 onBeforeUnmount(() => {
+  isMounted.value = false
   if (saveTimer) clearTimeout(saveTimer)
+  store.dispose()
 })
 
 // ─── Auto-save with debounce ───
@@ -136,21 +149,47 @@ async function doSave() {
   })
 }
 
+// Create project in DB when transitioning from Phase 1 to Phase 2
+async function ensureProjectCreated(): Promise<boolean> {
+  if (activeId.value) return true
+  const id = await projectsStore.createProject()
+  if (!id) return false
+  activeId.value = id
+  // Update URL silently without triggering Vue Router re-render
+  window.history.replaceState({}, '', `/decisionTree/calculator/${id}`)
+  // Save the current state in background (non-blocking)
+  doSave()
+  return true
+}
+
+// Watch phase changes to create project when entering Phase 2+
+watch(() => store.phase, async (newPhase) => {
+  if (newPhase >= 2 && !activeId.value) {
+    await ensureProjectCreated()
+  }
+})
+
 watch(
   () => [
     store.mode, store.phase, store.spend, store.nSup, store.award, store.ccy,
     store.evName, store.lots, store.sc, store.supNames, store.selLot, store.expLot, store.params,
   ],
   () => {
+    if (!activeId.value) return // not persisted yet — ensureProjectCreated handles first save
     if (saveTimer) clearTimeout(saveTimer)
-    saveStatus.value = 'saving'
     saveTimer = setTimeout(async () => {
+      if (!isMounted.value) return
+      saveStatus.value = 'saving'
       try {
         await doSave()
+        if (!isMounted.value) return
         saveStatus.value = 'saved'
-        setTimeout(() => { saveStatus.value = '' }, 2000)
+        setTimeout(() => { if (isMounted.value) saveStatus.value = '' }, 2000)
       } catch {
-        saveStatus.value = 'error'
+        if (isMounted.value) {
+          saveStatus.value = 'error'
+          setTimeout(() => { if (isMounted.value) saveStatus.value = '' }, 5000)
+        }
       }
     }, 800)
   },
@@ -173,6 +212,14 @@ function onUserNameInput(val: string) {
 function onEvNameInput(val: string) {
   store.evName = val
   if (val.trim()) store.evNameErr = false
+}
+
+// ─── Enter key advances to next step ───
+function tryAdvanceStep() {
+  const current = activePanel.value
+  if (current === undefined) return
+  // Try to open the next step (activePanel setter handles validation + flashErrors)
+  activePanel.value = current + 1
 }
 </script>
 
@@ -199,15 +246,15 @@ function onEvNameInput(val: string) {
           <span v-if="saveStatus" :key="saveStatus" class="save-indicator" :class="saveStatus">
             <template v-if="saveStatus === 'saving'">
               <v-progress-circular indeterminate size="12" width="1.5" color="grey" />
-              <span class="ml-1">Saving...</span>
+              <span class="ml-1">{{ t('calc.save.saving') }}</span>
             </template>
             <template v-else-if="saveStatus === 'saved'">
               <v-icon size="14" color="green">mdi-check</v-icon>
-              <span class="ml-1">Saved</span>
+              <span class="ml-1">{{ t('calc.save.saved') }}</span>
             </template>
             <template v-else-if="saveStatus === 'error'">
               <v-icon size="14" color="error">mdi-alert-circle-outline</v-icon>
-              <span class="ml-1">Error</span>
+              <span class="ml-1">{{ t('calc.save.error') }}</span>
             </template>
           </span>
         </Transition>
@@ -250,11 +297,11 @@ function onEvNameInput(val: string) {
                 <div class="step-info">
                   <span class="step-label">{{ step.title }}</span>
                   <!-- Inline fields when Phase 2 is active -->
-                  <div v-if="si === 1 && activePanel === 1" class="step-inline-fields" @click.stop>
+                  <div v-if="si === 1 && activePanel === 1" class="step-inline-fields" @click.stop @keydown.enter.stop="tryAdvanceStep()" @keydown.space.stop @keyup.space.prevent.stop>
                     <v-text-field
                       :model-value="store.evName"
-                      label="Scenario name"
-                      placeholder="e.g. IT Hardware Q2"
+                      :label="t('calc.fields.scenarioName')"
+                      :placeholder="t('calc.fields.scenarioPlaceholder')"
                       density="compact"
                       variant="outlined"
                       hide-details
@@ -268,8 +315,8 @@ function onEvNameInput(val: string) {
                     </v-text-field>
                     <v-text-field
                       :model-value="projectsStore.userName"
-                      label="Your name"
-                      placeholder="e.g. John Doe"
+                      :label="t('calc.fields.yourName')"
+                      :placeholder="t('calc.fields.yourNamePlaceholder')"
                       density="compact"
                       variant="outlined"
                       hide-details
@@ -297,7 +344,7 @@ function onEvNameInput(val: string) {
                     <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
                       <path d="M3 8.5L6.5 12L13 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
-                    Complete
+                    {{ t('calc.steps.complete') }}
                   </span>
                 </div>
 
@@ -310,7 +357,7 @@ function onEvNameInput(val: string) {
               </div>
             </v-expansion-panel-title>
 
-            <v-expansion-panel-text>
+            <v-expansion-panel-text @keydown.enter.stop="si < 2 && tryAdvanceStep()">
               <v-sheet class="bg-white rounded-lg" border>
                 <template v-if="si === 0">
                   <DecisionTreeCalculatorPhaseOneGuided v-if="store.mode === 'guided'" />

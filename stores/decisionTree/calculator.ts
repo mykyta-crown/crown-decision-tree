@@ -139,6 +139,18 @@ export const useCalculatorStore = defineStore('calculator', () => {
     return t > 0 ? Math.round(d / t * 100) : 0
   })
 
+  // Auto-sync Phase 1 from lot data when in Phase 2+
+  watch(totBase, (tb) => {
+    if (phase.value >= 2 && tb > 0) {
+      spend.value = Math.round(tb)
+    }
+  })
+  watch(sc, (newSc) => {
+    if (phase.value >= 2) {
+      nSup.value = newSc
+    }
+  })
+
   // Clear error states when values change
   watch(spend, (v) => { if (v > 0) spendErr.value = false })
   watch(nSup, (v) => { if (v > 0) nSupErr.value = false })
@@ -281,18 +293,20 @@ export const useCalculatorStore = defineStore('calculator', () => {
       excl: l.prices.map(() => false),
     }))
     selLot.value = 0
-    // In guided mode, sync spend/nSup from preset data
-    if (mode.value === 'guided') {
-      nSup.value = n
-      const totalSpend = preset.lots.reduce((sum, l) => {
-        const avg = l.prices.reduce((s, p) => s + p, 0) / l.prices.length
-        return sum + avg * l.qty
-      }, 0)
-      spend.value = Math.round(totalSpend)
-    }
+    // Sync Phase 1 from preset data
+    nSup.value = n
+    const totalSpend = preset.lots.reduce((sum, l) => {
+      const avg = l.prices.reduce((s, p) => s + p, 0) / l.prices.length
+      return sum + avg * l.qty
+    }, 0)
+    spend.value = Math.round(totalSpend)
   }
 
   function resetEditor() {
+    if (_paramsSaveTimer) {
+      clearTimeout(_paramsSaveTimer)
+      _paramsSaveTimer = null
+    }
     mode.value = 'standard'
     phase.value = 1
     spend.value = 0
@@ -311,6 +325,13 @@ export const useCalculatorStore = defineStore('calculator', () => {
     selLot.value = 0
     expLot.value = -1
     visitedPhase3.value = false
+  }
+
+  function dispose() {
+    if (_paramsSaveTimer) {
+      clearTimeout(_paramsSaveTimer)
+      _paramsSaveTimer = null
+    }
   }
 
   function resetParams() {
@@ -439,7 +460,7 @@ export const useCalculatorStore = defineStore('calculator', () => {
     // Actions
     updateLot, updatePrice, addLot, removeLot,
     addSupplier, removeSupplierAt, renameSupplier, toggleExclude,
-    applyDemoPreset, resetEditor, resetParams,
+    applyDemoPreset, resetEditor, resetParams, dispose,
     getSnapshot, hydrateFromState,
     paramsLoaded, loadScoringParams, saveScoringParams,
   }

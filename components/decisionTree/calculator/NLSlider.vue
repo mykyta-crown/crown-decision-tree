@@ -110,9 +110,9 @@ function onSlide(e: Event) {
 }
 
 .track {
-  height: 8px;
-  border-radius: 4px;
-  background: #E9EAEC;
+  height: 12px;
+  border-radius: 6px;
+  background: #EDEDEE;
   position: relative;
 }
 
@@ -121,8 +121,8 @@ function onSlide(e: Event) {
   left: 0;
   top: 0;
   height: 100%;
-  border-radius: 4px;
-  background: linear-gradient(90deg, #2DD4A0, #10B981);
+  border-radius: 6px;
+  background: linear-gradient(90deg, rgba(52, 211, 153, 0.35) 0%, #34D399 50%, #10B981 100%);
   transition: width 0.05s linear;
 }
 
@@ -131,7 +131,7 @@ function onSlide(e: Event) {
   top: -6px;
   left: 0;
   width: 100%;
-  height: 20px;
+  height: 24px;
   opacity: 0;
   cursor: pointer;
   z-index: 2;
@@ -140,12 +140,13 @@ function onSlide(e: Event) {
 
 .thumb {
   position: absolute;
-  top: -3px;
-  width: 14px;
-  height: 14px;
+  top: -4px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
-  background: #2DD4A0;
-  border: 2px solid #fff;
+  background: #10B981;
+  border: 3px solid #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
   pointer-events: none;
   transition: left 0.05s linear;
 }

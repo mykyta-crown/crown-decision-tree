@@ -3,7 +3,7 @@
     <v-card>
       <v-card-title class="d-flex align-center pa-5">
         <v-icon class="mr-2" size="22">mdi-table-check</v-icon>
-        <span class="text-h6 font-weight-bold">Auction Compatibility Matrix</span>
+        <span class="text-h6 font-weight-bold">{{ t('v3.title') }}</span>
         <v-spacer />
         <v-btn icon variant="text" size="small" @click="show = false">
           <v-icon>mdi-close</v-icon>
@@ -13,36 +13,36 @@
 
       <v-card-text class="matrix-canvas pa-6">
         <p class="text-body-2 text-grey-darken-1 mb-5">
-          Match your situation against each column. The auction type with the most matches is your best fit.
+          {{ t('v3.intro') }}
         </p>
 
         <div class="matrix-table">
           <!-- Header row -->
           <div class="matrix-row matrix-header">
-            <div class="matrix-cell cell-param">Parameters</div>
+            <div class="matrix-cell cell-param">{{ t('v3.parameters') }}</div>
             <div class="matrix-cell cell-type cell-double">
               <div class="type-dot dot-double" />
-              <span>Double Scenario</span>
+              <span>{{ t('families.doubleScenario') }}</span>
             </div>
             <div class="matrix-cell cell-type cell-english">
               <div class="type-dot dot-english" />
-              <span>English Reverse</span>
+              <span>{{ t('families.english') }}</span>
             </div>
             <div class="matrix-cell cell-type cell-dutch">
               <div class="type-dot dot-dutch" />
-              <span>Dutch</span>
+              <span>{{ t('families.dutch') }}</span>
             </div>
             <div class="matrix-cell cell-type cell-japanese">
               <div class="type-dot dot-japanese" />
-              <span>Japanese</span>
+              <span>{{ t('families.japanese') }}</span>
             </div>
             <div class="matrix-cell cell-type cell-sealed">
               <div class="type-dot dot-sealed" />
-              <span>Sealed Bid</span>
+              <span>{{ t('families.sealedBid') }}</span>
             </div>
             <div class="matrix-cell cell-type cell-nego">
               <div class="type-dot dot-nego" />
-              <span>Negotiation</span>
+              <span>{{ t('families.traditional') }}</span>
             </div>
           </div>
 
@@ -50,7 +50,7 @@
           <div class="matrix-row">
             <div class="matrix-cell cell-param">
               <v-icon size="16" class="mr-2" color="grey-darken-1">mdi-account-group-outline</v-icon>
-              <span>Suppliers needed</span>
+              <span>{{ t('v3.suppliersNeeded') }}</span>
             </div>
             <div class="matrix-cell cell-val"><span class="val-chip val-high">5+</span></div>
             <div class="matrix-cell cell-val"><span class="val-chip val-mid">3+</span></div>
@@ -64,21 +64,21 @@
           <div class="matrix-row row-alt">
             <div class="matrix-cell cell-param">
               <v-icon size="16" class="mr-2" color="grey-darken-1">mdi-cog-outline</v-icon>
-              <span>Spec complexity</span>
+              <span>{{ t('v3.specComplexity') }}</span>
             </div>
-            <div class="matrix-cell cell-val"><span class="val-text">Simple</span></div>
-            <div class="matrix-cell cell-val"><span class="val-text">Any</span></div>
-            <div class="matrix-cell cell-val"><span class="val-text">Simple</span></div>
-            <div class="matrix-cell cell-val"><span class="val-text">Any</span></div>
-            <div class="matrix-cell cell-val"><span class="val-text">Complex OK</span></div>
-            <div class="matrix-cell cell-val"><span class="val-text">Complex OK</span></div>
+            <div class="matrix-cell cell-val"><span class="val-text">{{ t('v3.simple') }}</span></div>
+            <div class="matrix-cell cell-val"><span class="val-text">{{ t('v3.any') }}</span></div>
+            <div class="matrix-cell cell-val"><span class="val-text">{{ t('v3.simple') }}</span></div>
+            <div class="matrix-cell cell-val"><span class="val-text">{{ t('v3.any') }}</span></div>
+            <div class="matrix-cell cell-val"><span class="val-text">{{ t('v3.complexOk') }}</span></div>
+            <div class="matrix-cell cell-val"><span class="val-text">{{ t('v3.complexOk') }}</span></div>
           </div>
 
           <!-- Row: Real-time bidding -->
           <div class="matrix-row">
             <div class="matrix-cell cell-param">
               <v-icon size="16" class="mr-2" color="grey-darken-1">mdi-timer-outline</v-icon>
-              <span>Real-time bidding</span>
+              <span>{{ t('v3.realTimeBidding') }}</span>
             </div>
             <div class="matrix-cell cell-val"><v-icon size="18" color="success">mdi-check-bold</v-icon></div>
             <div class="matrix-cell cell-val"><v-icon size="18" color="success">mdi-check-bold</v-icon></div>
@@ -92,63 +92,77 @@
           <div class="matrix-row row-alt">
             <div class="matrix-cell cell-param">
               <v-icon size="16" class="mr-2" color="grey-darken-1">mdi-view-grid-outline</v-icon>
-              <span>Multiple lots</span>
+              <span>{{ t('v3.multipleLots') }}</span>
             </div>
             <div class="matrix-cell cell-val"><v-icon size="18" color="success">mdi-check-bold</v-icon></div>
-            <div class="matrix-cell cell-val"><span class="val-text">Optional</span></div>
-            <div class="matrix-cell cell-val"><span class="val-text">Optional</span></div>
-            <div class="matrix-cell cell-val"><span class="val-text">Optional</span></div>
-            <div class="matrix-cell cell-val"><span class="val-text">Optional</span></div>
+            <div class="matrix-cell cell-val"><span class="val-text">{{ t('v3.optional') }}</span></div>
+            <div class="matrix-cell cell-val"><span class="val-text">{{ t('v3.optional') }}</span></div>
+            <div class="matrix-cell cell-val"><span class="val-text">{{ t('v3.optional') }}</span></div>
+            <div class="matrix-cell cell-val"><span class="val-text">{{ t('v3.optional') }}</span></div>
+            <div class="matrix-cell cell-val"><v-icon size="18" color="grey-lighten-1">mdi-minus</v-icon></div>
+          </div>
+
+          <!-- Row: Binding award -->
+          <div class="matrix-row">
+            <div class="matrix-cell cell-param">
+              <v-icon size="16" class="mr-2" color="grey-darken-1">mdi-gavel</v-icon>
+              <span>{{ t('v3.bindingAward') }}</span>
+            </div>
+            <div class="matrix-cell cell-val"><v-icon size="18" color="success">mdi-check-bold</v-icon></div>
+            <div class="matrix-cell cell-val"><v-icon size="18" color="success">mdi-check-bold</v-icon></div>
+            <div class="matrix-cell cell-val"><v-icon size="18" color="success">mdi-check-bold</v-icon></div>
+            <div class="matrix-cell cell-val"><v-icon size="18" color="error">mdi-close</v-icon></div>
+            <div class="matrix-cell cell-val"><v-icon size="18" color="success">mdi-check-bold</v-icon></div>
             <div class="matrix-cell cell-val"><v-icon size="18" color="grey-lighten-1">mdi-minus</v-icon></div>
           </div>
 
           <!-- Row: Price knowledge -->
-          <div class="matrix-row">
+          <div class="matrix-row row-alt">
             <div class="matrix-cell cell-param">
               <v-icon size="16" class="mr-2" color="grey-darken-1">mdi-tag-outline</v-icon>
-              <span>Starting price known</span>
+              <span>{{ t('v3.startingPriceKnown') }}</span>
             </div>
-            <div class="matrix-cell cell-val"><span class="val-text">Preferred</span></div>
-            <div class="matrix-cell cell-val"><span class="val-text">Optional</span></div>
+            <div class="matrix-cell cell-val"><span class="val-text">{{ t('v3.preferred') }}</span></div>
+            <div class="matrix-cell cell-val"><span class="val-text">{{ t('v3.optional') }}</span></div>
             <div class="matrix-cell cell-val"><v-icon size="18" color="success">mdi-check-bold</v-icon></div>
             <div class="matrix-cell cell-val"><v-icon size="18" color="error">mdi-close</v-icon></div>
-            <div class="matrix-cell cell-val"><span class="val-text">Optional</span></div>
+            <div class="matrix-cell cell-val"><span class="val-text">{{ t('v3.optional') }}</span></div>
             <div class="matrix-cell cell-val"><v-icon size="18" color="grey-lighten-1">mdi-minus</v-icon></div>
           </div>
 
           <!-- Row: Speed -->
-          <div class="matrix-row row-alt">
+          <div class="matrix-row">
             <div class="matrix-cell cell-param">
               <v-icon size="16" class="mr-2" color="grey-darken-1">mdi-lightning-bolt-outline</v-icon>
-              <span>Speed</span>
+              <span>{{ t('v3.speed') }}</span>
             </div>
-            <div class="matrix-cell cell-val"><span class="val-text">Medium</span></div>
-            <div class="matrix-cell cell-val"><span class="val-text">Medium</span></div>
-            <div class="matrix-cell cell-val"><span class="val-text">Fast</span></div>
-            <div class="matrix-cell cell-val"><span class="val-text">Slow</span></div>
-            <div class="matrix-cell cell-val"><span class="val-text">Fast</span></div>
-            <div class="matrix-cell cell-val"><span class="val-text">Variable</span></div>
+            <div class="matrix-cell cell-val"><span class="val-text">{{ t('v1.medium') }}</span></div>
+            <div class="matrix-cell cell-val"><span class="val-text">{{ t('v1.medium') }}</span></div>
+            <div class="matrix-cell cell-val"><span class="val-text">{{ t('v3.fast') }}</span></div>
+            <div class="matrix-cell cell-val"><span class="val-text">{{ t('v3.slow') }}</span></div>
+            <div class="matrix-cell cell-val"><span class="val-text">{{ t('v3.fast') }}</span></div>
+            <div class="matrix-cell cell-val"><span class="val-text">{{ t('v3.variable') }}</span></div>
           </div>
 
           <!-- Row: Price transparency -->
-          <div class="matrix-row">
+          <div class="matrix-row row-alt">
             <div class="matrix-cell cell-param">
               <v-icon size="16" class="mr-2" color="grey-darken-1">mdi-eye-outline</v-icon>
-              <span>Price transparency</span>
+              <span>{{ t('v3.priceTransparency') }}</span>
             </div>
-            <div class="matrix-cell cell-val"><span class="val-text">Full</span></div>
-            <div class="matrix-cell cell-val"><span class="val-text">Full</span></div>
-            <div class="matrix-cell cell-val"><span class="val-text">Partial</span></div>
-            <div class="matrix-cell cell-val"><span class="val-text">Full</span></div>
-            <div class="matrix-cell cell-val"><span class="val-text">None</span></div>
-            <div class="matrix-cell cell-val"><span class="val-text">None</span></div>
+            <div class="matrix-cell cell-val"><span class="val-text">{{ t('v3.full') }}</span></div>
+            <div class="matrix-cell cell-val"><span class="val-text">{{ t('v3.full') }}</span></div>
+            <div class="matrix-cell cell-val"><span class="val-text">{{ t('v3.partial') }}</span></div>
+            <div class="matrix-cell cell-val"><span class="val-text">{{ t('v3.full') }}</span></div>
+            <div class="matrix-cell cell-val"><span class="val-text">{{ t('v3.none') }}</span></div>
+            <div class="matrix-cell cell-val"><span class="val-text">{{ t('v3.none') }}</span></div>
           </div>
 
           <!-- Footer: Savings potential -->
           <div class="matrix-row matrix-footer">
             <div class="matrix-cell cell-param">
               <v-icon size="16" class="mr-2" color="grey-darken-1">mdi-trending-down</v-icon>
-              <strong>Est. savings</strong>
+              <strong>{{ t('v3.estSavings') }}</strong>
             </div>
             <div class="matrix-cell cell-val">
               <div class="savings-meter">
@@ -218,6 +232,9 @@
 </template>
 
 <script setup lang="ts">
+import useTranslations from '~/composables/useTranslations'
+
+const { t } = useTranslations('decisiontree')
 const show = defineModel<boolean>({ default: false })
 </script>
 

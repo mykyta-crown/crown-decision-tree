@@ -23,11 +23,13 @@ export default function useTranslations(customRouteName = null) {
     // Remove locale suffix (e.g., 'dashboard___en' -> 'dashboard')
     const cleanName = routeName.replace(/___[a-z]{2}$/, '')
 
-    // Map nested auction routes to 'auctions' content file
+    // Map nested routes to their content file
     if (cleanName.startsWith('auctions-')) {
       return 'auctions'
     } else if (cleanName.startsWith('trainings-')) {
       return 'trainings'
+    } else if (cleanName.startsWith('decisionTree-') || cleanName === 'decisionTree') {
+      return 'decisiontree'
     }
     return cleanName
   })

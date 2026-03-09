@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { fmtDate } from '~/utils/decisionTree/formatting'
+import useTranslations from '~/composables/useTranslations'
+
+const { t } = useTranslations('decisiontree')
 
 interface ProjectState {
   lots?: any[]
@@ -22,10 +25,12 @@ interface Project {
 
 const props = defineProps<{
   project: Project
+  selected?: boolean
 }>()
 
 const emit = defineEmits<{
   click: []
+  toggleSelect: []
   toggleFavorite: []
   edit: []
   archive: []
@@ -80,7 +85,7 @@ function onMenuAction(action: 'edit' | 'archive' | 'duplicate' | 'delete') {
   <div class="project-row" @click="onRowClick">
     <!-- Col 1: Checkbox -->
     <div class="col-checkbox" @click.stop>
-      <v-checkbox hide-details density="compact" />
+      <v-checkbox :model-value="props.selected" hide-details density="compact" color="#1D1D1B" @update:model-value="emit('toggleSelect')" />
     </div>
 
     <!-- Col 2: Project name -->
@@ -141,17 +146,17 @@ function onMenuAction(action: 'edit' | 'archive' | 'duplicate' | 'delete') {
         </template>
         <v-list density="compact" min-width="180">
           <v-list-item prepend-icon="mdi-pencil-outline" @click="onMenuAction('edit')">
-            <v-list-item-title class="text-body-2">Edit</v-list-item-title>
+            <v-list-item-title class="text-body-2">{{ t('page.menuEdit') }}</v-list-item-title>
           </v-list-item>
           <v-list-item prepend-icon="mdi-archive-outline" @click="onMenuAction('archive')">
-            <v-list-item-title class="text-body-2">Archive</v-list-item-title>
+            <v-list-item-title class="text-body-2">{{ t('page.menuArchive') }}</v-list-item-title>
           </v-list-item>
           <v-list-item prepend-icon="mdi-content-copy" @click="onMenuAction('duplicate')">
-            <v-list-item-title class="text-body-2">Duplicate</v-list-item-title>
+            <v-list-item-title class="text-body-2">{{ t('page.menuDuplicate') }}</v-list-item-title>
           </v-list-item>
           <v-divider class="my-1" />
           <v-list-item prepend-icon="mdi-delete-outline" class="text-red" @click="onMenuAction('delete')">
-            <v-list-item-title class="text-body-2">Delete</v-list-item-title>
+            <v-list-item-title class="text-body-2">{{ t('page.menuDelete') }}</v-list-item-title>
           </v-list-item>
         </v-list>
       </v-menu>

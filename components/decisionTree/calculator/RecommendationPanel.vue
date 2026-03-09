@@ -3,6 +3,8 @@ import { computed } from 'vue'
 import { useCalculatorStore } from '~/stores/decisionTree/calculator'
 import { useProjectsStore } from '~/stores/decisionTree/projects'
 import { FC, gfc, noFC } from '~/utils/decisionTree/constants'
+import useTranslations from '~/composables/useTranslations'
+const { t } = useTranslations('decisiontree')
 
 const store = useCalculatorStore()
 const projectsStore = useProjectsStore()
@@ -26,23 +28,23 @@ interface LotCard {
 }
 
 function strategyDisplayName(rec: { family: string; tf: string; aw: string } | null): string {
-  if (!rec) return 'No suggestion'
+  if (!rec) return t('calc.rec.noSuggestion')
   const familyNames: Record<string, string> = {
-    English: 'English',
-    Dutch: 'Dutch',
-    'Sealed Bid': 'Sealed Bid',
-    Japanese: 'Japanese',
-    'Double Scenario': 'Double Scenario',
-    Traditional: 'Traditional Negotiation',
+    English: t('families.english'),
+    Dutch: t('families.dutch'),
+    'Sealed Bid': t('families.sealedBid'),
+    Japanese: t('families.japanese'),
+    'Double Scenario': t('families.doubleScenario'),
+    Traditional: t('families.traditional'),
   }
   const base = familyNames[rec.family] || rec.family
   if (rec.family === 'Traditional' || rec.family === 'Double Scenario') return base
 
   const tfLabels: Record<string, string> = {
-    'Fixed+Dynamic': 'Transfo',
-    Ceiling: 'Ceiling',
-    Preference: 'Preferred',
-    'Ceiling+Pref': 'Ceiling + Preferred',
+    'Fixed+Dynamic': t('calc.rec.transfo'),
+    Ceiling: t('calc.rec.ceiling'),
+    Preference: t('calc.rec.preferred'),
+    'Ceiling+Pref': t('calc.rec.ceilingPreferred'),
   }
 
   const parts = [base]
@@ -70,14 +72,14 @@ const lotCards = computed<LotCard[]>(() => {
     const supMismatch = store.mode === 'guided' && ok && filledCount < store.nSup
 
     const subtitle = !ok
-      ? 'Complete inputs'
+      ? t('calc.rec.completeInputs')
       : supMismatch
-        ? `${filledCount}/${store.nSup} suppliers filled`
+        ? t('calc.rec.suppliersFilled', { filled: filledCount, total: store.nSup })
         : isDouble
-          ? 'English and Dutch eAuctions'
+          ? t('calc.rec.englishAndDutch')
           : oc > 0
-            ? `${oc} other option${oc > 1 ? 's' : ''} available`
-            : 'Best match'
+            ? t('calc.rec.otherOptions', { count: oc })
+            : t('calc.rec.bestMatch')
 
     const bg = ok
       ? isDouble
@@ -113,7 +115,7 @@ const lotCards = computed<LotCard[]>(() => {
       lotId: lot.id,
       index: li,
       family: f,
-      displayName: ok ? strategyDisplayName(ti) : 'No suggestion',
+      displayName: ok ? strategyDisplayName(ti) : t('calc.rec.noSuggestion'),
       ok,
       isDouble,
       subtitle,
@@ -151,10 +153,10 @@ function seeDetails() {
 </script>
 
 <template>
-  <v-card variant="outlined" class="rec-panel pa-4">
+  <v-card variant="outlined" class="rec-panel pa-3">
     <div class="rec-header" :style="{ height: store.lotHeaderH ? (store.lotHeaderH - 17) + 'px' : 'auto' }">
-      <div class="rec-title">AI Recommendation</div>
-      <p class="rec-subtitle">Best fit strategy based on your lot inputs</p>
+      <div class="rec-title">{{ t('calc.rec.aiTitle') }}</div>
+      <p class="rec-subtitle">{{ t('calc.rec.aiSubtitle') }}</p>
     </div>
 
     <div class="rec-cards">
@@ -186,7 +188,7 @@ function seeDetails() {
       append-icon="mdi-arrow-right"
       @click="seeDetails"
     >
-      See details
+      {{ t('calc.rec.seeDetails') }}
     </v-btn>
   </v-card>
 </template>
@@ -247,13 +249,13 @@ function seeDetails() {
   opacity: 0.65;
 }
 .rec-title {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 700;
   color: #1D1D1B;
   margin-bottom: 2px;
 }
 .rec-subtitle {
-  font-size: 11px;
+  font-size: 10px;
   color: #8E8E8E;
   margin: 0;
   line-height: 1.3;

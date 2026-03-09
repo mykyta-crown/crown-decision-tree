@@ -3,7 +3,7 @@
     <v-card>
       <v-card-title class="d-flex align-center pa-5">
         <v-icon class="mr-2" size="22">mdi-waterfall</v-icon>
-        <span class="text-h6 font-weight-bold">Auction Selection Cascade</span>
+        <span class="text-h6 font-weight-bold">{{ t('v2.title') }}</span>
         <v-spacer />
         <v-btn icon variant="text" size="small" @click="show = false">
           <v-icon>mdi-close</v-icon>
@@ -14,7 +14,7 @@
       <v-card-text class="cascade-canvas pa-6">
         <div class="cascade-intro mb-5">
           <p class="text-body-2 text-grey-darken-1">
-            Start from the top. The first auction type whose conditions you meet is your best option.
+            {{ t('v2.intro') }}
           </p>
         </div>
 
@@ -22,26 +22,26 @@
         <div class="cascade-tier tier-double">
           <div class="tier-rank">1</div>
           <div class="tier-left">
-            <div class="tier-badge badge-double">Best savings</div>
-            <div class="tier-name">Double Scenario</div>
-            <div class="tier-desc">English + Dutch combined for maximum competition</div>
+            <div class="tier-badge badge-double">{{ t('v2.bestSavings') }}</div>
+            <div class="tier-name">{{ t('families.doubleScenario') }}</div>
+            <div class="tier-desc">{{ t('v2.dsDesc') }}</div>
           </div>
           <div class="tier-conditions">
             <div class="condition">
               <v-icon size="16" color="success">mdi-check-circle</v-icon>
-              <span>5+ qualified suppliers</span>
+              <span>{{ t('v2.cond5Suppliers') }}</span>
             </div>
             <div class="condition">
               <v-icon size="16" color="success">mdi-check-circle</v-icon>
-              <span>Simple, standardized specs</span>
+              <span>{{ t('v2.condSimpleSpecs') }}</span>
             </div>
             <div class="condition">
               <v-icon size="16" color="success">mdi-check-circle</v-icon>
-              <span>Multiple lots available</span>
+              <span>{{ t('v2.condMultipleLots') }}</span>
             </div>
             <div class="condition">
               <v-icon size="16" color="success">mdi-check-circle</v-icon>
-              <span>Suppliers accept real-time bidding</span>
+              <span>{{ t('v2.condRealTimeBidding') }}</span>
             </div>
           </div>
           <div class="tier-savings">
@@ -54,7 +54,7 @@
 
         <div class="cascade-arrow">
           <div class="arrow-line" />
-          <div class="arrow-tag">Conditions not met?</div>
+          <div class="arrow-tag">{{ t('v2.conditionsNotMet') }}</div>
           <div class="arrow-line" />
         </div>
 
@@ -62,21 +62,22 @@
         <div class="cascade-tier tier-english">
           <div class="tier-rank">2</div>
           <div class="tier-left">
-            <div class="tier-name">English Reverse</div>
-            <div class="tier-desc">Competitive price descent through live bidding</div>
+            <div class="tier-badge badge-english">{{ t('v2.mostFlexible') }}</div>
+            <div class="tier-name">{{ t('families.english') }}</div>
+            <div class="tier-desc">{{ t('v2.enDesc') }}</div>
           </div>
           <div class="tier-conditions">
             <div class="condition">
               <v-icon size="16" color="success">mdi-check-circle</v-icon>
-              <span>3+ qualified suppliers</span>
+              <span>{{ t('v2.cond3Suppliers') }}</span>
             </div>
             <div class="condition">
               <v-icon size="16" color="success">mdi-check-circle</v-icon>
-              <span>Suppliers accept real-time bidding</span>
+              <span>{{ t('v2.condRealTimeBidding') }}</span>
             </div>
             <div class="condition">
-              <v-icon size="16" color="grey-lighten-1">mdi-minus-circle</v-icon>
-              <span class="text-grey">Any complexity level</span>
+              <v-icon size="16" color="success">mdi-check-circle</v-icon>
+              <span>{{ t('v2.condAllOptions') }}</span>
             </div>
           </div>
           <div class="tier-savings">
@@ -89,7 +90,7 @@
 
         <div class="cascade-arrow">
           <div class="arrow-line" />
-          <div class="arrow-tag">Need different approach?</div>
+          <div class="arrow-tag">{{ t('v2.needDifferent') }}</div>
           <div class="arrow-line" />
         </div>
 
@@ -98,21 +99,21 @@
           <div class="cascade-tier tier-dutch">
             <div class="tier-rank">3</div>
             <div class="tier-left">
-              <div class="tier-name">Dutch</div>
-              <div class="tier-desc">Price descends from known starting point</div>
+              <div class="tier-name">{{ t('families.dutch') }}</div>
+              <div class="tier-desc">{{ t('v2.duDesc') }}</div>
             </div>
             <div class="tier-conditions">
               <div class="condition">
                 <v-icon size="16" color="success">mdi-check-circle</v-icon>
-                <span>Known market/starting price</span>
+                <span>{{ t('v2.condBindingAward') }}</span>
               </div>
               <div class="condition">
                 <v-icon size="16" color="success">mdi-check-circle</v-icon>
-                <span>3+ suppliers</span>
+                <span>{{ t('v2.condKnownPrice') }}</span>
               </div>
               <div class="condition">
                 <v-icon size="16" color="success">mdi-check-circle</v-icon>
-                <span>Speed is important</span>
+                <span>{{ t('v2.condSuppliersAvailable') }}</span>
               </div>
             </div>
             <div class="tier-savings">
@@ -126,21 +127,21 @@
           <div class="cascade-tier tier-japanese">
             <div class="tier-rank">3</div>
             <div class="tier-left">
-              <div class="tier-name">Japanese</div>
-              <div class="tier-desc">Price ascends, sellers exit when too high</div>
+              <div class="tier-name">{{ t('families.japanese') }}</div>
+              <div class="tier-desc">{{ t('v2.jpDesc') }}</div>
             </div>
             <div class="tier-conditions">
               <div class="condition">
-                <v-icon size="16" color="success">mdi-check-circle</v-icon>
-                <span>Unknown market price</span>
+                <v-icon size="16" color="warning">mdi-alert-circle</v-icon>
+                <span>{{ t('v2.condNoBinding') }}</span>
               </div>
               <div class="condition">
                 <v-icon size="16" color="success">mdi-check-circle</v-icon>
-                <span>3+ suppliers</span>
+                <span>{{ t('v2.condRanking') }}</span>
               </div>
               <div class="condition">
                 <v-icon size="16" color="success">mdi-check-circle</v-icon>
-                <span>Need price discovery</span>
+                <span>{{ t('v2.condSuppliersAvailable') }}</span>
               </div>
             </div>
             <div class="tier-savings">
@@ -154,7 +155,7 @@
 
         <div class="cascade-arrow">
           <div class="arrow-line" />
-          <div class="arrow-tag">Real-time not possible?</div>
+          <div class="arrow-tag">{{ t('v2.realTimeNotPossible') }}</div>
           <div class="arrow-line" />
         </div>
 
@@ -162,17 +163,17 @@
         <div class="cascade-tier tier-sealed">
           <div class="tier-rank">4</div>
           <div class="tier-left">
-            <div class="tier-name">Sealed Bid</div>
-            <div class="tier-desc">Single blind submission, no live interaction</div>
+            <div class="tier-name">{{ t('families.sealedBid') }}</div>
+            <div class="tier-desc">{{ t('v2.sbDesc') }}</div>
           </div>
           <div class="tier-conditions">
             <div class="condition">
               <v-icon size="16" color="success">mdi-check-circle</v-icon>
-              <span>3+ suppliers available</span>
+              <span>{{ t('v2.condSuppliersAvailable') }}</span>
             </div>
             <div class="condition">
               <v-icon size="16" color="warning">mdi-alert-circle</v-icon>
-              <span>Suppliers refuse live bidding</span>
+              <span>{{ t('v2.condRefuseLive') }}</span>
             </div>
           </div>
           <div class="tier-savings">
@@ -185,7 +186,7 @@
 
         <div class="cascade-arrow">
           <div class="arrow-line" />
-          <div class="arrow-tag">Not enough suppliers?</div>
+          <div class="arrow-tag">{{ t('v2.notEnoughSuppliers') }}</div>
           <div class="arrow-line" />
         </div>
 
@@ -193,17 +194,17 @@
         <div class="cascade-tier tier-nego">
           <div class="tier-rank">5</div>
           <div class="tier-left">
-            <div class="tier-name">Traditional Negotiation</div>
-            <div class="tier-desc">Direct discussions with available suppliers</div>
+            <div class="tier-name">{{ t('families.traditional') }}</div>
+            <div class="tier-desc">{{ t('v2.trDesc') }}</div>
           </div>
           <div class="tier-conditions">
             <div class="condition">
               <v-icon size="16" color="grey-lighten-1">mdi-minus-circle</v-icon>
-              <span class="text-grey">Fewer than 3 suppliers</span>
+              <span class="text-grey">{{ t('v2.condFewer3') }}</span>
             </div>
             <div class="condition">
               <v-icon size="16" color="grey-lighten-1">mdi-minus-circle</v-icon>
-              <span class="text-grey">No competitive tension possible</span>
+              <span class="text-grey">{{ t('v2.condNoCompetition') }}</span>
             </div>
           </div>
           <div class="tier-savings">
@@ -219,6 +220,9 @@
 </template>
 
 <script setup lang="ts">
+import useTranslations from '~/composables/useTranslations'
+
+const { t } = useTranslations('decisiontree')
 const show = defineModel<boolean>({ default: false })
 </script>
 
@@ -270,6 +274,11 @@ const show = defineModel<boolean>({ default: false })
 
 .badge-double {
   background: #F59E0B;
+  color: #FFF;
+}
+
+.badge-english {
+  background: #3B82F6;
   color: #FFF;
 }
 

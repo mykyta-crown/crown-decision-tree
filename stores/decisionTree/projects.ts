@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 
 export interface Project {
   id: number
@@ -71,6 +71,13 @@ export const useProjectsStore = defineStore('projects', () => {
   const userName = ref('')
   const loading = ref(false)
   const loaded = ref(false)
+
+  // ─── Pagination ───
+  const page = ref(1)
+  const pageSize = ref(20) // 20 | 50 | 100 | 0 (0 = all)
+
+  // ─── Selection ───
+  const selectedIds = ref<Set<number>>(new Set())
 
   // ─── Filters ───
   const dropdownFilters = ref<{
@@ -441,11 +448,77 @@ export const useProjectsStore = defineStore('projects', () => {
     return projects.value.find(p => p.id === id)
   }
 
+  // ─── Pagination ───
+  const totalPages = computed(() => {
+    if (!pageSize.value) return 1 // "All"
+    return Math.max(1, Math.ceil(visibleProjects.value.length / pageSize.value))
+  })
+
+  const paginatedProjects = computed(() => {
+    if (!pageSize.value) return visibleProjects.value // "All"
+    const start = (page.value - 1) * pageSize.value
+    return visibleProjects.value.slice(start, start + pageSize.value)
+  })
+
+  // Reset to page 1 when filters/search change
+  watch([search, dropdownFilters, sortBy], () => { page.value = 1 }, { deep: true })
+
+  // ─── Selection ───
+  function toggleSelect(id: number) {
+    const s = new Set(selectedIds.value)
+    if (s.has(id)) s.delete(id)
+    else s.add(id)
+    selectedIds.value = s
+  }
+
+  function selectAllVisible() {
+    const s = new Set(selectedIds.value)
+    paginatedProjects.value.forEach(p => s.add(p.id))
+    selectedIds.value = s
+  }
+
+  function deselectAll() {
+    selectedIds.value = new Set()
+  }
+
+  const allVisibleSelected = computed(() => {
+    if (paginatedProjects.value.length === 0) return false
+    return paginatedProjects.value.every(p => selectedIds.value.has(p.id))
+  })
+
+  const someVisibleSelected = computed(() => {
+    return paginatedProjects.value.some(p => selectedIds.value.has(p.id)) && !allVisibleSelected.value
+  })
+
+  async function bulkDelete() {
+    const ids = [...selectedIds.value]
+    if (!ids.length) return
+
+    const { error } = await getClient()
+      .from('dt_projects')
+      .update({ status: 'Archived' })
+      .in('id', ids)
+
+    if (!error) {
+      projects.value = projects.value.map(p =>
+        ids.includes(p.id) ? { ...p, status: 'Archived' } : p
+      )
+      selectedIds.value = new Set()
+      // Reset to last valid page if current page is now empty
+      if (page.value > totalPages.value) {
+        page.value = Math.max(1, totalPages.value)
+      }
+    }
+  }
+
   return {
     projects, search, listFilter, openMenuId, userName, loading, loaded,
     dropdownFilters, sortBy, activeFilterCount,
     uniqueOwners, uniqueStatuses, uniqueTypes, uniqueClients,
     allActive, visibleProjects, headerCount,
+    page, pageSize, totalPages, paginatedProjects,
+    selectedIds, allVisibleSelected, someVisibleSelected,
+    toggleSelect, selectAllVisible, deselectAll, bulkDelete,
     loadProjects, createProject, saveProject,
     deleteProject, archiveProject, duplicateProject, toggleFavorite, getProject,
     toggleSort, clearFilters,

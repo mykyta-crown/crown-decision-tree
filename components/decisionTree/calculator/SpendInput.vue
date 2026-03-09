@@ -60,12 +60,12 @@ function commit() {
 <style scoped>
 .spend-edit,
 .spend-display {
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 26px;
+  font-weight: 700;
   width: 140px;
-  height: 28px;
-  line-height: 28px;
-  text-align: right;
+  height: 34px;
+  line-height: 34px;
+  text-align: center;
   font-family: inherit;
   white-space: nowrap;
 }

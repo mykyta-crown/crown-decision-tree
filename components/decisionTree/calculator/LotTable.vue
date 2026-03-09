@@ -3,7 +3,9 @@ import { computed, ref, onMounted, onUpdated, nextTick } from 'vue'
 import { useCalculatorStore } from '~/stores/decisionTree/calculator'
 import { fmtE } from '~/utils/decisionTree/formatting'
 import { DEMO_PRESETS } from '~/utils/decisionTree/demo-presets'
+import useTranslations from '~/composables/useTranslations'
 
+const { t } = useTranslations('decisiontree')
 const store = useCalculatorStore()
 
 const isGuided = computed(() => store.mode === 'guided')
@@ -47,7 +49,7 @@ const tableWidth = computed(() => {
         <svg class="baseline-icon" width="14" height="14" viewBox="0 0 16 16" fill="none">
           <path d="M2 12L6 4l4 5 4-7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
-        <span class="baseline-label">Baseline</span>
+        <span class="baseline-label">{{ t('calc.lotTable.baseline') }}</span>
         <v-tooltip
           content-class="bg-white text-black border text-body-2"
           location="top left"
@@ -57,7 +59,7 @@ const tableWidth = computed(() => {
             <v-icon inline v-bind="tp" size="small" color="grey" icon="mdi-information-outline" class="ml-1 baseline-info" />
           </template>
           <template #default>
-            Average of active supplier unit prices, multiplied by quantity. This is the estimated total spend for each lot.
+            {{ t('calc.lotTable.baselineTooltip') }}
           </template>
         </v-tooltip>
         <span class="baseline-dot" />
@@ -67,7 +69,7 @@ const tableWidth = computed(() => {
 
     <!-- Scrollable table area -->
     <div class="table-scroll">
-      <table class="xl-table" :style="{ width: tableWidth }">
+      <table class="xl-table" :style="{ minWidth: tableWidth, width: '100%' }">
         <colgroup>
           <col class="col-num" />
           <col class="col-name" />
@@ -85,39 +87,39 @@ const tableWidth = computed(() => {
             <th class="grp grp--details grp--sticky-num">&nbsp;</th>
             <th class="grp grp--details grp--sticky-name" :style="{ left: stickyLeftName }">
               <div class="grp-inner">
-                <span class="grp-label">Lot Details</span>
+                <span class="grp-label">{{ t('calc.lotTable.lotDetails') }}</span>
                 <button
                   v-if="store.lots.length < 10"
                   class="grp-add-btn grp-add-btn--details"
-                  title="Add lot"
-                  aria-label="Add lot"
+                  :title="t('calc.lotTable.addLot')"
+                  :aria-label="t('calc.lotTable.addLot')"
                   @click.stop="store.addLot"
                 >
                   <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
                     <path d="M6 2v8M2 6h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
                   </svg>
-                  <span class="grp-add-label">Lot</span>
+                  <span class="grp-add-label">{{ t('calc.lotTable.addLot') }}</span>
                 </button>
               </div>
             </th>
             <th class="grp grp--details" :colspan="2">&nbsp;</th>
             <th class="grp grp--criteria" :colspan="isGuided ? 3 : 2">
-              <span class="grp-label">Criteria</span>
+              <span class="grp-label">{{ t('calc.lotTable.criteria') }}</span>
             </th>
             <th class="grp grp--suppliers" :colspan="store.sc">
               <div class="grp-inner">
-                <span class="grp-label">Supplier Offers</span>
+                <span class="grp-label">{{ t('calc.lotTable.supplierOffers') }}</span>
                 <button
                   v-if="store.sc < 20"
                   class="grp-add-btn grp-add-btn--suppliers"
-                  title="Add supplier"
-                  aria-label="Add supplier"
+                  :title="t('calc.lotTable.addSupplier')"
+                  :aria-label="t('calc.lotTable.addSupplier')"
                   @click.stop="store.addSupplier"
                 >
                   <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
                     <path d="M6 2v8M2 6h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
                   </svg>
-                  <span class="grp-add-label">Supplier</span>
+                  <span class="grp-add-label">{{ t('calc.lotTable.addSupplier') }}</span>
                 </button>
               </div>
             </th>
@@ -127,11 +129,11 @@ const tableWidth = computed(() => {
           <!-- Column sub-headers -->
           <tr>
             <th class="xl-th xl-th--num xl-th--sticky-num">#</th>
-            <th class="xl-th xl-th--name xl-th--sticky-name" :style="{ left: stickyLeftName }">Lot name</th>
-            <th class="xl-th">Unit</th>
-            <th class="xl-th">Qty</th>
+            <th class="xl-th xl-th--name xl-th--sticky-name" :style="{ left: stickyLeftName }">{{ t('calc.lotTable.lotName') }}</th>
+            <th class="xl-th">{{ t('calc.lotTable.unit') }}</th>
+            <th class="xl-th">{{ t('calc.lotTable.qty') }}</th>
             <th class="xl-th xl-th--crit">
-              Preference
+              {{ t('calc.lotTable.preference') }}
               <v-tooltip
                 content-class="bg-white text-black border text-body-2"
                 location="top left"
@@ -141,14 +143,14 @@ const tableWidth = computed(() => {
                   <v-icon inline v-bind="tp" size="small" color="grey" icon="mdi-information-outline" class="ml-1" />
                 </template>
                 <template #default>
-                  <div><b>None</b> — Price only, no preference.</div>
-                  <div><b>Non-financial</b> — Qualitative criteria considered.</div>
-                  <div><b>Financial</b> — Price-based preference applied.</div>
+                  <div>{{ t('calc.lotTable.prefTooltipNone') }}</div>
+                  <div>{{ t('calc.lotTable.prefTooltipNonFin') }}</div>
+                  <div>{{ t('calc.lotTable.prefTooltipFinancial') }}</div>
                 </template>
               </v-tooltip>
             </th>
             <th class="xl-th xl-th--crit">
-              Intensity
+              {{ t('calc.lotTable.intensity') }}
               <v-tooltip
                 content-class="bg-white text-black border text-body-2"
                 location="top left"
@@ -158,12 +160,12 @@ const tableWidth = computed(() => {
                   <v-icon inline v-bind="tp" size="small" color="grey" icon="mdi-information-outline" class="ml-1" />
                 </template>
                 <template #default>
-                  Competition level for this lot (0–100%). Higher values indicate stronger competitive pressure, influencing which auction types are recommended.
+                  {{ t('calc.lotTable.intensityTooltip') }}
                 </template>
               </v-tooltip>
             </th>
             <th v-if="isGuided" class="xl-th xl-th--crit">
-              Awarding
+              {{ t('calc.lotTable.awarding') }}
               <v-tooltip
                 content-class="bg-white text-black border text-body-2"
                 location="top left"
@@ -173,9 +175,9 @@ const tableWidth = computed(() => {
                   <v-icon inline v-bind="tp" size="small" color="grey" icon="mdi-information-outline" class="ml-1" />
                 </template>
                 <template #default>
-                  <div><b>Award</b> — Best price wins the lot.</div>
-                  <div><b>Rank</b> — Suppliers are ranked, no binding commitment.</div>
-                  <div><b>No Rank</b> — No ranking, used for market testing.</div>
+                  <div>{{ t('calc.lotTable.awardTooltipAward') }}</div>
+                  <div>{{ t('calc.lotTable.awardTooltipRank') }}</div>
+                  <div>{{ t('calc.lotTable.awardTooltipNoRank') }}</div>
                 </template>
               </v-tooltip>
             </th>
@@ -220,7 +222,7 @@ const tableWidth = computed(() => {
               <input
                 type="text"
                 :value="lot.name"
-                placeholder="Lot name"
+                :placeholder="t('calc.lotTable.lotName')"
                 class="xl-input"
                 @input="store.updateLot(li, 'name', ($event.target as HTMLInputElement).value)"
                 @click.stop
@@ -263,9 +265,9 @@ const tableWidth = computed(() => {
                 @click.stop
                 @focus="store.selLot = li"
               >
-                <option :value="1">None</option>
-                <option :value="2">Non-financial</option>
-                <option :value="3">Financial</option>
+                <option :value="1">{{ t('calc.lotTable.prefNone') }}</option>
+                <option :value="2">{{ t('calc.lotTable.prefNonFin') }}</option>
+                <option :value="3">{{ t('calc.lotTable.prefFinancial') }}</option>
               </select>
             </td>
             <td class="xl-td xl-td--crit">
@@ -296,9 +298,9 @@ const tableWidth = computed(() => {
                 @click.stop
                 @focus="store.selLot = li"
               >
-                <option :value="1">Award</option>
-                <option :value="2">Rank</option>
-                <option :value="3">No Rank</option>
+                <option :value="1">{{ t('calc.lotTable.awardAward') }}</option>
+                <option :value="2">{{ t('calc.lotTable.awardRank') }}</option>
+                <option :value="3">{{ t('calc.lotTable.awardNoRank') }}</option>
               </select>
             </td>
 
@@ -337,9 +339,9 @@ const tableWidth = computed(() => {
                 tabindex="-1"
                 @click.stop="store.removeLot(li)"
               >
-                <svg width="11" height="12" viewBox="0 0 16 18" fill="none">
-                  <path d="M1 4h14M5.5 4V2.5A1.5 1.5 0 0 1 7 1h2a1.5 1.5 0 0 1 1.5 1.5V4m2 0v11a2 2 0 0 1-2 2H5.5a2 2 0 0 1-2-2V4h9Z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M6.5 8v5M9.5 8v5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+                <svg width="14" height="15" viewBox="0 0 16 18" fill="none">
+                  <path d="M1 4h14M5.5 4V2.5A1.5 1.5 0 0 1 7 1h2a1.5 1.5 0 0 1 1.5 1.5V4m2 0v11a2 2 0 0 1-2 2H5.5a2 2 0 0 1-2-2V4h9Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M6.5 8v5M9.5 8v5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                 </svg>
               </button>
             </td>
@@ -352,7 +354,7 @@ const tableWidth = computed(() => {
     <div class="table-footer">
       <div class="table-footer-spacer" />
       <div class="demo-presets">
-        <span class="demo-label">Quick fill:</span>
+        <span class="demo-label">{{ t('calc.lotTable.quickFill') }}</span>
         <v-btn
           v-for="p in DEMO_PRESETS"
           :key="p.id"
@@ -373,6 +375,9 @@ const tableWidth = computed(() => {
 .lot-table-card {
   padding: 0;
   overflow: hidden;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 /* ─── Top bar ─── */
@@ -386,13 +391,13 @@ const tableWidth = computed(() => {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 5px 14px 5px 10px;
-  border-radius: 20px;
-  background: linear-gradient(135deg, #F0FDF4 0%, #ECFDF5 100%);
-  border: 1px solid #A7F3D0;
+  padding: 6px 14px 6px 10px;
+  border-radius: 6px;
+  background: #F9FAFB;
+  border: 1px solid #E5E7EB;
 }
 .baseline-icon {
-  color: #10B981;
+  color: #6B7280;
   flex-shrink: 0;
 }
 .baseline-label {
@@ -411,12 +416,12 @@ const tableWidth = computed(() => {
 .baseline-value {
   font-size: 14px;
   font-weight: 700;
-  color: #065F46;
+  color: #1D1D1B;
   font-variant-numeric: tabular-nums;
 }
 .baseline-info {
   cursor: help;
-  opacity: 0.5;
+  opacity: 0.4;
   transition: opacity 0.15s;
 }
 .baseline-info:hover {
@@ -581,16 +586,24 @@ const tableWidth = computed(() => {
 
 /* ─── Table scroll ─── */
 .table-scroll {
-  overflow-x: auto;
+  flex: 1;
+  overflow-x: scroll;
   scrollbar-width: thin;
-  scrollbar-color: #D0D0D0 transparent;
+  scrollbar-color: #C0C0C0 #F3F4F6;
 }
 .table-scroll::-webkit-scrollbar {
-  height: 5px;
+  height: 8px;
+}
+.table-scroll::-webkit-scrollbar-track {
+  background: #F3F4F6;
+  border-radius: 4px;
 }
 .table-scroll::-webkit-scrollbar-thumb {
-  background: #D0D0D0;
-  border-radius: 3px;
+  background: #C0C0C0;
+  border-radius: 4px;
+}
+.table-scroll::-webkit-scrollbar-thumb:hover {
+  background: #A0A0A0;
 }
 
 /* ─── Excel-like table ─── */
@@ -598,19 +611,18 @@ const tableWidth = computed(() => {
   border-collapse: separate;
   border-spacing: 0;
   font-size: 13px;
-  table-layout: fixed;
 }
 
 /* ─── Column widths ─── */
-.col-num { width: 32px; }
-.col-name { width: 180px; }
-.col-unit { width: 80px; }
-.col-qty { width: 80px; }
-.col-pref { width: 120px; }
-.col-intens { width: 130px; }
-.col-award { width: 110px; }
-.col-sup { width: 110px; }
-.col-del { width: 28px; }
+.col-num { width: 32px; min-width: 32px; }
+.col-name { width: 180px; min-width: 180px; }
+.col-unit { width: 80px; min-width: 80px; }
+.col-qty { width: 80px; min-width: 80px; }
+.col-pref { width: 120px; min-width: 120px; }
+.col-intens { width: 130px; min-width: 130px; }
+.col-award { width: 110px; min-width: 110px; }
+.col-sup { width: 110px; min-width: 110px; }
+.col-del { width: 36px; min-width: 36px; }
 
 /* ─── Header ─── */
 .xl-th {
@@ -725,6 +737,7 @@ const tableWidth = computed(() => {
 }
 .xl-td--del {
   padding: 4px 0;
+  text-align: center;
 }
 
 /* ─── Inputs ─── */
@@ -908,21 +921,21 @@ const tableWidth = computed(() => {
   background: none;
   border: none;
   cursor: pointer;
-  padding: 2px;
-  display: flex;
+  padding: 6px;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: #CCCCCC;
-  opacity: 0.5;
-  transition: opacity 0.12s, color 0.12s;
+  color: #9CA3AF;
+  transition: color 0.12s, transform 0.12s;
+  margin: 0 auto;
 }
 .del-btn:disabled {
   cursor: default;
-  opacity: 0.15;
+  color: #E5E7EB;
 }
 .del-btn:not(:disabled):hover {
-  opacity: 1;
   color: #EF4444;
+  transform: scale(1.15);
 }
 
 /* ─── Footer ─── */

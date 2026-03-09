@@ -1,6 +1,12 @@
 <template>
   <div class="chart-container">
     <svg viewBox="0 0 280 130" fill="none">
+      <defs>
+        <marker id="axisArrowDS" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+          <path d="M0 1 L5 3 L0 5" fill="#D1D5DB" />
+        </marker>
+      </defs>
+
       <!-- Phase divider -->
       <line x1="140" y1="18" x2="140" y2="112" stroke="#D1D5DB" stroke-width="0.8" stroke-dasharray="3 3" />
 
@@ -11,12 +17,13 @@
       <rect x="158" y="4" width="68" height="14" rx="4" fill="#F5F3FF" />
       <text x="192" y="14" text-anchor="middle" class="phase-label" fill="#5B21B6">Phase 2: Dutch</text>
 
-      <!-- Y-axis -->
-      <line x1="18" y1="22" x2="18" y2="112" stroke="#E5E7EB" stroke-width="0.6" />
-      <text x="6" y="24" class="axis-label">Price</text>
+      <!-- Y-axis with arrow -->
+      <line x1="18" y1="112" x2="18" y2="18" stroke="#E5E7EB" stroke-width="0.6" marker-end="url(#axisArrowDS)" />
+      <text x="14" y="16" class="axis-label" text-anchor="end">Price</text>
 
-      <!-- X-axis -->
-      <line x1="18" y1="112" x2="268" y2="112" stroke="#E5E7EB" stroke-width="0.6" />
+      <!-- X-axis with arrow -->
+      <line x1="18" y1="112" x2="272" y2="112" stroke="#E5E7EB" stroke-width="0.6" marker-end="url(#axisArrowDS)" />
+      <text x="266" y="124" class="axis-label" text-anchor="end">Time</text>
 
       <!-- Grid -->
       <line x1="18" y1="46" x2="268" y2="46" stroke="#F3F4F6" stroke-width="0.4" stroke-dasharray="2 3" />
@@ -65,16 +72,12 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-
-const props = withDefaults(defineProps<{
+withDefaults(defineProps<{
   color: string
   ccy?: string
 }>(), {
   ccy: 'EUR',
 })
-
-const pL = computed(() => `Price (${props.ccy})`)
 </script>
 
 <style scoped>

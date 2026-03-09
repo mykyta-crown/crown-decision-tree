@@ -1,12 +1,29 @@
 <template>
   <div class="chart-container">
     <svg viewBox="0 0 280 130" fill="none">
-      <!-- Y-axis -->
-      <text x="8" y="20" class="axis-label">{{ pL }}</text>
-      <line x1="28" y1="14" x2="28" y2="112" stroke="#E5E7EB" stroke-width="0.8" />
+      <!-- Axis arrows -->
+      <defs>
+        <marker id="axisArrowEn" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+          <path d="M0 1 L5 3 L0 5" fill="#D1D5DB" />
+        </marker>
+        <marker id="arrowA" markerWidth="6" markerHeight="5" refX="6" refY="2.5" orient="auto">
+          <path d="M0 0 L6 2.5 L0 5" :fill="color" />
+        </marker>
+        <marker id="arrowB" markerWidth="6" markerHeight="5" refX="6" refY="2.5" orient="auto">
+          <path d="M0 0 L6 2.5 L0 5" fill="#9CA3AF" />
+        </marker>
+        <marker id="arrowC" markerWidth="6" markerHeight="5" refX="6" refY="2.5" orient="auto">
+          <path d="M0 0 L6 2.5 L0 5" fill="#6B7280" />
+        </marker>
+      </defs>
 
-      <!-- X-axis -->
-      <line x1="28" y1="112" x2="250" y2="112" stroke="#E5E7EB" stroke-width="0.8" />
+      <!-- Y-axis with arrow -->
+      <line x1="28" y1="112" x2="28" y2="10" stroke="#E5E7EB" stroke-width="0.8" marker-end="url(#axisArrowEn)" />
+      <text x="24" y="8" class="axis-label" text-anchor="end">Price</text>
+
+      <!-- X-axis with arrow -->
+      <line x1="28" y1="112" x2="254" y2="112" stroke="#E5E7EB" stroke-width="0.8" marker-end="url(#axisArrowEn)" />
+      <text x="248" y="124" class="axis-label" text-anchor="end">Time</text>
 
       <!-- Grid lines -->
       <line x1="28" y1="36" x2="250" y2="36" stroke="#F3F4F6" stroke-width="0.5" stroke-dasharray="3 3" />
@@ -52,34 +69,17 @@
       <rect x="208" y="44" width="48" height="12" rx="6" fill="#F3F4F6" />
       <circle cx="215" cy="50" r="2.5" fill="#6B7280" />
       <text x="220" y="53" class="legend-text">Supplier C</text>
-
-      <!-- Arrow markers -->
-      <defs>
-        <marker id="arrowA" markerWidth="6" markerHeight="5" refX="6" refY="2.5" orient="auto">
-          <path d="M0 0 L6 2.5 L0 5" :fill="color" />
-        </marker>
-        <marker id="arrowB" markerWidth="6" markerHeight="5" refX="6" refY="2.5" orient="auto">
-          <path d="M0 0 L6 2.5 L0 5" fill="#9CA3AF" />
-        </marker>
-        <marker id="arrowC" markerWidth="6" markerHeight="5" refX="6" refY="2.5" orient="auto">
-          <path d="M0 0 L6 2.5 L0 5" fill="#6B7280" />
-        </marker>
-      </defs>
     </svg>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-
-const props = withDefaults(defineProps<{
+withDefaults(defineProps<{
   color: string
   ccy?: string
 }>(), {
   ccy: 'EUR',
 })
-
-const pL = computed(() => `Price (${props.ccy})`)
 </script>
 
 <style scoped>

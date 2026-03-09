@@ -1,12 +1,18 @@
 <template>
   <div class="chart-container">
     <svg viewBox="0 0 280 130" fill="none">
-      <!-- Y-axis -->
-      <text x="8" y="20" class="axis-label">{{ pL }}</text>
-      <line x1="28" y1="14" x2="28" y2="112" stroke="#E5E7EB" stroke-width="0.8" />
+      <defs>
+        <marker id="axisArrowJp" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+          <path d="M0 1 L5 3 L0 5" fill="#D1D5DB" />
+        </marker>
+      </defs>
 
-      <!-- X-axis -->
-      <line x1="28" y1="112" x2="250" y2="112" stroke="#E5E7EB" stroke-width="0.8" />
+      <!-- Y-axis with arrow -->
+      <line x1="28" y1="112" x2="28" y2="10" stroke="#E5E7EB" stroke-width="0.8" marker-end="url(#axisArrowJp)" />
+      <text x="24" y="8" class="axis-label" text-anchor="end">Price</text>
+
+      <!-- X-axis with arrow -->
+      <line x1="28" y1="112" x2="254" y2="112" stroke="#E5E7EB" stroke-width="0.8" marker-end="url(#axisArrowJp)" />
 
       <!-- Round labels -->
       <text x="56" y="124" class="round-label">R1</text>
@@ -58,25 +64,21 @@
       <circle cx="182" cy="72" r="6" fill="none" stroke="#16A34A" stroke-width="1.5" />
       <text x="182" y="66" text-anchor="middle" class="winner-text">Last standing</text>
 
-      <!-- Down arrow -->
-      <path d="M260 20 L260 100" stroke="#D1D5DB" stroke-width="0.8" />
-      <path d="M257 94 L260 100 L263 94" fill="none" stroke="#D1D5DB" stroke-width="0.8" stroke-linecap="round" />
-      <text x="260" y="16" text-anchor="middle" class="arrow-label">Price</text>
+      <!-- Down arrow annotation -->
+      <path d="M262 20 L262 100" stroke="#D1D5DB" stroke-width="0.8" />
+      <path d="M259 94 L262 100 L265 94" fill="none" stroke="#D1D5DB" stroke-width="0.8" stroke-linecap="round" />
+      <text x="262" y="16" text-anchor="middle" class="arrow-label">Price drops</text>
     </svg>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-
-const props = withDefaults(defineProps<{
+withDefaults(defineProps<{
   color: string
   ccy?: string
 }>(), {
   ccy: 'EUR',
 })
-
-const pL = computed(() => `Price (${props.ccy})`)
 </script>
 
 <style scoped>

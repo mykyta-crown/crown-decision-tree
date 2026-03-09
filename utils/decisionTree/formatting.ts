@@ -4,7 +4,7 @@ const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', '
 
 export function fmtE(n: number, c?: string): string {
   const s = (c && CCY[c]?.sym) || '€'
-  return n ? s + n.toLocaleString('en-US') : s + '0'
+  return n ? s + Math.round(n).toLocaleString('en-US') : s + '0'
 }
 
 export function fmtDate(iso: string | null | undefined): string {

@@ -36,7 +36,7 @@
       append-icon="mdi-arrow-right"
       @click="goNext"
     >
-      Next step
+      {{ t('calc.phase1.nextStep') }}
     </v-btn>
   </v-card>
 </template>
@@ -44,6 +44,8 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useCalculatorStore } from '~/stores/decisionTree/calculator'
+import useTranslations from '~/composables/useTranslations'
+const { t } = useTranslations('decisiontree')
 
 const store = useCalculatorStore()
 
@@ -56,34 +58,34 @@ interface StatusConfig {
   dc: string
 }
 
-const configs: Record<string, StatusConfig> = {
+const configs = computed<Record<string, StatusConfig>>(() => ({
   setup: {
     bgColor: 'grey-ligthen-3',
     br: '#E9EAEC',
-    t: 'Criteria configuration',
-    d: 'Input your event details to unlock negotiation recommendation',
+    t: t('calc.phase1.verdictWaitTitle'),
+    d: t('calc.phase1.verdictWaitDesc'),
     tc: '#1D1D1B',
     dc: '#61615F',
   },
   notRec: {
     bgColor: 'red-light',
     br: '#FECDD3',
-    t: 'eAuction not recommended',
-    d: "Your current setup doesn't require an eAuction. A traditional negotiation is recommended",
+    t: t('calc.phase1.verdictStopTitle'),
+    d: t('calc.phase1.verdictStopDesc'),
     tc: '#881337',
     dc: '#BE123C',
   },
   eligible: {
     bgColor: 'green-light',
     br: '#86EFAC',
-    t: 'Eligible for eAuction',
-    d: 'Your event is suited for an eAuction. Continue to the next step to configure your lot(s).',
+    t: t('calc.phase1.verdictPerfTitle'),
+    d: t('calc.phase1.verdictPerfDesc'),
     tc: '#1D1D1B',
     dc: '#166534',
   },
-}
+}))
 
-const cfg = computed(() => configs[store.status] || configs.setup)
+const cfg = computed(() => configs.value[store.status] || configs.value.setup)
 
 function goNext() {
   store.phase = 2

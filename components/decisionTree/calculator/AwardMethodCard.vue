@@ -7,10 +7,10 @@
   >
     <div class="mb-1">
       <div class="d-flex align-center ga-2 mb-1">
-        <span class="text-subtitle-1 font-weight-bold">Award method</span>
+        <span class="text-subtitle-1 font-weight-bold">{{ t('calc.award.title') }}</span>
         <v-icon size="14" color="grey-ligthen-1">mdi-information-outline</v-icon>
       </div>
-      <p class="text-caption text-grey-darken-1 mb-4">Choose how the winner will be selected</p>
+      <p class="text-caption text-grey-darken-1 mb-4">{{ t('calc.award.desc') }}</p>
     </div>
     <div class="flex-grow-1 d-flex flex-column justify-center ga-2">
       <v-card
@@ -37,15 +37,18 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
+import useTranslations from '~/composables/useTranslations'
 import { useCalculatorStore } from '~/stores/decisionTree/calculator'
 
+const { t } = useTranslations('decisiontree')
 const store = useCalculatorStore()
 
-const options = [
-  { v: 1, t: 'Award from eAuction results', d: 'Winner is selected based on the results' },
-  { v: 2, t: 'Ranking only', d: 'Final award is decided later' },
-  { v: 3, t: 'No rank and post reward', d: 'Final award is decided later' },
-]
+const options = computed(() => [
+  { v: 1, t: t('calc.award.opt1Title'), d: t('calc.award.opt1Desc') },
+  { v: 2, t: t('calc.award.opt2Title'), d: t('calc.award.opt2Desc') },
+  { v: 3, t: t('calc.award.opt3Title'), d: t('calc.award.opt3Desc') },
+])
 </script>
 
 <style scoped>

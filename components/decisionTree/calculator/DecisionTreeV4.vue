@@ -8,8 +8,8 @@
             <v-icon size="20" color="white">mdi-tune-variant</v-icon>
           </div>
           <div>
-            <div class="dt4-title">Quick Selector</div>
-            <div class="dt4-sub">Select criteria to find the best auction type</div>
+            <div class="dt4-title">{{ t('v4.title') }}</div>
+            <div class="dt4-sub">{{ t('v4.subtitle') }}</div>
           </div>
         </div>
         <div class="d-flex align-center ga-2">
@@ -21,7 +21,7 @@
             prepend-icon="mdi-restart"
             @click="reset"
           >
-            Reset
+            {{ t('v4.reset') }}
           </v-btn>
           <v-btn icon variant="text" size="small" @click="show = false">
             <v-icon>mdi-close</v-icon>
@@ -60,21 +60,21 @@
             <div class="result-divider" />
             <div class="result-label">
               <v-icon size="16" class="mr-1">mdi-check-decagram</v-icon>
-              Best match
+              {{ t('v4.bestMatch') }}
             </div>
 
             <div class="result-card" :style="{ background: topColor.bg, borderColor: topColor.border }">
               <div class="result-accent" :style="{ background: topColor.border }" />
               <div class="result-main">
                 <div class="result-title" :style="{ color: topColor.text }">{{ topResult.displayName }}</div>
-                <div class="result-pct">{{ topResult.pctMatch }}% match</div>
+                <div class="result-pct">{{ topResult.pctMatch }}% {{ t('v4.match') }}</div>
                 <div class="result-stats">
                   <div class="result-stat">
-                    <span class="stat-label">Savings</span>
+                    <span class="stat-label">{{ t('v4.savingsLabel') }}</span>
                     <span class="stat-value">{{ topResult.saving }}%</span>
                   </div>
                   <div class="result-stat">
-                    <span class="stat-label">Family</span>
+                    <span class="stat-label">{{ t('v4.familyLabel') }}</span>
                     <span class="stat-value">{{ topResult.family }}</span>
                   </div>
                 </div>
@@ -106,7 +106,7 @@
               <path d="M14 20h12M20 14v12" stroke="#D1D5DB" stroke-width="2" stroke-linecap="round" />
             </svg>
           </div>
-          <div class="empty-text">Select at least one criterion to see recommendations</div>
+          <div class="empty-text">{{ t('v4.emptyState') }}</div>
         </div>
       </div>
     </v-card>
@@ -118,7 +118,9 @@ import { ref, computed, watch } from 'vue'
 import { useCalculatorStore } from '~/stores/decisionTree/calculator'
 import { getScores, Q_OPTS, type ScoreResult } from '~/utils/decisionTree/scoring-engine'
 import { FC, gfc } from '~/utils/decisionTree/constants'
+import useTranslations from '~/composables/useTranslations'
 
+const { t, pageTranslations } = useTranslations('decisiontree')
 const show = defineModel<boolean>({ default: false })
 const store = useCalculatorStore()
 
@@ -126,14 +128,14 @@ interface DisplayResult extends ScoreResult {
   displayName: string
 }
 
-const questions = [
-  { label: 'Spend', icon: '💰', hint: 'Total budget for this category', options: Q_OPTS[0] },
-  { label: 'Suppliers', icon: '👥', hint: 'Number of qualified suppliers', options: Q_OPTS[1] },
-  { label: 'Awarding', icon: '🏆', hint: 'How do you want to decide?', options: Q_OPTS[2] },
-  { label: 'Preference', icon: '⚖️', hint: 'Preference for incumbents?', options: Q_OPTS[3] },
-  { label: 'Intensity', icon: '🔥', hint: 'Level of competitive pressure', options: Q_OPTS[4] },
-  { label: 'Price Gap', icon: '📊', hint: 'Spread between best offers', options: Q_OPTS[5] },
-]
+const questions = computed(() => [
+  { label: t('v4.spend'), icon: '💰', hint: t('v4.spendHint'), options: pageTranslations.value?.v4?.spendOpts || Q_OPTS[0] },
+  { label: t('v4.suppliers'), icon: '👥', hint: t('v4.suppliersHint'), options: pageTranslations.value?.v4?.suppliersOpts || Q_OPTS[1] },
+  { label: t('v4.awarding'), icon: '🏆', hint: t('v4.awardingHint'), options: pageTranslations.value?.v4?.awardingOpts || Q_OPTS[2] },
+  { label: t('v4.preferenceQ'), icon: '⚖️', hint: t('v4.preferenceHint'), options: pageTranslations.value?.v4?.preferenceOpts || Q_OPTS[3] },
+  { label: t('v4.intensity'), icon: '🔥', hint: t('v4.intensityHint'), options: pageTranslations.value?.v4?.intensityOpts || Q_OPTS[4] },
+  { label: t('v4.priceGap'), icon: '📊', hint: t('v4.priceGapHint'), options: pageTranslations.value?.v4?.priceGapOpts || Q_OPTS[5] },
+])
 
 // Selection state: 0 = not selected, 1-3 = option index
 const sel = ref<number[]>([0, 0, 0, 0, 0, 0])
@@ -149,13 +151,16 @@ function reset() {
   sel.value = [0, 0, 0, 0, 0, 0]
 }
 
-const familyNames: Record<string, string> = {
-  English: 'English',
-  Dutch: 'Dutch',
-  'Sealed Bid': 'Sealed Bid',
-  Japanese: 'Japanese',
-  'Double Scenario': 'Double Scenario',
-  Traditional: 'Traditional Negotiation',
+function getFamilyName(family: string): string {
+  const map: Record<string, string> = {
+    English: t('families.english'),
+    Dutch: t('families.dutch'),
+    'Sealed Bid': t('families.sealedBid'),
+    Japanese: t('families.japanese'),
+    'Double Scenario': t('families.doubleScenario'),
+    Traditional: t('families.traditional'),
+  }
+  return map[family] || family
 }
 
 const tfLabels: Record<string, string> = {
@@ -166,7 +171,7 @@ const tfLabels: Record<string, string> = {
 }
 
 function buildDisplayName(r: ScoreResult): string {
-  const base = familyNames[r.family] || r.family
+  const base = getFamilyName(r.family)
   if (r.family === 'Traditional' || r.family === 'Double Scenario') return base
   const parts = [base]
   if (r.tf && r.tf !== 'None' && r.tf !== '—') parts.push(tfLabels[r.tf] || r.tf)

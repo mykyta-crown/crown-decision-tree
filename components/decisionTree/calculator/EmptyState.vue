@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import useTranslations from '~/composables/useTranslations'
+const { t } = useTranslations('decisiontree')
+
 const emit = defineEmits<{
   create: []
 }>()
@@ -33,12 +36,10 @@ function onCreate() {
       </div>
     </div>
 
-    <h2 class="empty-title">Welcome to Crown</h2>
+    <h2 class="empty-title">{{ t('calc.empty.title') }}</h2>
 
     <p class="empty-description">
-      You don't have any eAuction projects yet. Create your first project to get
-      started with auction strategy recommendations powered by Crown's scoring
-      engine.
+      {{ t('calc.empty.desc') }}
     </p>
 
     <v-btn
@@ -48,7 +49,7 @@ function onCreate() {
       size="large"
       @click="onCreate"
     >
-      New Scenario
+      {{ t('calc.empty.newScenario') }}
     </v-btn>
   </div>
 </template>

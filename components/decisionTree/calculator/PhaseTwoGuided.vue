@@ -18,17 +18,19 @@
 .phase2-layout {
   display: flex;
   gap: 24px;
-  align-items: flex-start;
+  align-items: stretch;
 }
 
 .phase2-table {
   flex: 1;
   min-width: 0;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .phase2-panel {
-  width: 220px;
+  width: 190px;
   flex-shrink: 0;
 }
 </style>

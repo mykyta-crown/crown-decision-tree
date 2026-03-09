@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="show" max-width="1500" scrollable>
+  <v-dialog v-model="show" max-width="1460" scrollable>
     <v-card class="dt-card" rounded="lg">
       <!-- Header -->
       <div class="dt-header">
@@ -8,184 +8,201 @@
             <v-icon size="20" color="white">mdi-file-tree</v-icon>
           </div>
           <div>
-            <div class="dt-title">Negotiation Scenarios</div>
-            <div class="dt-sub">Decision tree overview</div>
+            <div class="dt-title">{{ t('v1.title') }}</div>
+            <div class="dt-sub">{{ t('v1.subtitle') }}</div>
           </div>
         </div>
-        <v-btn icon variant="text" size="small" @click="show = false">
-          <v-icon>mdi-close</v-icon>
-        </v-btn>
+        <div class="d-flex align-center ga-3">
+          <div class="dt-legend">
+            <span class="legend-tag legend-tag--high">{{ t('v1.mostRecommended') }}</span>
+            <span class="legend-arrow">→</span>
+            <span class="legend-tag legend-tag--low">{{ t('v1.leastRecommended') }}</span>
+          </div>
+          <v-btn icon variant="text" size="small" @click="show = false">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+        </div>
       </div>
 
       <!-- Canvas -->
       <div class="dt-canvas-wrap">
         <div class="dt-canvas">
-          <!-- SVG connection lines -->
-          <svg class="dt-svg" viewBox="0 0 1400 820" fill="none" preserveAspectRatio="xMidYMid meet">
-            <defs>
-              <marker id="dt1-arrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
-                <path d="M0 0 L8 3 L0 6 Z" fill="#1D1D1B" />
-              </marker>
-            </defs>
-
-            <!-- Left conditions → Double Scenario -->
-            <path d="M130 230 L100 290" stroke="#1D1D1B" stroke-width="1.2" stroke-dasharray="6 4" marker-end="url(#dt1-arrow)" />
-
-            <!-- Left conditions → English chart area -->
-            <path d="M350 230 L350 310" stroke="#1D1D1B" stroke-width="1.2" stroke-dasharray="6 4" marker-end="url(#dt1-arrow)" />
-
-            <!-- English card → Center conditions -->
-            <path d="M430 420 Q480 380 510 360" stroke="#1D1D1B" stroke-width="1.2" stroke-dasharray="6 4" marker-end="url(#dt1-arrow)" />
-
-            <!-- Center conditions → Dutch -->
-            <path d="M600 310 Q630 270 660 240" stroke="#1D1D1B" stroke-width="1.2" stroke-dasharray="6 4" marker-end="url(#dt1-arrow)" />
-
-            <!-- Center conditions → Japanese -->
-            <path d="M600 400 Q630 450 660 490" stroke="#1D1D1B" stroke-width="1.2" stroke-dasharray="6 4" marker-end="url(#dt1-arrow)" />
-
-            <!-- Dutch → Petit spend -->
-            <path d="M840 210 Q870 240 890 265" stroke="#1D1D1B" stroke-width="1.2" stroke-dasharray="6 4" marker-end="url(#dt1-arrow)" />
-
-            <!-- Japanese → Petit spend -->
-            <path d="M840 560 Q870 490 890 410" stroke="#1D1D1B" stroke-width="1.2" stroke-dasharray="6 4" marker-end="url(#dt1-arrow)" />
-
-            <!-- Petit spend (near Dutch) → Sealed Bid -->
-            <path d="M960 290 L1000 330" stroke="#1D1D1B" stroke-width="1.2" stroke-dasharray="6 4" marker-end="url(#dt1-arrow)" />
-
-            <!-- Petit spend (near Japanese) → Sealed Bid -->
-            <path d="M960 415 L1000 390" stroke="#1D1D1B" stroke-width="1.2" stroke-dasharray="6 4" marker-end="url(#dt1-arrow)" />
-
-            <!-- Top-right Petit spend → Traditional -->
-            <path d="M1270 195 L1270 270" stroke="#1D1D1B" stroke-width="1.2" stroke-dasharray="6 4" marker-end="url(#dt1-arrow)" />
-
-            <!-- Top-right Petit spend (left) → Sealed Bid area -->
-            <path d="M1090 195 L1060 330" stroke="#1D1D1B" stroke-width="1.2" stroke-dasharray="6 4" marker-end="url(#dt1-arrow)" />
+          <!-- ═══ SVG FLOW ARROWS ═══ -->
+          <svg class="dt-svg" viewBox="0 0 1420 520">
+            <!-- Arrow G1 → G2: from EN center to DU center -->
+            <line x1="320" y1="82" x2="598" y2="82" stroke="#D1D5DB" stroke-width="1.5" stroke-dasharray="6,4" />
+            <polygon points="596,78 604,82 596,86" fill="#D1D5DB" />
+            <!-- Arrow G2 → G3: from JP center to SB center -->
+            <line x1="810" y1="82" x2="1088" y2="82" stroke="#D1D5DB" stroke-width="1.5" stroke-dasharray="6,4" />
+            <polygon points="1086,78 1094,82 1086,86" fill="#D1D5DB" />
           </svg>
 
-          <!-- ═══ TOP-LEFT: Condition nodes (column 1 - for Double Scenario) ═══ -->
-          <div class="cond" style="left: 40px; top: 150px">> 3 Suppliers</div>
-          <div class="cond cond--wide" style="left: 10px; top: 190px">Gap &lt;7% between best offers</div>
+          <!-- ═══ GROUP LABELS ═══ -->
+          <div class="group-label" style="left: 10px; top: 8px; width: 410px">{{ t('v1.veryHighCompetition') }}</div>
+          <div class="group-label" style="left: 500px; top: 8px; width: 410px">{{ t('v1.highCompetition') }}</div>
+          <div class="group-label" style="left: 990px; top: 8px; width: 410px">{{ t('v1.lowNoCompetition') }}</div>
 
-          <!-- Condition nodes (column 2 - for English) -->
-          <div class="cond" style="left: 270px; top: 150px">> 3 Suppliers</div>
-          <div class="cond cond--wide" style="left: 235px; top: 190px">Gap &lt;7% between best offers</div>
-
-          <!-- ═══ CENTER: Condition group ═══ -->
-          <div class="cond-group" style="left: 500px; top: 310px">
-            <div class="cond">&lt; 3 Suppliers</div>
-            <div class="cond-or">OR</div>
-            <div class="cond cond--wide">Gap > 7% between best offers</div>
+          <!-- ═══ ELIMINATION CRITERIA (on arrows between groups) ═══ -->
+          <!-- Between G1 and G2 -->
+          <div class="cond-group" style="left: 360px; top: 42px; width: 200px">
+            <div class="cond cond--static">{{ t('v1.lessThan3Suppliers') }}</div>
+            <div class="cond-or">{{ t('v1.or') }}</div>
+            <div class="cond cond--static">{{ t('v1.gapOver7') }}</div>
           </div>
 
-          <!-- ═══ RIGHT: Petit spend conditions ═══ -->
-          <div class="cond" style="left: 880px; top: 270px">Small spend</div>
-          <div class="cond" style="left: 880px; top: 395px">Small spend</div>
-          <div class="cond" style="left: 1020px; top: 160px">Small spend</div>
-          <div class="cond" style="left: 1210px; top: 160px">Small spend</div>
+          <!-- Between G2 and G3 -->
+          <div class="cond" style="left: 902px; top: 68px">{{ t('v1.smallSpend') }}</div>
 
-          <!-- ═══════════════════════════════ -->
-          <!-- AUCTION TYPE CARDS             -->
-          <!-- ═══════════════════════════════ -->
+          <!-- ═══ AUCTION CARDS ═══ -->
 
-          <!-- Double Scenario -->
-          <div class="acard" style="left: 15px; top: 300px">
-            <div class="acard-name" :style="{ color: colors['Double Scenario'].text }">
-              <div class="acard-dot" :style="{ background: colors['Double Scenario'].border }" />
-              Double Scenario
+          <!-- 1. Double Scenario -->
+          <div class="sc" style="left: 10px; top: 160px">
+            <div class="sc-top" :style="{ borderColor: c.DS.border, background: c.DS.bg }">
+              <DecisionTreeCalculatorChartsAChart family="Double Scenario" :color="c.DS.border" ccy="EUR" />
             </div>
-            <div class="acard-opts">
-              <span class="opt">Pre bid</span>
-              <span class="opt">Preference</span>
-              <span class="opt opt--hi">Competition ++++</span>
-              <span class="opt">Award / Post Award</span>
-            </div>
-          </div>
-
-          <!-- English chart (floating illustration) -->
-          <div class="chart-float" style="left: 295px; top: 260px">
-            <DecisionTreeCalculatorChartsAChart family="English" :color="colors['English'].border" ccy="EUR" />
-          </div>
-
-          <!-- English -->
-          <div class="acard" style="left: 270px; top: 380px">
-            <div class="acard-name" :style="{ color: colors['English'].text }">
-              <div class="acard-dot" :style="{ background: colors['English'].border }" />
-              English Reverse
-            </div>
-            <div class="acard-opts">
-              <span class="opt">Pre bid</span>
-              <span class="opt">Preference</span>
-              <span class="opt opt--hi">Competition +++</span>
-              <span class="opt">Award / Post Award</span>
+            <div class="sc-body">
+              <div class="sc-name" :style="{ color: c.DS.text }">
+                <span class="sc-dot" :style="{ background: c.DS.border }" />
+                {{ t('families.doubleScenario') }}
+              </div>
+              <div class="sc-savings">~15-25% {{ t('v1.savings') }}</div>
+              <div class="sc-comp">
+                <span v-for="i in 5" :key="i" class="pip" :style="{ background: c.DS.border }" />
+                <span class="comp-txt">{{ t('v1.veryHigh') }}</span>
+              </div>
+              <div class="pills">
+                <span class="p">{{ t('v1.preBid') }}</span>
+                <span class="p">{{ t('v1.preference') }}</span>
+                <span class="p p--y">{{ t('v1.competition') }} +++++</span>
+                <span class="p">{{ t('v1.awardPostAward') }}</span>
+              </div>
             </div>
           </div>
 
-          <!-- Dutch chart (floating illustration) -->
-          <div class="chart-float" style="left: 680px; top: 70px">
-            <DecisionTreeCalculatorChartsAChart family="Dutch" :color="colors['Dutch'].border" ccy="EUR" />
-          </div>
-
-          <!-- Dutch -->
-          <div class="acard" style="left: 650px; top: 190px">
-            <div class="acard-name" :style="{ color: colors['Dutch'].text }">
-              <div class="acard-dot" :style="{ background: colors['Dutch'].border }" />
-              Dutch Reverse
+          <!-- 2. English Reverse -->
+          <div class="sc" style="left: 220px; top: 160px">
+            <div class="sc-top" :style="{ borderColor: c.EN.border, background: c.EN.bg }">
+              <DecisionTreeCalculatorChartsAChart family="English" :color="c.EN.border" ccy="EUR" />
             </div>
-            <div class="acard-opts">
-              <span class="opt">Pre bid</span>
-              <span class="opt">Preference</span>
-              <span class="opt opt--hi">Competition ++</span>
-              <span class="opt opt--hi">Award</span>
-            </div>
-          </div>
-
-          <!-- Japanese chart (floating illustration) -->
-          <div class="chart-float" style="left: 680px; top: 430px">
-            <DecisionTreeCalculatorChartsAChart family="Japanese" :color="colors['Japanese'].border" ccy="EUR" />
-          </div>
-
-          <!-- Japanese -->
-          <div class="acard" style="left: 650px; top: 545px">
-            <div class="acard-name" :style="{ color: colors['Japanese'].text }">
-              <div class="acard-dot" :style="{ background: colors['Japanese'].border }" />
-              Japanese Reverse
-            </div>
-            <div class="acard-opts">
-              <span class="opt">Pre bid</span>
-              <span class="opt">Preference</span>
-              <span class="opt opt--hi">Competition ++</span>
-              <span class="opt">Award / Post Award</span>
+            <div class="sc-body">
+              <div class="sc-name" :style="{ color: c.EN.text }">
+                <span class="sc-dot" :style="{ background: c.EN.border }" />
+                {{ t('families.english') }}
+              </div>
+              <div class="sc-savings">~10-18% {{ t('v1.savings') }}</div>
+              <div class="sc-comp">
+                <span v-for="i in 5" :key="i" class="pip" :style="i <= 4 ? { background: c.EN.border } : {}" />
+                <span class="comp-txt">{{ t('v1.high') }}</span>
+              </div>
+              <div class="pills">
+                <span class="p">{{ t('v1.preBid') }}</span>
+                <span class="p">{{ t('v1.preference') }}</span>
+                <span class="p">{{ t('v1.ceiling') }}</span>
+                <span class="p p--y">{{ t('v1.mostOptions') }}</span>
+                <span class="p">{{ t('v1.awardPostAward') }}</span>
+              </div>
             </div>
           </div>
 
-          <!-- Sealed Bid illustration (envelope) -->
-          <div class="chart-float" style="left: 1020px; top: 260px">
-            <DecisionTreeCalculatorChartsAChart family="Sealed Bid" :color="colors['Sealed Bid'].border" ccy="EUR" />
+          <!-- 3. Dutch Reverse -->
+          <div class="sc" style="left: 500px; top: 160px">
+            <div class="sc-top" :style="{ borderColor: c.DU.border, background: c.DU.bg }">
+              <DecisionTreeCalculatorChartsAChart family="Dutch" :color="c.DU.border" ccy="EUR" />
+            </div>
+            <div class="sc-body">
+              <div class="sc-name" :style="{ color: c.DU.text }">
+                <span class="sc-dot" :style="{ background: c.DU.border }" />
+                {{ t('families.dutch') }}
+              </div>
+              <div class="sc-savings">~8-15% {{ t('v1.savings') }}</div>
+              <div class="sc-comp">
+                <span v-for="i in 5" :key="i" class="pip" :style="i <= 3 ? { background: c.DU.border } : {}" />
+                <span class="comp-txt">{{ t('v1.high') }}</span>
+              </div>
+              <div class="pills">
+                <span class="p">{{ t('v1.preBid') }}</span>
+                <span class="p">{{ t('v1.preference') }}</span>
+                <span class="p p--y">{{ t('v1.competition') }} +++</span>
+                <span class="p p--g">{{ t('v1.awardBinding') }}</span>
+              </div>
+            </div>
           </div>
 
-          <!-- Sealed Bid -->
-          <div class="acard" style="left: 1000px; top: 380px">
-            <div class="acard-name" :style="{ color: colors['Sealed Bid'].text }">
-              <div class="acard-dot" :style="{ background: colors['Sealed Bid'].border }" />
-              Sealed Bid
+          <!-- 4. Japanese Reverse -->
+          <div class="sc" style="left: 710px; top: 160px">
+            <div class="sc-top" :style="{ borderColor: c.JP.border, background: c.JP.bg }">
+              <DecisionTreeCalculatorChartsAChart family="Japanese" :color="c.JP.border" ccy="EUR" />
             </div>
-            <div class="acard-opts">
-              <span class="opt">Preference</span>
-              <span class="opt opt--hi">Competition +</span>
-              <span class="opt">Award / Post Award</span>
+            <div class="sc-body">
+              <div class="sc-name" :style="{ color: c.JP.text }">
+                <span class="sc-dot" :style="{ background: c.JP.border }" />
+                {{ t('families.japanese') }}
+              </div>
+              <div class="sc-savings">~8-15% {{ t('v1.savings') }}</div>
+              <div class="sc-comp">
+                <span v-for="i in 5" :key="i" class="pip" :style="i <= 3 ? { background: c.JP.border } : {}" />
+                <span class="comp-txt">{{ t('v1.high') }}</span>
+              </div>
+              <div class="pills">
+                <span class="p">{{ t('v1.preBid') }}</span>
+                <span class="p">{{ t('v1.preference') }}</span>
+                <span class="p p--y">{{ t('v1.competition') }} +++</span>
+                <span class="p p--w">{{ t('v1.rankingOnly') }}</span>
+              </div>
             </div>
           </div>
 
-          <!-- Traditional -->
-          <div class="acard" style="left: 1210px; top: 280px">
-            <div class="acard-name" :style="{ color: colors['Traditional'].text }">
-              <div class="acard-dot" :style="{ background: colors['Traditional'].border }" />
-              Traditional Negotiation
+          <!-- 5. Sealed Bid -->
+          <div class="sc" style="left: 990px; top: 160px">
+            <div class="sc-top" :style="{ borderColor: c.SB.border, background: c.SB.bg }">
+              <DecisionTreeCalculatorChartsAChart family="Sealed Bid" :color="c.SB.border" ccy="EUR" />
             </div>
-            <div class="acard-opts">
-              <span class="opt">Preference</span>
-              <span class="opt">Post Award</span>
+            <div class="sc-body">
+              <div class="sc-name" :style="{ color: c.SB.text }">
+                <span class="sc-dot" :style="{ background: c.SB.border }" />
+                {{ t('families.sealedBid') }}
+              </div>
+              <div class="sc-savings">~3-8% {{ t('v1.savings') }}</div>
+              <div class="sc-comp">
+                <span v-for="i in 5" :key="i" class="pip" :style="i <= 2 ? { background: c.SB.border } : {}" />
+                <span class="comp-txt">{{ t('v1.medium') }}</span>
+              </div>
+              <div class="pills">
+                <span class="p">{{ t('v1.preference') }}</span>
+                <span class="p p--y">{{ t('v1.competition') }} ++</span>
+                <span class="p">{{ t('v1.awardPostAward') }}</span>
+              </div>
             </div>
+          </div>
+
+          <!-- 6. Traditional Negotiation -->
+          <div class="sc" style="left: 1200px; top: 160px">
+            <div class="sc-top" :style="{ borderColor: c.TR.border, background: c.TR.bg }">
+              <DecisionTreeCalculatorChartsAChart family="Traditional" :color="c.TR.border" ccy="EUR" />
+            </div>
+            <div class="sc-body">
+              <div class="sc-name" :style="{ color: c.TR.text }">
+                <span class="sc-dot" :style="{ background: c.TR.border }" />
+                {{ t('families.traditional') }}
+              </div>
+              <div class="sc-savings">~0-3% {{ t('v1.savings') }}</div>
+              <div class="sc-comp">
+                <span v-for="i in 5" :key="i" class="pip" :style="i <= 1 ? { background: c.TR.border } : {}" />
+                <span class="comp-txt">{{ t('v1.low') }}</span>
+              </div>
+              <div class="pills">
+                <span class="p">{{ t('v1.preference') }}</span>
+                <span class="p p--y">{{ t('v1.competition') }} +</span>
+                <span class="p">{{ t('v1.postAward') }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- ═══ DUTCH vs JAPANESE DISTINCTION ═══ -->
+          <div class="dt-note" style="left: 500px; top: 475px; width: 410px">
+            {{ t('v1.awardBindingNote') }} <strong>Dutch</strong>
+            <span class="dt-note-sep">|</span>
+            {{ t('v1.noAwardNote') }} <strong>Japanese</strong>
           </div>
         </div>
       </div>
@@ -195,18 +212,28 @@
 
 <script setup lang="ts">
 import { FC } from '~/utils/decisionTree/constants'
+import useTranslations from '~/composables/useTranslations'
 
+const { t } = useTranslations('decisiontree')
 const show = defineModel<boolean>({ default: false })
 
-const colors = FC
+const c = {
+  DS: FC['Double Scenario'],
+  EN: FC['English'],
+  DU: FC['Dutch'],
+  JP: FC['Japanese'],
+  SB: FC['Sealed Bid'],
+  TR: FC['Traditional'],
+}
 </script>
 
 <style scoped>
-/* ── Dialog card ── */
+/* ── Dialog ── */
 .dt-card {
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  max-height: 92vh;
 }
 
 /* ── Header ── */
@@ -229,151 +256,229 @@ const colors = FC
   justify-content: center;
 }
 
-.dt-title {
-  font-size: 16px;
-  font-weight: 700;
-  color: #1D1D1B;
-}
+.dt-title { font-size: 16px; font-weight: 700; color: #1D1D1B; }
+.dt-sub { font-size: 12px; color: #9CA3AF; margin-top: 1px; }
 
-.dt-sub {
-  font-size: 12px;
-  color: #9CA3AF;
-  margin-top: 1px;
+.dt-legend { display: flex; align-items: center; gap: 8px; }
+.legend-tag {
+  font-size: 10px; font-weight: 600; padding: 3px 8px;
+  border-radius: 4px; text-transform: uppercase; letter-spacing: 0.03em;
 }
+.legend-tag--high { background: #ECFDF5; color: #065F46; }
+.legend-tag--low { background: #F3F4F6; color: #6B7280; }
+.legend-arrow { color: #D1D5DB; font-size: 14px; }
 
 /* ── Canvas ── */
 .dt-canvas-wrap {
   overflow: auto;
   background: #FAFAFA;
   flex: 1;
-  padding: 24px;
+  padding: 20px;
 }
 
 .dt-canvas {
   position: relative;
-  width: 1400px;
-  height: 820px;
+  width: 1420px;
+  height: 520px;
   margin: 0 auto;
 }
 
+/* ── SVG connection lines ── */
 .dt-svg {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+  top: 0;
+  left: 0;
+  width: 1420px;
+  height: 520px;
   pointer-events: none;
   z-index: 0;
 }
 
-/* ── Condition nodes ── */
+/* ── Group labels ── */
+.group-label {
+  position: absolute;
+  text-align: center;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #9CA3AF;
+  z-index: 1;
+}
+
+/* ── Condition nodes (elimination criteria) ── */
 .cond {
   position: absolute;
   background: #FFF;
   border: 1.5px solid #E5E7EB;
-  border-radius: 8px;
-  padding: 7px 18px;
-  font-size: 13px;
+  border-radius: 20px;
+  padding: 5px 14px;
+  font-size: 11.5px;
   font-weight: 500;
   color: #374151;
   white-space: nowrap;
-  z-index: 1;
+  z-index: 2;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
-.cond--wide {
-  font-size: 12px;
-}
+.cond--static { position: static; }
 
 .cond-group {
   position: absolute;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
-  z-index: 1;
-}
-
-.cond-group .cond {
-  position: static;
+  gap: 3px;
+  z-index: 2;
 }
 
 .cond-or {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
   color: #1D1D1B;
 }
 
-/* ── Floating chart illustrations ── */
-.chart-float {
+/* ── Scenario cards ── */
+.sc {
   position: absolute;
-  width: 160px;
-  height: 100px;
   z-index: 1;
-  background: #FFF;
-  border: 1.5px solid #E9EAEC;
-  border-radius: 12px;
-  padding: 6px 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  width: 200px;
+  border-radius: 10px;
   overflow: hidden;
+  background: #FFF;
+  border: 1px solid #E5E7EB;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.2s, transform 0.2s;
 }
 
-.chart-float :deep(.chart-container) {
-  height: 85px;
+.sc:hover {
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}
+
+/* ── Card chart area ── */
+.sc-top {
+  height: 70px;
+  padding: 6px 10px 0;
+  overflow: hidden;
+  border-bottom: 2px solid;
+}
+
+.sc-top :deep(.chart-container) {
+  height: 62px;
   border: none;
   background: transparent;
   padding: 0;
 }
 
-/* ── Auction type cards ── */
-.acard {
-  position: absolute;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+/* ── Card body ── */
+.sc-body {
+  padding: 10px 12px 12px;
 }
 
-.acard-name {
+.sc-name {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 16px;
+  gap: 6px;
+  font-size: 13px;
   font-weight: 700;
-  white-space: nowrap;
+  margin-bottom: 2px;
 }
 
-.acard-dot {
-  width: 10px;
-  height: 10px;
+.sc-dot {
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   flex-shrink: 0;
 }
 
-/* ── Option pills ── */
-.acard-opts {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+/* ── Savings indicator ── */
+.sc-savings {
+  font-size: 11px;
+  font-weight: 600;
+  color: #059669;
+  margin-bottom: 6px;
+  padding-left: 14px;
 }
 
-.opt {
+/* ── Competition bar ── */
+.sc-comp {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-bottom: 8px;
+}
+
+.pip {
+  width: 14px;
+  height: 4px;
+  border-radius: 2px;
+  background: #E5E7EB;
+}
+
+.comp-txt {
+  font-size: 10px;
+  font-weight: 500;
+  color: #9CA3AF;
+  margin-left: 4px;
+}
+
+/* ── Attribute pills ── */
+.pills {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.p {
   display: block;
   background: #FFF;
   border: 1.5px solid #E9EAEC;
-  border-radius: 8px;
-  padding: 7px 16px;
-  font-size: 13px;
+  border-radius: 6px;
+  padding: 5px 10px;
+  font-size: 11.5px;
   font-weight: 500;
   color: #374151;
   text-align: center;
   white-space: nowrap;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
 }
 
-.opt--hi {
+.p--y {
   background: #FFFBEB;
   border-color: #FDE68A;
   font-weight: 600;
   color: #1D1D1B;
+}
+
+.p--w {
+  background: #FEF2F2;
+  border-color: #FECACA;
+  font-weight: 600;
+  color: #991B1B;
+}
+
+.p--g {
+  background: #ECFDF5;
+  border-color: #A7F3D0;
+  font-weight: 600;
+  color: #065F46;
+}
+
+/* ── Dutch vs Japanese note ── */
+.dt-note {
+  position: absolute;
+  text-align: center;
+  font-size: 11.5px;
+  color: #6B7280;
+  z-index: 1;
+}
+
+.dt-note strong {
+  color: #374151;
+}
+
+.dt-note-sep {
+  margin: 0 10px;
+  color: #D1D5DB;
 }
 </style>

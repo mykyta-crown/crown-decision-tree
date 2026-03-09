@@ -79,7 +79,7 @@
         to="/decisionTree"
       >
         <template #prepend>
-          <v-img src="@/assets/icons/Sidebar/calculator.svg" width="16" height="16" />
+          <v-img src="@/assets/icons/Sidebar/architect.svg" width="16" height="16" />
         </template>
       </v-list-item>
       <v-list-item

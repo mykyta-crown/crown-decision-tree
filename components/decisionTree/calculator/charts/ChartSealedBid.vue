@@ -50,16 +50,12 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-
-const props = withDefaults(defineProps<{
+withDefaults(defineProps<{
   color: string
   ccy?: string
 }>(), {
   ccy: 'EUR',
 })
-
-const pL = computed(() => `Price (${props.ccy})`)
 </script>
 
 <style scoped>
