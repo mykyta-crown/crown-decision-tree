@@ -158,13 +158,14 @@ describe('B. Realistic procurement scenarios', () => {
   })
 
   // ── B7. No ranking at all — exploration ──
-  // DS has Q3=[0,0,0] so NoRank doesn't eliminate it; DS can win here
-  it('B7: No Rank → DS or Japanese/SB NoRank, Dutch eliminated', () => {
+  // DS contains English → eliminated with NoRank; Japanese/SB NoRank should win
+  it('B7: No Rank → Japanese/SB NoRank, Dutch and DS eliminated', () => {
     const r = getScores(P, 3, 3, 3, 1, 2, 1)
     const top = active(r)[0]
-    // Top is either a NoRank variant or DS (which has aw='—' and isn't affected by Q3)
-    expect(['No Rank', '—']).toContain(top.aw)
+    // Top should be a NoRank variant (Japanese or SB)
+    expect(top.aw).toBe('No Rank')
     expect(bestOf(r, 'Dutch')).toBeUndefined()
+    expect(bestOf(r, 'Double Scenario')).toBeUndefined()
   })
 
   // ── B8. Incumbent-preferred tender (financial preference) ──
@@ -238,11 +239,12 @@ describe('C. Award method routing', () => {
     expect(r.find(s => s.id === 9)?.eliminated).toBe(false)  // Eng-Rank
   })
 
-  it('NoRank (Q3=3): Dutch ALL eliminated, Japanese-NoRank active', () => {
+  it('NoRank (Q3=3): Dutch and DS ALL eliminated, Japanese-NoRank active', () => {
     const r = getScores(P, 2, 3, 3, 1, 2, 1)
     r.filter(s => s.family === 'Dutch').forEach(s => {
       expect(s.eliminated).toBe(true)
     })
+    expect(r.find(s => s.id === 22)?.eliminated).toBe(true) // DS eliminated (contains English)
     expect(r.find(s => s.id === 18)?.eliminated).toBe(false) // Jap-NoRank
   })
 
@@ -568,6 +570,16 @@ describe('J. Regression guard — key business invariants', () => {
         r.filter(s => s.family === 'Dutch').forEach(s => {
           expect(s.eliminated).toBe(true)
         })
+      }
+    }
+  })
+
+  it('INVARIANT: NoRank → Double Scenario is ALWAYS eliminated (contains English)', () => {
+    for (const q1 of [2, 3]) {
+      for (const q2 of [3]) {
+        const r = getScores(P, q1, q2, 3, 1, 2, 1)
+        const ds = r.find(s => s.family === 'Double Scenario')
+        expect(ds?.eliminated).toBe(true)
       }
     }
   })
