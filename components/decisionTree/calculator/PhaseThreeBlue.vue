@@ -3,18 +3,18 @@
     <v-card variant="outlined">
       <!-- Column headers -->
       <div class="results-header">
-        <span class="header-label">Lot</span>
+        <span class="header-label">{{ t('calc.phase3.lot') }}</span>
         <div class="header-rec">
-          <span class="header-rank header-rank--1">1st</span>
-          <span class="header-rec-text">Best Match</span>
+          <span class="header-rank header-rank--1">{{ t('calc.phase3.rank1') }}</span>
+          <span class="header-rec-text">{{ t('calc.phase3.bestMatch') }}</span>
         </div>
         <div class="header-rec">
-          <span class="header-rank header-rank--2">2nd</span>
-          <span class="header-rec-text">Alternative</span>
+          <span class="header-rank header-rank--2">{{ t('calc.phase3.rank2') }}</span>
+          <span class="header-rec-text">{{ t('calc.phase3.alternative') }}</span>
         </div>
         <div class="header-rec">
-          <span class="header-rank header-rank--3">3rd</span>
-          <span class="header-rec-text">Option</span>
+          <span class="header-rank header-rank--3">{{ t('calc.phase3.rank3') }}</span>
+          <span class="header-rec-text">{{ t('calc.phase3.option') }}</span>
         </div>
       </div>
 
@@ -30,7 +30,7 @@
           <div class="lot-col">
             <div class="lot-top-row">
               <div>
-                <div class="lot-index">Lot {{ li + 1 }}</div>
+                <div class="lot-index">{{ t('calc.phase3.lotPrefix') }} {{ li + 1 }}</div>
                 <div class="lot-name">{{ lot.name }}</div>
               </div>
               <div class="lot-chevron" :class="{ 'lot-chevron--open': store.expLot === li }">
@@ -51,7 +51,7 @@
                     </svg>
                   </div>
                   <div>
-                    <div class="stat-label">Spend</div>
+                    <div class="stat-label">{{ t('calc.phase3.spend') }}</div>
                     <div class="stat-value">{{ fmtE(store.lotBaseline(lot), store.ccy) }}</div>
                   </div>
                 </div>
@@ -67,7 +67,7 @@
                     </svg>
                   </div>
                   <div>
-                    <div class="stat-label">Suppliers</div>
+                    <div class="stat-label">{{ t('calc.phase3.suppliers') }}</div>
                     <div class="stat-value">{{ activeSupplierCount(lot) }}</div>
                   </div>
                 </div>
@@ -102,15 +102,20 @@
               <!-- Expandable body (designer card layout) -->
               <div class="rec-expand" :class="{ open: store.expLot === li }">
                 <div class="rec-body">
-                  <!-- Savings row -->
+                  <!-- Savings row with label -->
                   <div class="card-savings">
-                    <span class="savings-chip">+{{ getTop3(li)[ri - 1].saving }}%</span>
-                    <span
-                      v-if="store.lotBaseline(lot) > 0"
-                      class="savings-amount"
-                    >
-                      &#8776; {{ fmtE(Math.round(store.lotBaseline(lot) * getTop3(li)[ri - 1].saving / 100), store.ccy) }}
-                    </span>
+                    <div class="savings-left">
+                      <span class="savings-label">{{ t('calc.phase3.estSavings') }}</span>
+                      <div class="savings-values">
+                        <span class="savings-chip">+{{ getTop3(li)[ri - 1].saving }}%</span>
+                        <span
+                          v-if="store.lotBaseline(lot) > 0"
+                          class="savings-amount"
+                        >
+                          &#8776; {{ fmtE(Math.round(store.lotBaseline(lot) * getTop3(li)[ri - 1].saving / 100), store.ccy) }}
+                        </span>
+                      </div>
+                    </div>
                   </div>
 
                   <!-- Chart illustration -->
@@ -122,37 +127,37 @@
                     />
                   </div>
 
-                  <!-- Option pills -->
+                  <!-- Option pills (blue variant with lighter selected state) -->
                   <div class="card-options">
-                    <DecisionTreeCalculatorOptionRow
+                    <DecisionTreeCalculatorOptionRowBlue
                       v-if="getFamilyOptions(getTop3(li)[ri - 1].family).security"
-                      label="Security"
-                      :options="getFamilyOptions(getTop3(li)[ri - 1].family).security!"
-                      selected="Pre-bid"
+                      :label="t('calc.phase3.security')"
+                      :options="trPills(getFamilyOptions(getTop3(li)[ri - 1].family).security!)"
+                      :selected="getSecuritySelected(li, ri - 1)"
                     />
-                    <DecisionTreeCalculatorOptionRow
+                    <DecisionTreeCalculatorOptionRowBlue
                       v-if="getFamilyOptions(getTop3(li)[ri - 1].family).preference"
-                      label="Preference"
-                      :options="getFamilyOptions(getTop3(li)[ri - 1].family).preference!"
-                      :selected="PREF_LABELS[lot.pref] || 'None'"
+                      :label="t('calc.phase3.preference')"
+                      :options="trPills(getFamilyOptions(getTop3(li)[ri - 1].family).preference!)"
+                      :selected="trPrefLabels[lot.pref] || trPill('None')"
                     />
-                    <DecisionTreeCalculatorOptionRow
+                    <DecisionTreeCalculatorOptionRowBlue
                       v-if="getFamilyOptions(getTop3(li)[ri - 1].family).awarding"
-                      label="Awarding"
-                      :options="getFamilyOptions(getTop3(li)[ri - 1].family).awarding!"
+                      :label="t('calc.phase3.awarding')"
+                      :options="trPills(getFamilyOptions(getTop3(li)[ri - 1].family).awarding!)"
                       :selected="getAwardingSelected(li, ri - 1)"
                     />
-                    <DecisionTreeCalculatorIntensityBar :family="getTop3(li)[ri - 1].family" />
+                    <DecisionTreeCalculatorIntensityBar :family="getTop3(li)[ri - 1].family" :label="t('calc.phase3.intensity')" />
                   </div>
 
                   <!-- Action buttons -->
                   <div class="card-btn-wrap">
                     <button class="card-btn-learn" @click.stop="emit('learn-more', familyToKey(getTop3(li)[ri - 1].family))">
                       <v-icon size="14">mdi-help-circle-outline</v-icon>
-                      Learn more
+                      {{ t('calc.phase3.learnMore') }}
                     </button>
                     <button class="card-btn" @click.stop="goToConfig">
-                      Configure
+                      {{ t('calc.phase3.configure') }}
                       <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                         <path d="M3.5 8h9M8.5 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                       </svg>
@@ -168,37 +173,40 @@
       </div>
     </v-card>
 
-    <!-- Footer -->
+    <!-- Footer — black buttons -->
     <div class="d-flex justify-center ga-8 mt-6">
       <v-btn
         variant="text"
-        color="green"
+        color="#1D1D1B"
         prepend-icon="mdi-refresh"
         @click="editInputs"
       >
-        Edit inputs
+        {{ t('calc.phase3.editInputs') }}
       </v-btn>
       <v-btn
         variant="text"
-        color="green"
+        color="#1D1D1B"
         prepend-icon="mdi-download"
         @click="exportReport"
       >
-        Export Report
+        {{ t('calc.phase3.exportReport') }}
       </v-btn>
     </div>
   </v-container>
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useCalculatorStore } from '~/stores/decisionTree/calculator'
 import { useProjectsStore } from '~/stores/decisionTree/projects'
 import { FC, gfc, PREF_LABELS, getFamilyOptions } from '~/utils/decisionTree/constants'
 import { fmtE } from '~/utils/decisionTree/formatting'
 import { exportDecisionTreePdf } from '~/utils/decisionTree/exportPdf'
+import useTranslations from '~/composables/useTranslations'
 import type { Lot } from '~/stores/decisionTree/calculator'
 import type { ScoreResult } from '~/utils/decisionTree/scoring-engine'
 
+const { t } = useTranslations('decisiontree')
 const emit = defineEmits<{ 'learn-more': [family: string] }>()
 
 const store = useCalculatorStore()
@@ -211,11 +219,45 @@ function getTop3(li: number): ScoreResult[] {
   return store.lotTop3[li] || []
 }
 
+// Translate option pill labels from English identifiers to current locale
+const pillMap = computed(() => ({
+  'Pre-bid': t('calc.phase3.preBidYes'),
+  'No Pre-bid': t('calc.phase3.preBidNo'),
+  'None': t('calc.phase3.prefNone'),
+  'Non-Financial': t('calc.phase3.prefNonFin'),
+  'Financial': t('calc.phase3.prefFinancial'),
+  'Award': t('calc.phase3.awardAward'),
+  'Rank': t('calc.phase3.awardRank'),
+  'No Rank': t('calc.phase3.awardNoRank'),
+} as Record<string, string>))
+
+function trPill(s: string): string {
+  return pillMap.value[s] || s
+}
+
+function trPills(arr: string[]): string[] {
+  return arr.map(trPill)
+}
+
+const trPrefLabels = computed<Record<number, string>>(() => ({
+  1: t('calc.phase3.prefNone'),
+  2: t('calc.phase3.prefNonFin'),
+  3: t('calc.phase3.prefFinancial'),
+}))
+
+function getSecuritySelected(li: number, ri: number): string {
+  const rec = getTop3(li)[ri]
+  if (!rec) return trPill('Pre-bid')
+  // Sealed Bid only has 'No Pre-bid'; all others default to 'Pre-bid'
+  if (rec.family === 'Sealed Bid') return trPill('No Pre-bid')
+  return trPill('Pre-bid')
+}
+
 function getAwardingSelected(li: number, ri: number): string {
   const rec = getTop3(li)[ri]
-  if (!rec) return 'Award'
-  if (rec.family === 'Double Scenario') return 'Award'
-  return rec.aw && rec.aw !== '—' ? rec.aw : 'Award'
+  if (!rec) return trPill('Award')
+  if (rec.family === 'Double Scenario') return trPill('Award')
+  return rec.aw && rec.aw !== '—' ? trPill(rec.aw) : trPill('Award')
 }
 
 function activeSupplierCount(lot: Lot): number {
@@ -268,22 +310,22 @@ function displayName(li: number, ri: number): string {
   if (!rec) return ''
 
   const familyNames: Record<string, string> = {
-    English: 'English',
-    Dutch: 'Dutch',
-    'Sealed Bid': 'Sealed Bid',
-    Japanese: 'Japanese',
-    'Double Scenario': 'Double Scenario',
-    Traditional: 'Traditional Negotiation',
+    English: t('families.english'),
+    Dutch: t('families.dutch'),
+    'Sealed Bid': t('families.sealedBid'),
+    Japanese: t('families.japanese'),
+    'Double Scenario': t('families.doubleScenario'),
+    Traditional: t('families.traditional'),
   }
 
   const base = familyNames[rec.family] || rec.family
   if (rec.family === 'Traditional' || rec.family === 'Double Scenario') return base
 
   const tfLabels: Record<string, string> = {
-    'Fixed+Dynamic': 'Transfo',
-    Ceiling: 'Ceiling',
-    Preference: 'Preferred',
-    'Ceiling+Pref': 'Ceiling + Preferred',
+    'Fixed+Dynamic': t('calc.rec.transfo'),
+    Ceiling: t('calc.rec.ceiling'),
+    Preference: t('calc.rec.preferred'),
+    'Ceiling+Pref': t('calc.rec.ceilingPreferred'),
   }
 
   const parts = [base]
@@ -362,9 +404,9 @@ function exportReport() {
 }
 
 .header-label {
-  font-size: 13px;
-  font-weight: 500;
-  color: #61615F;
+  font-size: 12px;
+  font-weight: 400;
+  color: #787878;
   letter-spacing: 0.03em;
 }
 
@@ -403,9 +445,9 @@ function exportReport() {
 }
 
 .header-rec-text {
-  font-size: 14px;
-  font-weight: 600;
-  color: #1D1D1B;
+  font-size: 12px;
+  font-weight: 400;
+  color: #787878;
 }
 
 /* ----------------------------------------------------------------
@@ -524,13 +566,13 @@ function exportReport() {
 }
 
 .stat-label {
-  font-size: 11px;
+  font-size: 12px;
   color: #61615F;
   font-weight: 500;
 }
 
 .stat-value {
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 600;
   color: #1D1D1B;
 }
@@ -629,12 +671,31 @@ function exportReport() {
   flex: 1;
 }
 
-/* ── Savings row ── */
+/* ── Savings row with label ── */
 .card-savings {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px 16px 0;
+}
+
+.savings-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.savings-label {
+  font-size: 12px;
+  font-weight: 400;
+  color: #787878;
+  font-family: Poppins, sans-serif;
+}
+
+.savings-values {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 10px 16px 0;
 }
 
 .savings-chip {

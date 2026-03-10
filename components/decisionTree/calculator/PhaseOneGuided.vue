@@ -447,4 +447,26 @@ const verdictDesc = computed(() => {
     flex: 1 1 100%;
   }
 }
+
+@media (max-width: 600px) {
+  .guided-p1 {
+    padding: 12px;
+  }
+  .p1-card {
+    padding: 14px;
+  }
+  .verdict {
+    padding: 16px 14px;
+  }
+  .verdict-title {
+    font-size: 14px;
+  }
+  .verdict-desc {
+    font-size: 12px;
+  }
+  .verdict-btn {
+    padding: 10px 16px;
+    font-size: 13px;
+  }
+}
 </style>

@@ -67,7 +67,7 @@ const lotCards = computed<LotCard[]>(() => {
     const oc = Math.max(0, top.length - 1)
     const isDouble = f === 'Double Scenario'
 
-    // In guided mode, warn if filled prices < nSup
+    // In guided/blue mode, warn if filled prices < nSup
     const filledCount = lot.prices.filter((p, i) => p > 0 && !lot.excl[i]).length
     const supMismatch = (store.mode === 'guided' || store.mode === 'blue') && ok && filledCount < store.nSup
 
@@ -105,7 +105,7 @@ const lotCards = computed<LotCard[]>(() => {
       ? isDouble
         ? '#1D1D1B'
         : c.text
-      : '#8E8E8E'
+      : '#6B6B6B'
 
     const borderImage = ok && isDouble
       ? `linear-gradient(180deg, ${engC.border} 0%, ${dutC.border} 100%) 1`
@@ -138,12 +138,12 @@ function seeDetails() {
     store.evNameErr = true
     hasErr = true
   }
-  if (!projectsStore.userName.trim()) {
-    store.userNameErr = true
+  // Block if supplier offers are incomplete
+  if (!store.allOffersFilled) {
+    store.offersErr = true
     hasErr = true
   }
   if (hasErr) {
-    // Force Phase 2 open so the user can see the error fields
     store.phase = 2
     return
   }
@@ -255,10 +255,11 @@ function seeDetails() {
   margin-bottom: 2px;
 }
 .rec-subtitle {
-  font-size: 10px;
-  color: #8E8E8E;
+  font-size: 12px;
+  font-weight: 400;
+  color: #787878;
+  line-height: normal;
   margin: 0;
-  line-height: 1.3;
 }
 .rec-card-title {
   font-size: 12px;

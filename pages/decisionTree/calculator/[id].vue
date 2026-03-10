@@ -12,6 +12,17 @@ const store = useCalculatorStore()
 const projectsStore = useProjectsStore()
 const { t } = useTranslations('decisiontree')
 
+// How It Works dialog deep link
+const showHowItWorks = ref(false)
+const hiwSection = ref<string | undefined>(undefined)
+const hiwFamily = ref<string | undefined>(undefined)
+
+function openLearnMore(familyKey: string) {
+  hiwSection.value = 'families'
+  hiwFamily.value = familyKey
+  showHowItWorks.value = true
+}
+
 const isNew = computed(() => route.params.id === 'new')
 const activeId = ref<number | null>(isNew.value ? null : Number(route.params.id))
 const saveStatus = ref<'' | 'saving' | 'saved' | 'error'>('')
@@ -21,10 +32,11 @@ const isMounted = ref(true)
 // ─── Steps definition ───
 // p2Pct from store counts evName + lot prices; we add userName as an extra requirement
 const p2PctFull = computed(() => {
-  let t = 2 // evName + userName
+  const needsUserName = store.mode !== 'blue'
+  let t = needsUserName ? 2 : 1 // evName + userName (userName not needed in blue)
   let d = 0
   if (store.evName.trim()) d++
-  if (projectsStore.userName.trim()) d++
+  if (needsUserName && projectsStore.userName.trim()) d++
   store.lots.forEach(l => {
     t++
     if (l.prices.some((p, i) => p > 0 && !l.excl[i])) d++
@@ -37,6 +49,12 @@ const steps = computed(() => [
   { n: 2, title: t('calc.steps.step2'), pct: p2PctFull.value },
   { n: 3, title: t('calc.steps.step3'), pct: store.p3Pct },
 ])
+
+// Blue mode: Step 2 & 3 locked when eAuction not recommended
+const blueStepLocked = computed(() => {
+  if (store.mode !== 'blue') return false
+  return store.spend < 100000 && store.nSup <= 1
+})
 
 // ─── Expansion panel state (maps to store.phase) ───
 const shakeStep = ref<number | null>(null)
@@ -59,6 +77,12 @@ const activePanel = computed({
       return
     }
 
+    // Blue mode: block Step 2 if eAuction is not recommended (verdict = 'stop')
+    if (target >= 1 && store.mode === 'blue' && store.spend < 100000 && store.nSup <= 1) {
+      flashErrors(0)
+      return
+    }
+
     // Create project in DB when first entering Phase 2
     if (target >= 1 && !activeId.value) {
       ensureProjectCreated()
@@ -66,7 +90,8 @@ const activePanel = computed({
 
     // Going to Phase 3 requires Phase 2 fields complete
     if (target >= 2) {
-      const p2Missing = !store.evName.trim() || !projectsStore.userName.trim() || !step2Valid.value
+      const needsUserName = store.mode !== 'blue'
+      const p2Missing = !store.evName.trim() || (needsUserName && !projectsStore.userName.trim()) || !step2Valid.value
       if (p2Missing) {
         flashErrors(1)
         return
@@ -82,11 +107,11 @@ function flashErrors(step: number) {
     // Phase 1 errors
     if (store.spend <= 0) store.spendErr = true
     if (store.nSup <= 0) store.nSupErr = true
-    if (store.mode !== 'guided' && store.award === null) store.awardErr = true
+    if (store.mode !== 'guided' && store.mode !== 'blue' && store.award === null) store.awardErr = true
   } else if (step === 1) {
     // Phase 2 errors
     if (!store.evName.trim()) store.evNameErr = true
-    if (!projectsStore.userName.trim()) store.userNameErr = true
+    if (store.mode !== 'blue' && !projectsStore.userName.trim()) store.userNameErr = true
   }
   // Trigger shake animation
   shakeStep.value = step
@@ -275,6 +300,7 @@ function tryAdvanceStep() {
               'step-panel--active': activePanel === si,
               'step-panel--done': stepValid(si),
               'step-panel--shake': shakeStep === si,
+              'step-panel--locked': si >= 1 && blueStepLocked,
             }"
           >
             <v-expansion-panel-title class="step-title-wrap" hide-actions>
@@ -314,6 +340,7 @@ function tryAdvanceStep() {
                       </template>
                     </v-text-field>
                     <v-text-field
+                      v-if="store.mode !== 'blue'"
                       :model-value="projectsStore.userName"
                       :label="t('calc.fields.yourName')"
                       :placeholder="t('calc.fields.yourNamePlaceholder')"
@@ -360,15 +387,18 @@ function tryAdvanceStep() {
             <v-expansion-panel-text @keydown.enter.stop="si < 2 && tryAdvanceStep()">
               <v-sheet class="bg-white rounded-lg" border>
                 <template v-if="si === 0">
-                  <DecisionTreeCalculatorPhaseOneGuided v-if="store.mode === 'guided'" />
+                  <DecisionTreeCalculatorPhaseOneBlue v-if="store.mode === 'blue'" />
+                  <DecisionTreeCalculatorPhaseOneGuided v-else-if="store.mode === 'guided'" />
                   <DecisionTreeCalculatorPhaseOne v-else />
                 </template>
                 <template v-else-if="si === 1">
-                  <DecisionTreeCalculatorPhaseTwoGuided v-if="store.mode === 'guided'" />
+                  <DecisionTreeCalculatorPhaseTwoBlue v-if="store.mode === 'blue'" />
+                  <DecisionTreeCalculatorPhaseTwoGuided v-else-if="store.mode === 'guided'" />
                   <DecisionTreeCalculatorPhaseTwo v-else />
                 </template>
                 <template v-else-if="si === 2">
-                  <DecisionTreeCalculatorPhaseThree />
+                  <DecisionTreeCalculatorPhaseThreeBlue v-if="store.mode === 'blue'" @learn-more="openLearnMore" />
+                  <DecisionTreeCalculatorPhaseThree v-else @learn-more="openLearnMore" />
                 </template>
               </v-sheet>
             </v-expansion-panel-text>
@@ -376,6 +406,13 @@ function tryAdvanceStep() {
         </v-expansion-panels>
       </v-col>
     </v-row>
+
+    <!-- How It Works dialog (deep linked from Phase 3) -->
+    <DecisionTreeCalculatorHowItWorksDialog
+      v-model="showHowItWorks"
+      :initial-section="hiwSection"
+      :initial-family="hiwFamily"
+    />
   </v-container>
 </template>
 
@@ -543,6 +580,20 @@ function tryAdvanceStep() {
   color: #6B7280;
 }
 
+.step-panel--locked {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.step-panel--locked .step-badge {
+  background: #E5E7EB;
+  color: #9CA3AF;
+}
+
+.step-panel--locked .step-label {
+  color: #9CA3AF !important;
+}
+
 .step-inline-fields {
   display: flex;
   align-items: center;
@@ -639,5 +690,47 @@ function tryAdvanceStep() {
 /* Override breadcrumbs divider padding */
 :deep(.v-breadcrumbs-divider) {
   padding-inline: 4px !important;
+}
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .editor-page {
+    padding: 16px 12px 48px;
+  }
+  .step-inline-fields {
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+  }
+  .step-inline-fields .v-text-field {
+    min-width: 0 !important;
+    width: 100%;
+  }
+  .step-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .step-header {
+    gap: 10px;
+    padding: 14px 12px 14px 10px;
+  }
+  :deep(.v-expansion-panel-text__wrapper) {
+    padding: 0 0 8px 4px;
+  }
+}
+
+@media (max-width: 600px) {
+  .editor-page {
+    padding: 10px 6px 40px;
+  }
+  .step-label {
+    font-size: 14px;
+  }
+  .step-badge {
+    width: 28px;
+    height: 28px;
+    font-size: 12px;
+  }
 }
 </style>

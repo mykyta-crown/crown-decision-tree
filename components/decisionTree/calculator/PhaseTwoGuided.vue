@@ -33,4 +33,13 @@
   width: 190px;
   flex-shrink: 0;
 }
+
+@media (max-width: 900px) {
+  .phase2-layout {
+    flex-direction: column;
+  }
+  .phase2-panel {
+    width: 100%;
+  }
+}
 </style>

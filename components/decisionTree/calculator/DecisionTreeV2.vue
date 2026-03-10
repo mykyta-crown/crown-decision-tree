@@ -429,4 +429,68 @@ const show = defineModel<boolean>({ default: false })
 .cascade-pair .savings-bar {
   flex: 1;
 }
+
+/* ── Responsive ── */
+@media (max-width: 700px) {
+  .cascade-canvas {
+    padding: 16px !important;
+  }
+
+  .cascade-tier {
+    grid-template-columns: 30px 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 8px 12px;
+    padding: 14px 14px;
+  }
+
+  .tier-rank {
+    grid-row: 1 / 3;
+    align-self: start;
+    margin-top: 2px;
+  }
+
+  .tier-left {
+    grid-column: 2;
+  }
+
+  .tier-conditions {
+    grid-column: 1 / -1;
+  }
+
+  .tier-savings {
+    grid-column: 1 / -1;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .tier-savings .savings-bar {
+    flex: 1;
+  }
+
+  .cascade-pair {
+    grid-template-columns: 1fr;
+  }
+
+  .arrow-tag {
+    white-space: normal;
+    text-align: center;
+    font-size: 10px;
+  }
+
+  .arrow-line {
+    max-width: 40px;
+  }
+}
+
+@media (max-width: 400px) {
+  .tier-name {
+    font-size: 14px;
+  }
+
+  .tier-desc,
+  .condition {
+    font-size: 11px;
+  }
+}
 </style>

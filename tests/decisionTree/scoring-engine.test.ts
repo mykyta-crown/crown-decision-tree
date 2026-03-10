@@ -217,11 +217,12 @@ describe('Elimination rules', () => {
     expect(sbAwardNR?.eliminated).toBe(true)
   })
 
-  it('Traditional is eliminated with Financial preference', () => {
-    // Traditional Q4: [0, 0, -999]
+  it('Traditional survives Financial preference (fallback rule: raw clamped to 1)', () => {
+    // Traditional Q4: [0, 0, -999] → raw would be negative, but fallback clamps to 1
     const results = getScores(DEF_PARAMS, 2, 3, 1, 3, 2, 1)
     const trad = results.find(r => r.family === 'Traditional')
-    expect(trad?.eliminated).toBe(true)
+    expect(trad?.eliminated).toBe(false)
+    expect(trad?.raw).toBe(1) // clamped to 1, not eliminated
   })
 })
 
@@ -389,15 +390,20 @@ describe('deepCloneMatrix', () => {
 // 8. EDGE CASES
 // ══════════════════════════════════════════════════════════════
 describe('Edge cases', () => {
-  it('all strategies eliminated → all pctMatch = 0', () => {
+  it('all strategies eliminated except Traditional (fallback rule)', () => {
     // Create params where every strategy gets eliminated
+    // Traditional survives with raw=1 due to fallback rule
     const custom: ScoringParams = {
       bases: Array(22).fill(-1000),
       savings: [...DEF_SAVINGS],
       matrix: deepCloneMatrix(DEF_MATRIX),
     }
     const results = getScores(custom, 1, 1, 1, 1, 1, 1)
-    results.forEach(r => {
+    const trad = results.find(r => r.family === 'Traditional')
+    expect(trad?.eliminated).toBe(false)
+    expect(trad?.raw).toBe(1)
+    expect(trad?.pctMatch).toBe(100) // only survivor → 100%
+    results.filter(r => r.family !== 'Traditional').forEach(r => {
       expect(r.pctMatch).toBe(0)
       expect(r.eliminated).toBe(true)
     })
@@ -734,10 +740,12 @@ describe('Q1×Q2 cross-dependency — Japanese supplier boost', () => {
 // 15. PREFERENCE (Q4) — TRANSFORMATION ROUTING
 // ══════════════════════════════════════════════════════════════
 describe('Preference (Q4) — transformation routing', () => {
-  it('Financial preference (Q4=3) eliminates Traditional', () => {
+  it('Financial preference (Q4=3) penalizes Traditional but fallback keeps it alive', () => {
     const results = getScores(DEF_PARAMS, 2, 3, 1, 3, 2, 1)
     const trad = results.find(r => r.family === 'Traditional')
-    expect(trad?.eliminated).toBe(true)
+    // Traditional raw would go negative from -999, but fallback clamps to 1
+    expect(trad?.eliminated).toBe(false)
+    expect(trad?.raw).toBe(1)
   })
 
   it('Financial preference (Q4=3) favors transformation variants', () => {

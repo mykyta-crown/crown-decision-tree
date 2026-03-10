@@ -1,11 +1,22 @@
 <template>
-  <div class="std-p1">
+  <div class="blue-p1">
     <div class="p1-row">
       <!-- 1. Total spend -->
-      <div class="p1-card" :class="{ 'p1-card--done': store.spend > 0, 'p1-card--err': store.spendErr && store.spend <= 0 }">
+      <div class="p1-card" :class="{ 'p1-card--done': store.spend > 0 }">
         <div class="p1-card-header">
           <div class="p1-card-title">{{ t('calc.phase1.totalSpend') }}</div>
-          <v-icon size="16" color="#9CA3AF">mdi-information-outline</v-icon>
+          <v-tooltip
+            content-class="bg-white text-black border text-body-2"
+            location="top"
+            max-width="240"
+          >
+            <template #activator="{ props: tip }">
+              <v-icon v-bind="tip" size="16" color="#9CA3AF">mdi-information-outline</v-icon>
+            </template>
+            <template #default>
+              {{ t('calc.phase1.spendTooltip') }}
+            </template>
+          </v-tooltip>
         </div>
         <div class="p1-card-sub">{{ t('calc.phase1.spendSub') }}</div>
 
@@ -35,15 +46,26 @@
       <div v-else class="connector" />
 
       <!-- 2. Number of suppliers -->
-      <div class="p1-card" :class="{ 'p1-card--done': store.nSup > 0, 'p1-card--err': store.nSupErr && store.nSup <= 0 }">
+      <div class="p1-card" :class="{ 'p1-card--done': store.nSup > 0 }">
         <div class="p1-card-header">
           <div class="p1-card-title">{{ t('calc.phase1.numSuppliers') }}</div>
-          <v-icon size="16" color="#9CA3AF">mdi-information-outline</v-icon>
+          <v-tooltip
+            content-class="bg-white text-black border text-body-2"
+            location="top"
+            max-width="240"
+          >
+            <template #activator="{ props: tip }">
+              <v-icon v-bind="tip" size="16" color="#9CA3AF">mdi-information-outline</v-icon>
+            </template>
+            <template #default>
+              {{ t('calc.phase1.suppliersTooltip') }}
+            </template>
+          </v-tooltip>
         </div>
         <div class="p1-card-sub">{{ t('calc.phase1.suppliersSub') }}</div>
 
         <div class="sup-icon">
-          <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+          <svg width="32" height="32" viewBox="0 0 48 48" fill="none">
             <circle cx="20" cy="16" r="6" stroke="#C4C4C4" stroke-width="1.8" fill="none" />
             <path d="M10 38c0-5.523 4.477-10 10-10s10 4.477 10 10" stroke="#C4C4C4" stroke-width="1.8" fill="none" stroke-linecap="round" />
             <circle cx="32" cy="18" r="4.5" stroke="#C4C4C4" stroke-width="1.5" fill="none" />
@@ -74,44 +96,7 @@
       </div>
       <div v-else class="connector" />
 
-      <!-- 3. Award method -->
-      <div class="p1-card" :class="{ 'p1-card--done': store.award !== null, 'p1-card--err': store.awardErr && store.award === null }">
-        <div class="p1-card-header">
-          <div class="p1-card-title">{{ t('calc.phase1.awardMethod') }}</div>
-          <v-icon size="16" color="#9CA3AF">mdi-information-outline</v-icon>
-        </div>
-        <div class="p1-card-sub">{{ t('calc.phase1.awardSub') }}</div>
-
-        <div class="award-list">
-          <button
-            v-for="opt in awardOptions"
-            :key="opt.v"
-            class="award-row"
-            :class="{ 'award-row--sel': store.award === opt.v }"
-            @click="store.award = opt.v"
-          >
-            <div class="award-check">
-              <svg v-if="store.award === opt.v" width="12" height="12" viewBox="0 0 12 12" fill="none">
-                <path d="M2 6.5L4.5 9L10 3" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
-            </div>
-            <div>
-              <div class="award-label">{{ opt.t }}</div>
-              <div class="award-desc">{{ opt.d }}</div>
-            </div>
-          </button>
-        </div>
-      </div>
-
-      <!-- connector -->
-      <div v-if="store.p1Ok" class="connector">
-        <svg width="100%" height="2" preserveAspectRatio="none">
-          <line x1="0" y1="1" x2="100%" y2="1" stroke="#34D399" stroke-width="2" stroke-dasharray="6 4" />
-        </svg>
-      </div>
-      <div v-else class="connector" />
-
-      <!-- 4. Verdict -->
+      <!-- 3. Verdict -->
       <div class="p1-verdict">
         <Transition name="vfade" mode="out-in">
           <!-- waiting -->
@@ -191,12 +176,6 @@ import useTranslations from '~/composables/useTranslations'
 const { t } = useTranslations('decisiontree')
 const store = useCalculatorStore()
 
-const awardOptions = computed(() => [
-  { v: 1, t: t('calc.phase1.directAward'), d: t('calc.phase1.directAwardDesc') },
-  { v: 2, t: t('calc.phase1.rankingOnly'), d: t('calc.phase1.rankingOnlyDesc') },
-  { v: 3, t: t('calc.phase1.noRank'), d: t('calc.phase1.noRankDesc') },
-])
-
 const verdictLevel = computed<'perfect' | 'ok' | 'stop'>(() => {
   if (store.spend < 100000 && store.nSup <= 1) return 'stop'
   if (store.spend > 500000 && store.nSup > 1) return 'perfect'
@@ -213,11 +192,11 @@ const verdictDesc = computed(() => {
 </script>
 
 <style scoped>
-.std-p1 {
+.blue-p1 {
   padding: 20px 24px;
 }
 
-/* ── 4-column horizontal row ── */
+/* ── 3-column horizontal row ── */
 .p1-row {
   display: flex;
   align-items: stretch;
@@ -228,9 +207,9 @@ const verdictDesc = computed(() => {
   flex: 1;
   min-width: 0;
   border: 1.5px solid #E5E7EB;
-  border-radius: 14px;
+  border-radius: 4px;
   background: #FFF;
-  padding: 18px 20px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
   transition: border-color 0.3s, box-shadow 0.3s;
@@ -243,20 +222,6 @@ const verdictDesc = computed(() => {
 .p1-card--done {
   border-color: #34D399;
   box-shadow: 0 0 0 1px rgba(52, 211, 153, 0.1);
-}
-
-.p1-card--err {
-  border-color: #EF4444 !important;
-  box-shadow: 0 0 0 1px rgba(239, 68, 68, 0.15) !important;
-  animation: card-shake 0.5s ease;
-}
-
-@keyframes card-shake {
-  0%, 100% { transform: translateX(0); }
-  15% { transform: translateX(-4px); }
-  30% { transform: translateX(3px); }
-  45% { transform: translateX(-2px); }
-  60% { transform: translateX(1px); }
 }
 
 /* ── Connector dashes ── */
@@ -276,16 +241,19 @@ const verdictDesc = computed(() => {
 }
 
 .p1-card-title {
-  font-size: 15px;
-  font-weight: 700;
+  font-size: 14px;
+  font-weight: 600;
   color: #1D1D1B;
+  line-height: normal;
 }
 
 .p1-card-sub {
-  font-size: 11px;
-  color: #9CA3AF;
+  font-size: 12px;
+  font-weight: 400;
+  color: #787878;
+  line-height: normal;
   margin-top: 2px;
-  margin-bottom: 14px;
+  margin-bottom: 16px;
 }
 
 /* ── Spend input ── */
@@ -294,15 +262,15 @@ const verdictDesc = computed(() => {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  border: 1.5px dashed #D1D5DB;
-  border-radius: 10px;
+  border: 1.5px solid #D1D5DB;
+  border-radius: 4px;
   padding: 6px 14px;
   margin: 0 auto;
   transition: border-color 0.25s;
 }
 
 .spend-input-wrap--done {
-  border-color: #34D399;
+  border-color: #1D1D1B;
 }
 
 .spend-slider-area {
@@ -310,16 +278,16 @@ const verdictDesc = computed(() => {
 }
 
 .ccy-select {
-  width: 68px;
-  flex: 0 0 68px;
-  font-weight: 600;
+  width: 58px;
+  flex: 0 0 58px;
+  font-weight: 400;
   font-size: 16px;
 }
 
 .ccy-select :deep(.v-field__input) {
   padding: 0;
   min-height: auto;
-  font-weight: 600;
+  font-weight: 400;
   font-size: 16px;
 }
 
@@ -345,7 +313,7 @@ const verdictDesc = computed(() => {
   justify-content: center;
   gap: 16px;
   border: 1.5px solid #E5E7EB;
-  border-radius: 10px;
+  border-radius: 4px;
   padding: 8px 20px;
   margin: 0 auto;
 }
@@ -353,7 +321,7 @@ const verdictDesc = computed(() => {
 .sup-btn {
   width: 32px;
   height: 32px;
-  border-radius: 6px;
+  border-radius: 4px;
   border: 1.5px solid #E5E7EB;
   background: #FFF;
   color: #9CA3AF;
@@ -392,66 +360,6 @@ const verdictDesc = computed(() => {
   color: #D1D5DB;
 }
 
-/* ── Award method ── */
-.award-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.award-row {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  padding: 10px 12px;
-  border-radius: 10px;
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  text-align: left;
-  transition: background 0.15s;
-}
-
-.award-row:hover {
-  background: #F9FAFB;
-}
-
-.award-row--sel {
-  background: #F0FDF4;
-}
-
-.award-check {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  border: 1.5px solid #D1D5DB;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  margin-top: 1px;
-  transition: all 0.15s;
-}
-
-.award-row--sel .award-check {
-  border-color: #34D399;
-  background: #34D399;
-}
-
-.award-label {
-  font-size: 13px;
-  font-weight: 600;
-  color: #1D1D1B;
-  line-height: 1.3;
-}
-
-.award-desc {
-  font-size: 11px;
-  color: #9CA3AF;
-  line-height: 1.3;
-  margin-top: 1px;
-}
-
 /* ── Verdict card ── */
 .p1-verdict {
   flex: 1;
@@ -461,8 +369,8 @@ const verdictDesc = computed(() => {
 }
 
 .verdict {
-  border-radius: 14px;
-  padding: 22px 20px;
+  border-radius: 4px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -493,17 +401,17 @@ const verdictDesc = computed(() => {
 }
 
 .verdict-title {
-  font-size: 16px;
-  font-weight: 700;
-  font-style: italic;
+  font-size: 14px;
+  font-weight: 600;
   color: #1D1D1B;
-  line-height: 1.3;
+  line-height: normal;
   margin-bottom: 8px;
 }
 
 .verdict-desc {
-  font-size: 13px;
-  color: #6B7280;
+  font-size: 12px;
+  font-weight: 400;
+  color: #787878;
   line-height: 1.55;
   flex: 1;
 }
@@ -518,7 +426,7 @@ const verdictDesc = computed(() => {
   background: #1D1D1B;
   color: #FFF;
   border: none;
-  border-radius: 10px;
+  border-radius: 4px;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -551,7 +459,7 @@ const verdictDesc = computed(() => {
 }
 
 /* ── Responsive ── */
-@media (max-width: 1100px) {
+@media (max-width: 900px) {
   .p1-row {
     flex-wrap: wrap;
     gap: 12px;
@@ -561,17 +469,12 @@ const verdictDesc = computed(() => {
   }
   .p1-card,
   .p1-verdict {
-    flex: 1 1 calc(50% - 6px);
-    min-width: 240px;
+    flex: 1 1 100%;
   }
 }
 
-@media (max-width: 650px) {
-  .p1-card,
-  .p1-verdict {
-    flex: 1 1 100%;
-  }
-  .std-p1 {
+@media (max-width: 600px) {
+  .blue-p1 {
     padding: 12px;
   }
   .p1-card {
@@ -581,10 +484,10 @@ const verdictDesc = computed(() => {
     padding: 16px 14px;
   }
   .verdict-title {
-    font-size: 14px;
+    font-size: 13px;
   }
   .verdict-desc {
-    font-size: 12px;
+    font-size: 11px;
   }
   .verdict-btn {
     padding: 10px 16px;

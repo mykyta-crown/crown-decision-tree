@@ -5,10 +5,10 @@
   <v-container fluid class="py-6 px-6">
     <div class="phase2-layout">
       <div class="phase2-table">
-        <DecisionTreeCalculatorLotTable />
+        <DecisionTreeCalculatorLotTableBlue />
       </div>
       <div class="phase2-panel">
-        <DecisionTreeCalculatorRecommendationPanel />
+        <DecisionTreeCalculatorRecommendationPanelBlue />
       </div>
     </div>
   </v-container>

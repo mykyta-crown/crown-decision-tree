@@ -483,4 +483,57 @@ watch(show, (val) => { if (val) reset() })
   opacity: 0;
   transform: translateY(-8px);
 }
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .dt4-header {
+    padding: 12px 14px;
+  }
+
+  .dt4-body {
+    padding: 16px 14px;
+  }
+
+  .dt4-criteria {
+    gap: 14px;
+  }
+
+  .crit-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .crit-label {
+    width: 100%;
+  }
+
+  .crit-pills {
+    flex-wrap: wrap;
+  }
+
+  .pill {
+    flex: none;
+    padding: 7px 10px;
+    font-size: 11px;
+    white-space: normal;
+  }
+
+  .result-card {
+    flex-direction: column;
+  }
+
+  .result-chart {
+    width: 100%;
+    padding: 8px 12px;
+  }
+
+  .runners {
+    flex-direction: column;
+  }
+
+  .dt4-empty {
+    padding: 24px 0 8px;
+  }
+}
 </style>

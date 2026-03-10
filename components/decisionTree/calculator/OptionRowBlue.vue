@@ -56,9 +56,9 @@ defineProps<{
 }
 
 .pill-selected {
-  border-color: #1D1D1B;
+  border: 1px solid #1D1D1B;
   color: #1D1D1B;
-  font-weight: 600;
+  font-weight: 400;
 }
 
 @media (max-width: 400px) {

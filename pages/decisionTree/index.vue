@@ -33,65 +33,7 @@
     </v-row>
 
     <!-- How does it work dialog -->
-    <v-dialog v-model="showHowItWorks" max-width="580" content-class="hiw-dialog">
-      <v-card class="hiw-card">
-        <v-btn
-          icon="mdi-close"
-          variant="text"
-          size="small"
-          class="hiw-close"
-          @click="showHowItWorks = false"
-        />
-        <div class="hiw-header">
-          <div class="hiw-icon-wrap">
-            <v-icon size="28" color="#1D1D1B">mdi-lightbulb-outline</v-icon>
-          </div>
-          <h2 class="hiw-title">{{ t('page.howItWorks') }}</h2>
-          <p class="hiw-intro">{{ t('page.howIntro') }}</p>
-        </div>
-
-        <div class="hiw-steps">
-          <div class="hiw-step">
-            <div class="hiw-step-num">1</div>
-            <div class="hiw-step-body">
-              <div class="hiw-step-title">{{ t('page.step1Title') }}</div>
-              <div class="hiw-step-desc">{{ t('page.step1Desc') }}</div>
-            </div>
-          </div>
-
-          <div class="hiw-step-line" />
-
-          <div class="hiw-step">
-            <div class="hiw-step-num">2</div>
-            <div class="hiw-step-body">
-              <div class="hiw-step-title">{{ t('page.step2Title') }}</div>
-              <div class="hiw-step-desc">{{ t('page.step2Desc') }}</div>
-            </div>
-          </div>
-
-          <div class="hiw-step-line" />
-
-          <div class="hiw-step">
-            <div class="hiw-step-num">3</div>
-            <div class="hiw-step-body">
-              <div class="hiw-step-title">{{ t('page.step3Title') }}</div>
-              <div class="hiw-step-desc">{{ t('page.step3Desc') }}</div>
-            </div>
-          </div>
-        </div>
-
-        <v-btn
-          color="#1D1D1B"
-          variant="flat"
-          block
-          class="hiw-start-btn"
-          append-icon="mdi-arrow-right"
-          @click="showHowItWorks = false; createNewGuided()"
-        >
-          {{ t('page.startScenario') }}
-        </v-btn>
-      </v-card>
-    </v-dialog>
+    <DecisionTreeCalculatorHowItWorksDialog v-model="showHowItWorks" @start="createNewGuided" />
 
     <!-- Toolbar -->
     <v-row align="center" class="mb-6">
@@ -128,6 +70,14 @@
         >
           {{ t('page.quickSelector') }}
         </v-btn>
+        <v-btn
+          variant="outlined"
+          color="primary"
+          prepend-icon="mdi-sitemap-outline"
+          @click="showTreeV5 = true"
+        >
+          {{ t('page.dt5') }}
+        </v-btn>
       </v-col>
       <v-spacer />
       <v-col cols="auto" class="d-flex align-center ga-3">
@@ -145,6 +95,15 @@
           prepend-icon="mdi-plus"
           class="guided-btn"
           @click="createNewGuided"
+        >
+          {{ t('page.newScenario') }}
+        </v-btn>
+        <v-btn
+          color="#60A5FA"
+          variant="flat"
+          prepend-icon="mdi-plus"
+          class="blue-btn"
+          @click="createNewBlue"
         >
           {{ t('page.newScenario') }}
         </v-btn>
@@ -187,6 +146,7 @@
     <DecisionTreeCalculatorDecisionTreeV2 v-model="showTreeV2" />
     <DecisionTreeCalculatorDecisionTreeV3 v-model="showTreeV3" />
     <DecisionTreeCalculatorDecisionTreeV4 v-model="showTreeV4" />
+    <DecisionTreeCalculatorDecisionTreeV5 v-model="showTreeV5" />
 
     <!-- Table -->
     <v-card variant="outlined">
@@ -473,6 +433,7 @@ const showTreeV1 = ref(false)
 const showTreeV2 = ref(false)
 const showTreeV3 = ref(false)
 const showTreeV4 = ref(false)
+const showTreeV5 = ref(false)
 const showHowItWorks = ref(false)
 
 // Column search fields
@@ -622,6 +583,12 @@ function createNewGuided() {
   router.push('/decisionTree/calculator/new')
 }
 
+function createNewBlue() {
+  calcStore.resetEditor()
+  calcStore.mode = 'blue'
+  router.push('/decisionTree/calculator/new')
+}
+
 function openProject(proj: any) {
   calcStore.hydrateFromState(proj.state)
   if (proj.owner) {
@@ -762,106 +729,17 @@ function openProject(proj: any) {
   color: #065F46 !important;
 }
 
+/* ── Blue button ── */
+.blue-btn {
+  color: #1E3A5F !important;
+}
+
 /* ── How does it work button ── */
 .how-btn {
   text-transform: none;
   font-weight: 500;
   font-size: 13px;
   letter-spacing: 0;
-}
-
-/* ── How it works dialog ── */
-.hiw-card {
-  padding: 32px;
-  border-radius: 16px !important;
-  position: relative;
-}
-.hiw-close {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-}
-.hiw-header {
-  text-align: center;
-  margin-bottom: 28px;
-}
-.hiw-icon-wrap {
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
-  background: #F3F4F6;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 14px;
-}
-.hiw-title {
-  font-size: 20px;
-  font-weight: 700;
-  color: #1D1D1B;
-  margin-bottom: 8px;
-}
-.hiw-intro {
-  font-size: 13px;
-  color: #6B7280;
-  line-height: 1.5;
-  max-width: 420px;
-  margin: 0 auto;
-}
-
-/* Steps */
-.hiw-steps {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 24px;
-}
-.hiw-step {
-  display: flex;
-  gap: 14px;
-  align-items: flex-start;
-}
-.hiw-step-num {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background: #1D1D1B;
-  color: #FFF;
-  font-size: 13px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  margin-top: 2px;
-}
-.hiw-step-body {
-  flex: 1;
-  min-width: 0;
-}
-.hiw-step-title {
-  font-size: 14px;
-  font-weight: 600;
-  color: #1D1D1B;
-  margin-bottom: 4px;
-}
-.hiw-step-desc {
-  font-size: 13px;
-  color: #6B7280;
-  line-height: 1.5;
-}
-.hiw-step-line {
-  width: 1.5px;
-  height: 16px;
-  background: #E5E7EB;
-  margin: 6px 0 6px 14px;
-}
-.hiw-start-btn {
-  font-weight: 600;
-  text-transform: none;
-  border-radius: 10px;
-  font-size: 14px;
-  height: 44px !important;
-  letter-spacing: 0.01em;
 }
 
 /* ─── Bulk action bar ─── */
@@ -952,5 +830,32 @@ function openProject(proj: any) {
   letter-spacing: 0 !important;
   min-width: 36px !important;
   height: 28px !important;
+}
+
+/* ── Responsive ── */
+@media (max-width: 1100px) {
+  .table-header {
+    grid-template-columns: 40px 2fr 1fr 1fr 1fr 1fr 1fr 100px 36px 40px;
+  }
+}
+
+@media (max-width: 900px) {
+  .list-page {
+    padding: 16px 12px 48px;
+  }
+  .table-header {
+    display: none;
+  }
+  .pagination-footer {
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+  }
+}
+
+@media (max-width: 600px) {
+  .list-page {
+    padding: 10px 6px 40px;
+  }
 }
 </style>

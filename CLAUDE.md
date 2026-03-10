@@ -393,6 +393,42 @@ mcp__supabase__execute_sql({
 - Use `<script setup>` syntax
 - French comments are acceptable
 
+## UI Design System
+
+### General Principles
+- Minimalistic SaaS UI — clean, structured, data-first
+- Low cognitive load, no visual noise
+- Flat design (no heavy shadows), subtle `border-radius: 4px` everywhere
+- Use whitespace instead of lines, grid-based layout
+- Progressive disclosure — show only relevant data
+
+### Colors
+- **Primary accent**: Green (active states, success, progress, positive KPIs)
+- **Background**: `#F8F8F8` | **Surface**: `#FFFFFF` | **Divider**: `#E9EAEC`
+- **Text primary**: `#1D1D1B` | **Text secondary**: `#61615F` | **Placeholder**: `#AEB0B2` | **Disabled**: `#C5C7C9`
+- **Functional light colors**: Purple `#EDEBFE` | Blue `#DFF0FF` | Yellow `#FDFFD2` | Orange `#FFE1CB` | Red `#FDE8E8` | Green `#EBFFF7`
+
+### Badges (statuses, tags, categories)
+- Structure: `height: 24-28px`, `padding: 4px 8px`, `border-radius: 4px`, `font: 12px medium`, `display: inline-flex`, `gap: 4-6px`
+- Use soft background + darker text + optional icon
+
+### Typography (Poppins)
+- H1: 48/72 Bold | H2: 36/54 Bold | H3: 28/auto Bold-Medium | H4: 20/auto Bold-Semibold-Regular
+- Body: 16/24 Regular | Small: 14/20 Regular | XS: 12/16
+
+### Spacing
+- Base unit: **4px**, only multiples of 4 (4, 8, 12, 16, 20, 24, 32, 40, 48, 56, 64)
+
+### Components
+- **Buttons**: height 40px, padding 8px 32px, radius 4px
+  - Primary: bg `#1D1D1B`, text white
+  - Secondary: border `#E9EAEC`, bg transparent
+  - Tertiary: text-only, green accent
+- **Inputs**: height 40px, padding 8px 12px, border `#E9EAEC`, radius 4px
+- **Cards**: white bg, border `#E9EAEC`, radius 4px, padding 16-20px
+- **Checkbox**: 16px, radius 4px
+- **Data display**: bold for key numbers, green for positive KPIs, badges for statuses
+
 ## 🚨 CRITICAL: Database Migrations Policy
 
 **ALL database modifications MUST go through Supabase migrations. NO EXCEPTIONS.**
@@ -538,3 +574,37 @@ This documentation is a living resource - keep it accurate and helpful!
 - `## E2E: Create Multi-Lot Multi-Item eAuction with MCP Browser`
 
 Each new browser test flow should have its own section with the same structure.
+
+## Session State (updated every ~5 messages)
+
+### Current Scope
+- Working on **Decision Tree / Architect module** only
+- Do NOT modify the rest of the codebase (auction engine, bidding, etc.) unless explicitly asked
+
+### Decision Tree Routes
+- `/decisionTree` routes are **public** (no auth required) — see middleware config
+
+### Decision Tree Colors — `gfc(family)`
+Returns `{ border, bg, text }` per family. Defined in `utils/decisionTree/constants.ts`:
+- Sealed Bid: cyan `#67E8F9` | English: green `#34D399` | Dutch: violet `#A78BFA`
+- Japanese: yellow `#FBBF24` | Traditional: orange `#FB923C` | Double Scenario: rose `#F472B6`
+
+### Options per Auction Family
+| Family | Pre-bid | Preference | Award | Rank | No Rank |
+|--------|---------|------------|-------|------|---------|
+| Double Scenario | yes | yes | yes | - | - |
+| English | yes | yes | yes | yes | - |
+| Dutch | yes | yes | yes | - | - |
+| Japanese | yes | - | yes | yes | yes |
+| Sealed Bid | - | yes | yes | yes | yes |
+| Traditional | - | - | - | - | - |
+
+### Admin Users (DEV)
+- lisa@crown-procurement.com, louis@crown-procurement.com, nastya@crown-procurement.com
+- All profiles created manually (auth webhook failed)
+
+### Common Dev Issues
+- `Cannot delete property 'runtimeConfig'` → clear `.nuxt` + `node_modules/.cache`, restart dev
+- `useTranslations` → always **default import** (`import useTranslations from`)
+- `"type": "module"` in package.json → temp scripts need `.cjs` extension
+- Direct DB connection blocked locally → use Dashboard SQL editor or Node.js admin client

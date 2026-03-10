@@ -207,6 +207,8 @@ export function getScores(params: ScoringParams, a: number, b: number, c: number
     if (a >= 2 && b <= 2 && c !== 1 && s.family === 'Japanese') raw += 40
     // Q3×family: Award boosts Dutch to ensure it always beats Japanese for binding awards
     if (c === 1 && s.family === 'Dutch') raw += 10
+    // Traditional is the ultimate fallback — never eliminate it
+    if (s.family === 'Traditional' && raw < 0) raw = 1
     return { ...s, raw, saving: params.savings[i], tiebreak: raw + (22 - i) / 10000 }
   })
   const pos = res.filter(r => r.raw >= 0).map(r => r.raw)

@@ -249,4 +249,31 @@ function onMenuAction(action: 'edit' | 'archive' | 'duplicate' | 'delete') {
   align-items: center;
   justify-content: center;
 }
+
+/* ── Responsive ── */
+@media (max-width: 1100px) {
+  .project-row {
+    grid-template-columns: 40px 2fr 1fr 1fr 1fr 1fr 1fr 100px 36px 40px;
+  }
+}
+
+@media (max-width: 900px) {
+  .project-row {
+    grid-template-columns: 36px 1fr auto auto;
+    gap: 8px;
+    height: auto;
+    padding: 10px 12px;
+  }
+  /* Hide less important columns on mobile */
+  .col-cell:nth-child(3),  /* client */
+  .col-cell:nth-child(4),  /* created */
+  .col-cell:nth-child(5),  /* modified */
+  .col-cell:nth-child(6),  /* type */
+  .col-cell:nth-child(7) { /* owner */
+    display: none;
+  }
+  .col-star {
+    display: none;
+  }
+}
 </style>

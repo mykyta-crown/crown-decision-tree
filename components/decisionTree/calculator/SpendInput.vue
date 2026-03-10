@@ -80,4 +80,14 @@ function commit() {
 .spend-display {
   cursor: text;
 }
+
+@media (max-width: 600px) {
+  .spend-edit,
+  .spend-display {
+    font-size: 20px;
+    width: 110px;
+    height: 28px;
+    line-height: 28px;
+  }
+}
 </style>

@@ -196,7 +196,7 @@ function lotBlockHtml(lot: ExportLot, li: number, data: ExportData): string {
   const activeSup = lot.prices.filter((p, i) => !lot.excl[i] && p > 0).length
   const excludedSup = lot.excl.filter(Boolean).length
 
-  const awardLabel = data.mode === 'guided' ? (AWARD_MAP[lot.award] || 'Award') : (AWARD_MAP[data.award ?? 1] || 'Award')
+  const awardLabel = (data.mode === 'guided' || data.mode === 'blue') ? (AWARD_MAP[lot.award] || 'Award') : (AWARD_MAP[data.award ?? 1] || 'Award')
   const prefLabel = PREF_LABELS[lot.pref] || 'None'
 
   // Gap calculation (same as scoring engine)
@@ -388,7 +388,7 @@ export function exportDecisionTreePdf(data: ExportData) {
       <div style="width:28px;height:28px;border-radius:6px;background:#D1FAE5;color:#065F46;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;">1</div>
       <span style="font-size:16px;font-weight:600;color:#1D1D1B;">eAuction Feasibility Check</span>
     </div>
-    <div style="display:grid;grid-template-columns:repeat(${data.mode === 'guided' ? 3 : 4}, 1fr);gap:16px;margin-bottom:16px;">
+    <div style="display:grid;grid-template-columns:repeat(${(data.mode === 'guided' || data.mode === 'blue') ? 3 : 4}, 1fr);gap:16px;margin-bottom:16px;">
       <div style="border:1px solid #E9EAEC;border-radius:8px;padding:16px;">
         <div style="font-size:11px;color:#61615F;margin-bottom:4px;">Total Spend</div>
         <div style="font-size:18px;font-weight:700;color:#1D1D1B;">${fmtE(data.spend, data.ccy)}</div>
@@ -402,7 +402,7 @@ export function exportDecisionTreePdf(data: ExportData) {
         <div style="font-size:11px;color:#61615F;margin-bottom:4px;">Currency</div>
         <div style="font-size:18px;font-weight:700;color:#1D1D1B;">${ccyLabel}</div>
       </div>
-      ${data.mode !== 'guided' ? `
+      ${(data.mode !== 'guided' && data.mode !== 'blue') ? `
       <div style="border:1px solid #E9EAEC;border-radius:8px;padding:16px;">
         <div style="font-size:11px;color:#61615F;margin-bottom:4px;">Award Method</div>
         <div style="font-size:18px;font-weight:700;color:#1D1D1B;">${awardLabel}</div>
@@ -421,7 +421,7 @@ export function exportDecisionTreePdf(data: ExportData) {
     const activePrices = lot.prices.filter((p, pi) => !lot.excl[pi] && p > 0)
     const supCount = activePrices.length
     const prefLabel = PREF_LABELS[lot.pref] || 'None'
-    const lotAward = data.mode === 'guided' ? (AWARD_MAP[lot.award] || 'Award') : awardLabel
+    const lotAward = (data.mode === 'guided' || data.mode === 'blue') ? (AWARD_MAP[lot.award] || 'Award') : awardLabel
     lotTableRows += `
     <tr>
       <td style="padding:8px 12px;border-bottom:1px solid #F3F4F6;font-size:12px;color:#61615F;">Lot ${i + 1}</td>
@@ -516,7 +516,7 @@ export function exportDecisionTreePdf(data: ExportData) {
     <div style="text-align:right;">
       <div style="font-size:11px;color:#9CA3AF;font-weight:500;margin-bottom:4px;">Total Baseline</div>
       <div style="font-size:20px;font-weight:700;color:#1D1D1B;">${fmtE(data.totBase, data.ccy)}</div>
-      <div style="font-size:11px;color:#9CA3AF;margin-top:2px;">${data.lots.length} lot${data.lots.length > 1 ? 's' : ''} &middot; ${data.nSup} supplier${data.nSup > 1 ? 's' : ''} &middot; ${ccyLabel} &middot; ${data.mode === 'guided' ? 'Quick Scenario' : 'Standard'}</div>
+      <div style="font-size:11px;color:#9CA3AF;margin-top:2px;">${data.lots.length} lot${data.lots.length > 1 ? 's' : ''} &middot; ${data.nSup} supplier${data.nSup > 1 ? 's' : ''} &middot; ${ccyLabel} &middot; ${data.mode === 'guided' ? 'Quick Scenario' : data.mode === 'blue' ? 'Blue Scenario' : 'Standard'}</div>
     </div>
   </div>
 

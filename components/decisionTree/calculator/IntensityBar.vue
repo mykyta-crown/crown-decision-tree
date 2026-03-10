@@ -1,6 +1,6 @@
 <template>
   <div class="intensity-row">
-    <span class="intensity-label">Intensity:</span>
+    <span class="intensity-label">{{ label }}:</span>
     <div class="intensity-bars">
       <div
         v-for="i in totalBars"
@@ -19,9 +19,11 @@ import { computed } from 'vue'
 const props = withDefaults(defineProps<{
   value?: number
   family?: string
+  label?: string
 }>(), {
   value: -1,
   family: '',
+  label: 'Intensity',
 })
 
 const totalBars = 16

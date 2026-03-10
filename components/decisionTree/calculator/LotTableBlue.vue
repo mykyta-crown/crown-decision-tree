@@ -39,6 +39,9 @@ const tableWidth = computed(() => {
   const award = isGuided.value ? W.award : 0
   return base + award + store.sc * W.sup + 'px'
 })
+
+/* Force visible scrollbar when 3+ suppliers or narrow viewport */
+const forceScroll = computed(() => store.sc >= 3)
 </script>
 
 <template>
@@ -68,7 +71,7 @@ const tableWidth = computed(() => {
     </div>
 
     <!-- Scrollable table area -->
-    <div class="table-scroll">
+    <div class="table-scroll" :class="{ 'table-scroll--force': forceScroll }">
       <table class="xl-table" :style="{ minWidth: tableWidth, width: '100%' }">
         <colgroup>
           <col class="col-num" />
@@ -194,8 +197,10 @@ const tableWidth = computed(() => {
                   v-if="store.sc > 1"
                   class="sup-remove-btn"
                   role="button"
+                  tabindex="0"
                   :aria-label="'Remove ' + sn"
                   @click="store.removeSupplierAt(si)"
+                  @keydown.enter="store.removeSupplierAt(si)"
                 >
                   <svg width="7" height="7" viewBox="0 0 7 7" fill="none">
                     <path d="M1 1L6 6M6 1L1 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
@@ -313,7 +318,7 @@ const tableWidth = computed(() => {
               >
                 <span class="price-excluded-plus">+</span>
               </div>
-              <div v-else class="price-wrap" @click.stop>
+              <div v-else class="price-wrap" :class="{ 'price-wrap--err': store.offersErr && !lot.prices[si - 1] }" @click.stop>
                 <input
                   type="number"
                   :value="lot.prices[si - 1] || ''"
@@ -368,6 +373,11 @@ const tableWidth = computed(() => {
         </v-btn>
       </div>
     </div>
+
+    <!-- Offers validation error message -->
+    <div v-if="store.offersErr && !store.allOffersFilled" class="offers-err-msg">
+      {{ t('calc.lotTable.offersError') }}
+    </div>
   </v-card>
 </template>
 
@@ -387,14 +397,12 @@ const tableWidth = computed(() => {
   padding: 10px 16px;
   border-bottom: 1px solid #E9EAEC;
 }
+/* [CHANGE 2] Baseline — plain inline label, no border/background */
 .baseline-chip {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 14px 6px 10px;
-  border-radius: 6px;
-  background: #F9FAFB;
-  border: 1px solid #E5E7EB;
+  padding: 6px 0;
 }
 .baseline-icon {
   color: #6B7280;
@@ -520,7 +528,6 @@ const tableWidth = computed(() => {
 }
 
 /* ─── Sticky columns ─── */
-/* Group row: # and Name pinned left */
 .grp--sticky-num {
   position: sticky;
   left: 0;
@@ -530,7 +537,6 @@ const tableWidth = computed(() => {
   position: sticky;
   z-index: 4;
 }
-/* Sub-header & data: # pinned left */
 .xl-th--sticky-num,
 .xl-td--sticky-num {
   position: sticky;
@@ -541,7 +547,6 @@ const tableWidth = computed(() => {
 .xl-td--sticky-num {
   background: #FFF;
 }
-/* Sub-header & data: name pinned left */
 .xl-th--sticky-name,
 .xl-td--sticky-name {
   position: sticky;
@@ -551,10 +556,10 @@ const tableWidth = computed(() => {
 .xl-td--sticky-name {
   background: #FFF;
 }
-/* Selected / hover backgrounds for sticky cells */
+/* [CHANGE 5] Selected row — no green bg on sticky cells */
 .xl-row--sel .xl-td--sticky-num,
 .xl-row--sel .xl-td--sticky-name {
-  background: #F0FDF4;
+  background: #FFF;
 }
 .xl-row:hover:not(.xl-row--sel) .xl-td--sticky-num,
 .xl-row:hover:not(.xl-row--sel) .xl-td--sticky-name {
@@ -578,7 +583,7 @@ const tableWidth = computed(() => {
   background: #FFF;
 }
 .xl-td--del-sel {
-  background: #F0FDF4 !important;
+  background: #FFF !important;
 }
 .xl-row:hover:not(.xl-row--sel) .xl-td--sticky-del {
   background: #F9FAFB;
@@ -587,23 +592,33 @@ const tableWidth = computed(() => {
 /* ─── Table scroll ─── */
 .table-scroll {
   flex: 1;
-  overflow-x: scroll;
+  overflow-x: auto;
   scrollbar-width: thin;
   scrollbar-color: #C0C0C0 #F3F4F6;
 }
 .table-scroll::-webkit-scrollbar {
-  height: 8px;
+  height: 6px;
+  display: block;
 }
 .table-scroll::-webkit-scrollbar-track {
-  background: #F3F4F6;
-  border-radius: 4px;
+  background: #F1F1F1;
 }
 .table-scroll::-webkit-scrollbar-thumb {
-  background: #C0C0C0;
-  border-radius: 4px;
+  background: #C1C1C1;
+  border-radius: 3px;
 }
 .table-scroll::-webkit-scrollbar-thumb:hover {
   background: #A0A0A0;
+}
+/* [CHANGE 4] Force visible scrollbar on 3+ suppliers */
+.table-scroll--force {
+  overflow-x: scroll;
+}
+/* Also force on narrow viewports */
+@media (max-width: 1280px) {
+  .table-scroll {
+    overflow-x: scroll;
+  }
 }
 
 /* ─── Excel-like table ─── */
@@ -629,7 +644,7 @@ const tableWidth = computed(() => {
   padding: 8px 10px;
   font-size: 11px;
   font-weight: 600;
-  color: #8E8E8E;
+  color: #6B6B6B;
   text-transform: uppercase;
   letter-spacing: 0.04em;
   text-align: left;
@@ -670,7 +685,7 @@ const tableWidth = computed(() => {
   background: transparent;
   font-size: 11px;
   font-weight: 600;
-  color: #8E8E8E;
+  color: #6B6B6B;
   letter-spacing: 0.04em;
   text-transform: uppercase;
   font-family: inherit;
@@ -678,6 +693,7 @@ const tableWidth = computed(() => {
   min-width: 0;
   padding: 0;
 }
+/* [CHANGE 3] Supplier × hidden by default, shown on hover/focus */
 .sup-remove-btn {
   cursor: pointer;
   flex-shrink: 0;
@@ -689,23 +705,33 @@ const tableWidth = computed(() => {
   justify-content: center;
   background: rgba(0, 0, 0, 0.06);
   color: #AAAAAA;
-  transition: background 0.15s, color 0.15s;
+  transition: background 0.15s, color 0.15s, opacity 0.15s;
+  opacity: 0;
+}
+.sup-header:hover .sup-remove-btn,
+.sup-remove-btn:focus {
+  opacity: 1;
 }
 .sup-remove-btn:hover {
   background: #FECACA;
   color: #EF4444;
+  opacity: 1;
 }
 
 /* ─── Rows ─── */
 .xl-row {
   cursor: pointer;
   transition: background 0.08s;
+  /* [CHANGE 5] Transparent left border to prevent layout shift */
+  border-left: 3px solid transparent;
 }
 .xl-row:hover:not(.xl-row--sel) {
   background: #F9FAFB;
 }
+/* [CHANGE 5] Active row: black left border, no green background */
 .xl-row--sel {
-  background: #F0FDF4;
+  background: #FFF;
+  border-left: 3px solid #1D1D1B;
 }
 
 /* ─── Cells ─── */
@@ -726,7 +752,7 @@ const tableWidth = computed(() => {
   padding-left: 2px;
 }
 .xl-td--num.active {
-  color: #34D399;
+  color: #1D1D1B;
 }
 .xl-td--crit {
   background: rgba(238, 242, 255, 0.3);
@@ -866,7 +892,7 @@ const tableWidth = computed(() => {
 }
 .intensity-val {
   font-size: 11px;
-  color: #8E8E8E;
+  color: #6B6B6B;
   font-weight: 600;
   min-width: 28px;
   text-align: right;
@@ -906,7 +932,7 @@ const tableWidth = computed(() => {
   justify-content: center;
   cursor: pointer;
   font-size: 9px;
-  color: #8E8E8E;
+  color: #6B6B6B;
   padding: 0;
   opacity: 0;
   transition: opacity 0.12s;
@@ -914,6 +940,18 @@ const tableWidth = computed(() => {
 }
 .price-wrap:hover .price-x {
   opacity: 1;
+}
+
+/* ─── Offers validation error ─── */
+.price-wrap--err {
+  border: 1px solid #E02424;
+  border-radius: 4px;
+}
+.offers-err-msg {
+  padding: 8px 16px;
+  font-size: 13px;
+  color: #E02424;
+  border-top: 1px solid #E9EAEC;
 }
 
 /* ─── Delete button ─── */

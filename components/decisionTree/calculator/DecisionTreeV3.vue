@@ -380,4 +380,34 @@ const show = defineModel<boolean>({ default: false })
 .pct-japanese { color: #7C3AED; }
 .pct-sealed { color: #0D9488; }
 .pct-nego { color: #6B7280; }
+
+/* ── Responsive ── */
+@media (max-width: 700px) {
+  .matrix-canvas {
+    padding: 16px !important;
+  }
+
+  .matrix-table {
+    min-width: 600px;
+  }
+
+  .matrix-row {
+    grid-template-columns: 140px repeat(6, 1fr);
+  }
+
+  .cell-param {
+    padding-left: 8px;
+    font-size: 12px;
+  }
+
+  .matrix-cell {
+    padding: 10px 6px;
+    font-size: 12px;
+  }
+
+  .cell-type {
+    font-size: 10px;
+    padding: 8px 2px;
+  }
+}
 </style>

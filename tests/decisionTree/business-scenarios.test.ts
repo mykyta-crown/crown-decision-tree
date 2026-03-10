@@ -176,11 +176,10 @@ describe('B. Realistic procurement scenarios', () => {
     // Should be a transformation variant
     expect(top.tf).not.toBe('None')
     expect(top.tf).not.toBe('—')
-    // Traditional should be eliminated with financial pref (bestOf returns undefined for eliminated)
-    expect(bestOf(r, 'Traditional')).toBeUndefined()
-    // Verify it's actually eliminated in raw results
+    // Traditional survives with fallback raw=1 but scores very low
     const trad = r.find(s => s.family === 'Traditional')
-    expect(trad?.eliminated).toBe(true)
+    expect(trad?.eliminated).toBe(false)
+    expect(trad?.raw).toBe(1) // clamped by fallback rule
   })
 
   // ── B9. Non-financial preference with Dutch ──
@@ -599,13 +598,15 @@ describe('J. Regression guard — key business invariants', () => {
           }
   })
 
-  it('INVARIANT: Financial preference (Q4=3) ALWAYS eliminates Traditional', () => {
+  it('INVARIANT: Financial preference (Q4=3) penalizes Traditional but fallback keeps it alive', () => {
     for (let q1 = 1; q1 <= 3; q1++)
       for (let q2 = 1; q2 <= 3; q2++)
         for (let q3 = 1; q3 <= 3; q3++) {
           const r = getScores(P, q1, q2, q3, 3, 2, 1)
           const trad = r.find(s => s.family === 'Traditional')
-          expect(trad?.eliminated).toBe(true)
+          // Traditional fallback rule clamps raw to 1 (never eliminated)
+          expect(trad?.eliminated).toBe(false)
+          expect(trad?.raw).toBe(1)
         }
   })
 

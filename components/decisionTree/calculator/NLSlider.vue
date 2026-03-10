@@ -167,4 +167,10 @@ function onSlide(e: Event) {
   font-weight: 500;
   white-space: nowrap;
 }
+
+@media (max-width: 400px) {
+  .tick-label {
+    font-size: 9px;
+  }
+}
 </style>
