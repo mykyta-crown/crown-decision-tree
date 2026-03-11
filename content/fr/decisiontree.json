@@ -163,6 +163,7 @@
     "q1": "Le budget justifie-t-il une enchère en temps réel ?",
     "q2": "Avez-vous 3+ fournisseurs avec des prix proches ?",
     "q3": "Souhaitez-vous attribuer directement depuis l'enchère ?",
+    "q3a": "Combiner les formats pour maximiser les économies ?",
     "bestPotential": "Meilleur potentiel",
     "simpleApproach": "Approche simple",
     "dsShort": "Combine Anglaise + Hollandaise pour une compétition maximale",

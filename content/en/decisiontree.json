@@ -163,6 +163,7 @@
     "q1": "Does the spend justify a real-time auction?",
     "q2": "Do you have 3+ suppliers with close prices?",
     "q3": "Do you want to award directly from the auction?",
+    "q3a": "Combine formats for maximum savings?",
     "bestPotential": "Best potential",
     "simpleApproach": "Simple approach",
     "dsShort": "Combines English + Dutch for maximum competition",

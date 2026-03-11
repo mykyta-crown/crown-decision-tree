@@ -18,142 +18,170 @@
       </div>
 
       <div class="dt5-body">
-        <!-- ═══════════ DECISION TREE (SVG lines + positioned HTML) ═══════════ -->
+        <!-- ═══════════ DECISION TREE (SVG lines + positioned content) ═══════════ -->
+        <!--
+          Tree logic:
+          Q1 real-time? → YES → Q2 3+ suppliers?
+            → YES (best potential) → Q3a combine formats? → YES: DS / NO: Japanese
+            → NO → Q3 award directly? → YES: English / NO: Dutch
+          Q1 → NO (simple) → Sealed Bid / Traditional
+
+          Card order: DS, Japanese, English, Dutch, Sealed Bid, Traditional
+          Col centers: 8.33%, 25%, 41.67%, 58.33%, 75%, 91.67%
+          Left half (1-4): 33.33%   Right half (5-6): 83.33%
+          Left-left (1-2): 16.67%   Left-right (3-4): 50%
+        -->
         <div class="tree-section">
-          <!-- SVG layer: ALL connecting lines -->
-          <svg class="tree-svg" viewBox="0 0 100 380" preserveAspectRatio="none">
+          <!-- SVG lines layer -->
+          <svg class="tree-svg" viewBox="0 0 100 400" preserveAspectRatio="none">
             <g fill="none" stroke="#D1D5DB" stroke-width="1.5">
-              <!-- Root stem (center → fork) -->
-              <line x1="50" y1="48" x2="50" y2="62" />
-              <!-- Root fork bar (left-center ↔ right-center) -->
-              <line x1="25" y1="62" x2="75" y2="62" />
+              <!-- Root stem -->
+              <line x1="50" y1="46" x2="50" y2="60" />
+              <!-- Root bar (left-half ↔ right-half) -->
+              <line x1="33.33" y1="60" x2="83.33" y2="60" />
               <!-- Root drops -->
-              <line x1="25" y1="62" x2="25" y2="78" />
-              <line x1="75" y1="62" x2="75" y2="78" />
+              <line x1="33.33" y1="60" x2="33.33" y2="76" />
+              <line x1="83.33" y1="60" x2="83.33" y2="76" />
 
-              <!-- YES badge → Q2 bubble -->
-              <line x1="25" y1="98" x2="25" y2="114" />
+              <!-- YES badge → Q2 -->
+              <line x1="33.33" y1="98" x2="33.33" y2="112" />
               <!-- NO badge → Simple label -->
-              <line x1="75" y1="98" x2="75" y2="128" />
+              <line x1="83.33" y1="98" x2="83.33" y2="128" />
 
-              <!-- Q2 bubble → Q2 fork -->
-              <line x1="25" y1="162" x2="25" y2="178" />
-              <!-- Simple label → triple fork -->
-              <line x1="75" y1="144" x2="75" y2="178" />
+              <!-- Q2 → Q2 fork -->
+              <line x1="33.33" y1="152" x2="33.33" y2="166" />
+              <!-- Simple → Simple fork -->
+              <line x1="83.33" y1="142" x2="83.33" y2="166" />
 
-              <!-- Q2 fork bar (col1 ↔ c23) -->
-              <line x1="8.33" y1="178" x2="33.33" y2="178" />
+              <!-- Q2 fork bar (cols 1-2 center ↔ cols 3-4 center) -->
+              <line x1="16.67" y1="166" x2="50" y2="166" />
               <!-- Q2 fork drops -->
-              <line x1="8.33" y1="178" x2="8.33" y2="194" />
-              <line x1="33.33" y1="178" x2="33.33" y2="194" />
+              <line x1="16.67" y1="166" x2="16.67" y2="180" />
+              <line x1="50" y1="166" x2="50" y2="180" />
 
-              <!-- Triple fork bar (col4 ↔ col6) -->
-              <line x1="58.33" y1="178" x2="91.67" y2="178" />
-              <!-- Triple fork drops -->
-              <line x1="58.33" y1="178" x2="58.33" y2="194" />
-              <line x1="75" y1="178" x2="75" y2="194" />
-              <line x1="91.67" y1="178" x2="91.67" y2="194" />
+              <!-- Simple fork bar (col5 ↔ col6) -->
+              <line x1="75" y1="166" x2="91.67" y2="166" />
+              <!-- Simple fork drops → continuous to bottom -->
+              <line x1="75" y1="166" x2="75" y2="400" />
+              <line x1="91.67" y1="166" x2="91.67" y2="400" />
 
-              <!-- Col 1: badge → BEST POTENTIAL → bottom -->
-              <line x1="8.33" y1="194" x2="8.33" y2="198" />
-              <line x1="8.33" y1="216" x2="8.33" y2="234" />
-              <line x1="8.33" y1="234" x2="8.33" y2="380" />
+              <!-- Q2-YES badge → Best Potential → Q3a -->
+              <line x1="16.67" y1="180" x2="16.67" y2="184" />
+              <line x1="16.67" y1="214" x2="16.67" y2="224" />
+              <!-- Q2-NO badge → Q3b -->
+              <line x1="50" y1="180" x2="50" y2="184" />
+              <line x1="50" y1="202" x2="50" y2="224" />
 
-              <!-- c23: badge → Q3 bubble -->
-              <line x1="33.33" y1="194" x2="33.33" y2="198" />
-              <line x1="33.33" y1="216" x2="33.33" y2="222" />
+              <!-- Q3a → Q3a fork -->
+              <line x1="16.67" y1="258" x2="16.67" y2="272" />
+              <!-- Q3a fork bar (col1 ↔ col2) -->
+              <line x1="8.33" y1="272" x2="25" y2="272" />
+              <!-- Q3a fork drops -->
+              <line x1="8.33" y1="272" x2="8.33" y2="286" />
+              <line x1="25" y1="272" x2="25" y2="286" />
 
-              <!-- Q3 bubble → Q3 fork -->
-              <line x1="33.33" y1="256" x2="33.33" y2="270" />
-              <!-- Q3 fork bar (col2 ↔ col3) -->
-              <line x1="25" y1="270" x2="41.67" y2="270" />
-              <!-- Q3 fork drops -->
-              <line x1="25" y1="270" x2="25" y2="286" />
-              <line x1="41.67" y1="270" x2="41.67" y2="286" />
+              <!-- Q3b → Q3b fork -->
+              <line x1="50" y1="258" x2="50" y2="272" />
+              <!-- Q3b fork bar (col3 ↔ col4) -->
+              <line x1="41.67" y1="272" x2="58.33" y2="272" />
+              <!-- Q3b fork drops -->
+              <line x1="41.67" y1="272" x2="41.67" y2="286" />
+              <line x1="58.33" y1="272" x2="58.33" y2="286" />
 
-              <!-- Col 2: badge → bottom -->
+              <!-- Col 1 (DS): badge → bottom -->
+              <line x1="8.33" y1="286" x2="8.33" y2="290" />
+              <line x1="8.33" y1="308" x2="8.33" y2="400" />
+              <!-- Col 2 (JP): badge → bottom -->
               <line x1="25" y1="286" x2="25" y2="290" />
-              <line x1="25" y1="308" x2="25" y2="380" />
-              <!-- Col 3: badge → bottom -->
+              <line x1="25" y1="308" x2="25" y2="400" />
+              <!-- Col 3 (EN): badge → bottom -->
               <line x1="41.67" y1="286" x2="41.67" y2="290" />
-              <line x1="41.67" y1="308" x2="41.67" y2="380" />
-
-              <!-- Cols 4-6: continuous from fork to bottom -->
-              <line x1="58.33" y1="194" x2="58.33" y2="380" />
-              <line x1="75" y1="194" x2="75" y2="380" />
-              <line x1="91.67" y1="194" x2="91.67" y2="380" />
+              <line x1="41.67" y1="308" x2="41.67" y2="400" />
+              <!-- Col 4 (DU): badge → bottom -->
+              <line x1="58.33" y1="286" x2="58.33" y2="290" />
+              <line x1="58.33" y1="308" x2="58.33" y2="400" />
             </g>
           </svg>
 
-          <!-- HTML content layer (positioned on top of SVG lines) -->
+          <!-- HTML content layer -->
           <div class="tree-content">
             <!-- Root question -->
-            <div class="tree-el" style="left: 50%; top: 4px">
+            <div class="tree-el" style="left: 50%; top: 2px">
               <div class="q-bubble q-bubble--root">
                 <span class="q-icon">💰</span>
                 <span class="q-text">{{ t('v5.q1') }}</span>
               </div>
             </div>
 
-            <!-- YES badge (root left) -->
-            <div class="tree-el" style="left: 25%; top: 80px">
+            <!-- YES badge -->
+            <div class="tree-el" style="left: 33.33%; top: 80px">
               <div class="badge badge--yes">{{ t('v5.yes') }}</div>
             </div>
-
-            <!-- NO badge (root right) -->
-            <div class="tree-el" style="left: 75%; top: 80px">
+            <!-- NO badge -->
+            <div class="tree-el" style="left: 83.33%; top: 80px">
               <div class="badge badge--no">{{ t('v5.no') }}</div>
             </div>
 
             <!-- Q2 bubble -->
-            <div class="tree-el" style="left: 25%; top: 114px">
+            <div class="tree-el" style="left: 33.33%; top: 112px">
               <div class="q-bubble">
                 <span class="q-icon">👥</span>
                 <span class="q-text">{{ t('v5.q2') }}</span>
               </div>
             </div>
-
             <!-- Simple Approach label -->
-            <div class="tree-el" style="left: 75%; top: 130px">
+            <div class="tree-el" style="left: 83.33%; top: 130px">
               <div class="hint-label">{{ t('v5.simpleApproach') }}</div>
             </div>
 
-            <!-- Q2 → YES badge (col 1) -->
-            <div class="tree-el" style="left: 8.33%; top: 198px">
+            <!-- Q2 → YES badge (cols 1-2 center) -->
+            <div class="tree-el" style="left: 16.67%; top: 184px">
               <div class="badge badge--yes badge--sm">{{ t('v5.yes') }}</div>
             </div>
-
-            <!-- BEST POTENTIAL label (col 1) -->
-            <div class="tree-el" style="left: 8.33%; top: 218px">
+            <!-- Best Potential hint -->
+            <div class="tree-el" style="left: 16.67%; top: 202px">
               <div class="hint-label">{{ t('v5.bestPotential') }}</div>
             </div>
-
-            <!-- Q2 → NO badge (cols 2-3 center) -->
-            <div class="tree-el" style="left: 33.33%; top: 198px">
+            <!-- Q2 → NO badge (cols 3-4 center) -->
+            <div class="tree-el" style="left: 50%; top: 184px">
               <div class="badge badge--no badge--sm">{{ t('v5.no') }}</div>
             </div>
 
-            <!-- Q3 bubble (cols 2-3 center) -->
-            <div class="tree-el" style="left: 33.33%; top: 222px">
+            <!-- Q3a bubble (combine formats?) -->
+            <div class="tree-el" style="left: 16.67%; top: 224px">
+              <div class="q-bubble q-bubble--small">
+                <span class="q-icon">🔀</span>
+                <span class="q-text">{{ t('v5.q3a') }}</span>
+              </div>
+            </div>
+            <!-- Q3b bubble (award directly?) -->
+            <div class="tree-el" style="left: 50%; top: 224px">
               <div class="q-bubble q-bubble--small">
                 <span class="q-icon">🏅</span>
                 <span class="q-text">{{ t('v5.q3') }}</span>
               </div>
             </div>
 
-            <!-- Q3 → YES badge (col 2) -->
-            <div class="tree-el" style="left: 25%; top: 290px">
+            <!-- Q3a → YES (col 1 = DS) -->
+            <div class="tree-el" style="left: 8.33%; top: 290px">
               <div class="badge badge--yes badge--sm">{{ t('v5.yes') }}</div>
             </div>
-
-            <!-- Q3 → NO badge (col 3) -->
+            <!-- Q3a → NO (col 2 = JP) -->
+            <div class="tree-el" style="left: 25%; top: 290px">
+              <div class="badge badge--no badge--sm">{{ t('v5.no') }}</div>
+            </div>
+            <!-- Q3b → YES (col 3 = EN) -->
             <div class="tree-el" style="left: 41.67%; top: 290px">
+              <div class="badge badge--yes badge--sm">{{ t('v5.yes') }}</div>
+            </div>
+            <!-- Q3b → NO (col 4 = DU) -->
+            <div class="tree-el" style="left: 58.33%; top: 290px">
               <div class="badge badge--no badge--sm">{{ t('v5.no') }}</div>
             </div>
           </div>
         </div>
 
-        <!-- ═══════════ CARDS ROW (all same size, aligned) ═══════════ -->
+        <!-- ═══════════ CARDS ROW ═══════════ -->
         <div class="cards-grid">
           <div
             v-for="card in cards"
@@ -210,12 +238,19 @@ function pillBg(f: string) {
   return { background: c.border + '20', color: c.text }
 }
 
+// Card order matches tree: DS, Japanese, English, Dutch, Sealed Bid, Traditional
 const cards = computed(() => [
   {
     key: 'ds', family: 'Double Scenario', emoji: '🏆',
     name: t('families.doubleScenario'), short: t('v5.dsShort'),
     desc: t('v5.dsDesc'), use: t('v5.dsUse'),
     options: ['Pre-bid', 'No Pre-bid', 'Preference', 'Award'],
+  },
+  {
+    key: 'jp', family: 'Japanese', emoji: '🔺',
+    name: t('families.japanese'), short: t('v5.jpShort'),
+    desc: t('v5.jpDesc'), use: t('v5.jpUse'),
+    options: ['Pre-bid', 'No Pre-bid', 'Award', 'Rank', 'No Rank'],
   },
   {
     key: 'en', family: 'English', emoji: '🥈',
@@ -228,12 +263,6 @@ const cards = computed(() => [
     name: t('families.dutch'), short: t('v5.duShort'),
     desc: t('v5.duDesc'), use: t('v5.duUse'),
     options: ['Pre-bid', 'No Pre-bid', 'Preference', 'Award'],
-  },
-  {
-    key: 'jp', family: 'Japanese', emoji: '🔺',
-    name: t('families.japanese'), short: t('v5.jpShort'),
-    desc: t('v5.jpDesc'), use: t('v5.jpUse'),
-    options: ['Pre-bid', 'No Pre-bid', 'Award', 'Rank', 'No Rank'],
   },
   {
     key: 'sb', family: 'Sealed Bid', emoji: '📩',
@@ -276,15 +305,14 @@ const cards = computed(() => [
 }
 
 /* ════════════════════════════════════════════════
-   TREE SECTION (SVG lines + absolutely positioned HTML)
+   TREE SECTION (SVG + absolutely positioned HTML)
    ════════════════════════════════════════════════ */
 .tree-section {
   position: relative;
-  height: 380px;
+  height: 400px;
   margin-bottom: 0;
 }
 
-/* SVG line layer — fills the entire tree section */
 .tree-svg {
   position: absolute;
   top: 0; left: 0;
@@ -297,13 +325,11 @@ const cards = computed(() => [
   vector-effect: non-scaling-stroke;
 }
 
-/* HTML content layer */
 .tree-content {
   position: relative;
   width: 100%; height: 100%;
 }
 
-/* Each positioned element */
 .tree-el {
   position: absolute;
   transform: translateX(-50%);
@@ -348,7 +374,7 @@ const cards = computed(() => [
 }
 
 /* ════════════════════════════════════════════════
-   CARDS GRID — 6 equal columns, all same height
+   CARDS GRID
    ════════════════════════════════════════════════ */
 .cards-grid {
   display: grid;
@@ -382,7 +408,6 @@ const cards = computed(() => [
 }
 
 .card-emoji { font-size: 14px; }
-
 .card-title { font-size: 12px; font-weight: 700; flex: 1; }
 
 .card-chevron {
@@ -390,7 +415,6 @@ const cards = computed(() => [
   transition: transform 0.25s ease;
   flex-shrink: 0;
 }
-
 .card-chevron.open { transform: rotate(180deg); }
 
 .card-sub {
@@ -398,7 +422,6 @@ const cards = computed(() => [
   margin-bottom: 8px; flex: 1;
 }
 
-/* Pills always visible */
 .pills--always {
   display: flex; flex-wrap: wrap; gap: 4px;
 }
@@ -415,9 +438,7 @@ const cards = computed(() => [
   grid-template-rows: 0fr;
   transition: grid-template-rows 0.3s cubic-bezier(0.4,0,0.2,1);
 }
-
 .card-detail.open { grid-template-rows: 1fr; }
-
 .card-detail-inner { overflow: hidden; min-height: 0; }
 
 .card-desc {
@@ -435,23 +456,14 @@ const cards = computed(() => [
    RESPONSIVE
    ════════════════════════════════════════════════ */
 @media (max-width: 900px) {
-  .cards-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
+  .cards-grid { grid-template-columns: repeat(3, 1fr); }
   .tree-section { display: none; }
-
   .dt5-body { padding: 20px 14px 24px; }
 }
 
 @media (max-width: 600px) {
-  .cards-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
-  }
-
+  .cards-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
   .dt5-body { padding: 14px 10px 20px; }
-
   .card-sub { font-size: 9px; }
   .pill { font-size: 8px; padding: 2px 5px; }
 }
