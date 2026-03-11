@@ -4,18 +4,29 @@
     max-width="95vw"
     @update:model-value="store.showParams = $event"
   >
-    <v-card max-height="90vh" class="d-flex flex-column">
+    <v-card max-height="90vh" class="params-card d-flex flex-column">
       <!-- Header -->
-      <v-card-title class="d-flex align-center justify-space-between py-4 px-6">
-        <span class="text-subtitle-1 font-weight-bold">{{ t('calc.params.title') }}</span>
-        <div class="d-flex align-center ga-3">
-          <v-btn v-if="isAdmin" variant="outlined" size="small" @click="store.resetParams()">{{ t('calc.params.resetDefaults') }}</v-btn>
-          <v-btn icon variant="text" size="small" @click="store.showParams = false">
-            <v-icon>mdi-close</v-icon>
+      <div class="params-header">
+        <div class="params-header-left">
+          <v-icon size="20" color="#1D1D1B" class="mr-2">mdi-tune-vertical</v-icon>
+          <span class="params-title">{{ t('calc.params.title') }}</span>
+        </div>
+        <div class="d-flex align-center ga-2">
+          <v-btn
+            v-if="isAdmin"
+            variant="tonal"
+            size="small"
+            color="grey-darken-1"
+            prepend-icon="mdi-refresh"
+            @click="store.resetParams()"
+          >
+            {{ t('calc.params.resetDefaults') }}
+          </v-btn>
+          <v-btn icon variant="text" size="x-small" @click="store.showParams = false">
+            <v-icon size="18">mdi-close</v-icon>
           </v-btn>
         </div>
-      </v-card-title>
-      <v-divider />
+      </div>
 
       <!-- Scrollable table area -->
       <div class="params-table-wrap">
@@ -45,7 +56,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(s, i) in SC" :key="s.id" class="data-row">
+              <tr v-for="(s, i) in SC" :key="s.id" class="data-row" :class="{ 'family-first': isFamilyFirst(i) }">
                 <!-- Sticky strategy column -->
                 <td class="sticky-col strategy-cell">
                   <span class="strategy-id">{{ s.id }}</span>
@@ -107,10 +118,18 @@ const store = useCalculatorStore()
 const { isAdmin } = useUser()
 
 function cellBg(value: number): Record<string, string> {
-  if (value === -999) return { background: '#FFCDD2' }
-  if (value < 0) return { background: '#FFF0F0' }
-  if (value === 0) return { background: '#F8F8F8' }
-  return { background: '#C8E6C9' }
+  if (value === -999) return { background: '#FEE2E2' }
+  if (value < 0) return { background: '#FFF5F5' }
+  if (value === 0) return { background: '#FAFAFA' }
+  return { background: '#DCFCE7' }
+}
+
+// Detect first row of each auction family for visual grouping
+function isFamilyFirst(i: number): boolean {
+  if (i === 0) return false
+  const prev = SC[i - 1].name.split(' – ')[0].split(' - ')[0]
+  const curr = SC[i].name.split(' – ')[0].split(' - ')[0]
+  return prev !== curr
 }
 
 function onBaseInput(i: number, event: Event) {
@@ -136,10 +155,40 @@ function onMatrixInput(i: number, q: number, o: number, event: Event) {
 </script>
 
 <style scoped>
+/* ── Card ── */
+.params-card {
+  border-radius: 12px !important;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12) !important;
+}
+
+/* ── Header ── */
+.params-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  border-bottom: 1px solid #E9EAEC;
+  background: #fff;
+}
+
+.params-header-left {
+  display: flex;
+  align-items: center;
+}
+
+.params-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1D1D1B;
+  letter-spacing: -0.01em;
+}
+
 /* ── Table wrapper ── */
 .params-table-wrap {
   overflow: auto;
   flex: 1;
+  background: #fff;
 }
 
 /* ── Table ── */
@@ -148,6 +197,7 @@ function onMatrixInput(i: number, q: number, o: number, event: Event) {
   border-spacing: 0;
   font-size: 12px;
   white-space: nowrap;
+  font-family: 'Poppins', sans-serif;
 }
 
 /* ── Sticky headers ── */
@@ -155,19 +205,24 @@ function onMatrixInput(i: number, q: number, o: number, event: Event) {
   position: sticky;
   top: 0;
   z-index: 10;
-  background: #F8F8F8;
+  background: #FAFAFA;
   border-bottom: 1px solid #E9EAEC;
-  padding: 6px 8px;
+  padding: 8px 10px;
   font-weight: 600;
   color: #1D1D1B;
   text-align: center;
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
 }
 
 .header-row-2 th {
   font-size: 10px;
   font-weight: 500;
-  color: #61615F;
-  top: 33px;
+  color: #8B8D8F;
+  top: 37px;
+  text-transform: none;
+  letter-spacing: 0;
 }
 
 /* ── Sticky first column ── */
@@ -180,36 +235,45 @@ function onMatrixInput(i: number, q: number, o: number, event: Event) {
 
 thead .sticky-col {
   z-index: 15;
-  background: #F8F8F8;
+  background: #FAFAFA;
 }
 
 .strategy-header {
-  min-width: 180px;
+  min-width: 200px;
   text-align: left;
-  padding-left: 16px;
+  padding-left: 20px;
 }
 
 .strategy-cell {
-  min-width: 180px;
-  padding: 4px 8px 4px 16px;
-  border-bottom: 1px solid #F8F8F8;
+  min-width: 200px;
+  padding: 6px 12px 6px 20px;
+  border-bottom: 1px solid #F3F4F6;
   border-right: 1px solid #E9EAEC;
+  transition: background 0.15s;
 }
 
 .strategy-id {
-  display: inline-block;
-  width: 22px;
-  font-weight: 700;
-  color: #61615F;
-  font-size: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  background: #F3F4F6;
+  font-weight: 600;
+  color: #8B8D8F;
+  font-size: 9px;
+  margin-right: 8px;
+  flex-shrink: 0;
 }
 
 .strategy-name {
   font-size: 11px;
+  font-weight: 500;
   color: #1D1D1B;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 150px;
+  max-width: 155px;
   display: inline-block;
   vertical-align: middle;
 }
@@ -217,19 +281,20 @@ thead .sticky-col {
 /* ── Question group header ── */
 .q-group-header {
   border-left: 2px solid #E9EAEC;
-  font-size: 11px;
+  font-size: 10px;
 }
 
 /* ── Number cells ── */
 .num-header {
-  min-width: 56px;
+  min-width: 60px;
 }
 
 .num-cell {
-  padding: 2px;
-  border-bottom: 1px solid #F8F8F8;
+  padding: 3px;
+  border-bottom: 1px solid #F3F4F6;
   text-align: center;
   position: relative;
+  transition: filter 0.15s;
 }
 
 .savings-cell {
@@ -238,28 +303,29 @@ thead .sticky-col {
 
 .pct-suffix {
   position: absolute;
-  right: 4px;
+  right: 6px;
   top: 50%;
   transform: translateY(-50%);
   font-size: 10px;
-  color: #61615F;
+  color: #8B8D8F;
   pointer-events: none;
 }
 
 /* ── Cell input ── */
 .cell-input {
-  width: 50px;
-  height: 24px;
+  width: 52px;
+  height: 26px;
   border: 1px solid transparent;
   border-radius: 4px;
   text-align: center;
-  font-size: 12px;
+  font-size: 11px;
+  font-weight: 500;
   color: #1D1D1B;
   background: transparent;
   outline: none;
   padding: 0 2px;
   -moz-appearance: textfield;
-  transition: border-color 0.15s;
+  transition: border-color 0.15s, box-shadow 0.15s;
 }
 
 .cell-input::-webkit-inner-spin-button,
@@ -270,6 +336,7 @@ thead .sticky-col {
 
 .cell-input:focus {
   border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
   background: #fff;
 }
 
@@ -282,15 +349,31 @@ thead .sticky-col {
 
 /* ── Data rows ── */
 .data-row:hover .strategy-cell {
-  background: #f0f9ff;
+  background: #F0F9FF;
 }
 
 .data-row:hover .num-cell {
   filter: brightness(0.97);
 }
 
+/* ── Family grouping separator ── */
+.data-row.family-first .strategy-cell {
+  border-top: 2px solid #E0E0E0;
+}
+.data-row.family-first .num-cell {
+  border-top: 2px solid #E0E0E0;
+}
+
 /* ── Question column left borders ── */
 .params-table td:nth-child(3n + 4) {
-  border-left: 2px solid #F8F8F8;
+  border-left: 2px solid #F3F4F6;
+}
+
+/* ── Alternating row tint ── */
+.data-row:nth-child(even) .strategy-cell {
+  background: #FAFBFC;
+}
+.data-row:nth-child(even):hover .strategy-cell {
+  background: #F0F9FF;
 }
 </style>

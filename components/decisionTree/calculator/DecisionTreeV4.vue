@@ -245,23 +245,20 @@ watch(show, (val) => { if (val) reset() })
 
 /* Criteria */
 .dt4-criteria {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+  display: grid;
+  grid-template-columns: 200px 1fr 1fr 1fr;
+  gap: 12px 8px;
+  align-items: center;
 }
 
 .crit-row {
-  display: flex;
-  align-items: center;
-  gap: 16px;
+  display: contents;
 }
 
 .crit-label {
   display: flex;
   align-items: center;
   gap: 10px;
-  width: 200px;
-  flex-shrink: 0;
 }
 
 .crit-icon {
@@ -289,13 +286,10 @@ watch(show, (val) => { if (val) reset() })
 }
 
 .crit-pills {
-  display: flex;
-  gap: 6px;
-  flex: 1;
+  display: contents;
 }
 
 .pill {
-  flex: 1;
   padding: 9px 8px;
   border-radius: 8px;
   border: 1.5px solid #E5E7EB;
@@ -498,18 +492,20 @@ watch(show, (val) => { if (val) reset() })
     gap: 14px;
   }
 
-  .crit-row {
-    flex-direction: column;
-    align-items: flex-start;
+  .dt4-criteria {
+    grid-template-columns: 1fr;
     gap: 8px;
   }
 
-  .crit-label {
-    width: 100%;
+  .crit-row {
+    display: contents;
   }
 
   .crit-pills {
+    display: flex;
     flex-wrap: wrap;
+    gap: 6px;
+    grid-column: 1;
   }
 
   .pill {

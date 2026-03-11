@@ -68,7 +68,7 @@
           prepend-icon="mdi-tune-variant"
           @click="showTreeV4 = true"
         >
-          {{ t('page.quickSelector') }}
+          {{ t('page.dt4') }}
         </v-btn>
         <v-btn
           variant="outlined"
@@ -128,18 +128,7 @@
       </button>
     </div>
 
-    <!-- Base Table (admin only, bottom-right) -->
-    <v-btn
-      v-if="isAdmin"
-      class="base-table-fab"
-      variant="outlined"
-      color="grey-darken-1"
-      size="small"
-      prepend-icon="mdi-tune-vertical"
-      @click="calcStore.showParams = true"
-    >
-      {{ t('page.baseTable') }}
-    </v-btn>
+    <!-- Base Table button moved to bottom of page -->
 
     <DecisionTreeCalculatorParamsModal v-if="calcStore.showParams" />
     <DecisionTreeCalculatorDecisionTreeV1 v-model="showTreeV1" />
@@ -411,6 +400,20 @@
           <v-btn :value="0" size="x-small">{{ t('page.all') }}</v-btn>
         </v-btn-toggle>
       </div>
+    </div>
+
+    <!-- Base Table (admin only, bottom of page) -->
+    <div v-if="isAdmin" class="base-table-row">
+      <v-btn
+        variant="text"
+        color="grey"
+        size="x-small"
+        prepend-icon="mdi-tune-vertical"
+        class="base-table-btn"
+        @click="calcStore.showParams = true"
+      >
+        {{ t('page.baseTable') }}
+      </v-btn>
     </div>
   </v-container>
 </template>
@@ -717,11 +720,23 @@ function openProject(proj: any) {
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.base-table-fab {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  z-index: 10;
+/* ── Base Table button (bottom of page) ── */
+.base-table-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+  padding-right: 4px;
+}
+
+.base-table-btn {
+  opacity: 0.5;
+  text-transform: none !important;
+  font-size: 11px !important;
+  letter-spacing: 0 !important;
+}
+
+.base-table-btn:hover {
+  opacity: 1;
 }
 
 /* ── Guided button ── */
