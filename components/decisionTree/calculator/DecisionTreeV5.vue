@@ -166,11 +166,11 @@
             <div class="tree-el" style="left: 8.33%; top: 290px">
               <div class="badge badge--yes badge--sm">{{ t('v5.yes') }}</div>
             </div>
-            <!-- Q3a → NO (col 2 = JP) -->
+            <!-- Q3a → NO (col 2 = EN) -->
             <div class="tree-el" style="left: 25%; top: 290px">
               <div class="badge badge--no badge--sm">{{ t('v5.no') }}</div>
             </div>
-            <!-- Q3b → YES (col 3 = EN) -->
+            <!-- Q3b → YES (col 3 = JP) -->
             <div class="tree-el" style="left: 41.67%; top: 290px">
               <div class="badge badge--yes badge--sm">{{ t('v5.yes') }}</div>
             </div>
@@ -238,7 +238,7 @@ function pillBg(f: string) {
   return { background: c.border + '20', color: c.text }
 }
 
-// Card order matches tree: DS, Japanese, English, Dutch, Sealed Bid, Traditional
+// Card order matches tree: DS, English, Japanese, Dutch, Sealed Bid, Traditional
 const cards = computed(() => [
   {
     key: 'ds', family: 'Double Scenario', emoji: '🏆',
@@ -247,16 +247,16 @@ const cards = computed(() => [
     options: ['Pre-bid', 'No Pre-bid', 'Preference', 'Award'],
   },
   {
-    key: 'jp', family: 'Japanese', emoji: '🔺',
-    name: t('families.japanese'), short: t('v5.jpShort'),
-    desc: t('v5.jpDesc'), use: t('v5.jpUse'),
-    options: ['Pre-bid', 'No Pre-bid', 'Award', 'Rank', 'No Rank'],
-  },
-  {
     key: 'en', family: 'English', emoji: '🥈',
     name: t('families.english'), short: t('v5.enShort'),
     desc: t('v5.enDesc'), use: t('v5.enUse'),
     options: ['Pre-bid', 'No Pre-bid', 'Preference', 'Award', 'Rank'],
+  },
+  {
+    key: 'jp', family: 'Japanese', emoji: '🔺',
+    name: t('families.japanese'), short: t('v5.jpShort'),
+    desc: t('v5.jpDesc'), use: t('v5.jpUse'),
+    options: ['Pre-bid', 'No Pre-bid', 'Award', 'Rank', 'No Rank'],
   },
   {
     key: 'du', family: 'Dutch', emoji: '⏳',
