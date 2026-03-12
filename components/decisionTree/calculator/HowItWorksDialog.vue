@@ -611,7 +611,7 @@ function expandFamily(familyKey: string) {
     animatedFams.value = new Set([...animatedFams.value, familyKey])
     nextTick(() => {
       const el = document.getElementById(`fam-card-${familyKey}`)
-      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
     })
   })
 }
@@ -626,9 +626,11 @@ watch(show, (val) => {
     if (props.initialSection && sectionIds.includes(props.initialSection)) {
       activeSection.value = props.initialSection
       nextTick(() => {
-        scrollTo(props.initialSection!)
         if (props.initialFamily) {
-          setTimeout(() => expandFamily(props.initialFamily!), 650)
+          // Jump directly to the family card — short delay for dialog to fully render
+          setTimeout(() => expandFamily(props.initialFamily!), 150)
+        } else {
+          scrollTo(props.initialSection!)
         }
       })
     } else {

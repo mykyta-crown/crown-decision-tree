@@ -7,12 +7,6 @@
         </marker>
       </defs>
 
-      <!-- Axes -->
-      <line x1="38" y1="185" x2="38" y2="14" stroke="#9CA3AF" stroke-width="1" marker-end="url(#axDuArr)"/>
-      <line x1="38" y1="185" x2="278" y2="185" stroke="#9CA3AF" stroke-width="1" marker-end="url(#axDuArr)"/>
-      <text x="41" y="13" class="ax">Price</text>
-      <text x="275" y="195" class="ax" text-anchor="end">Time</text>
-
       <!-- Grid -->
       <line x1="38" y1="52"  x2="272" y2="52"  stroke="#E9EAEC" stroke-width="0.5" stroke-dasharray="3 3"/>
       <line x1="38" y1="88"  x2="272" y2="88"  stroke="#E9EAEC" stroke-width="0.5" stroke-dasharray="3 3"/>
@@ -32,7 +26,7 @@
           S4: y=105, x=144-172
           S5: y=84,  x=176-204  ← ACCEPT
           S6: y=63,  x=208-236  (future, grey)
-          S7: y=42,  x=240-256  (future, grey)
+          S7: y=42,  x=240-268  (future, grey)
       -->
 
       <!-- Step areas (accent fill, increasing opacity = more pressure) -->
@@ -66,9 +60,9 @@
 
       <!-- "Price rises" annotation (right edge) -->
       <g class="future-du">
-        <line x1="272" y1="172" x2="272" y2="48" stroke="#D1D5DB" stroke-width="0.8"/>
-        <path d="M269 54 L272 48 L275 54" fill="none" stroke="#D1D5DB" stroke-width="0.8" stroke-linecap="round"/>
-        <text x="272" y="181" text-anchor="middle" class="ann">rises</text>
+        <line x1="276" y1="172" x2="276" y2="48" stroke="#D1D5DB" stroke-width="0.8"/>
+        <path d="M273 54 L276 48 L279 54" fill="none" stroke="#D1D5DB" stroke-width="0.8" stroke-linecap="round"/>
+        <text x="276" y="181" text-anchor="middle" class="ann">rises</text>
       </g>
 
       <!-- Accept marker on S5 (center x=190, y=84) -->
@@ -82,6 +76,12 @@
         <rect x="149" y="60" width="82" height="12" rx="3" fill="#F0FDF4" stroke="#BBF7D0" stroke-width="0.5"/>
         <text x="190" y="68" text-anchor="middle" class="win">First to accept wins</text>
       </g>
+
+      <!-- Axes foreground (rendered last so bars never overlap them) -->
+      <line x1="38" y1="185" x2="38" y2="14" stroke="#9CA3AF" stroke-width="1" marker-end="url(#axDuArr)"/>
+      <line x1="38" y1="185" x2="278" y2="185" stroke="#9CA3AF" stroke-width="1" marker-end="url(#axDuArr)"/>
+      <text x="41" y="13" class="ax">Price</text>
+      <text x="275" y="195" class="ax" text-anchor="end">Time</text>
     </svg>
   </div>
 </template>

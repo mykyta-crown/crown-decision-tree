@@ -104,18 +104,14 @@
                 <div class="rec-body">
                   <!-- Savings row with label -->
                   <div class="card-savings">
-                    <div class="savings-left">
-                      <span class="savings-label">{{ t('calc.phase3.estSavings') }}</span>
-                      <div class="savings-values">
-                        <span class="savings-chip">+{{ getTop3(li)[ri - 1].saving }}%</span>
-                        <span
-                          v-if="store.lotBaseline(lot) > 0"
-                          class="savings-amount"
-                        >
-                          &#8776; {{ fmtE(Math.round(store.lotBaseline(lot) * getTop3(li)[ri - 1].saving / 100), store.ccy) }}
-                        </span>
-                      </div>
-                    </div>
+                    <span class="savings-chip">+{{ getTop3(li)[ri - 1].saving }}%</span>
+                    <span
+                      v-if="store.lotBaseline(lot) > 0"
+                      class="savings-amount"
+                    >
+                      &#8776; {{ fmtE(Math.round(store.lotBaseline(lot) * getTop3(li)[ri - 1].saving / 100), store.ccy) }}
+                    </span>
+                    <span class="savings-label">{{ t('calc.phase3.estSavings') }}</span>
                   </div>
 
                   <!-- Chart illustration -->
@@ -683,28 +679,16 @@ function exportReport() {
 /* ── Savings row with label ── */
 .card-savings {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 8px;
   padding: 10px 16px 0;
 }
 
-.savings-left {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
 .savings-label {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 400;
-  color: #787878;
+  color: #9CA3AF;
   font-family: Poppins, sans-serif;
-}
-
-.savings-values {
-  display: flex;
-  align-items: center;
-  gap: 8px;
 }
 
 .savings-chip {
