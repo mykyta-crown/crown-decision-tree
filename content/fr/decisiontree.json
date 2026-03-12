@@ -318,7 +318,24 @@
     "lvlIntCompet": "Compétitive",
     "lvlIntCompetDesc": "Pression de marché standard",
     "lvlIntAggr": "Agressive",
-    "lvlIntAggrDesc": "Pression maximale pour le meilleur prix"
+    "lvlIntAggrDesc": "Pression maximale pour le meilleur prix",
+    "optSecurityTitle": "Pré-offre",
+    "optPreBidOn": "Activée",
+    "optPreBidOnInfo": "Les fournisseurs soumettent un prix avant l'ouverture de l'enchère. Ce pré-bid s'exécute automatiquement au démarrage, établissant la position de départ.",
+    "optPreBidOff": "Non disponible",
+    "optPreBidOffInfo": "Ce type d'enchère ne supporte pas les pré-offres. Tous les prix sont soumis en direct pendant l'enchère.",
+    "optPrefTitle": "Préférence",
+    "optPrefAvailInfo": "Vous pouvez appliquer une pondération pour avantager certains fournisseurs (critères qualitatifs ou ajustement financier).",
+    "optPrefNAInfo": "Ce type d'enchère ne supporte pas la pondération de préférence.",
+    "optNoneInfo": "Aucune préférence — tous les fournisseurs concourent à égalité.",
+    "optNonFinInfo": "Non-financière — critères qualitatifs (qualité, RSE, délais) pondérés avec le prix.",
+    "optFinInfo": "Financière — un ajustement de prix (% ou montant fixe) est appliqué aux fournisseurs sélectionnés.",
+    "optAwardTitle": "Mode d'attribution",
+    "optAwardInfo": "Attribution — le fournisseur gagnant obtient contractuellement le lot.",
+    "optRankInfo": "Classement non-engageant — les fournisseurs sont ordonnés sans signature de contrat.",
+    "optNoRankInfo": "Test de marché uniquement — prix collectés sans classement ni engagement.",
+    "optAwardNAInfo": "La négociation traditionnelle n'utilise pas de mécanisme d'attribution automatisé.",
+    "optIntensityTitle": "Intensité"
   },
   "calc": {
     "columns": {

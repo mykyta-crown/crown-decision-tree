@@ -1,5 +1,5 @@
 <template>
-  <component :is="chartComponent" :color="color" :ccy="ccy" />
+  <component :is="chartComponent" :color="color" :ccy="ccy" :animated="animated" />
 </template>
 
 <script setup lang="ts">
@@ -15,8 +15,10 @@ const props = withDefaults(defineProps<{
   family: string
   color: string
   ccy?: string
+  animated?: boolean
 }>(), {
   ccy: 'EUR',
+  animated: false,
 })
 
 const chartComponent = computed(() => {

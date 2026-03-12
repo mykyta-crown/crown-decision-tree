@@ -124,6 +124,7 @@
                       :family="getTop3(li)[ri - 1].family"
                       :color="chartColor(li, ri - 1)"
                       :ccy="store.ccy"
+                      :animated="animatedLots.has(li)"
                     />
                   </div>
 
@@ -196,7 +197,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { ref, computed } from 'vue'
 import { useCalculatorStore } from '~/stores/decisionTree/calculator'
 import { useProjectsStore } from '~/stores/decisionTree/projects'
 import { FC, gfc, PREF_LABELS, getFamilyOptions } from '~/utils/decisionTree/constants'
@@ -211,6 +212,8 @@ const emit = defineEmits<{ 'learn-more': [family: string] }>()
 
 const store = useCalculatorStore()
 const projectsStore = useProjectsStore()
+
+const animatedLots = ref(new Set<number>())
 
 const engC = FC['English']
 const dutC = FC['Dutch']
@@ -359,7 +362,13 @@ function familyToKey(family: string): string {
 
 // --- Actions ---
 function toggleExpand(li: number) {
-  store.expLot = store.expLot === li ? -1 : li
+  const isOpening = store.expLot !== li
+  store.expLot = isOpening ? li : -1
+  if (isOpening && !animatedLots.value.has(li)) {
+    setTimeout(() => {
+      animatedLots.value = new Set([...animatedLots.value, li])
+    }, 50)
+  }
 }
 
 function goToConfig() {

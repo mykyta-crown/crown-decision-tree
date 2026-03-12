@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="show" max-width="820" scrollable @keydown="onKeydown">
+  <v-dialog v-model="show" max-width="1100" scrollable @keydown="onKeydown">
     <v-card class="hiw-card" rounded="lg">
       <!-- Header -->
       <div class="hiw-header">
@@ -52,60 +52,6 @@
           <div id="section-phases" class="hiw-section" data-section="phases">
             <h3 class="section-title">{{ t('hiw.phasesTitle') }}</h3>
 
-            <!-- Visual flow diagram -->
-            <div class="phase-flow">
-              <!-- Step 1: Check -->
-              <div class="phase-flow-step">
-                <div class="phase-flow-circle">
-                  <span class="phase-flow-icon">🔍</span>
-                </div>
-                <span class="phase-flow-label">{{ t('hiw.phaseFlowCheck') }}</span>
-              </div>
-
-              <!-- Arrow 1: Check → Yes/No -->
-              <div class="phase-flow-connector">
-                <div class="connector-line" />
-              </div>
-
-              <!-- Step 2: Yes / No decision -->
-              <div class="phase-flow-step">
-                <div class="phase-flow-decision">
-                  <span class="decision-yes">✓ Yes</span>
-                  <span class="decision-divider">/</span>
-                  <span class="decision-no">✗ No</span>
-                </div>
-                <span class="phase-flow-label phase-flow-label--decision">{{ t('hiw.phaseFlowDecision') }}</span>
-              </div>
-
-              <!-- Arrow 2: Yes/No → Configure -->
-              <div class="phase-flow-connector">
-                <div class="connector-line" />
-                <div class="connector-arrow" />
-              </div>
-
-              <!-- Step 3: Configure -->
-              <div class="phase-flow-step">
-                <div class="phase-flow-circle">
-                  <span class="phase-flow-icon">⚙️</span>
-                </div>
-                <span class="phase-flow-label">{{ t('hiw.phaseFlowConfigure') }}</span>
-              </div>
-
-              <!-- Arrow 3: Configure → Results -->
-              <div class="phase-flow-connector">
-                <div class="connector-line" />
-                <div class="connector-arrow" />
-              </div>
-
-              <!-- Step 4: Results -->
-              <div class="phase-flow-step">
-                <div class="phase-flow-circle">
-                  <span class="phase-flow-icon">🏆</span>
-                </div>
-                <span class="phase-flow-label">{{ t('hiw.phaseFlowResults') }}</span>
-              </div>
-            </div>
-
             <div class="phases-list">
               <div v-for="n in 3" :key="n" class="phase-item">
                 <div class="phase-num">{{ n }}</div>
@@ -141,49 +87,13 @@
               </div>
             </div>
 
-            <!-- Legend card -->
-            <div class="legend-card">
-              <div class="legend-header">
-                <v-icon size="14" color="#9CA3AF">mdi-information-outline</v-icon>
-                <span class="legend-title">{{ t('hiw.legendTitle') }}</span>
-              </div>
-              <div class="legend-body">
-                <div class="legend-example">
-                  <div class="legend-bar" />
-                  <div class="legend-content">
-                    <div class="legend-row">
-                      <span class="legend-emoji">🏷️</span>
-                      <span class="legend-name">{{ t('hiw.legendFamily') }}</span>
-                      <span class="legend-savings-badge">~X% {{ t('hiw.savings') }}</span>
-                      <span class="legend-chevron-demo">▾</span>
-                    </div>
-                    <div class="legend-desc-line">{{ t('hiw.legendDesc') }}</div>
-                    <div class="legend-pills-row">
-                      <span class="legend-pill">Option A</span>
-                      <span class="legend-pill">Option B</span>
-                      <span class="legend-pill">Option C</span>
-                    </div>
-                  </div>
-                </div>
-                <div class="legend-annotations">
-                  <div class="legend-anno"><span class="anno-dot anno-dot--1" />{{ t('hiw.legendFamily') }}</div>
-                  <div class="legend-anno"><span class="anno-dot anno-dot--2" />{{ t('hiw.legendSavings') }}</div>
-                  <div class="legend-anno"><span class="anno-dot anno-dot--3" />{{ t('hiw.legendOptions') }}</div>
-                </div>
-              </div>
-              <div class="legend-hint">
-                <v-icon size="12" color="#9CA3AF">mdi-cursor-default-click</v-icon>
-                {{ t('hiw.legendClick') }}
-              </div>
+            <!-- Legend hint -->
+            <div class="legend-hint-row">
+              <v-icon size="14" color="#9CA3AF">mdi-cursor-default-click</v-icon>
+              {{ t('hiw.legendClick') }}
             </div>
 
             <div class="families-list">
-              <div class="families-gradient" />
-              <div class="families-labels">
-                <span class="fam-label fam-label--top">{{ t('hiw.mostPowerful') }}</span>
-                <span class="fam-label fam-label--bottom">{{ t('hiw.simplest') }}</span>
-              </div>
-
               <div class="families-cards">
                 <div
                   v-for="fam in families"
@@ -211,20 +121,126 @@
                   </div>
                   <div class="fam-detail" :class="{ open: expandedFam === fam.key }">
                     <div class="fam-detail-inner" :class="{ 'fam-detail-visible': expandedFam === fam.key }">
-                      <!-- Illustration: auction flow diagram -->
+                      <!-- Illustration: SVG price chart -->
                       <div class="fam-illustration" :style="famIllustrationBg(fam.family)">
-                        <div class="fam-illus-flow">
-                          <span
-                            v-for="(stepKey, si) in famFlowKeys[fam.key]"
-                            :key="si"
-                            class="fam-illus-step"
-                          >
-                            <span class="fam-illus-icon">{{ stepKey.icon }}</span>
-                            <span class="fam-illus-label">{{ t(stepKey.labelKey) }}</span>
-                            <span v-if="si < famFlowKeys[fam.key].length - 1" class="fam-illus-arrow">→</span>
-                          </span>
+                        <div class="fam-chart-wrap">
+                          <AChart :family="fam.family" :color="gfc(fam.family).border" ccy="EUR" :animated="animatedFams.has(fam.key)" />
                         </div>
                         <div class="fam-illus-caption">{{ t(fam.illustrationKey) }}</div>
+                      </div>
+
+                      <!-- Options grid -->
+                      <div class="fam-opt-grid">
+                        <!-- Pre-bid -->
+                        <div class="fam-opt-block">
+                          <div class="fam-opt-title">
+                            <v-icon size="11" color="#9CA3AF">mdi-clock-fast</v-icon>
+                            {{ t('hiw.optSecurityTitle') }}
+                          </div>
+                          <div class="fam-opt-chips">
+                            <v-tooltip v-if="famOptionDetails[fam.key].preBid" :text="t('hiw.optPreBidOnInfo')" max-width="260" location="top">
+                              <template #activator="{ props: tp }">
+                                <span v-bind="tp" class="opt-chip opt-chip--on" :style="{ background: gfc(fam.family).border + '22', color: gfc(fam.family).text }">
+                                  <v-icon size="10">mdi-check</v-icon> {{ t('hiw.optPreBidOn') }}
+                                </span>
+                              </template>
+                            </v-tooltip>
+                            <v-tooltip v-else :text="t('hiw.optPreBidOffInfo')" max-width="260" location="top">
+                              <template #activator="{ props: tp }">
+                                <span v-bind="tp" class="opt-chip opt-chip--off">
+                                  <v-icon size="10">mdi-minus</v-icon> {{ t('hiw.optPreBidOff') }}
+                                </span>
+                              </template>
+                            </v-tooltip>
+                          </div>
+                        </div>
+
+                        <!-- Preference -->
+                        <div class="fam-opt-block">
+                          <div class="fam-opt-title">
+                            <v-icon size="11" color="#9CA3AF">mdi-scale-balance</v-icon>
+                            {{ t('hiw.optPrefTitle') }}
+                          </div>
+                          <div class="fam-opt-chips">
+                            <template v-if="famOptionDetails[fam.key].pref">
+                              <v-tooltip :text="t('hiw.optNoneInfo')" max-width="240" location="top">
+                                <template #activator="{ props: tp }">
+                                  <span v-bind="tp" class="opt-chip opt-chip--neutral">{{ t('hiw.lvlPrefNone') }}</span>
+                                </template>
+                              </v-tooltip>
+                              <v-tooltip :text="t('hiw.optNonFinInfo')" max-width="240" location="top">
+                                <template #activator="{ props: tp }">
+                                  <span v-bind="tp" class="opt-chip opt-chip--neutral">{{ t('hiw.lvlPrefNonFin') }}</span>
+                                </template>
+                              </v-tooltip>
+                              <v-tooltip :text="t('hiw.optFinInfo')" max-width="240" location="top">
+                                <template #activator="{ props: tp }">
+                                  <span v-bind="tp" class="opt-chip opt-chip--neutral">{{ t('hiw.lvlPrefFin') }}</span>
+                                </template>
+                              </v-tooltip>
+                            </template>
+                            <v-tooltip v-else :text="t('hiw.optPrefNAInfo')" max-width="240" location="top">
+                              <template #activator="{ props: tp }">
+                                <span v-bind="tp" class="opt-chip opt-chip--off">
+                                  <v-icon size="10">mdi-minus</v-icon> {{ t('hiw.lvlPrefNone') }}
+                                </span>
+                              </template>
+                            </v-tooltip>
+                          </div>
+                        </div>
+
+                        <!-- Award mode -->
+                        <div class="fam-opt-block">
+                          <div class="fam-opt-title">
+                            <v-icon size="11" color="#9CA3AF">mdi-trophy-outline</v-icon>
+                            {{ t('hiw.optAwardTitle') }}
+                          </div>
+                          <div class="fam-opt-chips">
+                            <template v-if="famOptionDetails[fam.key].awardModes.length">
+                              <v-tooltip v-if="famOptionDetails[fam.key].awardModes.includes('award')" :text="t('hiw.optAwardInfo')" max-width="240" location="top">
+                                <template #activator="{ props: tp }">
+                                  <span v-bind="tp" class="opt-chip opt-chip--neutral">{{ t('hiw.lvlAwardAward') }}</span>
+                                </template>
+                              </v-tooltip>
+                              <v-tooltip v-if="famOptionDetails[fam.key].awardModes.includes('rank')" :text="t('hiw.optRankInfo')" max-width="240" location="top">
+                                <template #activator="{ props: tp }">
+                                  <span v-bind="tp" class="opt-chip opt-chip--neutral">{{ t('hiw.lvlAwardRank') }}</span>
+                                </template>
+                              </v-tooltip>
+                              <v-tooltip v-if="famOptionDetails[fam.key].awardModes.includes('norank')" :text="t('hiw.optNoRankInfo')" max-width="240" location="top">
+                                <template #activator="{ props: tp }">
+                                  <span v-bind="tp" class="opt-chip opt-chip--neutral">{{ t('hiw.lvlAwardNoRank') }}</span>
+                                </template>
+                              </v-tooltip>
+                            </template>
+                            <v-tooltip v-else :text="t('hiw.optAwardNAInfo')" max-width="240" location="top">
+                              <template #activator="{ props: tp }">
+                                <span v-bind="tp" class="opt-chip opt-chip--off">
+                                  <v-icon size="10">mdi-minus</v-icon> N/A
+                                </span>
+                              </template>
+                            </v-tooltip>
+                          </div>
+                        </div>
+
+                        <!-- Intensity -->
+                        <div class="fam-opt-block">
+                          <div class="fam-opt-title">
+                            <v-icon size="11" color="#9CA3AF">mdi-fire</v-icon>
+                            {{ t('hiw.optIntensityTitle') }}
+                          </div>
+                          <div class="fam-opt-chips fam-opt-intensity">
+                            <div class="opt-intensity-bar-wrap">
+                              <div class="opt-intensity-bar">
+                                <div class="opt-intensity-fill" :style="{ width: famOptionDetails[fam.key].intensity.fill, background: famOptionDetails[fam.key].intensity.color }" />
+                              </div>
+                            </div>
+                            <span class="opt-intensity-label" :style="{ color: famOptionDetails[fam.key].intensity.color }">
+                              {{ t(famOptionDetails[fam.key].intensity.labelKey) }}
+                            </span>
+                            <span class="opt-intensity-desc">{{ t(famOptionDetails[fam.key].intensity.descKey) }}</span>
+                          </div>
+                        </div>
                       </div>
 
                       <p class="fam-desc-text">{{ t(fam.descKey) }}</p>
@@ -380,7 +396,6 @@
             <v-btn
               color="#1D1D1B"
               variant="flat"
-              block
               class="cta-btn"
               append-icon="mdi-arrow-right"
               @click="$emit('start'); show = false"
@@ -398,6 +413,7 @@
 import { ref, computed, watch, nextTick } from 'vue'
 import { gfc } from '~/utils/decisionTree/constants'
 import useTranslations from '~/composables/useTranslations'
+import AChart from '~/components/decisionTree/calculator/charts/AChart.vue'
 
 const { t } = useTranslations('decisiontree')
 const show = defineModel<boolean>({ default: false })
@@ -415,6 +431,8 @@ const expandedFam = ref<string | null>(null)
 const expandedFaq = ref<number | null>(null)
 const isScrolling = ref(false)
 const scrollProgress = ref(0)
+// Track which families have been animated (one-shot: only fires on first open)
+const animatedFams = ref(new Set<string>())
 
 const sectionIds = ['overview', 'phases', 'families', 'scoring', 'concepts', 'faq']
 
@@ -473,6 +491,21 @@ const famFlowKeys: Record<string, { icon: string; labelKey: string }[]> = {
     { icon: '💬', labelKey: 'hiw.flowTrNegotiate' },
     { icon: '🏆', labelKey: 'hiw.flowTrAgree' },
   ],
+}
+
+// Per-family configurable options metadata
+const famOptionDetails: Record<string, {
+  preBid: boolean
+  pref: boolean
+  awardModes: ('award' | 'rank' | 'norank')[]
+  intensity: { labelKey: string; fill: string; color: string; descKey: string }
+}> = {
+  ds: { preBid: true,  pref: true,  awardModes: ['award'],                   intensity: { labelKey: 'hiw.lvlIntAggr',   fill: '100%', color: '#EF4444', descKey: 'hiw.lvlIntAggrDesc'   } },
+  en: { preBid: true,  pref: true,  awardModes: ['award', 'rank'],            intensity: { labelKey: 'hiw.lvlIntCompet', fill: '66%',  color: '#F59E0B', descKey: 'hiw.lvlIntCompetDesc' } },
+  du: { preBid: true,  pref: true,  awardModes: ['award'],                   intensity: { labelKey: 'hiw.lvlIntCompet', fill: '66%',  color: '#F59E0B', descKey: 'hiw.lvlIntCompetDesc' } },
+  jp: { preBid: true,  pref: false, awardModes: ['award', 'rank', 'norank'], intensity: { labelKey: 'hiw.lvlIntCompet', fill: '66%',  color: '#F59E0B', descKey: 'hiw.lvlIntCompetDesc' } },
+  sb: { preBid: false, pref: true,  awardModes: ['award', 'rank', 'norank'], intensity: { labelKey: 'hiw.lvlIntCollab', fill: '33%',  color: '#34D399', descKey: 'hiw.lvlIntCollabDesc' } },
+  tr: { preBid: false, pref: false, awardModes: [],                          intensity: { labelKey: 'hiw.lvlIntCollab', fill: '33%',  color: '#34D399', descKey: 'hiw.lvlIntCollabDesc' } },
 }
 
 // Compatibility matrix
@@ -572,9 +605,14 @@ defineExpose({ scrollTo, expandFamily })
 
 function expandFamily(familyKey: string) {
   expandedFam.value = familyKey
+  // Always reset then re-trigger to replay animation
+  animatedFams.value = new Set([...animatedFams.value].filter(k => k !== familyKey))
   nextTick(() => {
-    const el = document.getElementById(`fam-card-${familyKey}`)
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    animatedFams.value = new Set([...animatedFams.value, familyKey])
+    nextTick(() => {
+      const el = document.getElementById(`fam-card-${familyKey}`)
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    })
   })
 }
 
@@ -584,6 +622,7 @@ watch(show, (val) => {
     expandedFam.value = null
     expandedFaq.value = null
     scrollProgress.value = 0
+    animatedFams.value = new Set()
     if (props.initialSection && sectionIds.includes(props.initialSection)) {
       activeSection.value = props.initialSection
       nextTick(() => {
@@ -602,7 +641,18 @@ watch(show, (val) => {
 })
 
 function toggleFam(key: string) {
-  expandedFam.value = expandedFam.value === key ? null : key
+  if (expandedFam.value === key) {
+    expandedFam.value = null
+    // Reset so animation replays on next open
+    animatedFams.value = new Set([...animatedFams.value].filter(k => k !== key))
+  } else {
+    expandedFam.value = key
+    // Remove first (force animated=false), then add back after DOM flush to restart animation
+    animatedFams.value = new Set([...animatedFams.value].filter(k => k !== key))
+    nextTick(() => {
+      animatedFams.value = new Set([...animatedFams.value, key])
+    })
+  }
 }
 
 function famCardStyle(f: string) {
@@ -631,40 +681,40 @@ function famTryBtnStyle(f: string) {
 /* ═══ HEADER ═══ */
 .hiw-header {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 16px 20px; border-bottom: 1px solid #E9EAEC;
+  padding: 20px 28px; border-bottom: 1px solid #E9EAEC;
 }
 .hiw-icon {
-  width: 36px; height: 36px; border-radius: 10px;
+  width: 44px; height: 44px; border-radius: 12px;
   background: linear-gradient(135deg, #FBBF24, #F59E0B);
   display: flex; align-items: center; justify-content: center;
 }
-.hiw-title { font-size: 16px; font-weight: 700; color: #1D1D1B; }
-.hiw-sub { font-size: 12px; color: #9CA3AF; margin-top: 1px; max-width: 420px; }
+.hiw-title { font-size: 18px; font-weight: 700; color: #1D1D1B; }
+.hiw-sub { font-size: 14px; color: #9CA3AF; margin-top: 2px; max-width: 520px; }
 
 /* ═══ PROGRESS BAR ═══ */
 .hiw-progress-track {
-  height: 2px; background: #F3F4F6;
+  height: 3px; background: #F3F4F6;
 }
 .hiw-progress-fill {
   height: 100%;
   background: linear-gradient(90deg, #FBBF24, #34D399);
   transition: width 0.15s ease-out;
-  border-radius: 0 1px 1px 0;
+  border-radius: 0 2px 2px 0;
 }
 
 /* ═══ LAYOUT: sidebar + content ═══ */
 .hiw-layout {
   display: flex;
-  height: calc(80vh - 74px);
-  min-height: 400px;
+  height: calc(88vh - 90px);
+  min-height: 500px;
 }
 
 /* ═══ SIDEBAR ═══ */
 .hiw-sidebar {
-  width: 180px;
+  width: 210px;
   flex-shrink: 0;
   border-right: 1px solid #E9EAEC;
-  padding: 12px 0;
+  padding: 16px 0;
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -672,9 +722,9 @@ function famTryBtnStyle(f: string) {
 }
 
 .sidebar-btn {
-  display: flex; align-items: center; gap: 8px;
-  padding: 10px 16px;
-  font-size: 12px; font-weight: 500;
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 20px;
+  font-size: 13px; font-weight: 500;
   color: #9CA3AF;
   background: none; border: none;
   border-left: 3px solid transparent;
@@ -693,30 +743,30 @@ function famTryBtnStyle(f: string) {
   border-left-color: #1D1D1B;
   background: #F3F4F6;
 }
-.sidebar-icon { font-size: 14px; flex-shrink: 0; }
+.sidebar-icon { font-size: 16px; flex-shrink: 0; }
 .sidebar-label { overflow: hidden; text-overflow: ellipsis; }
 
 /* ═══ BODY (scrollable content) ═══ */
 .hiw-body {
   flex: 1;
-  padding: 24px 28px 20px;
+  padding: 36px 44px 32px;
   overflow-y: auto;
   scroll-behavior: smooth;
 }
 
 /* ═══ SECTIONS ═══ */
-.hiw-section { margin-bottom: 4px; scroll-margin-top: 8px; }
+.hiw-section { margin-bottom: 8px; scroll-margin-top: 16px; }
 .section-title {
-  font-size: 16px; font-weight: 700; color: #1D1D1B;
-  margin-bottom: 8px;
+  font-size: 20px; font-weight: 700; color: #1D1D1B;
+  margin-bottom: 12px;
 }
 .section-desc {
-  font-size: 13px; color: #6B7280; line-height: 1.6;
-  margin-bottom: 16px;
+  font-size: 14px; color: #6B7280; line-height: 1.75;
+  margin-bottom: 20px;
 }
 .section-divider {
   height: 1px; background: #E9EAEC;
-  margin: 20px 0;
+  margin: 36px 0;
 }
 
 /* ═══ PHASE FLOW DIAGRAM ═══ */
@@ -725,62 +775,62 @@ function famTryBtnStyle(f: string) {
   align-items: flex-start;
   justify-content: center;
   gap: 0;
-  margin-bottom: 20px;
-  padding: 16px 0;
+  margin-bottom: 28px;
+  padding: 24px 0;
 }
 .phase-flow-step {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   flex: 0 0 auto;
 }
 .phase-flow-circle {
-  width: 48px; height: 48px;
+  width: 64px; height: 64px;
   border-radius: 50%;
   background: #F3F4F6;
   border: 2px solid #E9EAEC;
   display: flex; align-items: center; justify-content: center;
 }
 .phase-flow-label {
-  font-size: 11px; font-weight: 600; color: #6B7280;
+  font-size: 13px; font-weight: 600; color: #6B7280;
   text-align: center;
 }
 .phase-flow-label--decision {
   color: #9CA3AF; font-weight: 500;
 }
-.phase-flow-icon { font-size: 20px; }
+.phase-flow-icon { font-size: 26px; }
 
 /* Decision (Yes/No) */
 .phase-flow-decision {
   display: flex;
   align-items: center;
-  gap: 6px;
-  height: 48px;
-  padding: 0 12px;
-  border-radius: 8px;
+  gap: 8px;
+  height: 64px;
+  padding: 0 16px;
+  border-radius: 10px;
   border: 2px solid #E9EAEC;
   background: #FFFBEB;
 }
 .decision-yes {
-  font-size: 12px; font-weight: 700; color: #34D399;
+  font-size: 13px; font-weight: 700; color: #34D399;
 }
 .decision-divider {
-  font-size: 12px; color: #D1D5DB;
+  font-size: 13px; color: #D1D5DB;
 }
 .decision-no {
-  font-size: 12px; font-weight: 700; color: #EF4444;
+  font-size: 13px; font-weight: 700; color: #EF4444;
 }
 
 /* Connector lines between steps */
 .phase-flow-connector {
   display: flex;
   align-items: center;
-  height: 48px;
+  height: 64px;
   flex: 0 0 auto;
 }
 .connector-line {
-  width: 24px; height: 2px;
+  width: 32px; height: 2px;
   background: #D1D5DB;
 }
 .connector-arrow {
@@ -792,104 +842,104 @@ function famTryBtnStyle(f: string) {
 
 /* ═══ PHASES ═══ */
 .phases-list { display: flex; flex-direction: column; gap: 0; }
-.phase-item { display: flex; gap: 14px; align-items: flex-start; padding: 10px 0; }
+.phase-item { display: flex; gap: 16px; align-items: flex-start; padding: 14px 0; }
 .phase-num {
-  width: 28px; height: 28px; border-radius: 50%;
+  width: 32px; height: 32px; border-radius: 50%;
   background: #1D1D1B; color: #FFF;
-  font-size: 12px; font-weight: 700;
+  font-size: 13px; font-weight: 700;
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0; margin-top: 2px;
 }
 .phase-body { flex: 1; min-width: 0; }
-.phase-title { font-size: 14px; font-weight: 600; color: #1D1D1B; margin-bottom: 2px; }
-.phase-desc { font-size: 12px; color: #6B7280; line-height: 1.5; }
+.phase-title { font-size: 15px; font-weight: 600; color: #1D1D1B; margin-bottom: 4px; }
+.phase-desc { font-size: 13px; color: #6B7280; line-height: 1.6; }
 
 /* ═══ SAVINGS COMPARISON ═══ */
 .savings-compare {
   background: #F9FAFB; border-radius: 8px;
-  padding: 12px 16px; margin-bottom: 16px;
+  padding: 16px 20px; margin-bottom: 20px;
   border: 1px solid #E9EAEC;
 }
 .savings-compare-title {
-  font-size: 11px; font-weight: 600; color: #6B7280;
+  font-size: 12px; font-weight: 600; color: #6B7280;
   text-transform: uppercase; letter-spacing: 0.04em;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
-.savings-bars { display: flex; flex-direction: column; gap: 6px; }
+.savings-bars { display: flex; flex-direction: column; gap: 8px; }
 .savings-bar-row {
-  display: flex; align-items: center; gap: 8px;
+  display: flex; align-items: center; gap: 10px;
 }
 .savings-bar-label {
-  font-size: 11px; font-weight: 600; color: #374151;
-  width: 40px; flex-shrink: 0;
+  font-size: 12px; font-weight: 600; color: #374151;
+  width: 44px; flex-shrink: 0;
 }
 .savings-bar-track {
-  flex: 1; height: 8px; border-radius: 4px;
+  flex: 1; height: 10px; border-radius: 5px;
   background: #E5E7EB; overflow: hidden;
 }
 .savings-bar-fill {
-  height: 100%; border-radius: 4px;
+  height: 100%; border-radius: 5px;
   transition: width 0.5s ease-out;
 }
 .savings-bar-value {
-  font-size: 11px; font-weight: 700;
+  font-size: 12px; font-weight: 700;
   width: 36px; flex-shrink: 0; text-align: right;
 }
 
 /* ═══ LEGEND CARD ═══ */
 .legend-card {
   background: #F9FAFB; border: 1px dashed #D1D5DB;
-  border-radius: 8px; padding: 12px 16px;
-  margin-bottom: 16px;
+  border-radius: 8px; padding: 16px 20px;
+  margin-bottom: 20px;
 }
 .legend-header {
   display: flex; align-items: center; gap: 6px;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 .legend-title {
-  font-size: 11px; font-weight: 600; color: #6B7280;
+  font-size: 12px; font-weight: 600; color: #6B7280;
   text-transform: uppercase; letter-spacing: 0.04em;
 }
 .legend-body {
-  display: flex; gap: 20px; align-items: flex-start;
+  display: flex; gap: 24px; align-items: flex-start;
 }
 .legend-example {
   flex: 1; background: #FFF; border: 1.5px solid #D1D5DB;
-  border-radius: 8px; padding: 8px 10px 8px 14px;
+  border-radius: 8px; padding: 10px 12px 10px 16px;
   position: relative; overflow: hidden;
 }
 .legend-bar {
   position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
   background: #D1D5DB;
 }
-.legend-content { display: flex; flex-direction: column; gap: 4px; }
+.legend-content { display: flex; flex-direction: column; gap: 5px; }
 .legend-row {
   display: flex; align-items: center; gap: 6px;
 }
-.legend-emoji { font-size: 12px; }
+.legend-emoji { font-size: 13px; }
 .legend-name {
-  font-size: 11px; font-weight: 700; color: #6B7280; flex: 1;
+  font-size: 12px; font-weight: 700; color: #6B7280; flex: 1;
 }
 .legend-savings-badge {
-  font-size: 9px; font-weight: 600; padding: 1px 6px;
+  font-size: 10px; font-weight: 600; padding: 2px 7px;
   border-radius: 4px; background: #F3F4F6; color: #6B7280;
 }
-.legend-chevron-demo { font-size: 10px; color: #D1D5DB; }
+.legend-chevron-demo { font-size: 11px; color: #D1D5DB; }
 .legend-desc-line {
-  font-size: 10px; color: #9CA3AF; font-style: italic;
+  font-size: 11px; color: #9CA3AF; font-style: italic;
 }
-.legend-pills-row { display: flex; gap: 3px; }
+.legend-pills-row { display: flex; gap: 4px; }
 .legend-pill {
-  font-size: 9px; font-weight: 600; padding: 1px 6px;
+  font-size: 10px; font-weight: 600; padding: 2px 7px;
   border-radius: 4px; background: #E5E7EB; color: #6B7280;
 }
 .legend-annotations {
   flex-shrink: 0; display: flex; flex-direction: column;
-  gap: 8px; padding-top: 2px;
+  gap: 10px; padding-top: 2px;
 }
 .legend-anno {
-  display: flex; align-items: center; gap: 6px;
-  font-size: 10px; color: #6B7280; white-space: nowrap;
+  display: flex; align-items: center; gap: 8px;
+  font-size: 11px; color: #6B7280; white-space: nowrap;
 }
 .anno-dot {
   width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
@@ -899,68 +949,68 @@ function famTryBtnStyle(f: string) {
 .anno-dot--3 { background: #D1D5DB; }
 .legend-hint {
   display: flex; align-items: center; gap: 6px;
-  margin-top: 8px; font-size: 10px; color: #9CA3AF;
+  margin-top: 10px; font-size: 11px; color: #9CA3AF;
+}
+
+/* ═══ LEGEND HINT ROW ═══ */
+.legend-hint-row {
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 16px;
+  font-size: 13px; color: #9CA3AF;
 }
 
 /* ═══ FAMILIES ═══ */
 .families-list {
-  position: relative;
-  padding-left: 40px;
-  margin-top: 8px;
+  margin-top: 12px;
 }
-.families-gradient {
-  position: absolute; left: 14px; top: 0; bottom: 0;
-  width: 3px; border-radius: 2px;
-  background: linear-gradient(to bottom, #34D399, #FBBF24, #FB923C);
+.families-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
-.families-labels {
-  position: absolute; left: 0; top: 0; bottom: 0;
-  display: flex; flex-direction: column; justify-content: space-between;
-  width: 36px;
-}
-.fam-label {
-  font-size: 8px; font-weight: 700; color: #9CA3AF;
-  text-transform: uppercase; letter-spacing: 0.05em;
-  writing-mode: vertical-lr; transform: rotate(180deg);
-  text-align: center;
-}
-.fam-label--top { color: #34D399; }
-.fam-label--bottom { color: #FB923C; }
-.families-cards { display: flex; flex-direction: column; gap: 8px; }
 
 .fam-card {
   border-radius: 8px; border: 1.5px solid;
-  padding: 10px 12px 10px 16px;
+  padding: 14px 20px 14px 24px;
   position: relative; overflow: hidden;
-  cursor: pointer; transition: box-shadow 0.2s, transform 0.15s;
+  cursor: pointer; transition: box-shadow 0.2s, transform 0.15s, border-color 0.2s;
+  user-select: none;
 }
 .fam-card:hover {
-  box-shadow: 0 3px 12px rgba(0,0,0,0.06);
-  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.10);
+  transform: translateY(-2px);
+}
+.fam-card:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
 .fam-bar {
   position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
 }
 .fam-head {
-  display: flex; align-items: center; gap: 6px;
-  margin-bottom: 3px;
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 5px;
 }
-.fam-emoji { font-size: 14px; }
-.fam-name { font-size: 13px; font-weight: 700; flex: 1; }
+.fam-emoji { font-size: 16px; }
+.fam-name { font-size: 14px; font-weight: 700; flex: 1; }
 .fam-savings {
-  font-size: 10px; font-weight: 600;
-  padding: 2px 8px; border-radius: 4px;
+  font-size: 11px; font-weight: 600;
+  padding: 3px 9px; border-radius: 4px;
 }
 .fam-chevron {
-  font-size: 12px; color: #9CA3AF;
-  transition: transform 0.25s; flex-shrink: 0;
+  font-size: 16px; color: #9CA3AF;
+  transition: transform 0.25s, color 0.2s; flex-shrink: 0;
+  width: 22px; height: 22px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%; background: rgba(0,0,0,0.04);
 }
+.fam-card:hover .fam-chevron { color: #6B7280; background: rgba(0,0,0,0.08); }
 .fam-chevron.open { transform: rotate(180deg); }
-.fam-short { font-size: 11px; color: #6B7280; line-height: 1.4; margin-bottom: 6px; }
-.fam-pills { display: flex; flex-wrap: wrap; gap: 4px; }
+.fam-short { font-size: 12px; color: #6B7280; line-height: 1.5; margin-bottom: 8px; }
+.fam-pills { display: flex; flex-wrap: wrap; gap: 5px; }
 .pill {
-  font-size: 10px; font-weight: 600;
-  padding: 2px 8px; border-radius: 4px;
+  font-size: 11px; font-weight: 600;
+  padding: 3px 9px; border-radius: 4px;
   white-space: nowrap;
 }
 
@@ -978,51 +1028,95 @@ function famTryBtnStyle(f: string) {
 .fam-detail-inner.fam-detail-visible {
   opacity: 1;
 }
+/* ═══ OPTIONS GRID ═══ */
+.fam-opt-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 14px;
+}
+.fam-opt-block {
+  background: #F9FAFB;
+  border: 1px solid #E9EAEC;
+  border-radius: 6px;
+  padding: 10px 12px;
+}
+.fam-opt-title {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.06em; color: #9CA3AF;
+  margin-bottom: 7px;
+}
+.fam-opt-chips {
+  display: flex; flex-wrap: wrap; gap: 5px; align-items: center;
+}
+.opt-chip {
+  display: inline-flex; align-items: center; gap: 3px;
+  font-size: 11px; font-weight: 600;
+  padding: 3px 8px; border-radius: 4px;
+  cursor: default;
+  transition: opacity 0.15s;
+}
+.opt-chip:hover { opacity: 0.8; }
+.opt-chip--neutral { background: #E5E7EB; color: #374151; }
+.opt-chip--on     { /* color/bg set via inline style per family */ }
+.opt-chip--off    { background: #F3F4F6; color: #C5C7C9; }
+
+/* Intensity row */
+.fam-opt-intensity {
+  flex-direction: column; align-items: flex-start; gap: 4px;
+}
+.opt-intensity-bar-wrap { width: 100%; }
+.opt-intensity-bar {
+  width: 100%; height: 5px; border-radius: 3px;
+  background: #E5E7EB; overflow: hidden;
+}
+.opt-intensity-fill { height: 100%; border-radius: 3px; }
+.opt-intensity-label {
+  font-size: 11px; font-weight: 700;
+}
+.opt-intensity-desc {
+  font-size: 10px; color: #9CA3AF; line-height: 1.3;
+}
+
 .fam-desc-text {
-  font-size: 12px; color: #374151; line-height: 1.5;
-  margin-top: 10px; padding-top: 8px;
+  font-size: 13px; color: #374151; line-height: 1.6;
+  margin-top: 12px; padding-top: 10px;
   border-top: 1px solid rgba(0,0,0,0.06);
 }
 .fam-use-text {
-  font-size: 11px; color: #6B7280; font-style: italic;
-  margin-top: 4px; line-height: 1.4;
+  font-size: 12px; color: #6B7280; font-style: italic;
+  margin-top: 6px; line-height: 1.5;
 }
 
 /* Illustration inside expanded card */
 .fam-illustration {
-  margin-top: 10px;
-  padding: 12px 14px;
+  margin-top: 12px;
+  padding: 0 0 8px;
   border-radius: 8px;
   border: 1px solid;
+  overflow: hidden;
 }
-.fam-illus-flow {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0;
-  flex-wrap: wrap;
+.fam-chart-wrap {
+  width: 100%;
+  max-width: 450px; /* 450 × (200/300) = 300px height — exact 3:2 → zero letterboxing */
+  margin: 0 auto;
+  pointer-events: none;
 }
-.fam-illus-step {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-}
-.fam-illus-icon { font-size: 16px; }
-.fam-illus-label {
-  font-size: 11px; font-weight: 600; color: #374151;
-}
-.fam-illus-arrow {
-  margin: 0 6px;
-  font-size: 12px; color: #9CA3AF; font-weight: 400;
+.fam-chart-wrap :deep(.chart-container) {
+  height: 300px;
+  border: none;
+  border-radius: 0;
 }
 .fam-illus-caption {
-  font-size: 10px; color: #9CA3AF; text-align: center;
-  margin-top: 6px; line-height: 1.4;
+  font-size: 11px; color: #9CA3AF; text-align: center;
+  margin-top: 6px; line-height: 1.5;
+  padding: 0 12px;
 }
 
 .fam-example {
-  font-size: 11px; color: #9CA3AF; line-height: 1.4;
-  margin-top: 8px; padding: 6px 10px;
+  font-size: 12px; color: #9CA3AF; line-height: 1.5;
+  margin-top: 10px; padding: 8px 12px;
   background: rgba(0,0,0,0.02); border-radius: 4px;
   border-left: 2px solid #D1D5DB;
 }
@@ -1030,9 +1124,9 @@ function famTryBtnStyle(f: string) {
 /* Try this type button */
 .fam-try-btn {
   display: inline-flex; align-items: center; gap: 6px;
-  margin-top: 10px; padding: 6px 14px;
+  margin-top: 12px; padding: 7px 16px;
   border: none; border-radius: 6px;
-  font-size: 11px; font-weight: 600;
+  font-size: 12px; font-weight: 600;
   cursor: pointer;
   transition: opacity 0.2s, transform 0.15s;
 }
@@ -1044,104 +1138,107 @@ function famTryBtnStyle(f: string) {
 /* ═══ SCORING DIMENSIONS ═══ */
 .dims-grid { display: flex; flex-direction: column; gap: 0; }
 .dim-row {
-  display: flex; align-items: center; gap: 12px;
-  padding: 10px 0;
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 0;
   border-bottom: 1px solid #F3F4F6;
 }
 .dim-row:last-child { border-bottom: none; }
-.dim-icon { font-size: 16px; flex-shrink: 0; width: 24px; text-align: center; }
+.dim-icon { font-size: 18px; flex-shrink: 0; width: 26px; text-align: center; }
 .dim-info { flex: 1; min-width: 0; }
-.dim-name { font-size: 13px; font-weight: 600; color: #1D1D1B; }
-.dim-desc { font-size: 11px; color: #9CA3AF; }
-.dim-opts { display: flex; gap: 4px; flex-shrink: 0; }
+.dim-name { font-size: 14px; font-weight: 600; color: #1D1D1B; }
+.dim-desc { font-size: 12px; color: #9CA3AF; margin-top: 2px; }
+.dim-opts { display: flex; gap: 5px; flex-shrink: 0; }
 .dim-opt {
-  font-size: 10px; font-weight: 500;
-  padding: 3px 8px; border-radius: 4px;
+  font-size: 11px; font-weight: 500;
+  padding: 4px 10px; border-radius: 4px;
   background: #F3F4F6; color: #374151;
   white-space: nowrap;
 }
 
 /* ═══ COMPATIBILITY TABLE ═══ */
 .compat-title {
-  font-size: 14px; font-weight: 700; color: #1D1D1B;
-  margin-top: 24px; margin-bottom: 4px;
+  font-size: 15px; font-weight: 700; color: #1D1D1B;
+  margin-top: 28px; margin-bottom: 6px;
 }
 .compat-intro {
-  font-size: 12px; color: #9CA3AF; margin-bottom: 12px;
+  font-size: 13px; color: #9CA3AF; margin-bottom: 14px;
 }
 .compat-table-wrap {
   overflow-x: auto;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
 }
 .compat-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 12px;
+  font-size: 13px;
 }
 .compat-th-empty {
-  width: 100px;
+  width: 110px;
 }
 .compat-th {
   text-align: center;
-  padding: 8px 4px;
+  padding: 10px 6px;
   border-bottom: 2px solid #E9EAEC;
 }
-.compat-th-emoji { display: block; font-size: 16px; margin-bottom: 2px; }
-.compat-th-name { font-size: 10px; font-weight: 700; }
+.compat-th-emoji { display: block; font-size: 18px; margin-bottom: 3px; }
+.compat-th-name { font-size: 11px; font-weight: 700; }
 .compat-label {
-  font-size: 12px; font-weight: 500; color: #6B7280;
-  padding: 8px 8px 8px 0;
+  font-size: 13px; font-weight: 500; color: #6B7280;
+  padding: 10px 10px 10px 0;
   white-space: nowrap;
+}
+.compat-table tbody tr:nth-child(even) td {
+  background: #F9FAFB;
 }
 .compat-cell {
   text-align: center;
-  padding: 8px 4px;
+  padding: 10px 6px;
   border-bottom: 1px solid #F3F4F6;
 }
 .compat-check, .compat-cross {
   display: inline-flex; align-items: center; justify-content: center;
 }
 
-.scoring-notes { margin-top: 16px; display: flex; flex-direction: column; gap: 8px; }
+.scoring-notes { margin-top: 20px; display: flex; flex-direction: column; gap: 10px; }
 .scoring-note {
-  display: flex; align-items: flex-start; gap: 8px;
-  font-size: 12px; color: #6B7280; line-height: 1.5;
+  display: flex; align-items: flex-start; gap: 10px;
+  font-size: 13px; color: #6B7280; line-height: 1.6;
 }
 
 /* ═══ CONCEPTS ═══ */
 .concepts-list { display: flex; flex-direction: column; gap: 0; }
 .concept-item {
-  padding: 10px 0;
+  padding: 14px 0;
   border-bottom: 1px solid #F3F4F6;
 }
 .concept-item:last-child { border-bottom: none; }
-.concept-term { font-size: 13px; font-weight: 700; color: #1D1D1B; margin-bottom: 2px; }
-.concept-def { font-size: 12px; color: #6B7280; line-height: 1.5; }
+.concept-term { font-size: 14px; font-weight: 700; color: #1D1D1B; margin-bottom: 4px; }
+.concept-def { font-size: 13px; color: #6B7280; line-height: 1.6; }
 
 /* Concept levels */
 .concept-levels {
-  display: flex; flex-direction: column; gap: 6px;
-  margin-top: 8px; padding: 8px 12px;
+  display: flex; flex-direction: column; gap: 8px;
+  margin-top: 10px; padding: 10px 14px;
   background: #F9FAFB; border-radius: 6px;
 }
 .concept-level {
-  display: flex; align-items: center; gap: 8px;
+  display: flex; align-items: center; gap: 10px;
 }
-.concept-level-icon { font-size: 14px; flex-shrink: 0; width: 20px; text-align: center; }
+.concept-level-icon { font-size: 15px; flex-shrink: 0; width: 22px; text-align: center; }
 .concept-level-label {
-  font-size: 11px; font-weight: 700; color: #374151;
-  flex-shrink: 0; min-width: 80px;
+  font-size: 12px; font-weight: 700; color: #374151;
+  flex-shrink: 0; min-width: 88px;
 }
 .concept-level-desc {
-  font-size: 11px; color: #9CA3AF; line-height: 1.3;
+  font-size: 12px; color: #9CA3AF; line-height: 1.4;
 }
 
 /* Intensity bar */
 .intensity-bar-wrap {
-  flex-shrink: 0; width: 20px; display: flex; align-items: center;
+  flex-shrink: 0; width: 22px; display: flex; align-items: center;
 }
 .intensity-bar {
-  width: 20px; height: 6px; border-radius: 3px;
+  width: 22px; height: 6px; border-radius: 3px;
   background: #E5E7EB; overflow: hidden;
 }
 .intensity-fill {
@@ -1160,8 +1257,8 @@ function famTryBtnStyle(f: string) {
 .faq-item:last-child { border-bottom: none; }
 .faq-question {
   display: flex; align-items: center; gap: 10px;
-  padding: 12px 0;
-  font-size: 13px; font-weight: 600; color: #374151;
+  padding: 16px 0;
+  font-size: 14px; font-weight: 600; color: #374151;
 }
 .faq-item.open .faq-question { color: #1D1D1B; }
 .faq-answer {
@@ -1171,24 +1268,24 @@ function famTryBtnStyle(f: string) {
 .faq-answer.open { grid-template-rows: 1fr; }
 .faq-answer-inner {
   overflow: hidden; min-height: 0;
-  font-size: 12px; color: #6B7280; line-height: 1.6;
+  font-size: 13px; color: #6B7280; line-height: 1.7;
   padding: 0 0 0 26px;
 }
 .faq-answer.open .faq-answer-inner {
-  padding-bottom: 12px;
+  padding-bottom: 16px;
 }
 
 /* ═══ CTA ═══ */
-.hiw-cta { margin-top: 24px; }
+.hiw-cta { margin-top: 32px; display: flex; justify-content: center; }
 .cta-btn {
   font-weight: 600; text-transform: none;
-  border-radius: 8px; font-size: 14px;
-  height: 44px !important; letter-spacing: 0.01em;
+  border-radius: 8px; font-size: 15px;
+  height: 48px !important; letter-spacing: 0.01em;
 }
 
 /* ═══ RESPONSIVE ═══ */
 @media (max-width: 700px) {
-  .hiw-layout { flex-direction: column; height: auto; max-height: 80vh; }
+  .hiw-layout { flex-direction: column; height: auto; max-height: 88vh; }
   .hiw-sidebar {
     width: 100%; flex-direction: row; border-right: none;
     border-bottom: 1px solid #E9EAEC;
@@ -1199,26 +1296,24 @@ function famTryBtnStyle(f: string) {
   }
   .sidebar-btn {
     border-left: none; border-bottom: 2px solid transparent;
-    padding: 8px 12px; font-size: 11px;
+    padding: 8px 12px; font-size: 12px;
   }
   .sidebar-btn.active {
     border-left-color: transparent;
     border-bottom-color: #1D1D1B;
   }
-  .hiw-body { padding: 16px; max-height: 60vh; }
+  .hiw-body { padding: 20px; max-height: 60vh; }
   .dim-row { flex-direction: column; align-items: flex-start; gap: 6px; }
   .dim-opts { flex-wrap: wrap; }
-  .families-list { padding-left: 28px; }
-  .families-gradient { left: 8px; }
   .phase-flow { gap: 0; flex-wrap: wrap; justify-content: center; }
   .phase-flow-step { flex: 0 0 auto; }
-  .phase-flow-circle { width: 40px; height: 40px; }
-  .phase-flow-icon { font-size: 16px; }
-  .phase-flow-decision { padding: 0 8px; height: 40px; }
-  .phase-flow-connector { height: 40px; }
-  .connector-line { width: 12px; }
-  .compat-table { font-size: 11px; }
-  .savings-bar-label { width: 32px; font-size: 10px; }
+  .phase-flow-circle { width: 48px; height: 48px; }
+  .phase-flow-icon { font-size: 20px; }
+  .phase-flow-decision { padding: 0 10px; height: 48px; }
+  .phase-flow-connector { height: 48px; }
+  .connector-line { width: 16px; }
+  .compat-table { font-size: 12px; }
+  .savings-bar-label { width: 36px; font-size: 11px; }
   .legend-body { flex-direction: column; }
 }
 </style>

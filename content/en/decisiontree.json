@@ -318,7 +318,24 @@
     "lvlIntCompet": "Competitive",
     "lvlIntCompetDesc": "Standard market pressure",
     "lvlIntAggr": "Aggressive",
-    "lvlIntAggrDesc": "Maximum pressure for best price"
+    "lvlIntAggrDesc": "Maximum pressure for best price",
+    "optSecurityTitle": "Pre-bid",
+    "optPreBidOn": "Enabled",
+    "optPreBidOnInfo": "Suppliers submit a price before the auction opens. This pre-bid runs automatically at start, setting the initial competitive position.",
+    "optPreBidOff": "Not available",
+    "optPreBidOffInfo": "This auction type does not support pre-bids. All prices are submitted live during the auction.",
+    "optPrefTitle": "Preference",
+    "optPrefAvailInfo": "You can apply a weighting to favour certain suppliers (qualitative or financial adjustment).",
+    "optPrefNAInfo": "This auction type does not support preference weighting.",
+    "optNoneInfo": "No preference — all suppliers compete on equal footing.",
+    "optNonFinInfo": "Non-financial — qualitative criteria (quality, CSR, delivery) weighted alongside price.",
+    "optFinInfo": "Financial — a price adjustment (% or fixed amount) is applied to selected suppliers.",
+    "optAwardTitle": "Award mode",
+    "optAwardInfo": "Binding — the winning supplier is contractually awarded the lot.",
+    "optRankInfo": "Non-binding ranking — suppliers are ordered but no contract is signed.",
+    "optNoRankInfo": "Market test only — prices collected with no ranking or commitment.",
+    "optAwardNAInfo": "Traditional negotiation does not use an automated award mechanism.",
+    "optIntensityTitle": "Intensity"
   },
   "calc": {
     "columns": {

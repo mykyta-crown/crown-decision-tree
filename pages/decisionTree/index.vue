@@ -3,8 +3,8 @@
     <!-- Header -->
     <v-row align="center" class="mb-2">
       <v-col cols="auto" class="d-flex align-center ga-3">
-        <h1 class="text-h5 font-weight-bold">{{ t('page.title') }}</h1>
-        <v-chip size="small" color="primary" variant="flat" label>
+        <h1 style="color: var(--grey-900, #1D1D1B); font-family: Poppins; font-size: 20px; font-style: normal; font-weight: 600; line-height: normal;">{{ t('page.title') }}</h1>
+        <v-chip variant="flat" label class="rounded-lg justify-center font-weight-bold" style="background-color: #1D1D1B; color: #FFFFFF; font-size: 13px;">
           {{ projectsStore.allActive.length }}
         </v-chip>
       </v-col>
@@ -613,7 +613,7 @@ function openProject(proj: any) {
   display: grid;
   grid-template-columns: 48px 2fr 1fr 1fr 1fr 1fr 1fr 140px 40px 44px;
   padding: 0 20px;
-  height: 48px;
+  height: 40px;
   align-items: center;
   border-bottom: 1px solid #E9EAEC;
   background: #FFFFFF;
@@ -747,6 +747,11 @@ function openProject(proj: any) {
 /* ── Blue button ── */
 .blue-btn {
   color: #1E3A5F !important;
+}
+
+/* ── Search prepend icon color matches placeholder ── */
+.v-text-field :deep(.v-field__prepend-inner .v-icon) {
+  color: #AEB0B2;
 }
 
 /* ── How does it work button ── */

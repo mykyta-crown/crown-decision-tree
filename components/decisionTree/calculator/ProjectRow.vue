@@ -39,11 +39,11 @@ const emit = defineEmits<{
 }>()
 
 const STATUS_COLORS: Record<string, { bg: string; text: string }> = {
-  eAuction: { bg: '#DEF7EC', text: '#065F46' },
-  Closed: { bg: '#DEF7EC', text: '#065F46' },
-  Recommended: { bg: '#DEF7EC', text: '#065F46' },
-  Upcoming: { bg: '#DEF7EC', text: '#065F46' },
-  'In progress': { bg: '#FDF6B2', text: '#723B13' },
+  Recommended: { bg: '#DDFBEE', text: '#007C4A' },
+  eAuction: { bg: '#DFF0FF', text: '#1A49A9' },
+  Closed: { bg: '#DFF0FF', text: '#1A49A9' },
+  Upcoming: { bg: '#DFF0FF', text: '#1A49A9' },
+  'In progress': { bg: '#FDFFD2', text: '#9F580A' },
   Draft: { bg: '#F3F4F6', text: '#6B7280' },
 }
 
@@ -119,11 +119,11 @@ function onMenuAction(action: 'edit' | 'archive' | 'duplicate' | 'delete') {
       {{ project.owner || 'You' }}
     </div>
 
-    <!-- Col 8: Status chip -->
+    <!-- Col 8: Status badge -->
     <div class="col-status">
-      <v-chip size="small" :style="statusStyle">
+      <span class="status-badge" :style="statusStyle">
         {{ project.status || 'Draft' }}
-      </v-chip>
+      </span>
     </div>
 
     <!-- Col 9: Star / Favorite -->
@@ -170,7 +170,7 @@ function onMenuAction(action: 'edit' | 'archive' | 'duplicate' | 'delete') {
   grid-template-columns: 48px 2fr 1fr 1fr 1fr 1fr 1fr 140px 40px 44px;
   align-items: center;
   padding: 0 20px;
-  height: 48px;
+  height: 44px;
   border-bottom: 1px solid #F3F4F6;
   cursor: pointer;
   transition: background-color 0.15s ease;
@@ -223,6 +223,23 @@ function onMenuAction(action: 'edit' | 'archive' | 'duplicate' | 'delete') {
 .col-status {
   display: flex;
   align-items: center;
+}
+
+.status-badge {
+  display: flex;
+  height: 24px;
+  width: 100px;
+  padding: 4px 8px;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  border-radius: 4px;
+  font-family: Poppins;
+  font-size: 12px;
+  font-weight: 400;
+  white-space: nowrap;
+  flex-shrink: 0;
+  box-sizing: border-box;
 }
 
 .col-star {
