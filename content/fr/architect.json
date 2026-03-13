@@ -152,7 +152,7 @@
     "suppliersOpts": ["Un", "Deux", "Trois +"],
     "awardingOpts": ["Attribution", "Classement", "Sans classement"],
     "preferenceOpts": ["Aucune", "Non financière", "Financière"],
-    "intensityOpts": ["Collaborative", "Compétitive", "Élevée", "Intense"],
+    "intensityOpts": ["Collaborative", "Compétitive", "Intense"],
     "priceGapOpts": ["< 7%", "7%–10%", "> 10%"]
   },
   "v5": {
