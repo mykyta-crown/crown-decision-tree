@@ -116,7 +116,7 @@
 
                   <!-- Chart illustration -->
                   <div class="card-chart">
-                    <DecisionTreeCalculatorChartsAChart
+                    <ArchitectCalculatorChartsAChart
                       :family="getTop3(li)[ri - 1].family"
                       :color="chartColor(li, ri - 1)"
                       :ccy="store.ccy"
@@ -126,35 +126,31 @@
 
                   <!-- Option pills (blue variant with lighter selected state) -->
                   <div class="card-options">
-                    <DecisionTreeCalculatorOptionRowBlue
+                    <ArchitectCalculatorOptionRowBlue
                       v-if="getFamilyOptions(getTop3(li)[ri - 1].family).security"
                       :label="t('calc.phase3.security')"
                       :options="trPills(getFamilyOptions(getTop3(li)[ri - 1].family).security!)"
                       :selected="getSecuritySelected(li, ri - 1)"
                     />
-                    <DecisionTreeCalculatorOptionRowBlue
+                    <ArchitectCalculatorOptionRowBlue
                       v-if="getFamilyOptions(getTop3(li)[ri - 1].family).preference"
                       :label="t('calc.phase3.preference')"
                       :options="trPills(getFamilyOptions(getTop3(li)[ri - 1].family).preference!)"
                       :selected="trPrefLabels[lot.pref] || trPill('None')"
                     />
-                    <DecisionTreeCalculatorOptionRowBlue
+                    <ArchitectCalculatorOptionRowBlue
                       v-if="getFamilyOptions(getTop3(li)[ri - 1].family).awarding"
                       :label="t('calc.phase3.awarding')"
                       :options="trPills(getFamilyOptions(getTop3(li)[ri - 1].family).awarding!)"
                       :selected="getAwardingSelected(li, ri - 1)"
                     />
-                    <DecisionTreeCalculatorIntensityBar :family="getTop3(li)[ri - 1].family" :label="t('calc.phase3.intensity')" />
+                    <ArchitectCalculatorIntensityBar :family="getTop3(li)[ri - 1].family" :label="t('calc.phase3.intensity')" />
                   </div>
 
                   <!-- Action buttons -->
                   <div class="card-btn-wrap">
-                    <button class="card-btn-learn" @click.stop="emit('learn-more', familyToKey(getTop3(li)[ri - 1].family))">
-                      <v-icon size="14">mdi-help-circle-outline</v-icon>
+                    <button class="card-btn" @click.stop="emit('learn-more', familyToKey(getTop3(li)[ri - 1].family))">
                       {{ t('calc.phase3.learnMore') }}
-                    </button>
-                    <button class="card-btn" @click.stop="goToConfig">
-                      {{ t('calc.phase3.configure') }}
                       <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                         <path d="M3.5 8h9M8.5 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                       </svg>
@@ -193,23 +189,33 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { useCalculatorStore } from '~/stores/decisionTree/calculator'
-import { useProjectsStore } from '~/stores/decisionTree/projects'
-import { FC, gfc, PREF_LABELS, getFamilyOptions } from '~/utils/decisionTree/constants'
-import { fmtE } from '~/utils/decisionTree/formatting'
-import { exportDecisionTreePdf } from '~/utils/decisionTree/exportPdf'
+import { ref, computed, onMounted, nextTick } from 'vue'
+import { useCalculatorStore } from '~/stores/architect/calculator'
+import { useProjectsStore } from '~/stores/architect/projects'
+import { FC, gfc, PREF_LABELS, getFamilyOptions } from '~/utils/architect/constants'
+import { fmtE } from '~/utils/architect/formatting'
+import { exportArchitectPdf } from '~/utils/architect/exportPdf'
 import useTranslations from '~/composables/useTranslations'
-import type { Lot } from '~/stores/decisionTree/calculator'
-import type { ScoreResult } from '~/utils/decisionTree/scoring-engine'
+import type { Lot } from '~/stores/architect/calculator'
+import type { ScoreResult } from '~/utils/architect/scoring-engine'
 
-const { t } = useTranslations('decisiontree')
+const { t } = useTranslations('architect')
 const emit = defineEmits<{ 'learn-more': [family: string] }>()
 
 const store = useCalculatorStore()
 const projectsStore = useProjectsStore()
 
 const animatedLots = ref(new Set<number>())
+
+onMounted(() => {
+  if (store.expLot >= 0) {
+    nextTick(() => {
+      setTimeout(() => {
+        animatedLots.value = new Set([store.expLot])
+      }, 50)
+    })
+  }
+})
 
 const engC = FC['English']
 const dutC = FC['Dutch']
@@ -377,7 +383,7 @@ function editInputs() {
 }
 
 function exportReport() {
-  exportDecisionTreePdf({
+  exportArchitectPdf({
     evName: store.evName,
     userName: projectsStore.userName,
     mode: store.mode,
@@ -685,10 +691,9 @@ function exportReport() {
 }
 
 .savings-label {
-  font-size: 13px;
-  font-weight: 400;
-  color: #9CA3AF;
-  font-family: Poppins, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
 }
 
 .savings-chip {
