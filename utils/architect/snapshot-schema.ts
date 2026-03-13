@@ -51,7 +51,7 @@ const LotSchema = z.object({
 // ─── Snapshot v2 schema (current) ───
 export const SnapshotV2Schema = z.object({
   version: z.literal(2),
-  mode: z.enum(['standard', 'guided', 'blue']),
+  mode: z.enum(['standard', 'guided', 'blue', 'black']),
   phase: z.number().min(0).max(3),
   spend: z.number().min(0),
   nSup: z.number().min(0),
@@ -70,7 +70,7 @@ export type SnapshotV2 = z.infer<typeof SnapshotV2Schema>
 
 // ─── V1 schema (legacy, unversioned) ───
 const SnapshotV1Schema = z.object({
-  mode: z.enum(['standard', 'lots', 'guided', 'blue']).optional(),
+  mode: z.enum(['standard', 'lots', 'guided', 'blue', 'black']).optional(),
   phase: z.number().optional(),
   spend: z.number().optional(),
   nSup: z.number().optional(),
@@ -88,11 +88,13 @@ const SnapshotV1Schema = z.object({
 // ─── Migration: v1 → v2 ───
 function migrateV1toV2(raw: z.infer<typeof SnapshotV1Schema>): SnapshotV2 {
   // Normalize mode: 'lots' → 'guided'
-  let mode: 'standard' | 'guided' | 'blue' = 'standard'
+  let mode: 'standard' | 'guided' | 'blue' | 'black' = 'standard'
   if (raw.mode === 'guided' || raw.mode === 'lots') {
     mode = 'guided'
   } else if (raw.mode === 'blue') {
     mode = 'blue'
+  } else if (raw.mode === 'black') {
+    mode = 'black'
   }
 
   const sc = raw.sc ?? 2
@@ -186,7 +188,7 @@ export function parseSnapshot(raw: unknown): SnapshotV2 | null {
  * Create a snapshot from current store state (always at current version).
  */
 export function createSnapshot(state: {
-  mode: 'standard' | 'guided' | 'blue'
+  mode: 'standard' | 'guided' | 'blue' | 'black'
   phase: number
   spend: number
   nSup: number
