@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { computed, ref, onMounted, onUpdated, nextTick } from 'vue'
-import { useCalculatorStore } from '~/stores/decisionTree/calculator'
-import { fmtE } from '~/utils/decisionTree/formatting'
-import { DEMO_PRESETS } from '~/utils/decisionTree/demo-presets'
+import { computed, ref, watch, onMounted, onUpdated, onUnmounted, nextTick } from 'vue'
+import { useCalculatorStore } from '~/stores/architect/calculator'
+import { fmtE } from '~/utils/architect/formatting'
+import { DEMO_PRESETS } from '~/utils/architect/demo-presets'
 import useTranslations from '~/composables/useTranslations'
 
-const { t } = useTranslations('decisiontree')
+const { t } = useTranslations('architect')
 const store = useCalculatorStore()
 
 const isGuided = computed(() => store.mode === 'guided' || store.mode === 'blue')
@@ -22,8 +22,8 @@ function measureHeader() {
   store.lotHeaderH = rowRect.top - cardRect.top
 }
 
-onMounted(() => { nextTick(measureHeader) })
-onUpdated(() => { nextTick(measureHeader) })
+onMounted(() => { nextTick(() => { measureHeader(); updateThumb() }) })
+onUpdated(() => { nextTick(() => { measureHeader(); updateThumb() }) })
 
 function focusSetLot(li: number, e: FocusEvent) {
   store.selLot = li
@@ -42,6 +42,58 @@ const tableWidth = computed(() => {
 
 /* Force visible scrollbar when 3+ suppliers or narrow viewport */
 const forceScroll = computed(() => store.sc >= 3)
+
+/* ── Custom scrollbar ── */
+const scrollArea = ref<HTMLElement | null>(null)
+const thumbPct = ref(100)   // thumb width as % of track
+const thumbPos = ref(0)     // thumb left offset as % of track
+const canScroll = ref(false)
+
+function updateThumb() {
+  const el = scrollArea.value
+  if (!el) return
+  const maxScroll = el.scrollWidth - el.clientWidth
+  canScroll.value = maxScroll > 1
+  const ratio = el.clientWidth / el.scrollWidth
+  thumbPct.value = Math.max(ratio * 100, 6)
+  thumbPos.value = maxScroll > 0 ? (el.scrollLeft / maxScroll) * (100 - thumbPct.value) : 0
+}
+
+let _dragStartX = 0
+let _dragStartScrollLeft = 0
+
+function startDrag(e: MouseEvent) {
+  e.preventDefault()
+  _dragStartX = e.clientX
+  _dragStartScrollLeft = scrollArea.value?.scrollLeft ?? 0
+  window.addEventListener('mousemove', onDrag)
+  window.addEventListener('mouseup', stopDrag)
+}
+
+function onDrag(e: MouseEvent) {
+  const el = scrollArea.value
+  if (!el) return
+  const maxScroll = el.scrollWidth - el.clientWidth
+  const dx = e.clientX - _dragStartX
+  el.scrollLeft = Math.max(0, Math.min(maxScroll, _dragStartScrollLeft + (dx / el.clientWidth) * el.scrollWidth))
+}
+
+function stopDrag() {
+  window.removeEventListener('mousemove', onDrag)
+  window.removeEventListener('mouseup', stopDrag)
+}
+
+function onTrackClick(e: MouseEvent) {
+  const el = scrollArea.value
+  if (!el) return
+  const rect = (e.currentTarget as HTMLElement).getBoundingClientRect()
+  const clickRatio = (e.clientX - rect.left) / rect.width
+  el.scrollLeft = clickRatio * el.scrollWidth - el.clientWidth / 2
+}
+
+// Update thumb whenever suppliers change or layout updates
+watch(() => store.sc, () => nextTick(updateThumb))
+onUnmounted(stopDrag)
 </script>
 
 <template>
@@ -71,7 +123,7 @@ const forceScroll = computed(() => store.sc >= 3)
     </div>
 
     <!-- Scrollable table area -->
-    <div class="table-scroll" :class="{ 'table-scroll--force': forceScroll }">
+    <div ref="scrollArea" class="table-scroll" @scroll="updateThumb">
       <table class="xl-table" :style="{ minWidth: tableWidth, width: '100%' }">
         <colgroup>
           <col class="col-num" />
@@ -355,6 +407,15 @@ const forceScroll = computed(() => store.sc >= 3)
       </table>
     </div>
 
+    <!-- Custom always-visible scrollbar -->
+    <div v-show="canScroll" class="custom-scroll-track" @mousedown.self="onTrackClick">
+      <div
+        class="custom-scroll-thumb"
+        :style="{ width: thumbPct + '%', left: thumbPos + '%' }"
+        @mousedown.stop="startDrag"
+      />
+    </div>
+
     <!-- Footer -->
     <div class="table-footer">
       <div class="table-footer-spacer" />
@@ -592,34 +653,35 @@ const forceScroll = computed(() => store.sc >= 3)
 /* ─── Table scroll ─── */
 .table-scroll {
   flex: 1;
-  overflow-x: auto;
-  scrollbar-width: thin;
-  scrollbar-color: #C0C0C0 #F3F4F6;
-}
-.table-scroll::-webkit-scrollbar {
-  height: 6px;
-  display: block;
-}
-.table-scroll::-webkit-scrollbar-track {
-  background: #F1F1F1;
-}
-.table-scroll::-webkit-scrollbar-thumb {
-  background: #C1C1C1;
-  border-radius: 3px;
-}
-.table-scroll::-webkit-scrollbar-thumb:hover {
-  background: #A0A0A0;
-}
-/* [CHANGE 4] Force visible scrollbar on 3+ suppliers */
-.table-scroll--force {
   overflow-x: scroll;
+  /* Hide native scrollbar on all platforms — custom one below replaces it */
+  scrollbar-width: none;
 }
-/* Also force on narrow viewports */
-@media (max-width: 1280px) {
-  .table-scroll {
-    overflow-x: scroll;
-  }
+.table-scroll::-webkit-scrollbar { display: none; }
+.table-scroll--force { overflow-x: scroll; }
+
+/* ─── Custom scrollbar ─── */
+.custom-scroll-track {
+  flex-shrink: 0;
+  height: 12px;
+  background: #E9EAEC;
+  border-top: 1px solid #D1D5DB;
+  position: relative;
+  cursor: pointer;
+  user-select: none;
 }
+.custom-scroll-thumb {
+  position: absolute;
+  top: 2px;
+  height: 8px;
+  min-width: 32px;
+  background: #94A3B8;
+  border-radius: 4px;
+  cursor: grab;
+  transition: background 0.15s;
+}
+.custom-scroll-thumb:hover { background: #64748B; }
+.custom-scroll-thumb:active { cursor: grabbing; background: #475569; }
 
 /* ─── Excel-like table ─── */
 .xl-table {
@@ -681,6 +743,7 @@ const forceScroll = computed(() => store.sc >= 3)
 }
 .sup-name-input {
   border: none;
+  border-bottom: 1px dashed #C5C7C9;
   outline: none;
   background: transparent;
   font-size: 11px;
@@ -691,7 +754,14 @@ const forceScroll = computed(() => store.sc >= 3)
   font-family: inherit;
   width: 100%;
   min-width: 0;
-  padding: 0;
+  padding: 0 0 1px;
+  cursor: text;
+  transition: border-color 0.15s, color 0.15s;
+}
+.sup-name-input:hover,
+.sup-name-input:focus {
+  border-bottom-color: #6B6B6B;
+  color: #1D1D1B;
 }
 /* [CHANGE 3] Supplier × hidden by default, shown on hover/focus */
 .sup-remove-btn {
@@ -769,18 +839,18 @@ const forceScroll = computed(() => store.sc >= 3)
 /* ─── Inputs ─── */
 .xl-input {
   width: 100%;
-  border: 1px solid transparent;
+  border: 1px solid #E9EAEC;
   border-radius: 4px;
   padding: 7px 10px;
   font-size: 13px;
   font-family: inherit;
   outline: none;
-  background: transparent;
+  background: #FAFAFA;
   box-sizing: border-box;
   transition: all 0.12s ease;
 }
 .xl-input:hover {
-  border-color: #E5E7EB;
+  border-color: #C5C7C9;
   background: #FFF;
 }
 .xl-input:focus {
@@ -789,7 +859,7 @@ const forceScroll = computed(() => store.sc >= 3)
   box-shadow: 0 0 0 2px rgba(52, 211, 153, 0.12);
 }
 .xl-input::placeholder {
-  color: #D0D0D0;
+  color: #C5C7C9;
 }
 
 /* Hide number spinners */
@@ -810,13 +880,13 @@ const forceScroll = computed(() => store.sc >= 3)
 /* ─── Selects ─── */
 .xl-select {
   width: 100%;
-  border: 1px solid transparent;
+  border: 1px solid #E9EAEC;
   border-radius: 4px;
   padding: 7px 22px 7px 8px;
   font-size: 12px;
   font-family: inherit;
   outline: none;
-  background: transparent;
+  background-color: #FAFAFA;
   box-sizing: border-box;
   cursor: pointer;
   -webkit-appearance: none;
@@ -828,7 +898,7 @@ const forceScroll = computed(() => store.sc >= 3)
   transition: all 0.12s ease;
 }
 .xl-select:hover {
-  border-color: #E5E7EB;
+  border-color: #C5C7C9;
   background-color: #FFF;
 }
 .xl-select:focus {

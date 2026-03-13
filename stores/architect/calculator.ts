@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia'
 import { ref, computed, watch } from 'vue'
-import { getScores, DEF_BASES, DEF_SAVINGS, DEF_MATRIX, deepCloneMatrix, type ScoringParams } from '~/utils/decisionTree/scoring-engine'
-import { createSnapshot, parseSnapshot } from '~/utils/decisionTree/snapshot-schema'
-import type { DemoPreset } from '~/utils/decisionTree/demo-presets'
+import { getScores, DEF_BASES, DEF_SAVINGS, DEF_MATRIX, deepCloneMatrix, type ScoringParams } from '~/utils/architect/scoring-engine'
+import { createSnapshot, parseSnapshot } from '~/utils/architect/snapshot-schema'
+import type { DemoPreset } from '~/utils/architect/demo-presets'
 
 let _paramsSaveTimer: ReturnType<typeof setTimeout> | null = null
 

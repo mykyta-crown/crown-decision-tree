@@ -11,7 +11,7 @@ import { describe, it, expect } from 'vitest'
 import { readFileSync } from 'fs'
 import { resolve } from 'path'
 
-const CHARTS_DIR = resolve(__dirname, '../../components/decisionTree/calculator/charts')
+const CHARTS_DIR = resolve(__dirname, '../../components/architect/calculator/charts')
 
 function readChart(name: string): string {
   return readFileSync(resolve(CHARTS_DIR, name), 'utf-8')

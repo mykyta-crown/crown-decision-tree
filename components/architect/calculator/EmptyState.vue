@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import useTranslations from '~/composables/useTranslations'
-const { t } = useTranslations('decisiontree')
+const { t } = useTranslations('architect')
 
 const emit = defineEmits<{
   create: []

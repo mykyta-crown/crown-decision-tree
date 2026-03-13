@@ -110,10 +110,10 @@
 
 <script setup lang="ts">
 import useTranslations from '~/composables/useTranslations'
-import { useCalculatorStore } from '~/stores/decisionTree/calculator'
-import { SC, Q_LABELS, Q_OPTS } from '~/utils/decisionTree/scoring-engine'
+import { useCalculatorStore } from '~/stores/architect/calculator'
+import { SC, Q_LABELS, Q_OPTS } from '~/utils/architect/scoring-engine'
 
-const { t } = useTranslations('decisiontree')
+const { t } = useTranslations('architect')
 const store = useCalculatorStore()
 const { isAdmin } = useUser()
 

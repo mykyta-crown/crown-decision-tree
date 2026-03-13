@@ -7,13 +7,13 @@ import {
   deepCloneMatrix,
   type ScoringParams,
   type ScoreResult,
-} from '~/utils/decisionTree/scoring-engine'
+} from '~/utils/architect/scoring-engine'
 import {
   parseSnapshot,
   createSnapshot,
   SnapshotV2Schema,
-} from '~/utils/decisionTree/snapshot-schema'
-import { getFamilyOptions, PREF_LABELS } from '~/utils/decisionTree/constants'
+} from '~/utils/architect/snapshot-schema'
+import { getFamilyOptions, PREF_LABELS } from '~/utils/architect/constants'
 
 const P: ScoringParams = {
   bases: [...DEF_BASES],
@@ -339,7 +339,7 @@ describe('Blue mode — getFamilyOptions', () => {
   it('English has security, preference, and awarding options', () => {
     const opts = getFamilyOptions('English')
     expect(opts.security).toEqual(['Pre-bid', 'No Pre-bid'])
-    expect(opts.preference).toEqual(['None', 'Non-Financial', 'Financial'])
+    expect(opts.preference).toEqual(['None', 'Financial'])
     expect(opts.awarding).toEqual(['Award', 'Rank'])
   })
 
@@ -348,9 +348,10 @@ describe('Blue mode — getFamilyOptions', () => {
     expect(opts.awarding).toEqual(['Award'])
   })
 
-  it('Sealed Bid only has No Pre-bid for security', () => {
+  it('Sealed Bid only has No Pre-bid for security and no Non-Financial pref', () => {
     const opts = getFamilyOptions('Sealed Bid')
     expect(opts.security).toEqual(['No Pre-bid'])
+    expect(opts.preference).toEqual(['None', 'Financial'])
   })
 
   it('Japanese has Pre-bid and No Pre-bid, but no Non-Financial pref', () => {

@@ -9,7 +9,7 @@ import {
   STRATEGY_COUNT,
   type ScoringParams,
   type ScoreResult,
-} from '~/utils/decisionTree/scoring-engine'
+} from '~/utils/architect/scoring-engine'
 
 // ─── Helpers ───
 const DEF_PARAMS: ScoringParams = {
@@ -500,15 +500,14 @@ describe('Dutch vs Japanese — award binding logic', () => {
     expect(DEF_MATRIX[20][2][2]).toBe(10)
   })
 
-  it('Award + 2 suppliers + >500K → Dutch ALWAYS beats Japanese for Award', () => {
-    // Japanese cross-dep boost does NOT apply for Award (Q3=1)
-    // Plus Dutch gets +10 Award boost — Dutch always wins for binding awards
+  it('Award + 2 suppliers + >500K + Non-financial → Dutch-Preference top, Japanese fully eliminated', () => {
+    // When Q4=Non-financial, only Dutch-Preference can deliver — Japanese has no non-financial variant
     const results = getScores(DEF_PARAMS, 3, 2, 1, 2, 3, 2)
     const dutch = bestOf(results, 'Dutch')
     const jap = bestOf(results, 'Japanese')
     expect(dutch).toBeDefined()
-    expect(jap).toBeDefined()
-    expect(dutch!.raw).toBeGreaterThan(jap!.raw)
+    expect(dutch!.tf).toBe('Preference') // Dutch-Preference is the winner
+    expect(jap).toBeUndefined() // Japanese entirely eliminated for Non-financial preference
   })
 })
 

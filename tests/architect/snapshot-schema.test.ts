@@ -6,8 +6,8 @@ import {
   CURRENT_SNAPSHOT_VERSION,
   ScoringParamsSchema,
   SnapshotV2Schema,
-} from '~/utils/decisionTree/snapshot-schema'
-import { DEF_BASES, DEF_SAVINGS, DEF_MATRIX, deepCloneMatrix } from '~/utils/decisionTree/scoring-engine'
+} from '~/utils/architect/snapshot-schema'
+import { DEF_BASES, DEF_SAVINGS, DEF_MATRIX, deepCloneMatrix } from '~/utils/architect/scoring-engine'
 
 // ─── Fixtures ───
 const validLot = {

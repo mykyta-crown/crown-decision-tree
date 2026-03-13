@@ -74,9 +74,9 @@
       <v-list-item
         v-if="isAdmin || isBuyer"
         id="decision-tree-nav-item"
-        :title="rail ? '' : t('navigationdrawer.decisionTree')"
+        :title="rail ? '' : t('navigationdrawer.architect')"
         active-class="active-icon"
-        to="/decisionTree"
+        to="/architect"
       >
         <template #prepend>
           <v-img src="@/assets/icons/Sidebar/architect.svg" width="16" height="16" />

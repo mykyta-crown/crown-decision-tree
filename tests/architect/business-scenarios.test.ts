@@ -8,7 +8,7 @@ import {
   SC,
   type ScoringParams,
   type ScoreResult,
-} from '~/utils/decisionTree/scoring-engine'
+} from '~/utils/architect/scoring-engine'
 
 // ─── Helpers ───
 const P: ScoringParams = {
@@ -59,8 +59,8 @@ describe('A. Original bug report — Award should recommend Dutch over Japanese'
     const jap = bestOf(r, 'Japanese')
 
     expect(dutch).toBeDefined()
-    expect(jap).toBeDefined()
-    expect(dutch!.raw).toBeGreaterThan(jap!.raw)
+    // Japanese is entirely eliminated when Q4=Non-financial: no non-financial variant exists in Japanese
+    expect(jap).toBeUndefined()
     expect(topFamily(r)).toBe('Dutch')
   })
 
@@ -72,12 +72,13 @@ describe('A. Original bug report — Award should recommend Dutch over Japanese'
     expect(top.aw).toBe('Award')
   })
 
-  it('Dutch has 100% match, Japanese is lower', () => {
+  it('Dutch-Preference has 100% match, Japanese fully eliminated for Non-financial', () => {
     const r = getScores(P, 3, 2, 1, 2, 3, 2)
     const dutch = bestOf(r, 'Dutch')
     const jap = bestOf(r, 'Japanese')
     expect(dutch!.pctMatch).toBe(100)
-    expect(jap!.pctMatch).toBeLessThan(dutch!.pctMatch)
+    // Japanese has no non-financial preference variant — all Japanese strategies eliminated
+    expect(jap).toBeUndefined()
   })
 })
 

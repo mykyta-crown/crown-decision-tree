@@ -31,8 +31,8 @@ Crown is a B2B e-auction platform built with:
 | ---------- | --------------------- | ------------------------------------------ |
 | English    | `reverse`             | Price descends through competitive bidding |
 | Sealed Bid | `sealed-bid`          | Single blind bid submission                |
-| Dutch      | `dutch`               | Price auto-decreases, first to accept wins |
-| Japanese   | `japanese`            | Price ascends, sellers exit when too high  |
+| Dutch      | `dutch`               | Price auto-increases, first to accept wins (binding award) |
+| Japanese   | `japanese`            | Price descends each round, suppliers exit and learn their rank, last to exit wins |
 
 **NEVER write `auction.type === 'english'`** - this value does not exist in the database!
 
@@ -51,18 +51,34 @@ if (auction.type === 'reverse') { ... }
 return auction.type === 'reverse' ? 'english' : auction.type
 ```
 
+### Double Scenario Auction
+
+- Combines an **English** phase followed by a **Dutch** phase on the same lot
+- **English phase**: all suppliers compete by lowering their prices; establishes a competitive reference price (e.g. best price lands at 50€)
+- **Dutch phase**: starts significantly below the English best price (e.g. 30€) and ascends automatically; only the **top 3 suppliers** from the English phase participate; the first to accept wins with a binding award (e.g. Dutch rises 30→31→…→48€)
+- Why it's powerful: English reduces the average market price AND narrows the field; Dutch then extracts the absolute floor price from the best competitors
+- Always results in a binding award; no ranking
+- **Preference** can be applied independently to each phase: English phase can have transformation (non-financial weighting), Dutch phase can have Dutch Preferred (temporal priority) — both, one, or neither
+
 ### Dutch Auction
 
-- Price **descends** over time (starts high, goes low)
-- First bidder at current price wins
-- Supports **prebids**: scheduled bids executed automatically via Cloud Tasks
+- Price **ascends** automatically over time (starts low, goes high)
+- First supplier to accept the current price wins — auction stops immediately
+- Only one winner possible (binding award); no ranking
+- Supports **Preference** in two forms:
+  - **Dutch Preferred** (time-based / non-financial): one supplier gets exclusive access for the first X seconds of each round — the ONLY auction type that supports non-financial preference
+  - **Financial preference**: different acceptance thresholds per supplier
+- Supports **prebids**: supplier pre-sets an acceptance threshold; the bot auto-accepts when the ascending price reaches it
+- **If no prebids and no one accepts before ceiling price**: auction ends without a winner → falls back to traditional negotiation. Prebid is therefore strongly recommended to guarantee an offer on auction day. If suppliers haven't submitted prebids beforehand, the buyer should cancel the auction.
 - Queue: `BidWatchQueue` → `/api/v1/dutch/auto_bid`
 
 ### Japanese Auction
 
-- Price **ascends** over time (starts low, goes high)
-- Sellers must confirm each round or exit
-- Last remaining seller wins
+- Price **descends** each round (starts high, goes lower — e.g. 100 → 99 → 98…)
+- Suppliers must confirm each round or exit; each exiting supplier learns their rank at that moment
+- The **last** supplier to exit ends the auction and wins
+- Supports **Award** (binding), **Rank only**, or **No rank** (pure price discovery with off-platform award)
+- Supports **prebids**: supplier pre-sets a floor price; the system auto-confirms all rounds above that threshold, then switches back to manual confirmation
 - Queue: `JaponeseRoundHandler` → `/api/v1/japanese/round_handler`
 
 ### English (Reverse) Auction
@@ -71,6 +87,25 @@ return auction.type === 'reverse' ? 'english' : auction.type
 - Price **descends** through competitive bidding
 - Bidders compete by lowering their price
 - Supports overtime extensions when bids placed near end
+- Supports **financial transformations only**: fixed/dynamic handicaps applied to supplier bids (adjusts their effective score financially); ceiling price (maximum price a supplier can offer)
+- **Cannot do non-financial preference** — if the buyer needs non-financial preference (e.g. favour an incumbent without a price advantage), Dutch Preferred is the right choice instead
+- Suppliers see their own **rank** updated live during the auction (but not others' prices)
+
+### Sealed Bid Auction
+
+- Essentially an English auction with an extremely short live duration (near-instantaneous)
+- Suppliers submit offers before the deadline; bids remain undisclosed until closure
+- Supports the **same financial transformation options as English**: fixed/dynamic handicaps, ceiling price — **no non-financial preference**
+- No live ranking during the event; ranking revealed at closure
+- Supports **Award** (binding), **Rank** (ranking revealed at end), or **No rank** (pure price discovery)
+
+### ⚠️ Preference Type Decision Rule
+
+| Need | Use |
+|------|-----|
+| Financial weighting / handicap on bids | English or Sealed Bid (transformation) |
+| Non-financial preference (temporal priority) | Dutch Preferred — the **only** type supporting this |
+| Both financial + non-financial | Double Scenario (English phase: financial; Dutch phase: non-financial) |
 
 ## Important Conventions
 

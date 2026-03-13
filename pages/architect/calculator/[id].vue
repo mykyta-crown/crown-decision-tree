@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, watch, computed, onMounted, onBeforeUnmount } from 'vue'
-import { useCalculatorStore } from '~/stores/decisionTree/calculator'
-import { useProjectsStore } from '~/stores/decisionTree/projects'
+import { useCalculatorStore } from '~/stores/architect/calculator'
+import { useProjectsStore } from '~/stores/architect/projects'
 import useTranslations from '~/composables/useTranslations'
 
 definePageMeta({ middleware: ['user-role'] })
@@ -10,7 +10,7 @@ const route = useRoute()
 const router = useRouter()
 const store = useCalculatorStore()
 const projectsStore = useProjectsStore()
-const { t } = useTranslations('decisiontree')
+const { t } = useTranslations('architect')
 
 // How It Works dialog deep link
 const showHowItWorks = ref(false)
@@ -30,13 +30,9 @@ let saveTimer: ReturnType<typeof setTimeout> | null = null
 const isMounted = ref(true)
 
 // ─── Steps definition ───
-// p2Pct from store counts evName + lot prices; we add userName as an extra requirement
 const p2PctFull = computed(() => {
-  const needsUserName = store.mode !== 'blue'
-  let t = needsUserName ? 2 : 1 // evName + userName (userName not needed in blue)
-  let d = 0
-  if (store.evName.trim()) d++
-  if (needsUserName && projectsStore.userName.trim()) d++
+  let t = 1 // evName only
+  let d = store.evName.trim() ? 1 : 0
   store.lots.forEach(l => {
     t++
     if (l.prices.some((p, i) => p > 0 && !l.excl[i])) d++
@@ -45,16 +41,13 @@ const p2PctFull = computed(() => {
 })
 
 const steps = computed(() => [
-  { n: 1, title: t('calc.steps.step1'), pct: store.p1Pct },
-  { n: 2, title: t('calc.steps.step2'), pct: p2PctFull.value },
-  { n: 3, title: t('calc.steps.step3'), pct: store.p3Pct },
+  { n: 1, title: t('calc.steps.step1'), caption: t('calc.steps.step1Caption', {}, 'Enter inputs to assess eAuction suitability'), pct: store.p1Pct },
+  { n: 2, title: t('calc.steps.step2'), caption: t('calc.steps.step2Caption', {}, 'Define your lots, suppliers and criteria'), pct: p2PctFull.value },
+  { n: 3, title: t('calc.steps.step3'), caption: t('calc.steps.step3Caption', {}, 'Review results and configure your auction'), pct: store.p3Pct },
 ])
 
-// Blue mode: Step 2 & 3 locked when eAuction not recommended
-const blueStepLocked = computed(() => {
-  if (store.mode !== 'blue') return false
-  return store.spend < 100000 && store.nSup <= 1
-})
+// Step 2 & 3 locked when eAuction not recommended
+const stepLocked = computed(() => store.spend < 100000 && store.nSup <= 1)
 
 // ─── Expansion panel state (maps to store.phase) ───
 const shakeStep = ref<number | null>(null)
@@ -77,8 +70,8 @@ const activePanel = computed({
       return
     }
 
-    // Blue mode: block Step 2 if eAuction is not recommended (verdict = 'stop')
-    if (target >= 1 && store.mode === 'blue' && store.spend < 100000 && store.nSup <= 1) {
+    // Block Step 2 if eAuction is not recommended (verdict = 'stop')
+    if (target >= 1 && store.spend < 100000 && store.nSup <= 1) {
       flashErrors(0)
       return
     }
@@ -90,9 +83,7 @@ const activePanel = computed({
 
     // Going to Phase 3 requires Phase 2 fields complete
     if (target >= 2) {
-      const needsUserName = store.mode !== 'blue'
-      const p2Missing = !store.evName.trim() || (needsUserName && !projectsStore.userName.trim()) || !step2Valid.value
-      if (p2Missing) {
+      if (!store.evName.trim() || !step2Valid.value) {
         flashErrors(1)
         return
       }
@@ -107,11 +98,9 @@ function flashErrors(step: number) {
     // Phase 1 errors
     if (store.spend <= 0) store.spendErr = true
     if (store.nSup <= 0) store.nSupErr = true
-    if (store.mode !== 'guided' && store.mode !== 'blue' && store.award === null) store.awardErr = true
   } else if (step === 1) {
     // Phase 2 errors
     if (!store.evName.trim()) store.evNameErr = true
-    if (store.mode !== 'blue' && !projectsStore.userName.trim()) store.userNameErr = true
   }
   // Trigger shake animation
   shakeStep.value = step
@@ -129,7 +118,7 @@ function stepValid(si: number): boolean {
 
 // ─── Breadcrumbs ───
 const breadcrumbs = computed(() => [
-  { title: t('calc.breadcrumb.scenarios'), to: '/decisionTree' },
+  { title: t('calc.breadcrumb.scenarios'), to: '/architect' },
   { title: store.evName || t('calc.breadcrumb.newScenario'), disabled: true },
 ])
 
@@ -181,7 +170,7 @@ async function ensureProjectCreated(): Promise<boolean> {
   if (!id) return false
   activeId.value = id
   // Update URL silently without triggering Vue Router re-render
-  window.history.replaceState({}, '', `/decisionTree/calculator/${id}`)
+  window.history.replaceState({}, '', `/architect/calculator/${id}`)
   // Save the current state in background (non-blocking)
   doSave()
   return true
@@ -224,7 +213,7 @@ watch(
 // ─── Navigation ───
 async function goBack() {
   await doSave()
-  navigateTo('/decisionTree')
+  navigateTo('/architect')
 }
 
 // ─── userName input ───
@@ -300,7 +289,7 @@ function tryAdvanceStep() {
               'step-panel--active': activePanel === si,
               'step-panel--done': stepValid(si),
               'step-panel--shake': shakeStep === si,
-              'step-panel--locked': si >= 1 && blueStepLocked,
+              'step-panel--locked': si >= 1 && stepLocked,
             }"
           >
             <v-expansion-panel-title class="step-title-wrap" hide-actions>
@@ -321,7 +310,10 @@ function tryAdvanceStep() {
 
                 <!-- Title + inline fields for Phase 2 -->
                 <div class="step-info">
-                  <span class="step-label">{{ step.title }}</span>
+                  <div class="step-titles">
+                    <span class="step-label">{{ step.title }}</span>
+                    <span class="step-caption">{{ step.caption }}</span>
+                  </div>
                   <!-- Inline fields when Phase 2 is active -->
                   <div v-if="si === 1 && activePanel === 1" class="step-inline-fields" @click.stop @keydown.enter.stop="tryAdvanceStep()" @keydown.space.stop @keyup.space.prevent.stop>
                     <v-text-field
@@ -337,22 +329,6 @@ function tryAdvanceStep() {
                     >
                       <template #prepend-inner>
                         <v-icon size="16" color="grey">mdi-pencil-outline</v-icon>
-                      </template>
-                    </v-text-field>
-                    <v-text-field
-                      v-if="store.mode !== 'blue'"
-                      :model-value="projectsStore.userName"
-                      :label="t('calc.fields.yourName')"
-                      :placeholder="t('calc.fields.yourNamePlaceholder')"
-                      density="compact"
-                      variant="outlined"
-                      hide-details
-                      style="min-width: 220px"
-                      :error="store.userNameErr && !projectsStore.userName.trim()"
-                      @update:model-value="onUserNameInput"
-                    >
-                      <template #prepend-inner>
-                        <v-icon size="16" color="grey">mdi-account-outline</v-icon>
                       </template>
                     </v-text-field>
                   </div>
@@ -385,22 +361,15 @@ function tryAdvanceStep() {
             </v-expansion-panel-title>
 
             <v-expansion-panel-text @keydown.enter.stop="si < 2 && tryAdvanceStep()">
-              <v-sheet class="bg-white rounded-lg" border>
-                <template v-if="si === 0">
-                  <DecisionTreeCalculatorPhaseOneBlue v-if="store.mode === 'blue'" />
-                  <DecisionTreeCalculatorPhaseOneGuided v-else-if="store.mode === 'guided'" />
-                  <DecisionTreeCalculatorPhaseOne v-else />
-                </template>
-                <template v-else-if="si === 1">
-                  <DecisionTreeCalculatorPhaseTwoBlue v-if="store.mode === 'blue'" />
-                  <DecisionTreeCalculatorPhaseTwoGuided v-else-if="store.mode === 'guided'" />
-                  <DecisionTreeCalculatorPhaseTwo v-else />
-                </template>
-                <template v-else-if="si === 2">
-                  <DecisionTreeCalculatorPhaseThreeBlue v-if="store.mode === 'blue'" @learn-more="openLearnMore" />
-                  <DecisionTreeCalculatorPhaseThree v-else @learn-more="openLearnMore" />
-                </template>
-              </v-sheet>
+              <template v-if="si === 0">
+                <ArchitectCalculatorPhaseOneBlue />
+              </template>
+              <template v-else-if="si === 1">
+                <ArchitectCalculatorPhaseTwoBlue />
+              </template>
+              <template v-else-if="si === 2">
+                <ArchitectCalculatorPhaseThreeBlue @learn-more="openLearnMore" />
+              </template>
             </v-expansion-panel-text>
           </v-expansion-panel>
         </v-expansion-panels>
@@ -408,7 +377,7 @@ function tryAdvanceStep() {
     </v-row>
 
     <!-- How It Works dialog (deep linked from Phase 3) -->
-    <DecisionTreeCalculatorHowItWorksDialog
+    <ArchitectCalculatorHowItWorksDialog
       v-model="showHowItWorks"
       :initial-section="hiwSection"
       :initial-family="hiwFamily"
@@ -501,7 +470,7 @@ function tryAdvanceStep() {
 }
 
 :deep(.v-expansion-panel-text__wrapper) {
-  padding: 0 0 8px 16px;
+  padding: 0;
 }
 
 :deep(.v-expansion-panel-title) {
@@ -568,6 +537,12 @@ function tryAdvanceStep() {
   gap: 16px;
 }
 
+.step-titles {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
 .step-label {
   font-size: 16px;
   font-weight: 600;
@@ -577,6 +552,19 @@ function tryAdvanceStep() {
 }
 
 .step-panel:not(.step-panel--active):not(.step-panel--done) .step-label {
+  color: #6B7280;
+}
+
+.step-caption {
+  font-size: 13px;
+  font-weight: 400;
+  color: #9CA3AF;
+  white-space: nowrap;
+  margin-top: 1px;
+  transition: color 0.2s ease;
+}
+
+.step-panel--active .step-caption {
   color: #6B7280;
 }
 
@@ -716,7 +704,7 @@ function tryAdvanceStep() {
     padding: 14px 12px 14px 10px;
   }
   :deep(.v-expansion-panel-text__wrapper) {
-    padding: 0 0 8px 4px;
+    padding: 0;
   }
 }
 

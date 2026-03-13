@@ -58,7 +58,7 @@
           <!-- 1. Double Scenario -->
           <div class="sc" style="left: 10px; top: 160px">
             <div class="sc-top" :style="{ borderColor: c.DS.border, background: c.DS.bg }">
-              <DecisionTreeCalculatorChartsAChart family="Double Scenario" :color="c.DS.border" ccy="EUR" />
+              <ArchitectCalculatorChartsAChart family="Double Scenario" :color="c.DS.border" ccy="EUR" />
             </div>
             <div class="sc-body">
               <div class="sc-name" :style="{ color: c.DS.text }">
@@ -82,7 +82,7 @@
           <!-- 2. English Reverse -->
           <div class="sc" style="left: 220px; top: 160px">
             <div class="sc-top" :style="{ borderColor: c.EN.border, background: c.EN.bg }">
-              <DecisionTreeCalculatorChartsAChart family="English" :color="c.EN.border" ccy="EUR" />
+              <ArchitectCalculatorChartsAChart family="English" :color="c.EN.border" ccy="EUR" />
             </div>
             <div class="sc-body">
               <div class="sc-name" :style="{ color: c.EN.text }">
@@ -107,7 +107,7 @@
           <!-- 3. Dutch Reverse -->
           <div class="sc" style="left: 500px; top: 160px">
             <div class="sc-top" :style="{ borderColor: c.DU.border, background: c.DU.bg }">
-              <DecisionTreeCalculatorChartsAChart family="Dutch" :color="c.DU.border" ccy="EUR" />
+              <ArchitectCalculatorChartsAChart family="Dutch" :color="c.DU.border" ccy="EUR" />
             </div>
             <div class="sc-body">
               <div class="sc-name" :style="{ color: c.DU.text }">
@@ -131,7 +131,7 @@
           <!-- 4. Japanese Reverse -->
           <div class="sc" style="left: 710px; top: 160px">
             <div class="sc-top" :style="{ borderColor: c.JP.border, background: c.JP.bg }">
-              <DecisionTreeCalculatorChartsAChart family="Japanese" :color="c.JP.border" ccy="EUR" />
+              <ArchitectCalculatorChartsAChart family="Japanese" :color="c.JP.border" ccy="EUR" />
             </div>
             <div class="sc-body">
               <div class="sc-name" :style="{ color: c.JP.text }">
@@ -155,7 +155,7 @@
           <!-- 5. Sealed Bid -->
           <div class="sc" style="left: 990px; top: 160px">
             <div class="sc-top" :style="{ borderColor: c.SB.border, background: c.SB.bg }">
-              <DecisionTreeCalculatorChartsAChart family="Sealed Bid" :color="c.SB.border" ccy="EUR" />
+              <ArchitectCalculatorChartsAChart family="Sealed Bid" :color="c.SB.border" ccy="EUR" />
             </div>
             <div class="sc-body">
               <div class="sc-name" :style="{ color: c.SB.text }">
@@ -178,7 +178,7 @@
           <!-- 6. Traditional Negotiation -->
           <div class="sc" style="left: 1200px; top: 160px">
             <div class="sc-top" :style="{ borderColor: c.TR.border, background: c.TR.bg }">
-              <DecisionTreeCalculatorChartsAChart family="Traditional" :color="c.TR.border" ccy="EUR" />
+              <ArchitectCalculatorChartsAChart family="Traditional" :color="c.TR.border" ccy="EUR" />
             </div>
             <div class="sc-body">
               <div class="sc-name" :style="{ color: c.TR.text }">
@@ -211,10 +211,10 @@
 </template>
 
 <script setup lang="ts">
-import { FC } from '~/utils/decisionTree/constants'
+import { FC } from '~/utils/architect/constants'
 import useTranslations from '~/composables/useTranslations'
 
-const { t } = useTranslations('decisiontree')
+const { t } = useTranslations('architect')
 const show = defineModel<boolean>({ default: false })
 
 const c = {

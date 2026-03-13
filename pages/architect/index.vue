@@ -33,35 +33,11 @@
     </v-row>
 
     <!-- How does it work dialog -->
-    <DecisionTreeCalculatorHowItWorksDialog v-model="showHowItWorks" @start="createNewGuided" />
+    <ArchitectCalculatorHowItWorksDialog v-model="showHowItWorks" @start="createNew" />
 
     <!-- Toolbar -->
     <v-row align="center" class="mb-6">
       <v-col cols="auto" class="d-flex align-center ga-2">
-        <v-btn
-          variant="outlined"
-          color="primary"
-          prepend-icon="mdi-file-tree"
-          @click="showTreeV1 = true"
-        >
-          {{ t('page.dt1') }}
-        </v-btn>
-        <v-btn
-          variant="outlined"
-          color="primary"
-          prepend-icon="mdi-waterfall"
-          @click="showTreeV2 = true"
-        >
-          {{ t('page.dt2') }}
-        </v-btn>
-        <v-btn
-          variant="outlined"
-          color="primary"
-          prepend-icon="mdi-table-check"
-          @click="showTreeV3 = true"
-        >
-          {{ t('page.dt3') }}
-        </v-btn>
         <v-btn
           variant="outlined"
           color="primary"
@@ -89,24 +65,6 @@
         >
           {{ t('page.newScenario') }}
         </v-btn>
-        <v-btn
-          color="#34D399"
-          variant="flat"
-          prepend-icon="mdi-plus"
-          class="guided-btn"
-          @click="createNewGuided"
-        >
-          {{ t('page.newScenario') }}
-        </v-btn>
-        <v-btn
-          color="#60A5FA"
-          variant="flat"
-          prepend-icon="mdi-plus"
-          class="blue-btn"
-          @click="createNewBlue"
-        >
-          {{ t('page.newScenario') }}
-        </v-btn>
       </v-col>
     </v-row>
 
@@ -130,12 +88,9 @@
 
     <!-- Base Table button moved to bottom of page -->
 
-    <DecisionTreeCalculatorParamsModal v-if="calcStore.showParams" />
-    <DecisionTreeCalculatorDecisionTreeV1 v-model="showTreeV1" />
-    <DecisionTreeCalculatorDecisionTreeV2 v-model="showTreeV2" />
-    <DecisionTreeCalculatorDecisionTreeV3 v-model="showTreeV3" />
-    <DecisionTreeCalculatorDecisionTreeV4 v-model="showTreeV4" />
-    <DecisionTreeCalculatorDecisionTreeV5 v-model="showTreeV5" />
+    <ArchitectCalculatorParamsModal v-if="calcStore.showParams" />
+    <ArchitectCalculatorArchitectV4 v-model="showTreeV4" />
+    <ArchitectCalculatorArchitectV5 v-model="showTreeV5" />
 
     <!-- Table -->
     <v-card variant="outlined">
@@ -313,7 +268,7 @@
       </div>
 
       <!-- Empty state: no projects at all -->
-      <DecisionTreeCalculatorEmptyState
+      <ArchitectCalculatorEmptyState
         v-if="projectsStore.allActive.length === 0"
         @create="createNew"
       />
@@ -334,7 +289,7 @@
 
       <!-- Project rows -->
       <TransitionGroup name="row" tag="div">
-        <DecisionTreeCalculatorProjectRow
+        <ArchitectCalculatorProjectRow
           v-for="proj in projectsStore.paginatedProjects"
           :key="proj.id"
           :project="proj"
@@ -343,9 +298,8 @@
           @toggle-select="projectsStore.toggleSelect(proj.id)"
           @toggle-favorite="projectsStore.toggleFavorite(proj.id)"
           @edit="openProject(proj)"
-          @archive="projectsStore.archiveProject(proj.id)"
           @duplicate="projectsStore.duplicateProject(proj.id)"
-          @delete="projectsStore.deleteProject(proj.id)"
+          @archive="projectsStore.archiveProject(proj.id)"
         />
       </TransitionGroup>
     </v-card>
@@ -420,21 +374,18 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import { useProjectsStore } from '~/stores/decisionTree/projects'
-import { useCalculatorStore } from '~/stores/decisionTree/calculator'
+import { useProjectsStore } from '~/stores/architect/projects'
+import { useCalculatorStore } from '~/stores/architect/calculator'
 import useTranslations from '~/composables/useTranslations'
 
 definePageMeta({ middleware: ['user-role'] })
 
-const { t } = useTranslations('decisiontree')
+const { t } = useTranslations('architect')
 const router = useRouter()
 const projectsStore = useProjectsStore()
 const calcStore = useCalculatorStore()
 const { isAdmin } = useUser()
 
-const showTreeV1 = ref(false)
-const showTreeV2 = ref(false)
-const showTreeV3 = ref(false)
 const showTreeV4 = ref(false)
 const showTreeV5 = ref(false)
 const showHowItWorks = ref(false)
@@ -577,19 +528,7 @@ async function confirmBulkDelete() {
 // ─── Actions ───
 function createNew() {
   calcStore.resetEditor()
-  router.push('/decisionTree/calculator/new')
-}
-
-function createNewGuided() {
-  calcStore.resetEditor()
-  calcStore.mode = 'guided'
-  router.push('/decisionTree/calculator/new')
-}
-
-function createNewBlue() {
-  calcStore.resetEditor()
-  calcStore.mode = 'blue'
-  router.push('/decisionTree/calculator/new')
+  router.push('/architect/calculator/new')
 }
 
 function openProject(proj: any) {
@@ -597,7 +536,7 @@ function openProject(proj: any) {
   if (proj.owner) {
     projectsStore.userName = proj.owner
   }
-  router.push(`/decisionTree/calculator/${proj.id}`)
+  router.push(`/architect/calculator/${proj.id}`)
 }
 
 </script>
@@ -737,16 +676,6 @@ function openProject(proj: any) {
 
 .base-table-btn:hover {
   opacity: 1;
-}
-
-/* ── Guided button ── */
-.guided-btn {
-  color: #065F46 !important;
-}
-
-/* ── Blue button ── */
-.blue-btn {
-  color: #1E3A5F !important;
 }
 
 /* ── Search prepend icon color matches placeholder ── */

@@ -35,7 +35,7 @@
 </template>
 
 <script setup lang="ts">
-import { useCalculatorStore } from '~/stores/decisionTree/calculator'
+import { useCalculatorStore } from '~/stores/architect/calculator'
 
 const store = useCalculatorStore()
 

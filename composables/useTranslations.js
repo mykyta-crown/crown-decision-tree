@@ -28,8 +28,8 @@ export default function useTranslations(customRouteName = null) {
       return 'auctions'
     } else if (cleanName.startsWith('trainings-')) {
       return 'trainings'
-    } else if (cleanName.startsWith('decisionTree-') || cleanName === 'decisionTree') {
-      return 'decisiontree'
+    } else if (cleanName.startsWith('architect-') || cleanName === 'architect') {
+      return 'architect'
     }
     return cleanName
   })
@@ -180,10 +180,12 @@ export default function useTranslations(customRouteName = null) {
 
     // If no translation found, use fallback
     if (translatedText === null) {
-      if (process.env.NODE_ENV === 'development') {
+      if (fallback) {
+        translatedText = fallback
+      } else if (process.env.NODE_ENV === 'development') {
         translatedText = 'MISSING TRANSLATION'
       } else {
-        translatedText = fallback
+        translatedText = ''
       }
     }
 

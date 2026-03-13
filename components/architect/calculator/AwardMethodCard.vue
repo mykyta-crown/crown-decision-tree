@@ -39,9 +39,9 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import useTranslations from '~/composables/useTranslations'
-import { useCalculatorStore } from '~/stores/decisionTree/calculator'
+import { useCalculatorStore } from '~/stores/architect/calculator'
 
-const { t } = useTranslations('decisiontree')
+const { t } = useTranslations('architect')
 const store = useCalculatorStore()
 
 const options = computed(() => [

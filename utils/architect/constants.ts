@@ -57,9 +57,9 @@ export const DISP_NAMES: Record<string, string> = {
 
 export function getFamilyOptions(f: string): { security: string[] | null; preference: string[] | null; awarding: string[] | null } {
   const map: Record<string, { security: string[] | null; preference: string[] | null; awarding: string[] | null }> = {
-    'English': { security: ['Pre-bid', 'No Pre-bid'], preference: ['None', 'Non-Financial', 'Financial'], awarding: ['Award', 'Rank'] },
+    'English': { security: ['Pre-bid', 'No Pre-bid'], preference: ['None', 'Financial'], awarding: ['Award', 'Rank'] },
     'Dutch': { security: ['Pre-bid', 'No Pre-bid'], preference: ['None', 'Non-Financial', 'Financial'], awarding: ['Award'] },
-    'Sealed Bid': { security: ['No Pre-bid'], preference: ['None', 'Non-Financial', 'Financial'], awarding: ['Award', 'Rank', 'No Rank'] },
+    'Sealed Bid': { security: ['No Pre-bid'], preference: ['None', 'Financial'], awarding: ['Award', 'Rank', 'No Rank'] },
     'Japanese': { security: ['Pre-bid', 'No Pre-bid'], preference: ['None', 'Financial'], awarding: ['Award', 'Rank', 'No Rank'] },
     'Double Scenario': { security: ['Pre-bid', 'No Pre-bid'], preference: ['None', 'Non-Financial', 'Financial'], awarding: ['Award'] },
   }

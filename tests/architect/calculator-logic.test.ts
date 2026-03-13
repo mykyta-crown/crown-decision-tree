@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 
 // ─── Extracted pure functions from calculator store ───
-// These mirror the logic in stores/decisionTree/calculator.ts
+// These mirror the logic in stores/architect/calculator.ts
 
 interface Lot {
   prices: number[]

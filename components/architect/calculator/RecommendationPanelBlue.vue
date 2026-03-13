@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useCalculatorStore } from '~/stores/decisionTree/calculator'
-import { useProjectsStore } from '~/stores/decisionTree/projects'
-import { FC, gfc, noFC } from '~/utils/decisionTree/constants'
+import { useCalculatorStore } from '~/stores/architect/calculator'
+import { useProjectsStore } from '~/stores/architect/projects'
+import { FC, gfc, noFC } from '~/utils/architect/constants'
 import useTranslations from '~/composables/useTranslations'
-const { t } = useTranslations('decisiontree')
+const { t } = useTranslations('architect')
 
 const store = useCalculatorStore()
 const projectsStore = useProjectsStore()

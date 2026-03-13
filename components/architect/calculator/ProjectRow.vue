@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { fmtDate } from '~/utils/decisionTree/formatting'
+import { fmtDate } from '~/utils/architect/formatting'
 import useTranslations from '~/composables/useTranslations'
 
-const { t } = useTranslations('decisiontree')
+const { t } = useTranslations('architect')
 
 interface ProjectState {
   lots?: any[]
@@ -33,9 +33,8 @@ const emit = defineEmits<{
   toggleSelect: []
   toggleFavorite: []
   edit: []
-  archive: []
   duplicate: []
-  delete: []
+  archive: []
 }>()
 
 const STATUS_COLORS: Record<string, { bg: string; text: string }> = {
@@ -76,9 +75,6 @@ function onToggleFavorite(e: Event) {
   }, 400)
 }
 
-function onMenuAction(action: 'edit' | 'archive' | 'duplicate' | 'delete') {
-  emit(action)
-}
 </script>
 
 <template>
@@ -136,7 +132,7 @@ function onMenuAction(action: 'edit' | 'archive' | 'duplicate' | 'delete') {
       />
     </div>
 
-    <!-- Col 10: Three-dot menu -->
+    <!-- Col 10: Actions menu -->
     <div class="col-menu" @click.stop>
       <v-menu location="bottom end">
         <template #activator="{ props: menuProps }">
@@ -144,19 +140,16 @@ function onMenuAction(action: 'edit' | 'archive' | 'duplicate' | 'delete') {
             <v-icon size="18">mdi-dots-vertical</v-icon>
           </v-btn>
         </template>
-        <v-list density="compact" min-width="180">
-          <v-list-item prepend-icon="mdi-pencil-outline" @click="onMenuAction('edit')">
+        <v-list density="compact" min-width="160">
+          <v-list-item prepend-icon="mdi-pencil-outline" @click="emit('edit')">
             <v-list-item-title class="text-body-2">{{ t('page.menuEdit') }}</v-list-item-title>
           </v-list-item>
-          <v-list-item prepend-icon="mdi-archive-outline" @click="onMenuAction('archive')">
-            <v-list-item-title class="text-body-2">{{ t('page.menuArchive') }}</v-list-item-title>
-          </v-list-item>
-          <v-list-item prepend-icon="mdi-content-copy" @click="onMenuAction('duplicate')">
+          <v-list-item prepend-icon="mdi-content-copy" @click="emit('duplicate')">
             <v-list-item-title class="text-body-2">{{ t('page.menuDuplicate') }}</v-list-item-title>
           </v-list-item>
           <v-divider class="my-1" />
-          <v-list-item prepend-icon="mdi-delete-outline" class="text-red" @click="onMenuAction('delete')">
-            <v-list-item-title class="text-body-2">{{ t('page.menuDelete') }}</v-list-item-title>
+          <v-list-item prepend-icon="mdi-delete-outline" @click="emit('archive')" style="color: #EF4444">
+            <v-list-item-title class="text-body-2" style="color: #EF4444; font-weight: 500">{{ t('page.menuDelete') }}</v-list-item-title>
           </v-list-item>
         </v-list>
       </v-menu>
@@ -266,6 +259,7 @@ function onMenuAction(action: 'edit' | 'archive' | 'duplicate' | 'delete') {
   align-items: center;
   justify-content: center;
 }
+
 
 /* ── Responsive ── */
 @media (max-width: 1100px) {

@@ -33,9 +33,9 @@
 </template>
 
 <script setup lang="ts">
-import { useCalculatorStore } from '~/stores/decisionTree/calculator'
-import SpendInput from '~/components/decisionTree/calculator/SpendInput.vue'
-import NLSlider from '~/components/decisionTree/calculator/NLSlider.vue'
+import { useCalculatorStore } from '~/stores/architect/calculator'
+import SpendInput from '~/components/architect/calculator/SpendInput.vue'
+import NLSlider from '~/components/architect/calculator/NLSlider.vue'
 
 const store = useCalculatorStore()
 </script>
