@@ -39,11 +39,12 @@ const emit = defineEmits<{
 
 const STATUS_COLORS: Record<string, { bg: string; text: string }> = {
   Recommended: { bg: '#DDFBEE', text: '#007C4A' },
-  eAuction: { bg: '#DFF0FF', text: '#1A49A9' },
-  Closed: { bg: '#DFF0FF', text: '#1A49A9' },
-  Upcoming: { bg: '#DFF0FF', text: '#1A49A9' },
-  'In progress': { bg: '#FDFFD2', text: '#9F580A' },
-  Draft: { bg: '#F3F4F6', text: '#6B7280' },
+  'In Progress': { bg: '#DFF0FF', text: '#1A49A9' },
+  eAuction:     { bg: '#DFF0FF', text: '#1A49A9' }, // legacy DB records
+  Closed:       { bg: '#DFF0FF', text: '#1A49A9' },
+  Upcoming:     { bg: '#DFF0FF', text: '#1A49A9' },
+  'In progress': { bg: '#FDFFD2', text: '#9F580A' }, // legacy DB records
+  Draft:        { bg: '#F3F4F6', text: '#6B7280' },
 }
 
 const statusStyle = computed(() => {

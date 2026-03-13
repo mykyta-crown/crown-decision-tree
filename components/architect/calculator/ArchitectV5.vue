@@ -130,29 +130,68 @@
               </div>
             </div>
 
-            <!-- Cards grid -->
-            <div class="cards-grid">
-              <div
-                v-for="card in cards"
-                :key="card.key"
-                class="type-card"
-                :style="cardBorder(card.family)"
-                @click="toggle(card.key)"
-              >
-                <div class="card-bar" :style="barBg(card.family)" />
-                <div class="card-head">
-                  <v-icon size="15" class="card-icon" :style="cardColor(card.family)">{{ card.icon }}</v-icon>
-                  <span class="card-title" :style="cardColor(card.family)">{{ card.name }}</span>
-                  <span class="card-chevron" :class="{ open: expanded === card.key }">▾</span>
+            <!-- Family cards — always open -->
+            <div class="fam-grid">
+              <div v-for="card in cards" :key="card.key" class="fam-card">
+
+                <!-- Top band: icon + name + savings + intensity pips -->
+                <div class="fam-top" :style="{ background: gfc(card.family).bg, borderBottom: `2px solid ${gfc(card.family).border}` }">
+                  <div class="fam-top-left">
+                    <div class="fam-icon-wrap" :style="{ background: gfc(card.family).border + '22', borderColor: gfc(card.family).border + '55' }">
+                      <v-icon :icon="card.icon" size="14" :color="gfc(card.family).text" />
+                    </div>
+                    <span class="fam-name" :style="{ color: gfc(card.family).text }">{{ card.name }}</span>
+                  </div>
+                  <div class="fam-top-right">
+                    <span class="fam-savings" :style="{ color: gfc(card.family).text }">{{ card.savingsLabel }}</span>
+                    <div class="fam-pips">
+                      <div
+                        v-for="i in 4" :key="i"
+                        class="fam-pip"
+                        :style="{ background: i <= card.intensityLevel ? gfc(card.family).border : '#E5E7EB' }"
+                      />
+                    </div>
+                  </div>
                 </div>
-                <div class="card-sub">{{ card.short }}</div>
-                <div v-if="card.options.length" class="pills pills--always">
-                  <span v-for="o in card.options" :key="o" class="pill" :style="pillBg(card.family)">{{ o }}</span>
+
+                <!-- Chart illustration -->
+                <div class="fam-chart" :style="{ background: gfc(card.family).bg }">
+                  <ArchitectCalculatorChartsAChart
+                    :family="card.family"
+                    :color="gfc(card.family).border"
+                    ccy="EUR"
+                  />
                 </div>
-                <div class="card-detail" :class="{ open: expanded === card.key }">
-                  <div class="card-detail-inner">
-                    <p class="card-desc">{{ card.desc }}</p>
-                    <p class="card-use">{{ card.use }}</p>
+
+                <!-- Body: description + flow + chips -->
+                <div class="fam-body">
+                  <p class="fam-desc">{{ card.short }}</p>
+
+                  <!-- Flow steps -->
+                  <div class="fam-flow">
+                    <template v-for="(step, si) in famFlowKeys[card.key]" :key="si">
+                      <div class="fam-step">
+                        <v-icon :icon="step.icon" size="9" :color="gfc(card.family).border" />
+                        <span>{{ t(step.labelKey) }}</span>
+                      </div>
+                      <span v-if="si < famFlowKeys[card.key].length - 1" class="fam-sep" :style="{ color: gfc(card.family).border }">›</span>
+                    </template>
+                  </div>
+
+                  <!-- Option chips -->
+                  <div class="fam-chips">
+                    <span v-if="famOptionDetails[card.key].preBid" class="fam-chip">
+                      <v-icon size="8" color="#6B7280">mdi-clock-fast</v-icon>
+                      {{ t('v1.preBid') }}
+                    </span>
+                    <span v-if="famOptionDetails[card.key].pref" class="fam-chip">
+                      <v-icon size="8" color="#6B7280">mdi-scale-balance</v-icon>
+                      {{ t('v1.preference') }}
+                    </span>
+                    <span v-for="mode in famOptionDetails[card.key].awardModes" :key="mode" class="fam-chip">
+                      <v-icon size="8" color="#6B7280">{{ mode === 'award' ? 'mdi-trophy-outline' : mode === 'rank' ? 'mdi-format-list-numbered' : 'mdi-eye-outline' }}</v-icon>
+                      {{ mode === 'award' ? t('hiw.lvlAwardAward') : mode === 'rank' ? t('hiw.lvlAwardRank') : t('hiw.lvlAwardNoRank') }}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -484,25 +523,61 @@ import useTranslations from '~/composables/useTranslations'
 const { t } = useTranslations('architect')
 const show = defineModel<boolean>({ default: false })
 const tab = ref('tree')
-const expanded = ref<string | null>(null)
 
-function toggle(key: string) {
-  expanded.value = expanded.value === key ? null : key
+const famFlowKeys: Record<string, { icon: string; labelKey: string }[]> = {
+  ds: [
+    { icon: 'mdi-clock-outline',           labelKey: 'hiw.flowDsPreBid'  },
+    { icon: 'mdi-trending-down',           labelKey: 'hiw.flowDsEnglish' },
+    { icon: 'mdi-trending-up',             labelKey: 'hiw.flowDsDutch'   },
+    { icon: 'mdi-check-circle-outline',    labelKey: 'hiw.flowDsAward'   },
+  ],
+  en: [
+    { icon: 'mdi-currency-usd',            labelKey: 'hiw.flowEnCeiling' },
+    { icon: 'mdi-trending-down',           labelKey: 'hiw.flowEnBid1'    },
+    { icon: 'mdi-trending-down',           labelKey: 'hiw.flowEnBid2'    },
+    { icon: 'mdi-check-circle-outline',    labelKey: 'hiw.flowEnBest'    },
+  ],
+  du: [
+    { icon: 'mdi-currency-usd',            labelKey: 'hiw.flowDuHigh'    },
+    { icon: 'mdi-trending-up',             labelKey: 'hiw.flowDuAuto'    },
+    { icon: 'mdi-hand-back-right-outline', labelKey: 'hiw.flowDuAccept'  },
+    { icon: 'mdi-check-circle-outline',    labelKey: 'hiw.flowDuWinner'  },
+  ],
+  jp: [
+    { icon: 'mdi-currency-usd',            labelKey: 'hiw.flowJpLow'     },
+    { icon: 'mdi-trending-down',           labelKey: 'hiw.flowJpRound'   },
+    { icon: 'mdi-exit-to-app',             labelKey: 'hiw.flowJpExit'    },
+    { icon: 'mdi-check-circle-outline',    labelKey: 'hiw.flowJpLast'    },
+  ],
+  sb: [
+    { icon: 'mdi-email-outline',           labelKey: 'hiw.flowSbSubmit'  },
+    { icon: 'mdi-lock-outline',            labelKey: 'hiw.flowSbSealed'  },
+    { icon: 'mdi-chart-bar',               labelKey: 'hiw.flowSbCompare' },
+    { icon: 'mdi-check-circle-outline',    labelKey: 'hiw.flowSbBest'    },
+  ],
+  tr: [
+    { icon: 'mdi-handshake-outline',       labelKey: 'hiw.flowTrContact'   },
+    { icon: 'mdi-chat-outline',            labelKey: 'hiw.flowTrNegotiate' },
+    { icon: 'mdi-check-circle-outline',    labelKey: 'hiw.flowTrAgree'     },
+  ],
 }
 
-// ── Tab 1: Tree card helpers ──
-function cardBorder(f: string) { const c = gfc(f); return { borderColor: c.border, background: c.bg } }
-function barBg(f: string) { return { background: gfc(f).border } }
-function cardColor(f: string) { return { color: gfc(f).text } }
-function pillBg(f: string) { const c = gfc(f); return { background: c.border + '20', color: c.text } }
+const famOptionDetails: Record<string, { preBid: boolean; pref: boolean; awardModes: ('award' | 'rank' | 'norank')[] }> = {
+  ds: { preBid: true,  pref: true,  awardModes: ['award'] },
+  en: { preBid: true,  pref: true,  awardModes: ['award', 'rank'] },
+  du: { preBid: true,  pref: true,  awardModes: ['award'] },
+  jp: { preBid: true,  pref: true,  awardModes: ['award', 'rank', 'norank'] },
+  sb: { preBid: false, pref: true,  awardModes: ['award', 'rank', 'norank'] },
+  tr: { preBid: false, pref: false, awardModes: [] },
+}
 
 const cards = computed(() => [
-  { key: 'ds', family: 'Double Scenario', icon: 'mdi-layers-outline',     name: t('families.doubleScenario'), short: t('v5.dsShort'), desc: t('v5.dsDesc'), use: t('v5.dsUse'), options: ['Pre-bid', 'No Pre-bid', 'Preference', 'Award'] },
-  { key: 'en', family: 'English',         icon: 'mdi-trending-down',       name: t('families.english'),        short: t('v5.enShort'), desc: t('v5.enDesc'), use: t('v5.enUse'), options: ['Pre-bid', 'No Pre-bid', 'Preference', 'Award', 'Rank'] },
-  { key: 'du', family: 'Dutch',           icon: 'mdi-timer-sand',          name: t('families.dutch'),          short: t('v5.duShort'), desc: t('v5.duDesc'), use: t('v5.duUse'), options: ['Pre-bid', 'No Pre-bid', 'Preference', 'Award'] },
-  { key: 'jp', family: 'Japanese',        icon: 'mdi-trending-up',         name: t('families.japanese'),       short: t('v5.jpShort'), desc: t('v5.jpDesc'), use: t('v5.jpUse'), options: ['Pre-bid', 'No Pre-bid', 'Award', 'Rank', 'No Rank'] },
-  { key: 'sb', family: 'Sealed Bid',      icon: 'mdi-lock-outline',        name: t('families.sealedBid'),      short: t('v5.sbShort'), desc: t('v5.sbDesc'), use: t('v5.sbUse'), options: ['Preference', 'Award', 'Rank', 'No Rank'] },
-  { key: 'tr', family: 'Traditional',     icon: 'mdi-handshake-outline',   name: t('families.traditional'),   short: t('v5.trShort'), desc: t('v5.trDesc'), use: t('v5.trUse'), options: [] },
+  { key: 'ds', family: 'Double Scenario', icon: 'mdi-layers-outline',   name: t('families.doubleScenario'), short: t('v5.dsShort'), desc: t('v5.dsDesc'), use: t('v5.dsUse'), options: ['Pre-bid', 'No Pre-bid', 'Preference', 'Award'],               savingsLabel: '12–18%', intensityLevel: 4 },
+  { key: 'en', family: 'English',         icon: 'mdi-trending-down',     name: t('families.english'),        short: t('v5.enShort'), desc: t('v5.enDesc'), use: t('v5.enUse'), options: ['Pre-bid', 'No Pre-bid', 'Preference', 'Award', 'Rank'],        savingsLabel: '10–15%', intensityLevel: 3 },
+  { key: 'du', family: 'Dutch',           icon: 'mdi-timer-sand',        name: t('families.dutch'),          short: t('v5.duShort'), desc: t('v5.duDesc'), use: t('v5.duUse'), options: ['Pre-bid', 'No Pre-bid', 'Preference', 'Award'],               savingsLabel: '8–12%',  intensityLevel: 2 },
+  { key: 'jp', family: 'Japanese',        icon: 'mdi-trending-up',       name: t('families.japanese'),       short: t('v5.jpShort'), desc: t('v5.jpDesc'), use: t('v5.jpUse'), options: ['Pre-bid', 'No Pre-bid', 'Award', 'Rank', 'No Rank'],          savingsLabel: '8–12%',  intensityLevel: 2 },
+  { key: 'sb', family: 'Sealed Bid',      icon: 'mdi-lock-outline',      name: t('families.sealedBid'),      short: t('v5.sbShort'), desc: t('v5.sbDesc'), use: t('v5.sbUse'), options: ['Preference', 'Award', 'Rank', 'No Rank'],                      savingsLabel: '5–8%',   intensityLevel: 1 },
+  { key: 'tr', family: 'Traditional',     icon: 'mdi-handshake-outline', name: t('families.traditional'),    short: t('v5.trShort'), desc: t('v5.trDesc'), use: t('v5.trUse'), options: [],                                                              savingsLabel: '2–5%',   intensityLevel: 1 },
 ])
 
 // ── Tab 2: Overview cards (V1 style) ──
@@ -620,23 +695,36 @@ const overviewCards = computed(() => [
 .badge--sm  { padding: 2px 10px; font-size: 9px; }
 .hint-label { font-size: 10px; font-weight: 700; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.07em; }
 
-.cards-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; align-items: stretch; }
-.type-card { border-radius: 10px; border: 1.5px solid; padding: 12px 12px 12px 16px; position: relative; overflow: hidden; cursor: pointer; transition: box-shadow 0.2s, transform 0.15s; display: flex; flex-direction: column; }
-.type-card:hover { box-shadow: 0 3px 14px rgba(0,0,0,0.07); transform: translateY(-1px); }
-.card-bar { position: absolute; left: 0; top: 0; bottom: 0; width: 4px; }
-.card-head { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
-.card-icon { flex-shrink: 0; }
-.card-title { font-size: 12px; font-weight: 700; flex: 1; }
-.card-chevron { font-size: 12px; color: #9CA3AF; transition: transform 0.25s ease; flex-shrink: 0; }
-.card-chevron.open { transform: rotate(180deg); }
-.card-sub { font-size: 10px; color: #6B7280; line-height: 1.4; margin-bottom: 8px; flex: 1; }
-.pills--always { display: flex; flex-wrap: wrap; gap: 4px; }
-.pill { font-size: 9px; font-weight: 600; padding: 2px 7px; border-radius: 5px; white-space: nowrap; }
-.card-detail { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.3s cubic-bezier(0.4,0,0.2,1); }
-.card-detail.open { grid-template-rows: 1fr; }
-.card-detail-inner { overflow: hidden; min-height: 0; }
-.card-desc { font-size: 10px; color: #374151; line-height: 1.5; margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(0,0,0,0.06); }
-.card-use { font-size: 10px; color: #6B7280; font-style: italic; margin-top: 6px; line-height: 1.4; }
+/* Family cards grid: 6 cols (matches tree x-positions) */
+.fam-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
+.fam-card { background: #fff; border-radius: 10px; border: 1px solid #E9EAEC; overflow: hidden; display: flex; flex-direction: column; }
+
+/* Top band */
+.fam-top { display: flex; align-items: flex-start; justify-content: space-between; padding: 8px 10px 6px; }
+.fam-top-left { display: flex; align-items: center; gap: 5px; }
+.fam-icon-wrap { width: 22px; height: 22px; border-radius: 6px; border: 1px solid; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.fam-name { font-size: 11px; font-weight: 700; line-height: 1.3; }
+.fam-top-right { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; flex-shrink: 0; margin-left: 4px; }
+.fam-savings { font-size: 10px; font-weight: 700; white-space: nowrap; }
+.fam-pips { display: flex; gap: 2px; }
+.fam-pip { width: 9px; height: 3px; border-radius: 2px; }
+
+/* Chart */
+.fam-chart { padding: 6px 10px 4px; }
+.fam-chart :deep(.chart-container) { height: 72px; border: none; background: transparent; padding: 0; }
+
+/* Body */
+.fam-body { padding: 6px 10px 10px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+.fam-desc { font-size: 10px; color: #374151; line-height: 1.45; margin: 0; }
+
+/* Flow */
+.fam-flow { display: flex; align-items: center; flex-wrap: wrap; gap: 2px; }
+.fam-step { display: inline-flex; align-items: center; gap: 2px; font-size: 9px; font-weight: 500; color: #4B5563; background: #F9FAFB; border: 1px solid #E9EAEC; border-radius: 3px; padding: 2px 4px; white-space: nowrap; }
+.fam-sep { font-size: 10px; font-weight: 700; line-height: 1; }
+
+/* Chips */
+.fam-chips { display: flex; flex-wrap: wrap; gap: 3px; }
+.fam-chip { display: inline-flex; align-items: center; gap: 2px; font-size: 9px; font-weight: 500; color: #6B7280; background: #F3F4F6; border: 1px solid #E5E7EB; border-radius: 20px; padding: 2px 6px; white-space: nowrap; }
 
 /* ════════════════════════════════════
    TAB 2 — OVERVIEW CARDS (V1 style)
@@ -729,12 +817,12 @@ const overviewCards = computed(() => [
 
 /* ════ RESPONSIVE ════ */
 @media (max-width: 1000px) {
-  .cards-grid, .ov-cards { grid-template-columns: repeat(3, 1fr); }
+  .fam-grid, .ov-cards { grid-template-columns: repeat(3, 1fr); }
   .tree-section { display: none; }
   .tab-body { padding: 16px 14px 24px; }
 }
 @media (max-width: 640px) {
-  .cards-grid, .ov-cards { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .fam-grid, .ov-cards { grid-template-columns: repeat(2, 1fr); gap: 6px; }
   .cascade-pair { grid-template-columns: 1fr; }
 }
 </style>
