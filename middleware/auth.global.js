@@ -19,6 +19,11 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     return
   }
 
+  // Routes architect/decisionTree sont publiques
+  if (to.path.startsWith('/architect') || to.path.startsWith('/decisionTree')) {
+    return
+  }
+
   const supabase = useSupabaseClient()
   const user = useSupabaseUser()
 
