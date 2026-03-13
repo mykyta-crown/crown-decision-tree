@@ -156,7 +156,7 @@
                       <!-- RIGHT: options -->
                       <div class="fam-detail-right">
                       <!-- Options: 4 sections, each with sub-option rows -->
-                      <div v-if="famOptionDetails[fam.key].preBid || famOptionDetails[fam.key].pref || famOptionDetails[fam.key].awardModes.length" class="fam-opt-list">
+                      <div v-if="famOptionDetails[fam.key].preBid || famOptionDetails[fam.key].pref || famOptionDetails[fam.key].awardModes.length" class="fam-opt-list" :style="{ '--fam-accent': gfc(fam.family).border }">
 
                         <!-- ① Security / Pre-bid -->
                         <div class="opt-section">
@@ -193,10 +193,6 @@
                           <div class="opt-sub-row">
                             <span class="opt-sub-name">{{ t('hiw.lvlPrefFin') }}</span>
                             <span class="opt-sub-desc">{{ t('hiw.lvlPrefFinDesc') }}</span>
-                          </div>
-                          <div v-if="famOptionDetails[fam.key].prefNonFin === false" class="opt-pref-note">
-                            <v-icon size="11" color="#FBBF24">mdi-information-outline</v-icon>
-                            {{ t('hiw.lvlPrefFinOnlyNote', {}, 'Financial preference only — qualitative (non-financial) criteria are not supported in Japanese auctions.') }}
                           </div>
                         </div>
 
@@ -1039,10 +1035,11 @@ function famTryBtnStyle(f: string) {
 
 /* One card per criterion */
 .opt-section {
-  background: #FAFAFA;
-  border: 1px solid #F0F0F0;
+  background: #FFF;
+  border: 1px solid #E9EAEC;
+  border-left: 3px solid var(--fam-accent, #E9EAEC);
   border-radius: 8px;
-  padding: 7px 12px;
+  padding: 7px 12px 7px 10px;
   display: flex; flex-direction: column; gap: 0;
 }
 .opt-section-hdr {
