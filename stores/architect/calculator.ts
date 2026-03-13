@@ -36,7 +36,7 @@ function defaultLot(sc: number = 2): Lot {
 
 export const useCalculatorStore = defineStore('calculator', () => {
   // ─── Editor state ───
-  const mode = ref<'standard' | 'guided' | 'blue'>('standard')
+  const mode = ref<'black'>('black')
   const phase = ref(1)
   const spend = ref(0)
   const nSup = ref(0)
@@ -66,16 +66,12 @@ export const useCalculatorStore = defineStore('calculator', () => {
   // ─── Computed scoring ───
   const v1 = computed(() => spend.value < 100000 ? 1 : spend.value <= 500000 ? 2 : 3)
   const v3 = computed(() => award.value || 1)
-  const p1Ok = computed(() => {
-    if (mode.value === 'guided' || mode.value === 'blue') return spend.value > 0 && nSup.value > 0
-    return spend.value > 0 && nSup.value > 0 && award.value !== null
-  })
+  const p1Ok = computed(() => spend.value > 0 && nSup.value > 0)
 
   const p1Sc = computed(() => {
     if (!p1Ok.value) return []
     const nSupVal = nSup.value === 1 ? 1 : nSup.value === 2 ? 2 : 3
-    const awardVal = (mode.value === 'guided' || mode.value === 'blue') ? 1 : v3.value
-    return getScores(params.value, v1.value, nSupVal, awardVal, 1, 2, 1)
+    return getScores(params.value, v1.value, nSupVal, 1, 1, 2, 1)
   })
 
   const hasAuction = computed(() => p1Sc.value.some(s => !s.eliminated))
@@ -98,7 +94,7 @@ export const useCalculatorStore = defineStore('calculator', () => {
         v6 = g <= 7 ? 1 : g <= 10 ? 2 : 3
       }
     }
-    const lotAward = (mode.value === 'guided' || mode.value === 'blue') ? (l.award || 1) : v3.value
+    const lotAward = l.award || 1
     return getScores(params.value, v1.value, v2, lotAward, l.pref, v5, v6)
   }))
 
@@ -120,17 +116,13 @@ export const useCalculatorStore = defineStore('calculator', () => {
     const s = lotSc.value[i]
     if (!s) return []
 
-    // Blue mode rule: baseline < 100K AND award is Rank(2) or No Rank(3) → Traditional first
-    // Condition evaluated in: stores/decisionTree/calculator.ts (lotTop3 computed)
-    if (mode.value === 'blue') {
-      const bl = lotBaseline(lot)
-      const lotAw = lot.award || 1
-      if (bl > 0 && bl < 100000 && (lotAw === 2 || lotAw === 3)) {
-        const trad = s.find(r => r.family === 'Traditional')
-        if (trad) {
-          const others = s.filter(r => !r.eliminated && r.family !== 'Traditional').slice(0, 2)
-          return [{ ...trad, eliminated: false, pctMatch: 100 }, ...others]
-        }
+    const bl = lotBaseline(lot)
+    const lotAw = lot.award || 1
+    if (bl > 0 && bl < 100000 && (lotAw === 2 || lotAw === 3)) {
+      const trad = s.find(r => r.family === 'Traditional')
+      if (trad) {
+        const others = s.filter(r => !r.eliminated && r.family !== 'Traditional').slice(0, 2)
+        return [{ ...trad, eliminated: false, pctMatch: 100 }, ...others]
       }
     }
 
@@ -143,21 +135,13 @@ export const useCalculatorStore = defineStore('calculator', () => {
 
   // ─── Progress ───
   const p1Pct = computed(() => {
-    if (mode.value === 'guided' || mode.value === 'blue') {
-      let d = 0
-      if (spend.value > 0) d++
-      if (nSup.value > 0) d++
-      const pct = Math.round(d / 2 * 100)
-      // Blue mode: cap at 99% when verdict is 'stop' (eAuction not recommended)
-      // so the step badge shows progress-in-progress, not complete
-      if (mode.value === 'blue' && pct === 100 && spend.value < 100000 && nSup.value <= 1) return 99
-      return pct
-    }
     let d = 0
     if (spend.value > 0) d++
     if (nSup.value > 0) d++
-    if (award.value !== null) d++
-    return Math.round(d / 3 * 100)
+    const pct = Math.round(d / 2 * 100)
+    // Cap at 99% when verdict is 'stop' (eAuction not recommended)
+    if (pct === 100 && spend.value < 100000 && nSup.value <= 1) return 99
+    return pct
   })
 
   const p2Pct = computed(() => {
@@ -190,13 +174,12 @@ export const useCalculatorStore = defineStore('calculator', () => {
   // Track if user has ever opened Phase 3
   watch(phase, (v) => {
     if (v >= 3) visitedPhase3.value = true
-    // Sync sc/supNames with nSup when entering Phase 2 in guided mode
-    if (v === 2 && (mode.value === 'guided' || mode.value === 'blue')) syncGuidedSuppliers()
+    if (v === 2) syncGuidedSuppliers()
   })
 
-  // Keep sc in sync when nSup changes in guided mode (even while in Phase 2)
+  // Keep sc in sync when nSup changes (while in Phase 2)
   watch(nSup, () => {
-    if ((mode.value === 'guided' || mode.value === 'blue') && phase.value >= 2) syncGuidedSuppliers()
+    if (phase.value >= 2) syncGuidedSuppliers()
   })
 
   function syncGuidedSuppliers() {
@@ -338,7 +321,7 @@ export const useCalculatorStore = defineStore('calculator', () => {
       clearTimeout(_paramsSaveTimer)
       _paramsSaveTimer = null
     }
-    mode.value = 'standard'
+    mode.value = 'black'
     phase.value = 1
     spend.value = 0
     nSup.value = 0
@@ -457,7 +440,7 @@ export const useCalculatorStore = defineStore('calculator', () => {
     const s = parseSnapshot(raw)
     if (!s) { resetEditor(); return }
 
-    mode.value = s.mode
+    mode.value = 'black'
     phase.value = s.phase
     spend.value = s.spend
     nSup.value = s.nSup

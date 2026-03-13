@@ -187,9 +187,9 @@ function supplierPriceTableHtml(lot: ExportLot, supNames: string[], ccy: string)
 }
 
 function intensityLevelLabel(intens: number): string {
-  if (intens <= 33) return 'Low'
-  if (intens <= 66) return 'Medium'
-  return 'High'
+  if (intens <= 33) return 'Collaborative'
+  if (intens <= 66) return 'Competitive'
+  return 'Aggressive'
 }
 
 function lotBlockHtml(lot: ExportLot, li: number, data: ExportData): string {
@@ -299,26 +299,28 @@ function buildExecutiveSummary(data: ExportData): string {
   // Build sentences
   const lines: string[] = []
 
+  const familyDisplayNames: Record<string, string> = {
+    English: 'English', Dutch: 'Dutch', 'Sealed Bid': 'Sealed Bid',
+    Japanese: 'Japanese', 'Double Scenario': 'Double Scenario',
+    Traditional: 'Traditional Negotiation',
+  }
+
   // Intro line
   const lotWord = data.lots.length === 1 ? '1 lot' : `${data.lots.length} lots`
-  lines.push(`This scenario covers a total spend of <strong>${fmtE(data.spend, data.ccy)}</strong> (${ccyCode}) across <strong>${lotWord}</strong> with <strong>${data.nSup} supplier${data.nSup > 1 ? 's' : ''}</strong>.`)
+  const supWord = data.nSup === 1 ? '1 supplier' : `${data.nSup} suppliers`
+  lines.push(`This report covers a sourcing scenario totalling <strong>${fmtE(data.spend, data.ccy)}</strong> (${ccyCode}) across <strong>${lotWord}</strong> with <strong>${supWord}</strong> in the panel.`)
 
   // Recommendation line
   if (dominantFamily && topRecs.length > 0) {
-    const familyDisplayNames: Record<string, string> = {
-      English: 'English Reverse', Dutch: 'Dutch Reverse', 'Sealed Bid': 'Sealed Bid',
-      Japanese: 'Japanese Reverse', 'Double Scenario': 'Double Scenario',
-      Traditional: 'Traditional Negotiation',
-    }
     const famName = familyDisplayNames[dominantFamily[0]] || dominantFamily[0]
     const famColor = FAMILY_COLOR[dominantFamily[0]] || '#1D1D1B'
 
     if (data.lots.length === 1) {
-      lines.push(`The recommended auction type is <strong style="color:${famColor};">${famName}</strong> with a match score of <strong>${avgMatch}%</strong>.`)
+      lines.push(`Based on the parameters entered, the most suitable eAuction format is <strong style="color:${famColor};">${famName}</strong>, with a compatibility score of <strong>${avgMatch}%</strong>.`)
     } else {
       const allSame = Object.keys(familyCounts).length === 1
       if (allSame) {
-        lines.push(`<strong style="color:${famColor};">${famName}</strong> is the recommended auction type across all lots, with an average match score of <strong>${avgMatch}%</strong>.`)
+        lines.push(`The analysis recommends <strong style="color:${famColor};">${famName}</strong> across all lots, with an average compatibility score of <strong>${avgMatch}%</strong>.`)
       } else {
         const familySummary = Object.entries(familyCounts)
           .sort((a, b) => b[1] - a[1])
@@ -328,19 +330,19 @@ function buildExecutiveSummary(data: ExportData): string {
             return `<strong style="color:${col};">${name}</strong> (${count} lot${count > 1 ? 's' : ''})`
           })
           .join(', ')
-        lines.push(`Top recommendations across lots: ${familySummary}. Average match score: <strong>${avgMatch}%</strong>.`)
+        lines.push(`The recommended auction formats vary by lot: ${familySummary}. Average compatibility score: <strong>${avgMatch}%</strong>.`)
       }
     }
   }
 
   // Savings line
   if (avgSaving > 0) {
-    let savingsLine = `Expected savings potential: <strong>+${avgSaving}%</strong> on average`
+    let savingsLine = `The estimated savings potential is <strong>+${avgSaving}%</strong> on average`
     if (maxSaving !== avgSaving) {
-      savingsLine += ` (up to +${maxSaving}%)`
+      savingsLine += ` (up to <strong>+${maxSaving}%</strong> on the best-performing lot)`
     }
     if (estSavingsAmount > 0) {
-      savingsLine += `, approximately <strong>${fmtE(estSavingsAmount, data.ccy)}</strong> on the total baseline of ${fmtE(data.totBase, data.ccy)}`
+      savingsLine += `, representing approximately <strong>${fmtE(estSavingsAmount, data.ccy)}</strong> against a total baseline of ${fmtE(data.totBase, data.ccy)}`
     }
     savingsLine += '.'
     lines.push(savingsLine)
@@ -348,7 +350,7 @@ function buildExecutiveSummary(data: ExportData): string {
 
   // No recommendation warning
   if (topRecs.length === 0) {
-    lines.push('No eAuction type could be recommended for this scenario. A traditional negotiation approach may be more suitable given the current parameters.')
+    lines.push('No eAuction format could be recommended for this scenario given the current parameters. A traditional negotiation approach may be more appropriate.')
   }
 
   return `
@@ -363,7 +365,7 @@ function buildExecutiveSummary(data: ExportData): string {
   </div>`
 }
 
-export function exportDecisionTreePdf(data: ExportData) {
+export function exportArchitectPdf(data: ExportData) {
   const today = new Date()
   const dateStr = today.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
   const awardLabel = data.award ? (AWARD_MAP[data.award] || '-') : '-'
@@ -516,7 +518,7 @@ export function exportDecisionTreePdf(data: ExportData) {
     <div style="text-align:right;">
       <div style="font-size:11px;color:#9CA3AF;font-weight:500;margin-bottom:4px;">Total Baseline</div>
       <div style="font-size:20px;font-weight:700;color:#1D1D1B;">${fmtE(data.totBase, data.ccy)}</div>
-      <div style="font-size:11px;color:#9CA3AF;margin-top:2px;">${data.lots.length} lot${data.lots.length > 1 ? 's' : ''} &middot; ${data.nSup} supplier${data.nSup > 1 ? 's' : ''} &middot; ${ccyLabel} &middot; ${data.mode === 'guided' ? 'Quick Scenario' : data.mode === 'blue' ? 'Blue Scenario' : 'Standard'}</div>
+      <div style="font-size:11px;color:#9CA3AF;margin-top:2px;">${data.lots.length} lot${data.lots.length > 1 ? 's' : ''} &middot; ${data.nSup} supplier${data.nSup > 1 ? 's' : ''} &middot; ${ccyLabel} &middot; ${data.mode === 'guided' ? 'Quick Scenario' : data.mode === 'blue' ? 'Architect' : 'Standard'}</div>
     </div>
   </div>
 

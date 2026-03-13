@@ -33,7 +33,7 @@
             :aria-current="activeSection === s.id ? 'true' : undefined"
             @click="scrollTo(s.id)"
           >
-            <span class="sidebar-icon">{{ s.icon }}</span>
+            <v-icon :icon="s.icon" size="15" class="sidebar-icon" />
             <span class="sidebar-label">{{ s.label }}</span>
           </button>
         </nav>
@@ -75,7 +75,7 @@
               <div class="savings-compare-title">{{ t('hiw.savingsCompareTitle') }}</div>
               <div class="savings-bars">
                 <div v-for="fam in families" :key="fam.key" class="savings-bar-row">
-                  <span class="savings-bar-label">{{ fam.emoji }} {{ fam.shortName }}</span>
+                  <span class="savings-bar-label"><v-icon :icon="fam.icon" size="14" :color="gfc(fam.family).text" style="margin-right:4px" />{{ fam.shortName }}</span>
                   <div class="savings-bar-track">
                     <div
                       class="savings-bar-fill"
@@ -105,157 +105,146 @@
                 >
                   <div class="fam-bar" :style="barBg(fam.family)" />
                   <div class="fam-head">
-                    <span class="fam-emoji">{{ fam.emoji }}</span>
+                    <v-icon :icon="fam.icon" size="18" :color="gfc(fam.family).text" class="fam-icon" />
                     <span class="fam-name" :style="famTextColor(fam.family)">{{ t(fam.nameKey) }}</span>
-                    <span class="fam-savings" :style="famPillStyle(fam.family)">~{{ fam.savings }}% {{ t('hiw.savings') }}</span>
+                    <span class="fam-savings" :style="famPillStyle(fam.family)">{{ fam.savingsLabel }} {{ t('hiw.savings') }}</span>
                     <span class="fam-chevron" :class="{ open: expandedFam === fam.key }">▾</span>
                   </div>
                   <div class="fam-short">{{ t(fam.shortKey) }}</div>
-                  <div class="fam-pills">
-                    <span
-                      v-for="opt in fam.options"
-                      :key="opt"
-                      class="pill"
-                      :style="famPillStyle(fam.family)"
-                    >{{ opt }}</span>
-                  </div>
                   <div class="fam-detail" :class="{ open: expandedFam === fam.key }">
                     <div class="fam-detail-inner" :class="{ 'fam-detail-visible': expandedFam === fam.key }">
-                      <!-- Illustration: SVG price chart -->
-                      <div class="fam-illustration" :style="famIllustrationBg(fam.family)">
-                        <div class="fam-chart-wrap">
-                          <AChart :family="fam.family" :color="gfc(fam.family).border" ccy="EUR" :animated="animatedFams.has(fam.key)" />
-                        </div>
-                        <div class="fam-illus-caption">{{ t(fam.illustrationKey) }}</div>
-                      </div>
+                      <div class="fam-detail-cols">
 
-                      <!-- Options grid -->
-                      <div class="fam-opt-grid">
-                        <!-- Pre-bid -->
-                        <div class="fam-opt-block">
-                          <div class="fam-opt-title">
+                      <!-- LEFT: chart + flow + description -->
+                      <div class="fam-detail-left">
+                        <div class="fam-illustration" :style="famIllustrationBg(fam.family)">
+                          <div class="fam-chart-wrap">
+                            <AChart :family="fam.family" :color="gfc(fam.family).border" ccy="EUR" :animated="animatedFams.has(fam.key)" />
+                          </div>
+                        </div>
+
+                        <!-- Flow steps -->
+                        <div class="fam-flow-steps" :style="{ background: gfc(fam.family).bg, borderColor: gfc(fam.family).border + '44' }">
+                          <template v-for="(step, si) in famFlowKeys[fam.key]" :key="si">
+                            <div class="fam-flow-step">
+                              <v-icon :icon="step.icon" size="12" :color="gfc(fam.family).text" />
+                              <span class="fam-flow-label">{{ t(step.labelKey) }}</span>
+                            </div>
+                            <span v-if="si < famFlowKeys[fam.key].length - 1" class="fam-flow-arrow">
+                              <svg width="20" height="10" viewBox="0 0 20 10" fill="none">
+                                <path d="M1 5h16M13 1l4 4-4 4" :stroke="gfc(fam.family).border" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                              </svg>
+                            </span>
+                          </template>
+                        </div>
+
+                        <p class="fam-desc-text">{{ t(fam.descKey) }}</p>
+                        <div class="fam-tip">
+                          <v-icon size="13" color="#6B7280">mdi-lightbulb-outline</v-icon>
+                          <span>{{ t(fam.useKey) }}</span>
+                        </div>
+                        <button
+                          class="fam-try-btn"
+                          :style="famTryBtnStyle(fam.family)"
+                          @click.stop="$emit('start'); show = false"
+                        >
+                          <v-icon size="14">mdi-play-circle-outline</v-icon>
+                          {{ t('hiw.tryThisType') }}
+                        </button>
+                      </div><!-- /fam-detail-left -->
+
+                      <!-- RIGHT: options -->
+                      <div class="fam-detail-right">
+                      <!-- Options: 4 sections, each with sub-option rows -->
+                      <div v-if="famOptionDetails[fam.key].preBid || famOptionDetails[fam.key].pref || famOptionDetails[fam.key].awardModes.length" class="fam-opt-list">
+
+                        <!-- ① Security / Pre-bid -->
+                        <div class="opt-section">
+                          <div class="opt-section-hdr">
                             <v-icon size="11" color="#9CA3AF">mdi-clock-fast</v-icon>
                             {{ t('hiw.optSecurityTitle') }}
                           </div>
-                          <div class="fam-opt-chips">
-                            <v-tooltip v-if="famOptionDetails[fam.key].preBid" :text="t('hiw.optPreBidOnInfo')" max-width="260" location="top">
-                              <template #activator="{ props: tp }">
-                                <span v-bind="tp" class="opt-chip opt-chip--on" :style="{ background: gfc(fam.family).border + '22', color: gfc(fam.family).text }">
-                                  <v-icon size="10">mdi-check</v-icon> {{ t('hiw.optPreBidOn') }}
-                                </span>
-                              </template>
-                            </v-tooltip>
-                            <v-tooltip v-else :text="t('hiw.optPreBidOffInfo')" max-width="260" location="top">
-                              <template #activator="{ props: tp }">
-                                <span v-bind="tp" class="opt-chip opt-chip--off">
-                                  <v-icon size="10">mdi-minus</v-icon> {{ t('hiw.optPreBidOff') }}
-                                </span>
-                              </template>
-                            </v-tooltip>
+                          <!-- No pre-bid — always available -->
+                          <div class="opt-sub-row">
+                            <span class="opt-sub-name">{{ t('hiw.lvlPreBidDisabled') }}</span>
+                            <span class="opt-sub-desc">{{ t('hiw.lvlPreBidDisabledDesc') }}</span>
+                          </div>
+                          <!-- Pre-bid — only when supported -->
+                          <div v-if="famOptionDetails[fam.key].preBid" class="opt-sub-row">
+                            <span class="opt-sub-name">{{ t('hiw.lvlPreBidEnabled') }}</span>
+                            <span class="opt-sub-desc">{{ t('hiw.lvlPreBidEnabledDesc') }}</span>
                           </div>
                         </div>
 
-                        <!-- Preference -->
-                        <div class="fam-opt-block">
-                          <div class="fam-opt-title">
+                        <!-- ② Preference — only when supported -->
+                        <div v-if="famOptionDetails[fam.key].pref" class="opt-section">
+                          <div class="opt-section-hdr">
                             <v-icon size="11" color="#9CA3AF">mdi-scale-balance</v-icon>
                             {{ t('hiw.optPrefTitle') }}
                           </div>
-                          <div class="fam-opt-chips">
-                            <template v-if="famOptionDetails[fam.key].pref">
-                              <v-tooltip :text="t('hiw.optNoneInfo')" max-width="240" location="top">
-                                <template #activator="{ props: tp }">
-                                  <span v-bind="tp" class="opt-chip opt-chip--neutral">{{ t('hiw.lvlPrefNone') }}</span>
-                                </template>
-                              </v-tooltip>
-                              <v-tooltip :text="t('hiw.optNonFinInfo')" max-width="240" location="top">
-                                <template #activator="{ props: tp }">
-                                  <span v-bind="tp" class="opt-chip opt-chip--neutral">{{ t('hiw.lvlPrefNonFin') }}</span>
-                                </template>
-                              </v-tooltip>
-                              <v-tooltip :text="t('hiw.optFinInfo')" max-width="240" location="top">
-                                <template #activator="{ props: tp }">
-                                  <span v-bind="tp" class="opt-chip opt-chip--neutral">{{ t('hiw.lvlPrefFin') }}</span>
-                                </template>
-                              </v-tooltip>
-                            </template>
-                            <v-tooltip v-else :text="t('hiw.optPrefNAInfo')" max-width="240" location="top">
-                              <template #activator="{ props: tp }">
-                                <span v-bind="tp" class="opt-chip opt-chip--off">
-                                  <v-icon size="10">mdi-minus</v-icon> {{ t('hiw.lvlPrefNone') }}
-                                </span>
-                              </template>
-                            </v-tooltip>
+                          <div class="opt-sub-row">
+                            <span class="opt-sub-name">{{ t('hiw.lvlPrefNone') }}</span>
+                            <span class="opt-sub-desc">{{ t('hiw.lvlPrefNoneDesc') }}</span>
+                          </div>
+                          <div v-if="famOptionDetails[fam.key].prefNonFin !== false" class="opt-sub-row">
+                            <span class="opt-sub-name">{{ t('hiw.lvlPrefNonFin') }}</span>
+                            <span class="opt-sub-desc">{{ t('hiw.lvlPrefNonFinDesc') }}</span>
+                          </div>
+                          <div class="opt-sub-row">
+                            <span class="opt-sub-name">{{ t('hiw.lvlPrefFin') }}</span>
+                            <span class="opt-sub-desc">{{ t('hiw.lvlPrefFinDesc') }}</span>
+                          </div>
+                          <div v-if="famOptionDetails[fam.key].prefNonFin === false" class="opt-pref-note">
+                            <v-icon size="11" color="#FBBF24">mdi-information-outline</v-icon>
+                            {{ t('hiw.lvlPrefFinOnlyNote', {}, 'Financial preference only — qualitative (non-financial) criteria are not supported in Japanese auctions.') }}
                           </div>
                         </div>
 
-                        <!-- Award mode -->
-                        <div class="fam-opt-block">
-                          <div class="fam-opt-title">
+                        <!-- ③ Award mode — only when supported -->
+                        <div v-if="famOptionDetails[fam.key].awardModes.length" class="opt-section">
+                          <div class="opt-section-hdr">
                             <v-icon size="11" color="#9CA3AF">mdi-trophy-outline</v-icon>
                             {{ t('hiw.optAwardTitle') }}
                           </div>
-                          <div class="fam-opt-chips">
-                            <template v-if="famOptionDetails[fam.key].awardModes.length">
-                              <v-tooltip v-if="famOptionDetails[fam.key].awardModes.includes('award')" :text="t('hiw.optAwardInfo')" max-width="240" location="top">
-                                <template #activator="{ props: tp }">
-                                  <span v-bind="tp" class="opt-chip opt-chip--neutral">{{ t('hiw.lvlAwardAward') }}</span>
-                                </template>
-                              </v-tooltip>
-                              <v-tooltip v-if="famOptionDetails[fam.key].awardModes.includes('rank')" :text="t('hiw.optRankInfo')" max-width="240" location="top">
-                                <template #activator="{ props: tp }">
-                                  <span v-bind="tp" class="opt-chip opt-chip--neutral">{{ t('hiw.lvlAwardRank') }}</span>
-                                </template>
-                              </v-tooltip>
-                              <v-tooltip v-if="famOptionDetails[fam.key].awardModes.includes('norank')" :text="t('hiw.optNoRankInfo')" max-width="240" location="top">
-                                <template #activator="{ props: tp }">
-                                  <span v-bind="tp" class="opt-chip opt-chip--neutral">{{ t('hiw.lvlAwardNoRank') }}</span>
-                                </template>
-                              </v-tooltip>
-                            </template>
-                            <v-tooltip v-else :text="t('hiw.optAwardNAInfo')" max-width="240" location="top">
-                              <template #activator="{ props: tp }">
-                                <span v-bind="tp" class="opt-chip opt-chip--off">
-                                  <v-icon size="10">mdi-minus</v-icon> N/A
-                                </span>
-                              </template>
-                            </v-tooltip>
+                          <div v-if="famOptionDetails[fam.key].awardModes.includes('award')" class="opt-sub-row">
+                            <span class="opt-sub-name">{{ t('hiw.lvlAwardAward') }}</span>
+                            <span class="opt-sub-desc">{{ t('hiw.lvlAwardAwardDesc') }}</span>
+                          </div>
+                          <div v-if="famOptionDetails[fam.key].awardModes.includes('rank')" class="opt-sub-row">
+                            <span class="opt-sub-name">{{ t('hiw.lvlAwardRank') }}</span>
+                            <span class="opt-sub-desc">{{ t('hiw.lvlAwardRankDesc') }}</span>
+                          </div>
+                          <div v-if="famOptionDetails[fam.key].awardModes.includes('norank')" class="opt-sub-row">
+                            <span class="opt-sub-name">{{ t('hiw.lvlAwardNoRank') }}</span>
+                            <span class="opt-sub-desc">{{ t('hiw.lvlAwardNoRankDesc') }}</span>
                           </div>
                         </div>
 
-                        <!-- Intensity -->
-                        <div class="fam-opt-block">
-                          <div class="fam-opt-title">
+                        <!-- ④ Intensity -->
+                        <div class="opt-section">
+                          <div class="opt-section-hdr">
                             <v-icon size="11" color="#9CA3AF">mdi-fire</v-icon>
                             {{ t('hiw.optIntensityTitle') }}
                           </div>
-                          <div class="fam-opt-chips fam-opt-intensity">
-                            <div class="opt-intensity-bar-wrap">
-                              <div class="opt-intensity-bar">
-                                <div class="opt-intensity-fill" :style="{ width: famOptionDetails[fam.key].intensity.fill, background: famOptionDetails[fam.key].intensity.color }" />
-                              </div>
+                          <div class="opt-sub-row opt-sub-row--intensity">
+                            <div class="opt-int-track">
+                              <div class="opt-int-fill" :style="{ width: famOptionDetails[fam.key].intensity.fill, background: famOptionDetails[fam.key].intensity.color }" />
                             </div>
-                            <span class="opt-intensity-label" :style="{ color: famOptionDetails[fam.key].intensity.color }">
-                              {{ t(famOptionDetails[fam.key].intensity.labelKey) }}
-                            </span>
-                            <span class="opt-intensity-desc">{{ t(famOptionDetails[fam.key].intensity.descKey) }}</span>
+                            <span class="opt-int-label" :style="{ color: famOptionDetails[fam.key].intensity.color }">{{ t(famOptionDetails[fam.key].intensity.labelKey, {}, famOptionDetails[fam.key].intensity.labelFb) }}</span>
+                            <span class="opt-sep">—</span>
+                            <span class="opt-sub-desc">{{ t(famOptionDetails[fam.key].intensity.descKey, {}, famOptionDetails[fam.key].intensity.descFb) }}</span>
                           </div>
                         </div>
+
                       </div>
+                      <!-- No configurable options (Traditional) -->
+                      <div v-else class="fam-no-options">
+                        <v-icon size="16" color="#9CA3AF">mdi-tune-off</v-icon>
+                        <span>{{ t('hiw.noOptions', {}, 'No configurable parameters — fully managed off-platform') }}</span>
+                      </div>
+                      </div><!-- /fam-detail-right -->
 
-                      <p class="fam-desc-text">{{ t(fam.descKey) }}</p>
-                      <p class="fam-use-text">{{ t(fam.useKey) }}</p>
-                      <p class="fam-example">{{ t(fam.exampleKey) }}</p>
-
-                      <!-- Try this type button -->
-                      <button
-                        class="fam-try-btn"
-                        :style="famTryBtnStyle(fam.family)"
-                        @click.stop="$emit('start'); show = false"
-                      >
-                        <v-icon size="14">mdi-play-circle-outline</v-icon>
-                        {{ t('hiw.tryThisType') }}
-                      </button>
+                      </div><!-- /fam-detail-cols -->
                     </div>
                   </div>
                 </div>
@@ -272,7 +261,7 @@
 
             <div class="dims-grid">
               <div v-for="d in 6" :key="d" class="dim-row">
-                <div class="dim-icon">{{ dimIcons[d - 1] }}</div>
+                <div class="dim-icon"><v-icon :icon="dimIcons[d - 1]" size="18" color="#9CA3AF" /></div>
                 <div class="dim-info">
                   <div class="dim-name">{{ t(`hiw.dim${d}`) }}</div>
                   <div class="dim-desc">{{ t(`hiw.dim${d}Desc`) }}</div>
@@ -296,7 +285,7 @@
                   <tr>
                     <th class="compat-th-empty" />
                     <th v-for="fam in families" :key="fam.key" class="compat-th">
-                      <span class="compat-th-emoji">{{ fam.emoji }}</span>
+                      <v-icon :icon="fam.icon" size="16" :color="gfc(fam.family).text" class="compat-th-icon" />
                       <span class="compat-th-name" :style="{ color: gfc(fam.family).text }">{{ fam.shortName }}</span>
                     </th>
                   </tr>
@@ -353,7 +342,7 @@
                         <div class="intensity-fill" :style="{ width: lvl.fill, background: lvl.color }" />
                       </div>
                     </div>
-                    <span v-else class="concept-level-icon">{{ lvl.icon }}</span>
+                    <v-icon v-else :icon="lvl.icon" size="14" color="#9CA3AF" class="concept-level-icon" />
                     <span class="concept-level-label">{{ t(lvl.labelKey) }}</span>
                     <span class="concept-level-desc">{{ t(lvl.descKey) }}</span>
                   </div>
@@ -411,11 +400,11 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, nextTick } from 'vue'
-import { gfc } from '~/utils/decisionTree/constants'
+import { gfc } from '~/utils/architect/constants'
 import useTranslations from '~/composables/useTranslations'
-import AChart from '~/components/decisionTree/calculator/charts/AChart.vue'
+import AChart from '~/components/architect/calculator/charts/AChart.vue'
 
-const { t } = useTranslations('decisiontree')
+const { t } = useTranslations('architect')
 const show = defineModel<boolean>({ default: false })
 
 const props = defineProps<{
@@ -437,59 +426,59 @@ const animatedFams = ref(new Set<string>())
 const sectionIds = ['overview', 'phases', 'families', 'scoring', 'concepts', 'faq']
 
 const sections = computed(() => [
-  { id: 'overview', icon: '💡', label: t('hiw.navOverview') },
-  { id: 'phases', icon: '⚙️', label: t('hiw.navPhases') },
-  { id: 'families', icon: '🏷️', label: t('hiw.navFamilies') },
-  { id: 'scoring', icon: '📊', label: t('hiw.navScoring') },
-  { id: 'concepts', icon: '📖', label: t('hiw.navConcepts') },
-  { id: 'faq', icon: '❓', label: t('hiw.navFaq') },
+  { id: 'overview', icon: 'mdi-lightbulb-outline',      label: t('hiw.navOverview') },
+  { id: 'phases',   icon: 'mdi-cog-outline',            label: t('hiw.navPhases') },
+  { id: 'families', icon: 'mdi-tag-multiple-outline',   label: t('hiw.navFamilies') },
+  { id: 'scoring',  icon: 'mdi-chart-bar',              label: t('hiw.navScoring') },
+  { id: 'concepts', icon: 'mdi-book-open-outline',      label: t('hiw.navConcepts') },
+  { id: 'faq',      icon: 'mdi-help-circle-outline',    label: t('hiw.navFaq') },
 ])
 
 const families = [
-  { key: 'ds', shortName: 'DS', family: 'Double Scenario', emoji: '🏆', nameKey: 'families.doubleScenario', shortKey: 'v5.dsShort', descKey: 'v5.dsDesc', useKey: 'v5.dsUse', exampleKey: 'hiw.exampleDs', illustrationKey: 'hiw.illustDs', savings: 15, options: ['Pre-bid', 'Preference', 'Award'] },
-  { key: 'en', shortName: 'EN', family: 'English', emoji: '🥈', nameKey: 'families.english', shortKey: 'v5.enShort', descKey: 'v5.enDesc', useKey: 'v5.enUse', exampleKey: 'hiw.exampleEn', illustrationKey: 'hiw.illustEn', savings: 12, options: ['Pre-bid', 'Preference', 'Award', 'Rank'] },
-  { key: 'du', shortName: 'DU', family: 'Dutch', emoji: '⏳', nameKey: 'families.dutch', shortKey: 'v5.duShort', descKey: 'v5.duDesc', useKey: 'v5.duUse', exampleKey: 'hiw.exampleDu', illustrationKey: 'hiw.illustDu', savings: 10, options: ['Pre-bid', 'Preference', 'Award'] },
-  { key: 'jp', shortName: 'JP', family: 'Japanese', emoji: '🔺', nameKey: 'families.japanese', shortKey: 'v5.jpShort', descKey: 'v5.jpDesc', useKey: 'v5.jpUse', exampleKey: 'hiw.exampleJp', illustrationKey: 'hiw.illustJp', savings: 10, options: ['Pre-bid', 'Award', 'Rank', 'No Rank'] },
-  { key: 'sb', shortName: 'SB', family: 'Sealed Bid', emoji: '📩', nameKey: 'families.sealedBid', shortKey: 'v5.sbShort', descKey: 'v5.sbDesc', useKey: 'v5.sbUse', exampleKey: 'hiw.exampleSb', illustrationKey: 'hiw.illustSb', savings: 7, options: ['Preference', 'Award', 'Rank', 'No Rank'] },
-  { key: 'tr', shortName: 'TR', family: 'Traditional', emoji: '🤝', nameKey: 'families.traditional', shortKey: 'v5.trShort', descKey: 'v5.trDesc', useKey: 'v5.trUse', exampleKey: 'hiw.exampleTr', illustrationKey: 'hiw.illustTr', savings: 4, options: [] },
+  { key: 'ds', shortName: 'Double Scenario', family: 'Double Scenario', icon: 'mdi-layers-outline',       nameKey: 'families.doubleScenario', shortKey: 'v5.dsShort', descKey: 'v5.dsDesc', useKey: 'v5.dsUse', illustrationKey: 'hiw.illustDs', savings: 15, savingsLabel: '12–18%', options: ['Pre-bid', 'Preference', 'Award'] },
+  { key: 'en', shortName: 'English',         family: 'English',          icon: 'mdi-gavel',                nameKey: 'families.english',        shortKey: 'v5.enShort', descKey: 'v5.enDesc', useKey: 'v5.enUse', illustrationKey: 'hiw.illustEn', savings: 12, savingsLabel: '10–15%', options: ['Pre-bid', 'Preference', 'Award', 'Rank'] },
+  { key: 'du', shortName: 'Dutch',           family: 'Dutch',            icon: 'mdi-trending-up',           nameKey: 'families.dutch',          shortKey: 'v5.duShort', descKey: 'v5.duDesc', useKey: 'v5.duUse', illustrationKey: 'hiw.illustDu', savings: 10, savingsLabel: '8–12%',  options: ['Pre-bid', 'Preference', 'Award'] },
+  { key: 'jp', shortName: 'Japanese',        family: 'Japanese',         icon: 'mdi-trending-down',         nameKey: 'families.japanese',       shortKey: 'v5.jpShort', descKey: 'v5.jpDesc', useKey: 'v5.jpUse', illustrationKey: 'hiw.illustJp', savings: 10, savingsLabel: '8–12%',  options: ['Pre-bid', 'Preference', 'Award', 'Rank', 'No Rank'] },
+  { key: 'sb', shortName: 'Sealed Bid',      family: 'Sealed Bid',       icon: 'mdi-email-lock-outline',    nameKey: 'families.sealedBid',      shortKey: 'v5.sbShort', descKey: 'v5.sbDesc', useKey: 'v5.sbUse', illustrationKey: 'hiw.illustSb', savings: 7,  savingsLabel: '5–8%',   options: ['Preference', 'Award', 'Rank', 'No Rank'] },
+  { key: 'tr', shortName: 'Traditional',     family: 'Traditional',      icon: 'mdi-handshake-outline',     nameKey: 'families.traditional',    shortKey: 'v5.trShort', descKey: 'v5.trDesc', useKey: 'v5.trUse', illustrationKey: 'hiw.illustTr', savings: 4,  savingsLabel: '2–5%',   options: [] },
 ]
 
 // Visual flow diagrams per auction family — translated via keys
 const famFlowKeys: Record<string, { icon: string; labelKey: string }[]> = {
   ds: [
-    { icon: '📋', labelKey: 'hiw.flowDsPreBid' },
-    { icon: '📉', labelKey: 'hiw.flowDsEnglish' },
-    { icon: '⏳', labelKey: 'hiw.flowDsDutch' },
-    { icon: '🏆', labelKey: 'hiw.flowDsAward' },
+    { icon: 'mdi-clock-outline',        labelKey: 'hiw.flowDsPreBid' },
+    { icon: 'mdi-trending-down',        labelKey: 'hiw.flowDsEnglish' },
+    { icon: 'mdi-trending-up',          labelKey: 'hiw.flowDsDutch' },
+    { icon: 'mdi-check-circle-outline', labelKey: 'hiw.flowDsAward' },
   ],
   en: [
-    { icon: '💰', labelKey: 'hiw.flowEnCeiling' },
-    { icon: '📉', labelKey: 'hiw.flowEnBid1' },
-    { icon: '📉', labelKey: 'hiw.flowEnBid2' },
-    { icon: '🏆', labelKey: 'hiw.flowEnBest' },
+    { icon: 'mdi-currency-usd',         labelKey: 'hiw.flowEnCeiling' },
+    { icon: 'mdi-trending-down',        labelKey: 'hiw.flowEnBid1' },
+    { icon: 'mdi-trending-down',        labelKey: 'hiw.flowEnBid2' },
+    { icon: 'mdi-check-circle-outline', labelKey: 'hiw.flowEnBest' },
   ],
   du: [
-    { icon: '💰', labelKey: 'hiw.flowDuHigh' },
-    { icon: '⏳', labelKey: 'hiw.flowDuAuto' },
-    { icon: '✋', labelKey: 'hiw.flowDuAccept' },
-    { icon: '🏆', labelKey: 'hiw.flowDuWinner' },
+    { icon: 'mdi-currency-usd',         labelKey: 'hiw.flowDuHigh' },
+    { icon: 'mdi-trending-up',          labelKey: 'hiw.flowDuAuto' },
+    { icon: 'mdi-hand-back-right-outline', labelKey: 'hiw.flowDuAccept' },
+    { icon: 'mdi-check-circle-outline', labelKey: 'hiw.flowDuWinner' },
   ],
   jp: [
-    { icon: '💰', labelKey: 'hiw.flowJpLow' },
-    { icon: '📈', labelKey: 'hiw.flowJpRound' },
-    { icon: '🚪', labelKey: 'hiw.flowJpExit' },
-    { icon: '🏆', labelKey: 'hiw.flowJpLast' },
+    { icon: 'mdi-currency-usd',         labelKey: 'hiw.flowJpLow' },
+    { icon: 'mdi-trending-down',        labelKey: 'hiw.flowJpRound' },
+    { icon: 'mdi-exit-to-app',          labelKey: 'hiw.flowJpExit' },
+    { icon: 'mdi-check-circle-outline', labelKey: 'hiw.flowJpLast' },
   ],
   sb: [
-    { icon: '📩', labelKey: 'hiw.flowSbSubmit' },
-    { icon: '🔒', labelKey: 'hiw.flowSbSealed' },
-    { icon: '📊', labelKey: 'hiw.flowSbCompare' },
-    { icon: '🏆', labelKey: 'hiw.flowSbBest' },
+    { icon: 'mdi-email-outline',        labelKey: 'hiw.flowSbSubmit' },
+    { icon: 'mdi-lock-outline',         labelKey: 'hiw.flowSbSealed' },
+    { icon: 'mdi-chart-bar',            labelKey: 'hiw.flowSbCompare' },
+    { icon: 'mdi-check-circle-outline', labelKey: 'hiw.flowSbBest' },
   ],
   tr: [
-    { icon: '🤝', labelKey: 'hiw.flowTrContact' },
-    { icon: '💬', labelKey: 'hiw.flowTrNegotiate' },
-    { icon: '🏆', labelKey: 'hiw.flowTrAgree' },
+    { icon: 'mdi-handshake-outline',    labelKey: 'hiw.flowTrContact' },
+    { icon: 'mdi-chat-outline',         labelKey: 'hiw.flowTrNegotiate' },
+    { icon: 'mdi-check-circle-outline', labelKey: 'hiw.flowTrAgree' },
   ],
 }
 
@@ -497,49 +486,51 @@ const famFlowKeys: Record<string, { icon: string; labelKey: string }[]> = {
 const famOptionDetails: Record<string, {
   preBid: boolean
   pref: boolean
+  prefNonFin?: boolean
   awardModes: ('award' | 'rank' | 'norank')[]
-  intensity: { labelKey: string; fill: string; color: string; descKey: string }
+  intensity: { labelKey: string; labelFb: string; fill: string; color: string; descKey: string; descFb: string }
 }> = {
-  ds: { preBid: true,  pref: true,  awardModes: ['award'],                   intensity: { labelKey: 'hiw.lvlIntAggr',   fill: '100%', color: '#EF4444', descKey: 'hiw.lvlIntAggrDesc'   } },
-  en: { preBid: true,  pref: true,  awardModes: ['award', 'rank'],            intensity: { labelKey: 'hiw.lvlIntCompet', fill: '66%',  color: '#F59E0B', descKey: 'hiw.lvlIntCompetDesc' } },
-  du: { preBid: true,  pref: true,  awardModes: ['award'],                   intensity: { labelKey: 'hiw.lvlIntCompet', fill: '66%',  color: '#F59E0B', descKey: 'hiw.lvlIntCompetDesc' } },
-  jp: { preBid: true,  pref: false, awardModes: ['award', 'rank', 'norank'], intensity: { labelKey: 'hiw.lvlIntCompet', fill: '66%',  color: '#F59E0B', descKey: 'hiw.lvlIntCompetDesc' } },
-  sb: { preBid: false, pref: true,  awardModes: ['award', 'rank', 'norank'], intensity: { labelKey: 'hiw.lvlIntCollab', fill: '33%',  color: '#34D399', descKey: 'hiw.lvlIntCollabDesc' } },
-  tr: { preBid: false, pref: false, awardModes: [],                          intensity: { labelKey: 'hiw.lvlIntCollab', fill: '33%',  color: '#34D399', descKey: 'hiw.lvlIntCollabDesc' } },
+  ds: { preBid: true,  pref: true,                  awardModes: ['award'],                   intensity: { labelKey: 'hiw.lvlIntAggr',   labelFb: 'Intense',      fill: '100%', color: '#EF4444', descKey: 'hiw.lvlIntAggrDesc',   descFb: 'Full competitive pressure — maximises savings potential'  } },
+  en: { preBid: true,  pref: true,                  awardModes: ['award', 'rank'],            intensity: { labelKey: 'hiw.lvlIntHigh',   labelFb: 'High',         fill: '75%',  color: '#F59E0B', descKey: 'hiw.lvlIntHighDesc',   descFb: 'Strong pressure — real-time bidding drives prices down'   } },
+  du: { preBid: true,  pref: true,                  awardModes: ['award'],                   intensity: { labelKey: 'hiw.lvlIntCompet', labelFb: 'Competitive',  fill: '50%',  color: '#FBBF24', descKey: 'hiw.lvlIntCompetDesc', descFb: 'Balanced competition — works with most market configurations' } },
+  jp: { preBid: true,  pref: true, prefNonFin: false, awardModes: ['award', 'rank', 'norank'], intensity: { labelKey: 'hiw.lvlIntCompet', labelFb: 'Competitive',  fill: '50%',  color: '#FBBF24', descKey: 'hiw.lvlIntCompetDesc', descFb: 'Balanced competition — works with most market configurations' } },
+  sb: { preBid: false, pref: true,                  awardModes: ['award', 'rank', 'norank'], intensity: { labelKey: 'hiw.lvlIntCollab', labelFb: 'Collaborative', fill: '25%',  color: '#34D399', descKey: 'hiw.lvlIntCollabDesc', descFb: 'Light pressure — suited for strategic partnerships'         } },
+  tr: { preBid: false, pref: false,                 awardModes: [],                          intensity: { labelKey: 'hiw.lvlIntCollab', labelFb: 'Collaborative', fill: '25%',  color: '#34D399', descKey: 'hiw.lvlIntCollabDesc', descFb: 'Light pressure — suited for strategic partnerships'         } },
 }
 
 // Compatibility matrix
 const compatRows = [
   { labelKey: 'hiw.scoringTablePreBid', data: { ds: true, en: true, du: true, jp: true, sb: false, tr: false } },
-  { labelKey: 'hiw.scoringTablePref', data: { ds: true, en: true, du: true, jp: false, sb: true, tr: false } },
+  { labelKey: 'hiw.scoringTablePref', data: { ds: true, en: true, du: true, jp: true, sb: true, tr: false } },
   { labelKey: 'hiw.scoringTableAward', data: { ds: true, en: true, du: true, jp: true, sb: true, tr: false } },
   { labelKey: 'hiw.scoringTableRank', data: { ds: false, en: true, du: false, jp: true, sb: true, tr: false } },
   { labelKey: 'hiw.scoringTableNoRank', data: { ds: false, en: false, du: false, jp: true, sb: true, tr: false } },
 ]
 
-const dimIcons = ['💰', '👥', '🏅', '⭐', '🔥', '📏']
+const dimIcons = ['mdi-cash-multiple', 'mdi-account-group-outline', 'mdi-medal-outline', 'mdi-star-outline', 'mdi-fire', 'mdi-ruler']
 const concepts = ['PreBid', 'Preference', 'Awarding', 'Intensity']
 
 // Concept levels — translated via keys
 const conceptLevelKeys: Record<string, { icon?: string; labelKey: string; descKey: string; fill?: string; color?: string }[]> = {
   PreBid: [
-    { icon: '✅', labelKey: 'hiw.lvlPreBidEnabled', descKey: 'hiw.lvlPreBidEnabledDesc' },
-    { icon: '⛔', labelKey: 'hiw.lvlPreBidDisabled', descKey: 'hiw.lvlPreBidDisabledDesc' },
+    { icon: 'mdi-clock-check-outline',  labelKey: 'hiw.lvlPreBidEnabled',  descKey: 'hiw.lvlPreBidEnabledDesc' },
+    { icon: 'mdi-clock-remove-outline', labelKey: 'hiw.lvlPreBidDisabled', descKey: 'hiw.lvlPreBidDisabledDesc' },
   ],
   Preference: [
-    { icon: '⚖️', labelKey: 'hiw.lvlPrefNone', descKey: 'hiw.lvlPrefNoneDesc' },
-    { icon: '📝', labelKey: 'hiw.lvlPrefNonFin', descKey: 'hiw.lvlPrefNonFinDesc' },
-    { icon: '💰', labelKey: 'hiw.lvlPrefFin', descKey: 'hiw.lvlPrefFinDesc' },
+    { icon: 'mdi-equal',              labelKey: 'hiw.lvlPrefNone',    descKey: 'hiw.lvlPrefNoneDesc' },
+    { icon: 'mdi-text-box-outline',   labelKey: 'hiw.lvlPrefNonFin',  descKey: 'hiw.lvlPrefNonFinDesc' },
+    { icon: 'mdi-currency-eur',       labelKey: 'hiw.lvlPrefFin',     descKey: 'hiw.lvlPrefFinDesc' },
   ],
   Awarding: [
-    { icon: '🏆', labelKey: 'hiw.lvlAwardAward', descKey: 'hiw.lvlAwardAwardDesc' },
-    { icon: '📊', labelKey: 'hiw.lvlAwardRank', descKey: 'hiw.lvlAwardRankDesc' },
-    { icon: '🔍', labelKey: 'hiw.lvlAwardNoRank', descKey: 'hiw.lvlAwardNoRankDesc' },
+    { icon: 'mdi-trophy-outline',     labelKey: 'hiw.lvlAwardAward',  descKey: 'hiw.lvlAwardAwardDesc' },
+    { icon: 'mdi-format-list-numbered', labelKey: 'hiw.lvlAwardRank', descKey: 'hiw.lvlAwardRankDesc' },
+    { icon: 'mdi-eye-outline',        labelKey: 'hiw.lvlAwardNoRank', descKey: 'hiw.lvlAwardNoRankDesc' },
   ],
   Intensity: [
-    { labelKey: 'hiw.lvlIntCollab', descKey: 'hiw.lvlIntCollabDesc', fill: '33%', color: '#34D399' },
-    { labelKey: 'hiw.lvlIntCompet', descKey: 'hiw.lvlIntCompetDesc', fill: '66%', color: '#FBBF24' },
-    { labelKey: 'hiw.lvlIntAggr', descKey: 'hiw.lvlIntAggrDesc', fill: '100%', color: '#EF4444' },
+    { labelKey: 'hiw.lvlIntCollab', descKey: 'hiw.lvlIntCollabDesc', fill: '25%',  color: '#34D399' },
+    { labelKey: 'hiw.lvlIntCompet', descKey: 'hiw.lvlIntCompetDesc', fill: '50%',  color: '#FBBF24' },
+    { labelKey: 'hiw.lvlIntHigh',   descKey: 'hiw.lvlIntHighDesc',   fill: '75%',  color: '#F59E0B' },
+    { labelKey: 'hiw.lvlIntAggr',   descKey: 'hiw.lvlIntAggrDesc',   fill: '100%', color: '#EF4444' },
   ],
 }
 
@@ -673,7 +664,7 @@ function famIllustrationBg(f: string) {
 }
 function famTryBtnStyle(f: string) {
   const c = gfc(f)
-  return { background: c.border, color: '#FFF' }
+  return { background: c.bg, color: c.text, border: `1px solid ${c.border}` }
 }
 </script>
 
@@ -745,7 +736,7 @@ function famTryBtnStyle(f: string) {
   border-left-color: #1D1D1B;
   background: #F3F4F6;
 }
-.sidebar-icon { font-size: 16px; flex-shrink: 0; }
+.sidebar-icon { flex-shrink: 0; opacity: 0.7; }
 .sidebar-label { overflow: hidden; text-overflow: ellipsis; }
 
 /* ═══ BODY (scrollable content) ═══ */
@@ -861,6 +852,7 @@ function famTryBtnStyle(f: string) {
   background: #F9FAFB; border-radius: 8px;
   padding: 16px 20px; margin-bottom: 20px;
   border: 1px solid #E9EAEC;
+  max-width: 520px;
 }
 .savings-compare-title {
   font-size: 12px; font-weight: 600; color: #6B7280;
@@ -873,14 +865,14 @@ function famTryBtnStyle(f: string) {
 }
 .savings-bar-label {
   font-size: 12px; font-weight: 600; color: #374151;
-  width: 44px; flex-shrink: 0;
+  width: 120px; flex-shrink: 0;
 }
 .savings-bar-track {
-  flex: 1; height: 10px; border-radius: 5px;
+  flex: 1; height: 6px; border-radius: 3px;
   background: #E5E7EB; overflow: hidden;
 }
 .savings-bar-fill {
-  height: 100%; border-radius: 5px;
+  height: 100%; border-radius: 3px;
   transition: width 0.5s ease-out;
 }
 .savings-bar-value {
@@ -918,7 +910,6 @@ function famTryBtnStyle(f: string) {
 .legend-row {
   display: flex; align-items: center; gap: 6px;
 }
-.legend-emoji { font-size: 13px; }
 .legend-name {
   font-size: 12px; font-weight: 700; color: #6B7280; flex: 1;
 }
@@ -993,7 +984,7 @@ function famTryBtnStyle(f: string) {
   display: flex; align-items: center; gap: 8px;
   margin-bottom: 5px;
 }
-.fam-emoji { font-size: 16px; }
+.fam-icon { flex-shrink: 0; }
 .fam-name { font-size: 14px; font-weight: 700; flex: 1; }
 .fam-savings {
   font-size: 11px; font-weight: 600;
@@ -1009,12 +1000,6 @@ function famTryBtnStyle(f: string) {
 .fam-card:hover .fam-chevron { color: #6B7280; background: rgba(0,0,0,0.08); }
 .fam-chevron.open { transform: rotate(180deg); }
 .fam-short { font-size: 12px; color: #6B7280; line-height: 1.5; margin-bottom: 8px; }
-.fam-pills { display: flex; flex-wrap: wrap; gap: 5px; }
-.pill {
-  font-size: 11px; font-weight: 600;
-  padding: 3px 9px; border-radius: 4px;
-  white-space: nowrap;
-}
 
 /* Expandable detail with fade-in animation */
 .fam-detail {
@@ -1030,106 +1015,198 @@ function famTryBtnStyle(f: string) {
 .fam-detail-inner.fam-detail-visible {
   opacity: 1;
 }
-/* ═══ OPTIONS GRID ═══ */
-.fam-opt-grid {
+.fam-detail-cols {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  margin-top: 14px;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 16px;
+  align-items: start;
+  padding-top: 10px;
 }
-.fam-opt-block {
-  background: #F9FAFB;
-  border: 1px solid #E9EAEC;
-  border-radius: 6px;
-  padding: 10px 12px;
+.fam-detail-left {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
 }
-.fam-opt-title {
+.fam-detail-right {
+  min-width: 0;
+}
+/* ═══ OPTIONS LIST ═══ */
+.fam-opt-list {
+  display: flex; flex-direction: column;
+  gap: 4px; margin-top: 0;
+}
+
+/* One card per criterion */
+.opt-section {
+  background: #FAFAFA;
+  border: 1px solid #F0F0F0;
+  border-radius: 8px;
+  padding: 7px 12px;
+  display: flex; flex-direction: column; gap: 0;
+}
+.opt-section-hdr {
   display: flex; align-items: center; gap: 5px;
   font-size: 10px; font-weight: 700; text-transform: uppercase;
-  letter-spacing: 0.06em; color: #9CA3AF;
-  margin-bottom: 7px;
+  letter-spacing: 0.07em; color: #A0A0A0;
+  margin-bottom: 5px;
 }
-.fam-opt-chips {
-  display: flex; flex-wrap: wrap; gap: 5px; align-items: center;
-}
-.opt-chip {
-  display: inline-flex; align-items: center; gap: 3px;
-  font-size: 11px; font-weight: 600;
-  padding: 3px 8px; border-radius: 4px;
-  cursor: default;
-  transition: opacity 0.15s;
-}
-.opt-chip:hover { opacity: 0.8; }
-.opt-chip--neutral { background: #E5E7EB; color: #374151; }
-.opt-chip--on     { /* color/bg set via inline style per family */ }
-.opt-chip--off    { background: #F3F4F6; color: #C5C7C9; }
 
-/* Intensity row */
-.fam-opt-intensity {
-  flex-direction: column; align-items: flex-start; gap: 4px;
+/* Each option: badge left, description right */
+.opt-sub-row {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 8px;
+  align-items: center;
+  padding: 3px 0;
+  border-top: 1px solid #F3F4F6;
 }
-.opt-intensity-bar-wrap { width: 100%; }
-.opt-intensity-bar {
-  width: 100%; height: 5px; border-radius: 3px;
-  background: #E5E7EB; overflow: hidden;
+.opt-sub-row--rec {
+  grid-template-columns: 100px 1fr auto;
 }
-.opt-intensity-fill { height: 100%; border-radius: 3px; }
-.opt-intensity-label {
-  font-size: 11px; font-weight: 700;
+.opt-sub-row:first-of-type {
+  border-top: none;
 }
-.opt-intensity-desc {
-  font-size: 10px; color: #9CA3AF; line-height: 1.3;
+.opt-sub-name {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 11px; font-weight: 600; color: #374151;
+  background: #fff;
+  border: 1px solid #E5E7EB;
+  border-radius: 5px;
+  padding: 2px 8px;
+  white-space: nowrap;
+  width: fit-content;
+}
+.opt-rec-tag {
+  display: inline-flex; align-items: center;
+  font-size: 9px; font-weight: 600;
+  color: #065F46; background: #D1FAE5;
+  border-radius: 3px; padding: 1px 5px;
+  text-transform: none; letter-spacing: 0;
+  white-space: nowrap;
+}
+.opt-sub-desc {
+  font-size: 11px; color: #6B7280; line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.opt-sep { color: #C5C7C9; font-size: 12px; }
+.opt-pref-note {
+  display: flex; align-items: flex-start; gap: 5px;
+  font-size: 10px; color: #92400E; line-height: 1.4;
+  background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 4px;
+  padding: 5px 7px; margin-top: 4px;
+}
+
+/* Intensity row — full-width flex (no grid split) */
+.opt-sub-row--intensity {
+  display: flex; align-items: center; gap: 8px;
+  grid-template-columns: none;
+  border-top: none;
+  padding: 0;
+}
+.opt-int-track {
+  width: 44px; height: 4px; border-radius: 2px;
+  background: #E9EAEC; overflow: hidden; flex-shrink: 0;
+}
+.opt-int-fill { height: 100%; border-radius: 2px; }
+.opt-int-label { font-size: 12px; font-weight: 600; flex-shrink: 0; }
+
+/* Flow steps */
+.fam-flow-steps {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: 1px solid;
+}
+.fam-flow-step {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex: 0 0 auto;
+}
+.fam-flow-label {
+  font-size: 10px; font-weight: 600; color: #374151;
+  white-space: nowrap;
+}
+.fam-flow-arrow {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
 }
 
 .fam-desc-text {
-  font-size: 13px; color: #374151; line-height: 1.6;
-  margin-top: 12px; padding-top: 10px;
-  border-top: 1px solid rgba(0,0,0,0.06);
+  font-size: 12px; color: #374151; line-height: 1.6;
+  margin-top: 10px;
 }
-.fam-use-text {
-  font-size: 12px; color: #6B7280; font-style: italic;
-  margin-top: 6px; line-height: 1.5;
+
+/* "Best when" tip */
+.fam-tip {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin-top: 6px;
+  padding: 6px 10px;
+  background: rgba(0,0,0,0.025);
+  border-radius: 5px;
+  border-left: 2px solid #D1D5DB;
+  font-size: 11px; color: #6B7280; line-height: 1.45;
+}
+.fam-tip .v-icon { flex-shrink: 0; margin-top: 1px; }
+
+/* Traditional: no options placeholder */
+.fam-no-options {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 12px;
+  background: #FAFAFA;
+  border: 1px solid #F0F0F0;
+  border-radius: 8px;
+  font-size: 12px; color: #9CA3AF; line-height: 1.5;
 }
 
 /* Illustration inside expanded card */
 .fam-illustration {
-  margin-top: 12px;
-  padding: 0 0 8px;
+  margin-top: 0;
+  padding: 0 0 6px;
   border-radius: 8px;
   border: 1px solid;
   overflow: hidden;
 }
 .fam-chart-wrap {
   width: 100%;
-  max-width: 450px; /* 450 × (200/300) = 300px height — exact 3:2 → zero letterboxing */
+  max-width: 100%;
   margin: 0 auto;
   pointer-events: none;
 }
 .fam-chart-wrap :deep(.chart-container) {
-  height: 300px;
+  height: 220px;
   border: none;
   border-radius: 0;
 }
-.fam-illus-caption {
-  font-size: 11px; color: #9CA3AF; text-align: center;
-  margin-top: 6px; line-height: 1.5;
-  padding: 0 12px;
-}
 
 .fam-example {
-  font-size: 12px; color: #9CA3AF; line-height: 1.5;
-  margin-top: 10px; padding: 8px 12px;
+  font-size: 11px; color: #B0B0B0; line-height: 1.5;
+  margin-top: 6px; padding: 6px 10px;
   background: rgba(0,0,0,0.02); border-radius: 4px;
-  border-left: 2px solid #D1D5DB;
+  border-left: 2px solid #E5E7EB;
 }
 
 /* Try this type button */
 .fam-try-btn {
-  display: inline-flex; align-items: center; gap: 6px;
-  margin-top: 12px; padding: 7px 16px;
-  border: none; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  margin-top: 12px; padding: 8px 0;
+  border: 1px solid rgba(0,0,0,0.1); border-radius: 6px;
   font-size: 12px; font-weight: 600;
-  cursor: pointer;
+  cursor: pointer; width: 100%;
   transition: opacity 0.2s, transform 0.15s;
 }
 .fam-try-btn:hover {
@@ -1182,7 +1259,7 @@ function famTryBtnStyle(f: string) {
   padding: 10px 6px;
   border-bottom: 2px solid #E9EAEC;
 }
-.compat-th-emoji { display: block; font-size: 18px; margin-bottom: 3px; }
+.compat-th-icon { display: block; margin-bottom: 3px; }
 .compat-th-name { font-size: 11px; font-weight: 700; }
 .compat-label {
   font-size: 13px; font-weight: 500; color: #6B7280;
@@ -1226,7 +1303,7 @@ function famTryBtnStyle(f: string) {
 .concept-level {
   display: flex; align-items: center; gap: 10px;
 }
-.concept-level-icon { font-size: 15px; flex-shrink: 0; width: 22px; text-align: center; }
+.concept-level-icon { flex-shrink: 0; width: 22px; }
 .concept-level-label {
   font-size: 12px; font-weight: 700; color: #374151;
   flex-shrink: 0; min-width: 88px;
@@ -1287,6 +1364,12 @@ function famTryBtnStyle(f: string) {
 
 /* ═══ RESPONSIVE ═══ */
 @media (max-width: 700px) {
+  .fam-detail-cols {
+    grid-template-columns: 1fr;
+  }
+  .fam-detail-right {
+    position: static;
+  }
   .hiw-layout { flex-direction: column; height: auto; max-height: 88vh; }
   .hiw-sidebar {
     width: 100%; flex-direction: row; border-right: none;
@@ -1315,7 +1398,7 @@ function famTryBtnStyle(f: string) {
   .phase-flow-connector { height: 48px; }
   .connector-line { width: 16px; }
   .compat-table { font-size: 12px; }
-  .savings-bar-label { width: 36px; font-size: 11px; }
+  .savings-bar-label { width: 100px; font-size: 11px; }
   .legend-body { flex-direction: column; }
 }
 </style>

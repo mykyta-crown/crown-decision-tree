@@ -34,7 +34,7 @@
         <div class="dt4-criteria">
           <div v-for="(q, qi) in questions" :key="qi" class="crit-row">
             <div class="crit-label">
-              <div class="crit-icon">{{ q.icon }}</div>
+              <v-icon :icon="q.icon" size="18" color="#9CA3AF" class="crit-icon" />
               <div>
                 <div class="crit-name">{{ q.label }}</div>
                 <div class="crit-hint">{{ q.hint }}</div>
@@ -80,7 +80,7 @@
                 </div>
               </div>
               <div class="result-chart">
-                <DecisionTreeCalculatorChartsAChart
+                <ArchitectCalculatorChartsAChart
                   :family="topResult.family"
                   :color="topColor.border"
                   ccy="EUR"
@@ -115,12 +115,12 @@
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
-import { useCalculatorStore } from '~/stores/decisionTree/calculator'
-import { getScores, Q_OPTS, type ScoreResult } from '~/utils/decisionTree/scoring-engine'
-import { FC, gfc } from '~/utils/decisionTree/constants'
+import { useCalculatorStore } from '~/stores/architect/calculator'
+import { getScores, Q_OPTS, type ScoreResult } from '~/utils/architect/scoring-engine'
+import { FC, gfc } from '~/utils/architect/constants'
 import useTranslations from '~/composables/useTranslations'
 
-const { t, pageTranslations } = useTranslations('decisiontree')
+const { t, pageTranslations } = useTranslations('architect')
 const show = defineModel<boolean>({ default: false })
 const store = useCalculatorStore()
 
@@ -129,12 +129,12 @@ interface DisplayResult extends ScoreResult {
 }
 
 const questions = computed(() => [
-  { label: t('v4.spend'), icon: '💰', hint: t('v4.spendHint'), options: pageTranslations.value?.v4?.spendOpts || Q_OPTS[0] },
-  { label: t('v4.suppliers'), icon: '👥', hint: t('v4.suppliersHint'), options: pageTranslations.value?.v4?.suppliersOpts || Q_OPTS[1] },
-  { label: t('v4.awarding'), icon: '🏆', hint: t('v4.awardingHint'), options: pageTranslations.value?.v4?.awardingOpts || Q_OPTS[2] },
-  { label: t('v4.preferenceQ'), icon: '⚖️', hint: t('v4.preferenceHint'), options: pageTranslations.value?.v4?.preferenceOpts || Q_OPTS[3] },
-  { label: t('v4.intensity'), icon: '🔥', hint: t('v4.intensityHint'), options: pageTranslations.value?.v4?.intensityOpts || Q_OPTS[4] },
-  { label: t('v4.priceGap'), icon: '📊', hint: t('v4.priceGapHint'), options: pageTranslations.value?.v4?.priceGapOpts || Q_OPTS[5] },
+  { label: t('v4.spend'),       icon: 'mdi-cash-multiple',          hint: t('v4.spendHint'),       options: pageTranslations.value?.v4?.spendOpts      || Q_OPTS[0] },
+  { label: t('v4.suppliers'),  icon: 'mdi-account-group-outline',  hint: t('v4.suppliersHint'),   options: pageTranslations.value?.v4?.suppliersOpts  || Q_OPTS[1] },
+  { label: t('v4.awarding'),   icon: 'mdi-trophy-outline',         hint: t('v4.awardingHint'),    options: pageTranslations.value?.v4?.awardingOpts   || Q_OPTS[2] },
+  { label: t('v4.preferenceQ'), icon: 'mdi-star-outline',          hint: t('v4.preferenceHint'),  options: pageTranslations.value?.v4?.preferenceOpts || Q_OPTS[3] },
+  { label: t('v4.intensity'),  icon: 'mdi-fire',                   hint: t('v4.intensityHint'),   options: pageTranslations.value?.v4?.intensityOpts  || Q_OPTS[4] },
+  { label: t('v4.priceGap'),   icon: 'mdi-ruler',                  hint: t('v4.priceGapHint'),    options: pageTranslations.value?.v4?.priceGapOpts   || Q_OPTS[5] },
 ])
 
 // Selection state: 0 = not selected, 1-3 = option index
@@ -262,7 +262,6 @@ watch(show, (val) => { if (val) reset() })
 }
 
 .crit-icon {
-  font-size: 20px;
   width: 36px;
   height: 36px;
   border-radius: 10px;
@@ -286,10 +285,13 @@ watch(show, (val) => { if (val) reset() })
 }
 
 .crit-pills {
-  display: contents;
+  grid-column: 2 / -1;
+  display: flex;
+  gap: 8px;
 }
 
 .pill {
+  flex: 1;
   padding: 9px 8px;
   border-radius: 8px;
   border: 1.5px solid #E5E7EB;
@@ -502,14 +504,15 @@ watch(show, (val) => { if (val) reset() })
   }
 
   .crit-pills {
+    grid-column: 1 / -1;
     display: flex;
     flex-wrap: wrap;
     gap: 6px;
-    grid-column: 1;
   }
 
   .pill {
-    flex: none;
+    flex: 1;
+    min-width: 70px;
     padding: 7px 10px;
     font-size: 11px;
     white-space: normal;
