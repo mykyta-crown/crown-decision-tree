@@ -212,9 +212,8 @@ export const useCalculatorStore = defineStore('calculator', () => {
   const p3Pct = computed(() => (phase.value >= 3 || visitedPhase3.value) ? 100 : 0)
 
   const statusLabel = computed(() => {
-    if (phase.value >= 3) return 'eAuction'
-    if (lotTop3.value.some(t => t.length > 0)) return 'Recommended'
-    if (evName.value.trim()) return 'In progress'
+    if (p3Pct.value === 100 && lotTop3.value.some(t => t.length > 0)) return 'Recommended'
+    if (p2Pct.value > 0) return 'In Progress'
     return 'Draft'
   })
 

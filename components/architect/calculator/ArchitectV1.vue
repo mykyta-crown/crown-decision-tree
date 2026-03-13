@@ -1,235 +1,168 @@
 <template>
-  <v-dialog v-model="show" max-width="1460" scrollable>
-    <v-card class="dt-card" rounded="lg">
+  <v-dialog v-model="show" max-width="1200" scrollable>
+    <v-card class="ov-card" rounded="lg">
+
       <!-- Header -->
-      <div class="dt-header">
+      <div class="ov-header">
         <div class="d-flex align-center ga-3">
-          <div class="dt-icon">
-            <v-icon size="20" color="white">mdi-file-tree</v-icon>
+          <div class="ov-icon">
+            <v-icon size="20" color="white">mdi-tag-multiple-outline</v-icon>
           </div>
           <div>
-            <div class="dt-title">{{ t('v1.title') }}</div>
-            <div class="dt-sub">{{ t('v1.subtitle') }}</div>
+            <div class="ov-title">{{ t('v1.title') }}</div>
+            <div class="ov-sub">{{ t('v1.subtitle') }}</div>
           </div>
         </div>
-        <div class="d-flex align-center ga-3">
-          <div class="dt-legend">
-            <span class="legend-tag legend-tag--high">{{ t('v1.mostRecommended') }}</span>
-            <span class="legend-arrow">→</span>
-            <span class="legend-tag legend-tag--low">{{ t('v1.leastRecommended') }}</span>
+        <v-btn icon variant="text" size="small" @click="show = false">
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
+      </div>
+
+      <!-- Grid -->
+      <div class="ov-body">
+        <div class="fam-grid">
+          <div v-for="fam in families" :key="fam.key" class="fam-card">
+
+            <!-- Top band: name + savings + intensity -->
+            <div class="fam-top" :style="{ background: gfc(fam.family).bg, borderBottom: `2px solid ${gfc(fam.family).border}` }">
+              <div class="fam-top-left">
+                <div class="fam-icon-wrap" :style="{ background: gfc(fam.family).border + '22', borderColor: gfc(fam.family).border + '44' }">
+                  <v-icon :icon="fam.icon" size="16" :color="gfc(fam.family).text" />
+                </div>
+                <span class="fam-name" :style="{ color: gfc(fam.family).text }">{{ t(fam.nameKey) }}</span>
+              </div>
+              <div class="fam-top-right">
+                <span class="fam-savings" :style="{ color: gfc(fam.family).text }">{{ fam.savingsLabel }}</span>
+                <div class="int-pip-row">
+                  <div
+                    v-for="i in 4" :key="i"
+                    class="int-pip"
+                    :style="{ background: i <= fam.intensityLevel ? famOptionDetails[fam.key].intensity.color : '#E5E7EB' }"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <!-- Chart illustration -->
+            <div class="fam-chart-area" :style="{ background: gfc(fam.family).bg }">
+              <ArchitectCalculatorChartsAChart
+                :family="fam.family"
+                :color="gfc(fam.family).border"
+                ccy="EUR"
+              />
+            </div>
+
+            <!-- Short description -->
+            <div class="fam-body">
+              <p class="fam-desc">{{ t(fam.shortKey) }}</p>
+
+              <!-- Flow steps -->
+              <div class="fam-flow">
+                <template v-for="(step, si) in famFlowKeys[fam.key]" :key="si">
+                  <div class="flow-step">
+                    <v-icon :icon="step.icon" size="10" :color="gfc(fam.family).border" />
+                    <span>{{ t(step.labelKey) }}</span>
+                  </div>
+                  <span v-if="si < famFlowKeys[fam.key].length - 1" class="flow-sep" :style="{ color: gfc(fam.family).border }">›</span>
+                </template>
+              </div>
+
+              <!-- Option chips -->
+              <div class="fam-chips">
+                <span v-if="famOptionDetails[fam.key].preBid" class="chip">
+                  <v-icon size="9" color="#6B7280">mdi-clock-fast</v-icon>
+                  {{ t('v1.preBid') }}
+                </span>
+                <span v-if="famOptionDetails[fam.key].pref" class="chip">
+                  <v-icon size="9" color="#6B7280">mdi-scale-balance</v-icon>
+                  {{ t('v1.preference') }}
+                </span>
+                <span v-for="mode in famOptionDetails[fam.key].awardModes" :key="mode" class="chip">
+                  <v-icon size="9" color="#6B7280">{{ mode === 'award' ? 'mdi-trophy-outline' : mode === 'rank' ? 'mdi-format-list-numbered' : 'mdi-eye-outline' }}</v-icon>
+                  {{ mode === 'award' ? t('hiw.lvlAwardAward') : mode === 'rank' ? t('hiw.lvlAwardRank') : t('hiw.lvlAwardNoRank') }}
+                </span>
+              </div>
+            </div>
+
           </div>
-          <v-btn icon variant="text" size="small" @click="show = false">
-            <v-icon>mdi-close</v-icon>
-          </v-btn>
         </div>
       </div>
 
-      <!-- Canvas -->
-      <div class="dt-canvas-wrap">
-        <div class="dt-canvas">
-          <!-- ═══ SVG FLOW ARROWS ═══ -->
-          <svg class="dt-svg" viewBox="0 0 1420 520">
-            <!-- Arrow G1 → G2: from EN center to DU center -->
-            <line x1="320" y1="82" x2="598" y2="82" stroke="#D1D5DB" stroke-width="1.5" stroke-dasharray="6,4" />
-            <polygon points="596,78 604,82 596,86" fill="#D1D5DB" />
-            <!-- Arrow G2 → G3: from JP center to SB center -->
-            <line x1="810" y1="82" x2="1088" y2="82" stroke="#D1D5DB" stroke-width="1.5" stroke-dasharray="6,4" />
-            <polygon points="1086,78 1094,82 1086,86" fill="#D1D5DB" />
-          </svg>
-
-          <!-- ═══ GROUP LABELS ═══ -->
-          <div class="group-label" style="left: 10px; top: 8px; width: 410px">{{ t('v1.veryHighCompetition') }}</div>
-          <div class="group-label" style="left: 500px; top: 8px; width: 410px">{{ t('v1.highCompetition') }}</div>
-          <div class="group-label" style="left: 990px; top: 8px; width: 410px">{{ t('v1.lowNoCompetition') }}</div>
-
-          <!-- ═══ ELIMINATION CRITERIA (on arrows between groups) ═══ -->
-          <!-- Between G1 and G2 -->
-          <div class="cond-group" style="left: 360px; top: 42px; width: 200px">
-            <div class="cond cond--static">{{ t('v1.lessThan3Suppliers') }}</div>
-            <div class="cond-or">{{ t('v1.or') }}</div>
-            <div class="cond cond--static">{{ t('v1.gapOver7') }}</div>
-          </div>
-
-          <!-- Between G2 and G3 -->
-          <div class="cond" style="left: 902px; top: 68px">{{ t('v1.smallSpend') }}</div>
-
-          <!-- ═══ AUCTION CARDS ═══ -->
-
-          <!-- 1. Double Scenario -->
-          <div class="sc" style="left: 10px; top: 160px">
-            <div class="sc-top" :style="{ borderColor: c.DS.border, background: c.DS.bg }">
-              <ArchitectCalculatorChartsAChart family="Double Scenario" :color="c.DS.border" ccy="EUR" />
-            </div>
-            <div class="sc-body">
-              <div class="sc-name" :style="{ color: c.DS.text }">
-                <span class="sc-dot" :style="{ background: c.DS.border }" />
-                {{ t('families.doubleScenario') }}
-              </div>
-              <div class="sc-savings">~15-25% {{ t('v1.savings') }}</div>
-              <div class="sc-comp">
-                <span v-for="i in 5" :key="i" class="pip" :style="{ background: c.DS.border }" />
-                <span class="comp-txt">{{ t('v1.veryHigh') }}</span>
-              </div>
-              <div class="pills">
-                <span class="p">{{ t('v1.preBid') }}</span>
-                <span class="p">{{ t('v1.preference') }}</span>
-                <span class="p p--y">{{ t('v1.competition') }} +++++</span>
-                <span class="p">{{ t('v1.awardPostAward') }}</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- 2. English Reverse -->
-          <div class="sc" style="left: 220px; top: 160px">
-            <div class="sc-top" :style="{ borderColor: c.EN.border, background: c.EN.bg }">
-              <ArchitectCalculatorChartsAChart family="English" :color="c.EN.border" ccy="EUR" />
-            </div>
-            <div class="sc-body">
-              <div class="sc-name" :style="{ color: c.EN.text }">
-                <span class="sc-dot" :style="{ background: c.EN.border }" />
-                {{ t('families.english') }}
-              </div>
-              <div class="sc-savings">~10-18% {{ t('v1.savings') }}</div>
-              <div class="sc-comp">
-                <span v-for="i in 5" :key="i" class="pip" :style="i <= 4 ? { background: c.EN.border } : {}" />
-                <span class="comp-txt">{{ t('v1.high') }}</span>
-              </div>
-              <div class="pills">
-                <span class="p">{{ t('v1.preBid') }}</span>
-                <span class="p">{{ t('v1.preference') }}</span>
-                <span class="p">{{ t('v1.ceiling') }}</span>
-                <span class="p p--y">{{ t('v1.mostOptions') }}</span>
-                <span class="p">{{ t('v1.awardPostAward') }}</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- 3. Dutch Reverse -->
-          <div class="sc" style="left: 500px; top: 160px">
-            <div class="sc-top" :style="{ borderColor: c.DU.border, background: c.DU.bg }">
-              <ArchitectCalculatorChartsAChart family="Dutch" :color="c.DU.border" ccy="EUR" />
-            </div>
-            <div class="sc-body">
-              <div class="sc-name" :style="{ color: c.DU.text }">
-                <span class="sc-dot" :style="{ background: c.DU.border }" />
-                {{ t('families.dutch') }}
-              </div>
-              <div class="sc-savings">~8-15% {{ t('v1.savings') }}</div>
-              <div class="sc-comp">
-                <span v-for="i in 5" :key="i" class="pip" :style="i <= 3 ? { background: c.DU.border } : {}" />
-                <span class="comp-txt">{{ t('v1.high') }}</span>
-              </div>
-              <div class="pills">
-                <span class="p">{{ t('v1.preBid') }}</span>
-                <span class="p">{{ t('v1.preference') }}</span>
-                <span class="p p--y">{{ t('v1.competition') }} +++</span>
-                <span class="p p--g">{{ t('v1.awardBinding') }}</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- 4. Japanese Reverse -->
-          <div class="sc" style="left: 710px; top: 160px">
-            <div class="sc-top" :style="{ borderColor: c.JP.border, background: c.JP.bg }">
-              <ArchitectCalculatorChartsAChart family="Japanese" :color="c.JP.border" ccy="EUR" />
-            </div>
-            <div class="sc-body">
-              <div class="sc-name" :style="{ color: c.JP.text }">
-                <span class="sc-dot" :style="{ background: c.JP.border }" />
-                {{ t('families.japanese') }}
-              </div>
-              <div class="sc-savings">~8-15% {{ t('v1.savings') }}</div>
-              <div class="sc-comp">
-                <span v-for="i in 5" :key="i" class="pip" :style="i <= 3 ? { background: c.JP.border } : {}" />
-                <span class="comp-txt">{{ t('v1.high') }}</span>
-              </div>
-              <div class="pills">
-                <span class="p">{{ t('v1.preBid') }}</span>
-                <span class="p">{{ t('v1.preference') }}</span>
-                <span class="p p--y">{{ t('v1.competition') }} +++</span>
-                <span class="p p--w">{{ t('v1.rankingOnly') }}</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- 5. Sealed Bid -->
-          <div class="sc" style="left: 990px; top: 160px">
-            <div class="sc-top" :style="{ borderColor: c.SB.border, background: c.SB.bg }">
-              <ArchitectCalculatorChartsAChart family="Sealed Bid" :color="c.SB.border" ccy="EUR" />
-            </div>
-            <div class="sc-body">
-              <div class="sc-name" :style="{ color: c.SB.text }">
-                <span class="sc-dot" :style="{ background: c.SB.border }" />
-                {{ t('families.sealedBid') }}
-              </div>
-              <div class="sc-savings">~3-8% {{ t('v1.savings') }}</div>
-              <div class="sc-comp">
-                <span v-for="i in 5" :key="i" class="pip" :style="i <= 2 ? { background: c.SB.border } : {}" />
-                <span class="comp-txt">{{ t('v1.medium') }}</span>
-              </div>
-              <div class="pills">
-                <span class="p">{{ t('v1.preference') }}</span>
-                <span class="p p--y">{{ t('v1.competition') }} ++</span>
-                <span class="p">{{ t('v1.awardPostAward') }}</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- 6. Traditional Negotiation -->
-          <div class="sc" style="left: 1200px; top: 160px">
-            <div class="sc-top" :style="{ borderColor: c.TR.border, background: c.TR.bg }">
-              <ArchitectCalculatorChartsAChart family="Traditional" :color="c.TR.border" ccy="EUR" />
-            </div>
-            <div class="sc-body">
-              <div class="sc-name" :style="{ color: c.TR.text }">
-                <span class="sc-dot" :style="{ background: c.TR.border }" />
-                {{ t('families.traditional') }}
-              </div>
-              <div class="sc-savings">~0-3% {{ t('v1.savings') }}</div>
-              <div class="sc-comp">
-                <span v-for="i in 5" :key="i" class="pip" :style="i <= 1 ? { background: c.TR.border } : {}" />
-                <span class="comp-txt">{{ t('v1.low') }}</span>
-              </div>
-              <div class="pills">
-                <span class="p">{{ t('v1.preference') }}</span>
-                <span class="p p--y">{{ t('v1.competition') }} +</span>
-                <span class="p">{{ t('v1.postAward') }}</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- ═══ DUTCH vs JAPANESE DISTINCTION ═══ -->
-          <div class="dt-note" style="left: 500px; top: 475px; width: 410px">
-            {{ t('v1.awardBindingNote') }} <strong>Dutch</strong>
-            <span class="dt-note-sep">|</span>
-            {{ t('v1.noAwardNote') }} <strong>Japanese</strong>
-          </div>
-        </div>
-      </div>
     </v-card>
   </v-dialog>
 </template>
 
 <script setup lang="ts">
-import { FC } from '~/utils/architect/constants'
+import { gfc } from '~/utils/architect/constants'
 import useTranslations from '~/composables/useTranslations'
 
 const { t } = useTranslations('architect')
 const show = defineModel<boolean>({ default: false })
 
-const c = {
-  DS: FC['Double Scenario'],
-  EN: FC['English'],
-  DU: FC['Dutch'],
-  JP: FC['Japanese'],
-  SB: FC['Sealed Bid'],
-  TR: FC['Traditional'],
+const families = [
+  { key: 'ds', family: 'Double Scenario', icon: 'mdi-layers-outline',    nameKey: 'families.doubleScenario', shortKey: 'v5.dsShort', savingsLabel: '12–18%', intensityLevel: 4 },
+  { key: 'en', family: 'English',          icon: 'mdi-gavel',             nameKey: 'families.english',        shortKey: 'v5.enShort', savingsLabel: '10–15%', intensityLevel: 3 },
+  { key: 'du', family: 'Dutch',            icon: 'mdi-trending-up',        nameKey: 'families.dutch',          shortKey: 'v5.duShort', savingsLabel: '8–12%',  intensityLevel: 2 },
+  { key: 'jp', family: 'Japanese',         icon: 'mdi-trending-down',      nameKey: 'families.japanese',       shortKey: 'v5.jpShort', savingsLabel: '8–12%',  intensityLevel: 2 },
+  { key: 'sb', family: 'Sealed Bid',       icon: 'mdi-email-lock-outline', nameKey: 'families.sealedBid',      shortKey: 'v5.sbShort', savingsLabel: '5–8%',   intensityLevel: 1 },
+  { key: 'tr', family: 'Traditional',      icon: 'mdi-handshake-outline',  nameKey: 'families.traditional',    shortKey: 'v5.trShort', savingsLabel: '2–5%',   intensityLevel: 1 },
+]
+
+const famFlowKeys: Record<string, { icon: string; labelKey: string }[]> = {
+  ds: [
+    { icon: 'mdi-clock-outline',           labelKey: 'hiw.flowDsPreBid'     },
+    { icon: 'mdi-trending-down',           labelKey: 'hiw.flowDsEnglish'    },
+    { icon: 'mdi-trending-up',             labelKey: 'hiw.flowDsDutch'      },
+    { icon: 'mdi-check-circle-outline',    labelKey: 'hiw.flowDsAward'      },
+  ],
+  en: [
+    { icon: 'mdi-currency-usd',            labelKey: 'hiw.flowEnCeiling'    },
+    { icon: 'mdi-trending-down',           labelKey: 'hiw.flowEnBid1'       },
+    { icon: 'mdi-trending-down',           labelKey: 'hiw.flowEnBid2'       },
+    { icon: 'mdi-check-circle-outline',    labelKey: 'hiw.flowEnBest'       },
+  ],
+  du: [
+    { icon: 'mdi-currency-usd',            labelKey: 'hiw.flowDuHigh'       },
+    { icon: 'mdi-trending-up',             labelKey: 'hiw.flowDuAuto'       },
+    { icon: 'mdi-hand-back-right-outline', labelKey: 'hiw.flowDuAccept'     },
+    { icon: 'mdi-check-circle-outline',    labelKey: 'hiw.flowDuWinner'     },
+  ],
+  jp: [
+    { icon: 'mdi-currency-usd',            labelKey: 'hiw.flowJpLow'        },
+    { icon: 'mdi-trending-down',           labelKey: 'hiw.flowJpRound'      },
+    { icon: 'mdi-exit-to-app',             labelKey: 'hiw.flowJpExit'       },
+    { icon: 'mdi-check-circle-outline',    labelKey: 'hiw.flowJpLast'       },
+  ],
+  sb: [
+    { icon: 'mdi-email-outline',           labelKey: 'hiw.flowSbSubmit'     },
+    { icon: 'mdi-lock-outline',            labelKey: 'hiw.flowSbSealed'     },
+    { icon: 'mdi-chart-bar',               labelKey: 'hiw.flowSbCompare'    },
+    { icon: 'mdi-check-circle-outline',    labelKey: 'hiw.flowSbBest'       },
+  ],
+  tr: [
+    { icon: 'mdi-handshake-outline',       labelKey: 'hiw.flowTrContact'    },
+    { icon: 'mdi-chat-outline',            labelKey: 'hiw.flowTrNegotiate'  },
+    { icon: 'mdi-check-circle-outline',    labelKey: 'hiw.flowTrAgree'      },
+  ],
+}
+
+const famOptionDetails: Record<string, {
+  preBid: boolean
+  pref: boolean
+  awardModes: ('award' | 'rank' | 'norank')[]
+  intensity: { labelKey: string; labelFb: string; fill: string; color: string }
+}> = {
+  ds: { preBid: true,  pref: true,  awardModes: ['award'],                   intensity: { labelKey: 'hiw.lvlIntAggr',   labelFb: 'Intense',       fill: '100%', color: '#EF4444' } },
+  en: { preBid: true,  pref: true,  awardModes: ['award', 'rank'],            intensity: { labelKey: 'hiw.lvlIntHigh',   labelFb: 'Very High',     fill: '75%',  color: '#F59E0B' } },
+  du: { preBid: true,  pref: true,  awardModes: ['award'],                   intensity: { labelKey: 'hiw.lvlIntCompet', labelFb: 'Competitive',   fill: '50%',  color: '#FBBF24' } },
+  jp: { preBid: true,  pref: true,  awardModes: ['award', 'rank', 'norank'], intensity: { labelKey: 'hiw.lvlIntCompet', labelFb: 'Competitive',   fill: '50%',  color: '#FBBF24' } },
+  sb: { preBid: false, pref: true,  awardModes: ['award', 'rank', 'norank'], intensity: { labelKey: 'hiw.lvlIntCollab', labelFb: 'Collaborative', fill: '25%',  color: '#34D399' } },
+  tr: { preBid: false, pref: false, awardModes: [],                          intensity: { labelKey: 'hiw.lvlIntCollab', labelFb: 'Collaborative', fill: '25%',  color: '#34D399' } },
 }
 </script>
 
 <style scoped>
-/* ── Dialog ── */
-.dt-card {
+.ov-card {
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -237,7 +170,7 @@ const c = {
 }
 
 /* ── Header ── */
-.dt-header {
+.ov-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -245,240 +178,157 @@ const c = {
   border-bottom: 1px solid #E9EAEC;
   flex-shrink: 0;
 }
-
-.dt-icon {
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
+.ov-icon {
+  width: 36px; height: 36px; border-radius: 10px;
   background: linear-gradient(135deg, #34D399 0%, #059669 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: flex; align-items: center; justify-content: center;
 }
+.ov-title { font-size: 16px; font-weight: 700; color: #1D1D1B; }
+.ov-sub   { font-size: 12px; color: #9CA3AF; margin-top: 1px; }
 
-.dt-title { font-size: 16px; font-weight: 700; color: #1D1D1B; }
-.dt-sub { font-size: 12px; color: #9CA3AF; margin-top: 1px; }
-
-.dt-legend { display: flex; align-items: center; gap: 8px; }
-.legend-tag {
-  font-size: 10px; font-weight: 600; padding: 3px 8px;
-  border-radius: 4px; text-transform: uppercase; letter-spacing: 0.03em;
-}
-.legend-tag--high { background: #ECFDF5; color: #065F46; }
-.legend-tag--low { background: #F3F4F6; color: #6B7280; }
-.legend-arrow { color: #D1D5DB; font-size: 14px; }
-
-/* ── Canvas ── */
-.dt-canvas-wrap {
-  overflow: auto;
-  background: #FAFAFA;
-  flex: 1;
+/* ── Body ── */
+.ov-body {
+  overflow-y: auto;
   padding: 20px;
+  background: #F8F8F8;
 }
 
-.dt-canvas {
-  position: relative;
-  width: 1420px;
-  height: 520px;
-  margin: 0 auto;
+/* ── Grid: 3 cols × 2 rows ── */
+.fam-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
 }
 
-/* ── SVG connection lines ── */
-.dt-svg {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 1420px;
-  height: 520px;
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* ── Group labels ── */
-.group-label {
-  position: absolute;
-  text-align: center;
-  font-size: 10px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: #9CA3AF;
-  z-index: 1;
-}
-
-/* ── Condition nodes (elimination criteria) ── */
-.cond {
-  position: absolute;
-  background: #FFF;
-  border: 1.5px solid #E5E7EB;
-  border-radius: 20px;
-  padding: 5px 14px;
-  font-size: 11.5px;
-  font-weight: 500;
-  color: #374151;
-  white-space: nowrap;
-  z-index: 2;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-}
-
-.cond--static { position: static; }
-
-.cond-group {
-  position: absolute;
+/* ── Card ── */
+.fam-card {
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #E9EAEC;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 3px;
-  z-index: 2;
 }
 
-.cond-or {
+/* Top band */
+.fam-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+}
+.fam-top-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.fam-icon-wrap {
+  width: 28px; height: 28px;
+  border-radius: 8px;
+  border: 1px solid;
+  display: flex; align-items: center; justify-content: center;
+}
+.fam-name {
+  font-size: 13px;
+  font-weight: 700;
+}
+.fam-top-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+.fam-savings {
   font-size: 12px;
   font-weight: 700;
-  color: #1D1D1B;
+}
+.int-pip-row {
+  display: flex;
+  gap: 3px;
+}
+.int-pip {
+  width: 12px; height: 4px;
+  border-radius: 2px;
 }
 
-/* ── Scenario cards ── */
-.sc {
-  position: absolute;
-  z-index: 1;
-  width: 200px;
-  border-radius: 10px;
-  overflow: hidden;
-  background: #FFF;
-  border: 1px solid #E5E7EB;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
-  transition: box-shadow 0.2s, transform 0.2s;
+/* Chart */
+.fam-chart-area {
+  padding: 12px 16px 8px;
 }
-
-.sc:hover {
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-  transform: translateY(-2px);
-}
-
-/* ── Card chart area ── */
-.sc-top {
-  height: 70px;
-  padding: 6px 10px 0;
-  overflow: hidden;
-  border-bottom: 2px solid;
-}
-
-.sc-top :deep(.chart-container) {
-  height: 62px;
+.fam-chart-area :deep(.chart-container) {
+  height: 96px;
   border: none;
   background: transparent;
   padding: 0;
 }
 
-/* ── Card body ── */
-.sc-body {
-  padding: 10px 12px 12px;
-}
-
-.sc-name {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 13px;
-  font-weight: 700;
-  margin-bottom: 2px;
-}
-
-.sc-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-
-/* ── Savings indicator ── */
-.sc-savings {
-  font-size: 11px;
-  font-weight: 600;
-  color: #059669;
-  margin-bottom: 6px;
-  padding-left: 14px;
-}
-
-/* ── Competition bar ── */
-.sc-comp {
-  display: flex;
-  align-items: center;
-  gap: 2px;
-  margin-bottom: 8px;
-}
-
-.pip {
-  width: 14px;
-  height: 4px;
-  border-radius: 2px;
-  background: #E5E7EB;
-}
-
-.comp-txt {
-  font-size: 10px;
-  font-weight: 500;
-  color: #9CA3AF;
-  margin-left: 4px;
-}
-
-/* ── Attribute pills ── */
-.pills {
+/* Body */
+.fam-body {
+  padding: 10px 14px 14px;
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 10px;
+  flex: 1;
+}
+.fam-desc {
+  font-size: 12px;
+  color: #374151;
+  line-height: 1.5;
+  margin: 0;
 }
 
-.p {
-  display: block;
-  background: #FFF;
-  border: 1.5px solid #E9EAEC;
-  border-radius: 6px;
-  padding: 5px 10px;
-  font-size: 11.5px;
+/* Flow */
+.fam-flow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 3px;
+}
+.flow-step {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 10px;
   font-weight: 500;
-  color: #374151;
-  text-align: center;
+  color: #4B5563;
+  background: #F9FAFB;
+  border: 1px solid #E9EAEC;
+  border-radius: 4px;
+  padding: 2px 5px;
+  white-space: nowrap;
+}
+.flow-sep {
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* Option chips */
+.fam-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 10px;
+  font-weight: 500;
+  color: #6B7280;
+  background: #F3F4F6;
+  border: 1px solid #E5E7EB;
+  border-radius: 20px;
+  padding: 2px 8px;
   white-space: nowrap;
 }
 
-.p--y {
-  background: #FFFBEB;
-  border-color: #FDE68A;
-  font-weight: 600;
-  color: #1D1D1B;
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .fam-grid { grid-template-columns: repeat(2, 1fr); }
 }
-
-.p--w {
-  background: #FEF2F2;
-  border-color: #FECACA;
-  font-weight: 600;
-  color: #991B1B;
-}
-
-.p--g {
-  background: #ECFDF5;
-  border-color: #A7F3D0;
-  font-weight: 600;
-  color: #065F46;
-}
-
-/* ── Dutch vs Japanese note ── */
-.dt-note {
-  position: absolute;
-  text-align: center;
-  font-size: 11.5px;
-  color: #6B7280;
-  z-index: 1;
-}
-
-.dt-note strong {
-  color: #374151;
-}
-
-.dt-note-sep {
-  margin: 0 10px;
-  color: #D1D5DB;
+@media (max-width: 600px) {
+  .fam-grid { grid-template-columns: 1fr; }
+  .ov-body  { padding: 12px; }
 }
 </style>
