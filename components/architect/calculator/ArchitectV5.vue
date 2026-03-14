@@ -14,7 +14,8 @@
         </div>
         <div class="d-flex align-center ga-4">
           <v-tabs v-model="tab" density="compact" color="#1D1D1B" class="v5-tabs">
-            <v-tab value="tree" prepend-icon="mdi-sitemap-outline">{{ t('v5.tabTree') }}</v-tab>
+            <v-tab value="tree" prepend-icon="mdi-cursor-default-click-outline">{{ t('v5.tabTree') }}</v-tab>
+            <v-tab value="tree2" prepend-icon="mdi-sitemap-outline">{{ t('v5.tabTree2') }}</v-tab>
             <v-tab value="cards" prepend-icon="mdi-card-multiple-outline">{{ t('v5.tabCards') }}</v-tab>
             <v-tab value="cascade" prepend-icon="mdi-waterfall">{{ t('v5.tabCascade') }}</v-tab>
             <v-tab value="matrix" prepend-icon="mdi-table-check">{{ t('v5.tabMatrix') }}</v-tab>
@@ -30,10 +31,30 @@
         <!-- ══════════════════════════════════════════
              TAB 1 — DECISION TREE (original V5)
              ══════════════════════════════════════════ -->
+        <!-- ══════════════════════════════════════════
+             TAB 1 — INTERACTIVE DECISION TREE
+             ══════════════════════════════════════════ -->
         <v-window-item value="tree">
           <div class="tab-body">
+            <!-- Reset / status bar -->
+            <div class="itree-bar">
+              <div class="itree-status">
+                <template v-if="iActive === 'done'">
+                  <v-icon size="14" color="#059669">mdi-check-circle-outline</v-icon>
+                  <span>{{ t('v5.iDone') }}</span>
+                </template>
+                <template v-else>
+                  <v-icon size="14" color="#6366F1">mdi-cursor-default-click-outline</v-icon>
+                  <span>{{ t('v5.iClick') }}</span>
+                </template>
+              </div>
+              <button v-if="Object.values(iAns).some(v => v !== null)" class="itree-reset" @click="iReset()">
+                <v-icon size="13">mdi-refresh</v-icon> {{ t('v5.iReset') }}
+              </button>
+            </div>
             <div class="tree-section">
               <svg class="tree-svg" viewBox="0 0 100 400" preserveAspectRatio="none">
+                <!-- Grey connector lines -->
                 <g fill="none" stroke="#D1D5DB" stroke-width="1.5">
                   <line x1="50" y1="46" x2="50" y2="60" />
                   <line x1="33.33" y1="60" x2="83.33" y2="60" />
@@ -42,17 +63,23 @@
                   <line x1="33.33" y1="98" x2="33.33" y2="112" />
                   <line x1="83.33" y1="98" x2="83.33" y2="128" />
                   <line x1="33.33" y1="152" x2="33.33" y2="166" />
-                  <line x1="83.33" y1="142" x2="83.33" y2="166" />
+                  <!-- Simple approach branch: extends to new question node -->
+                  <line x1="83.33" y1="142" x2="83.33" y2="194" />
                   <line x1="16.67" y1="166" x2="50" y2="166" />
                   <line x1="16.67" y1="166" x2="16.67" y2="180" />
                   <line x1="50" y1="166" x2="50" y2="180" />
-                  <line x1="75" y1="166" x2="91.67" y2="166" />
-                  <line x1="75" y1="166" x2="75" y2="400" />
-                  <line x1="91.67" y1="166" x2="91.67" y2="400" />
                   <line x1="16.67" y1="180" x2="16.67" y2="184" />
                   <line x1="16.67" y1="214" x2="16.67" y2="224" />
                   <line x1="50" y1="180" x2="50" y2="184" />
                   <line x1="50" y1="202" x2="50" y2="224" />
+                  <!-- Simple approach: from question down to split -->
+                  <line x1="83.33" y1="232" x2="83.33" y2="248" />
+                  <line x1="75" y1="248" x2="91.67" y2="248" />
+                  <line x1="75" y1="248" x2="75" y2="264" />
+                  <line x1="75" y1="282" x2="75" y2="400" />
+                  <line x1="91.67" y1="248" x2="91.67" y2="264" />
+                  <line x1="91.67" y1="282" x2="91.67" y2="400" />
+                  <!-- Left branches (Q3a / Q3) -->
                   <line x1="16.67" y1="258" x2="16.67" y2="272" />
                   <line x1="8.33" y1="272" x2="25" y2="272" />
                   <line x1="8.33" y1="272" x2="8.33" y2="286" />
@@ -70,23 +97,38 @@
                   <line x1="58.33" y1="286" x2="58.33" y2="290" />
                   <line x1="58.33" y1="308" x2="58.33" y2="400" />
                 </g>
+                <!-- Colored anchor dots — align with card tops -->
+                <g>
+                  <circle cx="8.33"  cy="400" r="3.5" fill="#F472B6" />
+                  <circle cx="25"    cy="400" r="3.5" fill="#34D399" />
+                  <circle cx="41.67" cy="400" r="3.5" fill="#A78BFA" />
+                  <circle cx="58.33" cy="400" r="3.5" fill="#FBBF24" />
+                  <circle cx="75"    cy="400" r="3.5" fill="#67E8F9" />
+                  <circle cx="91.67" cy="400" r="3.5" fill="#FB923C" />
+                </g>
               </svg>
 
               <div class="tree-content">
+                <!-- Q1 — root -->
                 <div class="tree-el" style="left: 50%; top: 2px">
-                  <div class="q-bubble q-bubble--root">
+                  <div class="q-bubble q-bubble--root" :class="iq('q1')">
                     <v-icon size="18" class="q-icon">mdi-cash-multiple</v-icon>
                     <span class="q-text">{{ t('v5.q1') }}</span>
                   </div>
                 </div>
                 <div class="tree-el" style="left: 33.33%; top: 80px">
-                  <div class="badge badge--yes">{{ t('v5.yes') }}</div>
+                  <button class="ibadge" :class="ib('q1','yes')" @click="ia('q1','yes')">
+                    <div class="badge badge--yes">{{ t('v5.yes') }}</div>
+                  </button>
                 </div>
                 <div class="tree-el" style="left: 83.33%; top: 80px">
-                  <div class="badge badge--no">{{ t('v5.no') }}</div>
+                  <button class="ibadge" :class="ib('q1','no')" @click="ia('q1','no')">
+                    <div class="badge badge--no">{{ t('v5.no') }}</div>
+                  </button>
                 </div>
+                <!-- Q2 -->
                 <div class="tree-el" style="left: 33.33%; top: 112px">
-                  <div class="q-bubble">
+                  <div class="q-bubble" :class="iq('q2')">
                     <v-icon size="18" class="q-icon">mdi-account-group-outline</v-icon>
                     <span class="q-text">{{ t('v5.q2') }}</span>
                   </div>
@@ -94,45 +136,83 @@
                 <div class="tree-el" style="left: 83.33%; top: 130px">
                   <div class="hint-label">{{ t('v5.simpleApproach') }}</div>
                 </div>
+                <!-- Q4 — Sealed Bid vs Traditional -->
+                <div class="tree-el" style="left: 83.33%; top: 194px">
+                  <div class="q-bubble q-bubble--small" :class="iq('q4')">
+                    <v-icon size="16" class="q-icon">mdi-lock-outline</v-icon>
+                    <span class="q-text">{{ t('v5.q4') }}</span>
+                  </div>
+                </div>
+                <div class="tree-el" style="left: 75%; top: 264px">
+                  <button class="ibadge" :class="ib('q4','yes')" @click="ia('q4','yes')">
+                    <div class="badge badge--yes badge--sm">{{ t('v5.yes') }}</div>
+                  </button>
+                </div>
+                <div class="tree-el" style="left: 91.67%; top: 264px">
+                  <button class="ibadge" :class="ib('q4','no')" @click="ia('q4','no')">
+                    <div class="badge badge--no badge--sm">{{ t('v5.no') }}</div>
+                  </button>
+                </div>
+                <!-- Q2 YES / NO -->
                 <div class="tree-el" style="left: 16.67%; top: 184px">
-                  <div class="badge badge--yes badge--sm">{{ t('v5.yes') }}</div>
+                  <button class="ibadge" :class="ib('q2','yes')" @click="ia('q2','yes')">
+                    <div class="badge badge--yes badge--sm">{{ t('v5.yes') }}</div>
+                  </button>
                 </div>
                 <div class="tree-el" style="left: 16.67%; top: 202px">
-                  <div class="hint-label">{{ t('v5.bestPotential') }}</div>
+                  <div class="badge-best">{{ t('v5.bestPotential') }}</div>
                 </div>
                 <div class="tree-el" style="left: 50%; top: 184px">
-                  <div class="badge badge--no badge--sm">{{ t('v5.no') }}</div>
+                  <button class="ibadge" :class="ib('q2','no')" @click="ia('q2','no')">
+                    <div class="badge badge--no badge--sm">{{ t('v5.no') }}</div>
+                  </button>
                 </div>
+                <!-- Q3a -->
                 <div class="tree-el" style="left: 16.67%; top: 224px">
-                  <div class="q-bubble q-bubble--small">
-                    <v-icon size="16" class="q-icon">mdi-gavel</v-icon>
+                  <div class="q-bubble q-bubble--small" :class="iq('q3a')">
+                    <v-icon size="16" class="q-icon">mdi-layers-triple-outline</v-icon>
                     <span class="q-text">{{ t('v5.q3a') }}</span>
                   </div>
                 </div>
+                <!-- Q3 -->
                 <div class="tree-el" style="left: 50%; top: 224px">
-                  <div class="q-bubble q-bubble--small">
-                    <v-icon size="16" class="q-icon">mdi-format-list-numbered</v-icon>
+                  <div class="q-bubble q-bubble--small" :class="iq('q3')">
+                    <v-icon size="16" class="q-icon">mdi-trophy-outline</v-icon>
                     <span class="q-text">{{ t('v5.q3') }}</span>
                   </div>
                 </div>
+                <!-- Q3a YES → DS / NO → EN -->
                 <div class="tree-el" style="left: 8.33%; top: 290px">
-                  <div class="badge badge--yes badge--sm">{{ t('v5.yes') }}</div>
+                  <button class="ibadge" :class="ib('q3a','yes')" @click="ia('q3a','yes')">
+                    <div class="badge badge--yes badge--sm">{{ t('v5.yes') }}</div>
+                  </button>
+                  <div class="hint-label">{{ t('v5.hintDS') }}</div>
                 </div>
                 <div class="tree-el" style="left: 25%; top: 290px">
-                  <div class="badge badge--no badge--sm">{{ t('v5.no') }}</div>
+                  <button class="ibadge" :class="ib('q3a','no')" @click="ia('q3a','no')">
+                    <div class="badge badge--no badge--sm">{{ t('v5.no') }}</div>
+                  </button>
+                  <div class="hint-label">{{ t('v5.hintEN') }}</div>
                 </div>
+                <!-- Q3 YES → DU / NO → JP -->
                 <div class="tree-el" style="left: 41.67%; top: 290px">
-                  <div class="badge badge--yes badge--sm">{{ t('v5.yes') }}</div>
+                  <button class="ibadge" :class="ib('q3','yes')" @click="ia('q3','yes')">
+                    <div class="badge badge--yes badge--sm">{{ t('v5.yes') }}</div>
+                  </button>
+                  <div class="hint-label">{{ t('v5.hintDU') }}</div>
                 </div>
                 <div class="tree-el" style="left: 58.33%; top: 290px">
-                  <div class="badge badge--no badge--sm">{{ t('v5.no') }}</div>
+                  <button class="ibadge" :class="ib('q3','no')" @click="ia('q3','no')">
+                    <div class="badge badge--no badge--sm">{{ t('v5.no') }}</div>
+                  </button>
+                  <div class="hint-label">{{ t('v5.hintJP') }}</div>
                 </div>
               </div>
             </div>
 
-            <!-- Family cards — always open -->
+            <!-- Family cards — state driven by answers -->
             <div class="fam-grid">
-              <div v-for="card in cards" :key="card.key" class="fam-card">
+              <div v-for="card in cards" :key="card.key" class="fam-card" :class="iCard(card.key)" :style="{ borderTop: `3px solid ${gfc(card.family).border}` }">
 
                 <!-- Top band: icon + name + savings + intensity pips -->
                 <div class="fam-top" :style="{ background: gfc(card.family).bg, borderBottom: `2px solid ${gfc(card.family).border}` }">
@@ -200,7 +280,167 @@
         </v-window-item>
 
         <!-- ══════════════════════════════════════════
-             TAB 2 — CARDS OVERVIEW (from V1)
+             TAB 2 — REFERENCE TREE (static copy)
+             ══════════════════════════════════════════ -->
+        <v-window-item value="tree2">
+          <div class="tab-body">
+            <div class="tree-section">
+              <svg class="tree-svg" viewBox="0 0 100 400" preserveAspectRatio="none">
+                <g fill="none" stroke="#D1D5DB" stroke-width="1.5">
+                  <line x1="50" y1="46" x2="50" y2="60" />
+                  <line x1="33.33" y1="60" x2="83.33" y2="60" />
+                  <line x1="33.33" y1="60" x2="33.33" y2="76" />
+                  <line x1="83.33" y1="60" x2="83.33" y2="76" />
+                  <line x1="33.33" y1="98" x2="33.33" y2="112" />
+                  <line x1="83.33" y1="98" x2="83.33" y2="128" />
+                  <line x1="33.33" y1="152" x2="33.33" y2="166" />
+                  <line x1="83.33" y1="142" x2="83.33" y2="194" />
+                  <line x1="16.67" y1="166" x2="50" y2="166" />
+                  <line x1="16.67" y1="166" x2="16.67" y2="180" />
+                  <line x1="50" y1="166" x2="50" y2="180" />
+                  <line x1="16.67" y1="180" x2="16.67" y2="184" />
+                  <line x1="16.67" y1="214" x2="16.67" y2="224" />
+                  <line x1="50" y1="180" x2="50" y2="184" />
+                  <line x1="50" y1="202" x2="50" y2="224" />
+                  <line x1="83.33" y1="232" x2="83.33" y2="248" />
+                  <line x1="75" y1="248" x2="91.67" y2="248" />
+                  <line x1="75" y1="248" x2="75" y2="264" />
+                  <line x1="75" y1="282" x2="75" y2="400" />
+                  <line x1="91.67" y1="248" x2="91.67" y2="264" />
+                  <line x1="91.67" y1="282" x2="91.67" y2="400" />
+                  <line x1="16.67" y1="258" x2="16.67" y2="272" />
+                  <line x1="8.33" y1="272" x2="25" y2="272" />
+                  <line x1="8.33" y1="272" x2="8.33" y2="286" />
+                  <line x1="25" y1="272" x2="25" y2="286" />
+                  <line x1="50" y1="258" x2="50" y2="272" />
+                  <line x1="41.67" y1="272" x2="58.33" y2="272" />
+                  <line x1="41.67" y1="272" x2="41.67" y2="286" />
+                  <line x1="58.33" y1="272" x2="58.33" y2="286" />
+                  <line x1="8.33" y1="286" x2="8.33" y2="290" />
+                  <line x1="8.33" y1="308" x2="8.33" y2="400" />
+                  <line x1="25" y1="286" x2="25" y2="290" />
+                  <line x1="25" y1="308" x2="25" y2="400" />
+                  <line x1="41.67" y1="286" x2="41.67" y2="290" />
+                  <line x1="41.67" y1="308" x2="41.67" y2="400" />
+                  <line x1="58.33" y1="286" x2="58.33" y2="290" />
+                  <line x1="58.33" y1="308" x2="58.33" y2="400" />
+                </g>
+                <g>
+                  <circle cx="8.33"  cy="400" r="3.5" fill="#F472B6" />
+                  <circle cx="25"    cy="400" r="3.5" fill="#34D399" />
+                  <circle cx="41.67" cy="400" r="3.5" fill="#A78BFA" />
+                  <circle cx="58.33" cy="400" r="3.5" fill="#FBBF24" />
+                  <circle cx="75"    cy="400" r="3.5" fill="#67E8F9" />
+                  <circle cx="91.67" cy="400" r="3.5" fill="#FB923C" />
+                </g>
+              </svg>
+              <div class="tree-content">
+                <div class="tree-el" style="left: 50%; top: 2px">
+                  <div class="q-bubble q-bubble--root">
+                    <v-icon size="18" class="q-icon">mdi-cash-multiple</v-icon>
+                    <span class="q-text">{{ t('v5.q1') }}</span>
+                  </div>
+                </div>
+                <div class="tree-el" style="left: 33.33%; top: 80px"><div class="badge badge--yes">{{ t('v5.yes') }}</div></div>
+                <div class="tree-el" style="left: 83.33%; top: 80px"><div class="badge badge--no">{{ t('v5.no') }}</div></div>
+                <div class="tree-el" style="left: 33.33%; top: 112px">
+                  <div class="q-bubble">
+                    <v-icon size="18" class="q-icon">mdi-account-group-outline</v-icon>
+                    <span class="q-text">{{ t('v5.q2') }}</span>
+                  </div>
+                </div>
+                <div class="tree-el" style="left: 83.33%; top: 130px"><div class="hint-label">{{ t('v5.simpleApproach') }}</div></div>
+                <div class="tree-el" style="left: 83.33%; top: 194px">
+                  <div class="q-bubble q-bubble--small">
+                    <v-icon size="16" class="q-icon">mdi-lock-outline</v-icon>
+                    <span class="q-text">{{ t('v5.q4') }}</span>
+                  </div>
+                </div>
+                <div class="tree-el" style="left: 75%; top: 264px"><div class="badge badge--yes badge--sm">{{ t('v5.yes') }}</div></div>
+                <div class="tree-el" style="left: 91.67%; top: 264px"><div class="badge badge--no badge--sm">{{ t('v5.no') }}</div></div>
+                <div class="tree-el" style="left: 16.67%; top: 184px"><div class="badge badge--yes badge--sm">{{ t('v5.yes') }}</div></div>
+                <div class="tree-el" style="left: 16.67%; top: 202px"><div class="badge-best">{{ t('v5.bestPotential') }}</div></div>
+                <div class="tree-el" style="left: 50%; top: 184px"><div class="badge badge--no badge--sm">{{ t('v5.no') }}</div></div>
+                <div class="tree-el" style="left: 16.67%; top: 224px">
+                  <div class="q-bubble q-bubble--small">
+                    <v-icon size="16" class="q-icon">mdi-layers-triple-outline</v-icon>
+                    <span class="q-text">{{ t('v5.q3a') }}</span>
+                  </div>
+                </div>
+                <div class="tree-el" style="left: 50%; top: 224px">
+                  <div class="q-bubble q-bubble--small">
+                    <v-icon size="16" class="q-icon">mdi-trophy-outline</v-icon>
+                    <span class="q-text">{{ t('v5.q3') }}</span>
+                  </div>
+                </div>
+                <div class="tree-el" style="left: 8.33%; top: 290px">
+                  <div class="badge badge--yes badge--sm">{{ t('v5.yes') }}</div>
+                  <div class="hint-label">{{ t('v5.hintDS') }}</div>
+                </div>
+                <div class="tree-el" style="left: 25%; top: 290px">
+                  <div class="badge badge--no badge--sm">{{ t('v5.no') }}</div>
+                  <div class="hint-label">{{ t('v5.hintEN') }}</div>
+                </div>
+                <div class="tree-el" style="left: 41.67%; top: 290px">
+                  <div class="badge badge--yes badge--sm">{{ t('v5.yes') }}</div>
+                  <div class="hint-label">{{ t('v5.hintDU') }}</div>
+                </div>
+                <div class="tree-el" style="left: 58.33%; top: 290px">
+                  <div class="badge badge--no badge--sm">{{ t('v5.no') }}</div>
+                  <div class="hint-label">{{ t('v5.hintJP') }}</div>
+                </div>
+              </div>
+            </div>
+            <div class="fam-grid">
+              <div v-for="card in cards" :key="card.key" class="fam-card" :style="{ borderTop: `3px solid ${gfc(card.family).border}` }">
+                <div class="fam-top" :style="{ background: gfc(card.family).bg, borderBottom: `2px solid ${gfc(card.family).border}` }">
+                  <div class="fam-top-left">
+                    <div class="fam-icon-wrap" :style="{ background: gfc(card.family).border + '22', borderColor: gfc(card.family).border + '55' }">
+                      <v-icon :icon="card.icon" size="14" :color="gfc(card.family).text" />
+                    </div>
+                    <span class="fam-name" :style="{ color: gfc(card.family).text }">{{ card.name }}</span>
+                  </div>
+                  <div class="fam-top-right">
+                    <span class="fam-savings" :style="{ color: gfc(card.family).text }">{{ card.savingsLabel }}</span>
+                    <div class="fam-pips">
+                      <div v-for="i in 4" :key="i" class="fam-pip" :style="{ background: i <= card.intensityLevel ? gfc(card.family).border : '#E5E7EB' }" />
+                    </div>
+                  </div>
+                </div>
+                <div class="fam-chart" :style="{ background: gfc(card.family).bg }">
+                  <ArchitectCalculatorChartsAChart :family="card.family" :color="gfc(card.family).border" ccy="EUR" />
+                </div>
+                <div class="fam-body">
+                  <p class="fam-desc">{{ card.short }}</p>
+                  <div class="fam-flow">
+                    <template v-for="(step, si) in famFlowKeys[card.key]" :key="si">
+                      <div class="fam-step">
+                        <v-icon :icon="step.icon" size="9" :color="gfc(card.family).border" />
+                        <span>{{ t(step.labelKey) }}</span>
+                      </div>
+                      <span v-if="si < famFlowKeys[card.key].length - 1" class="fam-sep" :style="{ color: gfc(card.family).border }">›</span>
+                    </template>
+                  </div>
+                  <div class="fam-chips">
+                    <span v-if="famOptionDetails[card.key].preBid" class="fam-chip">
+                      <v-icon size="8" color="#6B7280">mdi-clock-fast</v-icon> {{ t('v1.preBid') }}
+                    </span>
+                    <span v-if="famOptionDetails[card.key].pref" class="fam-chip">
+                      <v-icon size="8" color="#6B7280">mdi-scale-balance</v-icon> {{ t('v1.preference') }}
+                    </span>
+                    <span v-for="mode in famOptionDetails[card.key].awardModes" :key="mode" class="fam-chip">
+                      <v-icon size="8" color="#6B7280">{{ mode === 'award' ? 'mdi-trophy-outline' : mode === 'rank' ? 'mdi-format-list-numbered' : 'mdi-eye-outline' }}</v-icon>
+                      {{ mode === 'award' ? t('hiw.lvlAwardAward') : mode === 'rank' ? t('hiw.lvlAwardRank') : t('hiw.lvlAwardNoRank') }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </v-window-item>
+
+        <!-- ══════════════════════════════════════════
+             TAB 3 — CARDS OVERVIEW (from V1)
              ══════════════════════════════════════════ -->
         <v-window-item value="cards">
           <div class="tab-body tab-body--canvas">
@@ -516,13 +756,66 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, reactive } from 'vue'
 import { FC, gfc } from '~/utils/architect/constants'
 import useTranslations from '~/composables/useTranslations'
 
 const { t } = useTranslations('architect')
 const show = defineModel<boolean>({ default: false })
 const tab = ref('tree')
+
+// ── Interactive Tree ──
+const iAns = reactive<Record<string, 'yes'|'no'|null>>({
+  q1: null, q2: null, q3a: null, q3: null, q4: null,
+})
+
+const iActive = computed(() => {
+  if (!iAns.q1)                               return 'q1'
+  if (iAns.q1 === 'yes' && !iAns.q2)         return 'q2'
+  if (iAns.q1 === 'no'  && !iAns.q4)         return 'q4'
+  if (iAns.q2 === 'yes' && !iAns.q3a)        return 'q3a'
+  if (iAns.q2 === 'no'  && !iAns.q3)         return 'q3'
+  return 'done'
+})
+
+function ia(q: string, v: 'yes'|'no') { iAns[q] = v }
+function iReset() { Object.keys(iAns).forEach(k => { iAns[k] = null }) }
+
+const CARD_PATHS: Record<string, Record<string, string>> = {
+  ds:  { q1: 'yes', q2: 'yes', q3a: 'yes' },
+  en:  { q1: 'yes', q2: 'yes', q3a: 'no'  },
+  du:  { q1: 'yes', q2: 'no',  q3:  'yes' },
+  jp:  { q1: 'yes', q2: 'no',  q3:  'no'  },
+  sb:  { q1: 'no',  q4:  'yes'             },
+  tr:  { q1: 'no',  q4:  'no'              },
+}
+
+function iCard(key: string) {
+  const path = CARD_PATHS[key]
+  if (!path) return 'ic--neutral'
+  const anyAnswered = Object.values(iAns).some(v => v !== null)
+  if (!anyAnswered) return 'ic--neutral'
+  if (Object.entries(path).some(([q, v]) => iAns[q] !== null && iAns[q] !== v)) return 'ic--out'
+  if (Object.entries(path).every(([q, v]) => iAns[q] === v)) return 'ic--win'
+  return 'ic--maybe'
+}
+
+function iq(q: string) {
+  if (iActive.value === q) return 'iq--on'
+  if (iAns[q] !== null) return 'iq--done'
+  const reach: Record<string, boolean> = {
+    q1: true, q2: iAns.q1 === 'yes', q4: iAns.q1 === 'no',
+    q3a: iAns.q2 === 'yes', q3: iAns.q2 === 'no',
+  }
+  return reach[q] ? 'iq--wait' : 'iq--off'
+}
+
+function ib(q: string, v: 'yes'|'no') {
+  if (iActive.value === q) return 'ib--on'
+  if (iAns[q] === v)       return 'ib--chosen'
+  if (iAns[q] !== null)    return 'ib--fade'
+  return 'ib--off'
+}
 
 const famFlowKeys: Record<string, { icon: string; labelKey: string }[]> = {
   ds: [
@@ -684,9 +977,10 @@ const overviewCards = computed(() => [
 .tree-el { position: absolute; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 2px; white-space: nowrap; }
 
 .q-bubble { display: inline-flex; align-items: center; gap: 10px; padding: 10px 20px; border-radius: 12px; background: #F9FAFB; border: 1.5px solid #E5E7EB; white-space: nowrap; }
-.q-bubble--root { background: #F3F4F6; border-color: #D1D5DB; padding: 12px 24px; }
+.q-bubble--root { background: #F5F3FF; border-color: #C7D2FE; border-width: 2px; padding: 12px 24px; }
+.q-bubble--root .q-icon { color: #4F46E5; opacity: 1; }
 .q-bubble--small { padding: 8px 14px; }
-.q-icon { flex-shrink: 0; opacity: 0.75; }
+.q-icon { flex-shrink: 0; opacity: 0.6; }
 .q-text { font-size: 13px; font-weight: 600; color: #374151; line-height: 1.4; }
 
 .badge { font-size: 10px; font-weight: 700; padding: 3px 14px; border-radius: 10px; text-transform: uppercase; letter-spacing: 0.06em; display: inline-block; }
@@ -694,6 +988,7 @@ const overviewCards = computed(() => [
 .badge--no  { background: #FEE2E2; color: #991B1B; }
 .badge--sm  { padding: 2px 10px; font-size: 9px; }
 .hint-label { font-size: 10px; font-weight: 700; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.07em; }
+.badge-best { font-size: 9px; font-weight: 700; padding: 2px 8px; border-radius: 6px; background: #ECFDF5; color: #059669; border: 1px solid #6EE7B7; text-transform: uppercase; letter-spacing: 0.06em; }
 
 /* Family cards grid: 6 cols (matches tree x-positions) */
 .fam-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
@@ -814,6 +1109,114 @@ const overviewCards = computed(() => [
 .fill-double { background: linear-gradient(135deg, #3B82F6, #10B981); } .fill-english { background: #60A5FA; } .fill-dutch { background: #FB923C; } .fill-japanese { background: #A78BFA; } .fill-sealed { background: #2DD4BF; } .fill-nego { background: #D1D5DB; }
 .savings-pct { font-size: 11px; font-weight: 700; }
 .pct-double { color: #1E40AF; } .pct-english { color: #2563EB; } .pct-dutch { color: #EA580C; } .pct-japanese { color: #7C3AED; } .pct-sealed { color: #0D9488; } .pct-nego { color: #6B7280; }
+
+/* ════════════════════════════════════
+   INTERACTIVE TREE — control bar
+   ════════════════════════════════════ */
+.itree-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 6px 12px; margin-bottom: 12px;
+  background: #F9FAFB; border: 1px solid #E9EAEC; border-radius: 8px;
+}
+.itree-status {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12px; font-weight: 500; color: #6B7280;
+}
+.itree-reset {
+  display: inline-flex; align-items: center; gap-4px;
+  font-size: 11px; font-weight: 600; color: #4F46E5;
+  background: transparent; border: 1px solid #C7D2FE; border-radius: 6px;
+  padding: 3px 10px; cursor: pointer; transition: background 0.15s;
+  gap: 4px;
+}
+.itree-reset:hover { background: #EEF2FF; }
+
+/* ════════════════════════════════════
+   INTERACTIVE TREE — question bubble states
+   ════════════════════════════════════ */
+.q-bubble { transition: all 0.2s ease; }
+
+/* Active — pulsing indigo ring */
+.iq--on {
+  background: #EEF2FF !important; border-color: #6366F1 !important;
+  box-shadow: 0 0 0 3px rgba(99,102,241,0.2);
+}
+.iq--on .q-icon { opacity: 1 !important; color: #4F46E5 !important; }
+.iq--on .q-text { color: #1D1D1B !important; }
+
+/* Done — answered, muted green */
+.iq--done {
+  background: #F0FDF4 !important; border-color: #86EFAC !important;
+}
+.iq--done .q-icon { opacity: 0.5 !important; color: #16A34A !important; }
+.iq--done .q-text { color: #6B7280 !important; }
+
+/* Waiting — reachable but not yet active */
+.iq--wait {
+  background: #FAFAFA !important; border-color: #D1D5DB !important;
+  opacity: 0.7;
+}
+
+/* Off — unreachable branch */
+.iq--off {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+/* ════════════════════════════════════
+   INTERACTIVE TREE — badge button states
+   ════════════════════════════════════ */
+.ibadge {
+  background: transparent; border: none; padding: 0; cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  transition: transform 0.15s;
+}
+.ibadge:hover { transform: scale(1.05); }
+
+/* Active question — badge glows */
+.ib--on .badge { box-shadow: 0 0 0 2px rgba(99,102,241,0.4); cursor: pointer; }
+.ib--on .badge--yes { background: #A7F3D0; color: #065F46; }
+.ib--on .badge--no  { background: #FECACA; color: #991B1B; }
+
+/* Chosen answer */
+.ib--chosen .badge { opacity: 1; font-weight: 800; }
+.ib--chosen .badge--yes { background: #059669; color: #FFF; }
+.ib--chosen .badge--no  { background: #DC2626; color: #FFF; }
+
+/* Unchosen (other answer was picked) */
+.ib--fade .badge { opacity: 0.25; }
+
+/* Not yet reachable */
+.ib--off .badge { opacity: 0.35; cursor: default; }
+.ib--off { pointer-events: none; }
+
+/* ════════════════════════════════════
+   INTERACTIVE TREE — family card states
+   ════════════════════════════════════ */
+.fam-card { transition: filter 0.3s ease, opacity 0.3s ease, transform 0.25s ease, box-shadow 0.25s ease; }
+
+/* No answer yet — all cards neutral (full color) */
+.ic--neutral { filter: none; opacity: 1; }
+
+/* Eliminated — strong grey out */
+.ic--out {
+  filter: grayscale(100%) opacity(0.35);
+  transform: scale(0.97);
+}
+
+/* Still in the running — slight grey */
+.ic--maybe {
+  filter: grayscale(30%);
+  opacity: 0.75;
+}
+
+/* Winner — pop it */
+.ic--win {
+  filter: none;
+  opacity: 1;
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+}
 
 /* ════ RESPONSIVE ════ */
 @media (max-width: 1000px) {
