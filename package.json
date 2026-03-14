@@ -11,6 +11,8 @@
     "preview:local": "NITRO_PRESET=node-server nuxt preview",
     "engine": "node crown/scripts/engineCall.js",
     "dev": "nuxt dev --no-fork",
+    "dev:fresh": "pkill -f 'nuxt dev' 2>/dev/null; sleep 1; nuxt dev --no-fork",
+    "deploy": "git push origin main && git push playground main",
     "dev:ngrok": "nuxt dev & sleep 3 && ngrok http 3000",
     "test_jap_plan": "node scripts/api_testing/v1/japanese/engineCallJapanese.js",
     "test_jap_bider": "node scripts/api_testing/v1/japanese/emulateBids.js",
