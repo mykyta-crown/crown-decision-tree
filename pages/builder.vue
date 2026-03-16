@@ -366,12 +366,6 @@ if (route.query.mode === 'architect') {
     lots.value = _state.lots ?? []
     timingRule.value = _state.timingRule ?? 'serial'
     try { sessionStorage.removeItem(_ARCH_KEY) } catch {}
-
-    await nextTick()
-    basics.value = { ...basics.value }
-    suppliers.value = [...suppliers.value]
-    lots.value = [...lots.value]
-    await new Promise((resolve) => setTimeout(resolve, 0))
   } else {
     console.warn('[Builder] Mode architect mais aucun état trouvé, création standard')
     await until(() => !pending.value).toBe(true)
@@ -435,10 +429,16 @@ if (route.query.mode === 'architect') {
   addLot()
 }
 
-// Architect mode: hydrate supplier+N@crown.ovh placeholders with real profile data
+// Architect mode: force reactivity + hydrate supplier+N@crown.ovh with real profiles
 onMounted(async () => {
   if (route.query.mode !== 'architect') return
-  const emails = (suppliers.value ?? []).map((s) => s.email).filter(Boolean)
+
+  // Force reactivity (needed after SSR hydration)
+  basics.value = { ...basics.value }
+  suppliers.value = [...(suppliers.value ?? [])]
+  lots.value = [...(lots.value ?? [])]
+
+  const emails = suppliers.value.map((s) => s.email).filter(Boolean)
   if (!emails.length) return
   const { data: profiles } = await supabase
     .from('profiles')
