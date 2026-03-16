@@ -1255,9 +1255,10 @@ function famTryBtnStyle(f: string) {
   text-align: center;
   padding: 10px 6px;
   border-bottom: 2px solid #E9EAEC;
+  vertical-align: bottom;
 }
-.compat-th-icon { display: block; margin-bottom: 3px; }
-.compat-th-name { font-size: 11px; font-weight: 700; }
+.compat-th-icon { display: block; margin-bottom: 4px; }
+.compat-th-name { font-size: 11px; font-weight: 700; display: block; }
 .compat-label {
   font-size: 13px; font-weight: 500; color: #6B7280;
   padding: 10px 10px 10px 0;
