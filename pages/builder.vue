@@ -356,8 +356,9 @@ async function formatExistingAuction(auctionId) {
 
 // Mode architect : pré-remplir depuis sessionStorage (généré par l'architect calculator)
 if (route.query.mode === 'architect') {
-  const { getArchitectState, clearArchitectState } = useArchitectBuildState()
+  const { getArchitectState } = useArchitectBuildState()
   const state = getArchitectState()
+  const clearArchitectState = () => sessionStorage.removeItem('crown_architect_build_state')
 
   if (state) {
     basics.value = {
