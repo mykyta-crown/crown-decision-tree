@@ -361,42 +361,8 @@ if (route.query.mode === 'architect') {
   try { const _s = sessionStorage.getItem(_ARCH_KEY); state = _s ? JSON.parse(_s) : null } catch {}
 
   if (state) {
-    basics.value = {
-      ...basics.value,
-      ...state.basics,
-      date: dayjs(state.basics.date),
-    }
-
-    // Hydrate architect placeholder suppliers (supplier+N@crown.ovh) with real profile data
-    const rawSuppliers = state.suppliers ?? []
-    const emails = rawSuppliers.map((s) => s.email)
-    if (emails.length) {
-      const { data: profiles } = await supabase
-        .from('profiles')
-        .select('email, first_name, last_name, phone, position, companies(name, address, country, legal_id)')
-        .in('email', emails)
-
-      suppliers.value = rawSuppliers.map((s) => {
-        const p = profiles?.find((pr) => pr.email === s.email)
-        if (p) {
-          return {
-            email: s.email,
-            phone: p.phone ?? s.phone ?? '',
-            name: p.last_name ? `${p.first_name} ${p.last_name}` : (p.first_name ?? null),
-            company: p.companies?.name ?? null,
-            address: p.companies?.address ?? null,
-            country: p.companies?.country ?? null,
-            id: p.companies?.legal_id ?? null,
-            position: p.position ?? null,
-            isNew: false,
-          }
-        }
-        return s
-      })
-    } else {
-      suppliers.value = rawSuppliers
-    }
-
+    basics.value = { ...basics.value, ...state.basics, date: dayjs(state.basics.date) }
+    suppliers.value = state.suppliers ?? []
     lots.value = state.lots ?? []
     timingRule.value = state.timingRule ?? 'serial'
 
@@ -404,7 +370,7 @@ if (route.query.mode === 'architect') {
 
     await nextTick()
     basics.value = { ...basics.value }
-    if (suppliers.value) suppliers.value = [...suppliers.value]
+    suppliers.value = [...suppliers.value]
     lots.value = [...lots.value]
     await new Promise((resolve) => setTimeout(resolve, 0))
   } else {
@@ -469,6 +435,33 @@ if (route.query.mode === 'architect') {
   await until(() => !pending.value).toBe(true)
   addLot()
 }
+
+// Architect mode: hydrate supplier+N@crown.ovh placeholders with real profile data (done in onMounted to avoid top-level await issues)
+onMounted(async () => {
+  if (route.query.mode !== 'architect') return
+  const emails = (suppliers.value ?? []).map((s) => s.email).filter(Boolean)
+  if (!emails.length) return
+  const { data: profiles } = await supabase
+    .from('profiles')
+    .select('email, first_name, last_name, phone, position, companies(name, address, country, legal_id)')
+    .in('email', emails)
+  if (!profiles?.length) return
+  suppliers.value = suppliers.value.map((s) => {
+    const p = profiles.find((pr) => pr.email === s.email)
+    if (!p) return s
+    return {
+      email: s.email,
+      phone: p.phone ?? s.phone ?? '',
+      name: p.last_name ? `${p.first_name} ${p.last_name}` : (p.first_name ?? null),
+      company: p.companies?.name ?? null,
+      address: p.companies?.address ?? null,
+      country: p.companies?.country ?? null,
+      id: p.companies?.legal_id ?? null,
+      position: p.position ?? null,
+      isNew: false,
+    }
+  })
+})
 
 const validLots = computed(() => {
   return lots.value.every((lot) => {
