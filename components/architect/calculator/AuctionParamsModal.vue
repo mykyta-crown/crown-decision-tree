@@ -509,6 +509,13 @@ onMounted(async () => {
   } else {
     buyerName.value = user.email || ''
   }
+
+  // If show is already true on mount (v-if + show set simultaneously),
+  // watch(show) won't fire — call initEditable directly
+  if (show.value) {
+    await nextTick()
+    initEditable()
+  }
 })
 
 // ── Editable state ────────────────────────────────────────────────────────────
