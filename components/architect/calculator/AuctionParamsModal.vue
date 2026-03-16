@@ -474,6 +474,7 @@ import useTranslations from '~/composables/useTranslations'
 import { useArchitectBuildState } from '~/composables/useArchitectBuildState'
 
 const STORAGE_KEY = 'crown_architect_build_state'
+const router = useRouter()
 
 const props = defineProps<{
   family: string
@@ -706,7 +707,7 @@ async function buildAuction() {
   }
 
   show.value = false
-  useRouter().push('/builder?mode=architect')
+  router.push('/builder?mode=architect')
 }
 
 // ── Family colors ────────────────────────────────────────────────────────────
