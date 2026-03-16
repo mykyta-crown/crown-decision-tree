@@ -557,7 +557,7 @@
       "preferredWindow": "Preferred supplier window",
       "bidRules": "Bid rules",
       "minDecrement": "Min. decrement",
-      "maxDecline": "Max. decline",
+      "maxDecrement": "Max. decrement",
       "supplierCeilings": "Supplier ceilings",
       "supplierCeilingsHint": "Each supplier's current offer is used as their ceiling price",
       "aboveAuctionCeiling": "This price exceeds the auction ceiling — the supplier won't be able to bid above it",

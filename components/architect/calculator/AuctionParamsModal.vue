@@ -119,7 +119,7 @@
                   </div>
                 </div>
                 <div class="ap-english-decr-item">
-                  <span class="ap-arc-ctrl-lbl">{{ t('calc.auctionParams.maxDecline', {}, 'Max /bid') }}</span>
+                  <span class="ap-arc-ctrl-lbl">{{ t('calc.auctionParams.maxDecrement', {}, 'Max /bid') }}</span>
                   <div class="ap-price-arc-step">
                     <span class="ap-price-arc-step-sign" style="color:#059669">−</span>
                     <input v-model.number="editMaxDecr" type="number" class="ap-step-input" step="any" :min="0" />
@@ -601,6 +601,11 @@ watch(show, async (val) => {
   }
 })
 
+// Re-init when params become available (async store load) while modal is already open
+watch(params, (val) => {
+  if (val && show.value) initEditable()
+})
+
 // ── Dutch / Japanese reactive price computations ───────────────────────────
 
 const nbRounds = computed(() =>
@@ -699,7 +704,6 @@ async function buildAuction() {
   }
 
   show.value = false
-  await nextTick()
   navigateTo('/builder?mode=architect')
 }
 

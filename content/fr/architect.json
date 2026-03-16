@@ -557,7 +557,7 @@
       "preferredWindow": "Fenêtre fournisseur préféré",
       "bidRules": "Règles d'enchère",
       "minDecrement": "Décrémentation min.",
-      "maxDecline": "Déclin max.",
+      "maxDecrement": "Décrémentation max.",
       "supplierCeilings": "Plafonds fournisseurs",
       "supplierCeilingsHint": "L'offre actuelle de chaque fournisseur est utilisée comme prix plafond",
       "aboveAuctionCeiling": "Ce prix dépasse le plafond de l'enchère — le fournisseur ne pourra pas enchérir au-dessus",
