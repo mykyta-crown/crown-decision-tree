@@ -162,15 +162,15 @@ function onSlide(e: Event) {
 .tick-label {
   position: absolute;
   transform: translateX(-50%);
-  font-size: 11px;
-  color: #8E8E8E;
+  font-size: 12px;
+  color: #767676;
   font-weight: 500;
   white-space: nowrap;
 }
 
 @media (max-width: 400px) {
   .tick-label {
-    font-size: 9px;
+    font-size: 12px;
   }
 }
 </style>

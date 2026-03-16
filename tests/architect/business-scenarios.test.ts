@@ -624,6 +624,36 @@ describe('J. Regression guard — key business invariants', () => {
       }
   })
 
+  it('INVARIANT: Financial (Q4=3) + No Rank (Q3=3) + Competitive/Aggressive (Q5≥2) → Japanese top', () => {
+    // Regression guard: For competitive/aggressive intensity with Financial preference + No Rank,
+    // Japanese-Ceiling-NoRank must always be recommended over Sealed Bid.
+    // Note: Q5=1 (Collaborative) with 3+ suppliers legitimately favors Sealed Bid.
+    for (const q1 of [2, 3]) {
+      for (const q2 of [1, 2, 3]) {
+        for (const q5 of [2, 3]) { // Competitive and Aggressive only
+          const r = getScores(P, q1, q2, 3, 3, q5, 1)
+          expect(topFamily(r)).toBe('Japanese',
+            `Japanese should be top for Q1=${q1},Q2=${q2},Q3=3,Q4=3,Q5=${q5}`)
+          const jap = bestOf(r, 'Japanese')
+          const sb  = bestOf(r, 'Sealed Bid')
+          if (jap && sb) {
+            expect(jap.raw).toBeGreaterThan(sb.raw,
+              `Japanese should score above Sealed Bid for Q1=${q1},Q2=${q2},Q5=${q5}`)
+          }
+        }
+      }
+    }
+  })
+
+  it('REGRESSION: exact user-reported scenario → Japanese wins (>500K, 3+, NoRank, Financial, Intense)', () => {
+    const r = getScores(P, 3, 3, 3, 3, 3, 1) // Q1=>500K, Q2=Three+, Q3=NoRank, Q4=Financial, Q5=Aggressive, Q6=<7%
+    expect(topFamily(r)).toBe('Japanese')
+    const top = active(r)[0]
+    expect(top.family).toBe('Japanese')
+    expect(top.aw).toBe('No Rank')
+    expect(top.tf).toBe('Ceiling') // Jap-Ceiling-NoRank is the correct variant for Financial
+  })
+
   it('INVARIANT: at least 1 non-eliminated strategy for every combo (Q4≠3)', () => {
     // With non-Financial preference, there should always be at least Traditional
     for (let q1 = 1; q1 <= 3; q1++)

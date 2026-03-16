@@ -69,7 +69,7 @@ const lotCards = computed<LotCard[]>(() => {
 
     // In guided/blue mode, warn if filled prices < nSup
     const filledCount = lot.prices.filter((p, i) => p > 0 && !lot.excl[i]).length
-    const supMismatch = (store.mode === 'guided' || store.mode === 'blue') && ok && filledCount < store.nSup
+    const supMismatch = ok && filledCount < store.nSup
 
     const subtitle = !ok
       ? t('calc.rec.completeInputs')

@@ -30,7 +30,7 @@ defineProps<{
 }
 
 .option-label {
-  font-size: 11px;
+  font-size: 12px;
   color: #1D1D1B;
   min-width: 68px;
   flex-shrink: 0;
@@ -47,8 +47,8 @@ defineProps<{
   padding: 3px 8px;
   border-radius: 5px;
   border: 1.5px solid #E5E7EB;
-  font-size: 10px;
-  color: #9CA3AF;
+  font-size: 12px;
+  color: #767676;
   font-weight: 400;
   background: #FFF;
   line-height: 1.3;
@@ -64,12 +64,12 @@ defineProps<{
 @media (max-width: 400px) {
   .option-label {
     min-width: 52px;
-    font-size: 10px;
+    font-size: 12px;
   }
 
   .pill {
     padding: 2px 6px;
-    font-size: 9px;
+    font-size: 12px;
   }
 }
 </style>

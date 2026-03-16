@@ -8,7 +8,7 @@ import useTranslations from '~/composables/useTranslations'
 const { t } = useTranslations('architect')
 const store = useCalculatorStore()
 
-const isGuided = computed(() => store.mode === 'guided' || store.mode === 'blue')
+const isGuided = true
 
 const tableCard = ref<HTMLElement>()
 
@@ -47,7 +47,7 @@ const stickyLeftName = W.num + 'px'
 
 const tableWidth = computed(() => {
   const base = W.num + W.name + W.unit + W.qty + W.pref + W.intens + W.del
-  const award = isGuided.value ? W.award : 0
+  const award = isGuided ? W.award : 0
   return base + award + store.sc * W.sup + 'px'
 })
 
@@ -491,9 +491,9 @@ function isLotComplete(lot: Lot): boolean {
   flex-shrink: 0;
 }
 .baseline-label {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
-  color: #6B7280;
+  color: #595959;
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
@@ -536,7 +536,7 @@ function isLotComplete(lot: Lot): boolean {
 }
 .grp {
   padding: 7px 12px;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -570,7 +570,7 @@ function isLotComplete(lot: Lot): boolean {
   gap: 6px;
 }
 .grp-label {
-  font-size: 11px;
+  font-size: 12px;
 }
 .grp-add-btn {
   margin-left: 6px;
@@ -603,7 +603,7 @@ function isLotComplete(lot: Lot): boolean {
   border-color: #9A3412;
 }
 .grp-add-label {
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.02em;
   text-transform: none;
@@ -684,25 +684,27 @@ function isLotComplete(lot: Lot): boolean {
 /* ─── Custom scrollbar ─── */
 .custom-scroll-track {
   flex-shrink: 0;
-  height: 12px;
-  background: #E9EAEC;
-  border-top: 1px solid #D1D5DB;
+  height: 14px;
+  background: transparent;
   position: relative;
   cursor: pointer;
   user-select: none;
+  display: flex;
+  align-items: center;
 }
 .custom-scroll-thumb {
   position: absolute;
-  top: 2px;
-  height: 8px;
-  min-width: 32px;
-  background: #94A3B8;
-  border-radius: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 5px;
+  min-width: 100px;
+  background: #C1C1C1;
+  border-radius: 999px;
   cursor: grab;
   transition: background 0.15s;
 }
-.custom-scroll-thumb:hover { background: #64748B; }
-.custom-scroll-thumb:active { cursor: grabbing; background: #475569; }
+.custom-scroll-thumb:hover { background: #A0A0A0; }
+.custom-scroll-thumb:active { cursor: grabbing; background: #888888; }
 
 /* ─── Excel-like table ─── */
 .xl-table {
@@ -725,7 +727,7 @@ function isLotComplete(lot: Lot): boolean {
 /* ─── Header ─── */
 .xl-th {
   padding: 8px 10px;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   color: #6B6B6B;
   text-transform: uppercase;
@@ -767,7 +769,7 @@ function isLotComplete(lot: Lot): boolean {
   border-bottom: 1px dashed #C5C7C9;
   outline: none;
   background: transparent;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   color: #6B6B6B;
   letter-spacing: 0.04em;
@@ -834,9 +836,9 @@ function isLotComplete(lot: Lot): boolean {
 }
 .xl-td--num {
   text-align: center;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
-  color: #CCCCCC;
+  color: #767676;
   padding: 6px 2px;
 }
 .lot-num-cell {
@@ -996,7 +998,7 @@ function isLotComplete(lot: Lot): boolean {
   transition: left 0.1s;
 }
 .intensity-val {
-  font-size: 11px;
+  font-size: 12px;
   color: #6B6B6B;
   font-weight: 600;
   min-width: 28px;
@@ -1036,7 +1038,7 @@ function isLotComplete(lot: Lot): boolean {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  font-size: 9px;
+  font-size: 12px;
   color: #6B6B6B;
   padding: 0;
   opacity: 0;

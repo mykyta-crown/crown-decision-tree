@@ -72,7 +72,7 @@ const barColor = computed(() => {
 }
 
 .intensity-label {
-  font-size: 11px;
+  font-size: 12px;
   color: #61615F;
   min-width: 68px;
   flex-shrink: 0;

@@ -346,7 +346,7 @@ function tryAdvanceStep() {
                   </span>
                   <span v-else class="step-done-pill">
                     <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
-                      <path d="M3 8.5L6.5 12L13 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                      <path d="M3 8.5L6.5 12L13 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
                     {{ t('calc.steps.complete') }}
                   </span>
@@ -553,20 +553,20 @@ function tryAdvanceStep() {
 }
 
 .step-panel:not(.step-panel--active):not(.step-panel--done) .step-label {
-  color: #6B7280;
+  color: #595959;
 }
 
 .step-caption {
   font-size: 13px;
   font-weight: 400;
-  color: #9CA3AF;
+  color: #767676;
   white-space: nowrap;
-  margin-top: 1px;
+  margin-top: 5px;
   transition: color 0.2s ease;
 }
 
 .step-panel--active .step-caption {
-  color: #6B7280;
+  color: #595959;
 }
 
 .step-panel--locked {
@@ -576,11 +576,11 @@ function tryAdvanceStep() {
 
 .step-panel--locked .step-badge {
   background: #E5E7EB;
-  color: #9CA3AF;
+  color: #767676;
 }
 
 .step-panel--locked .step-label {
-  color: #9CA3AF !important;
+  color: #767676 !important;
 }
 
 .step-inline-fields {
@@ -601,7 +601,7 @@ function tryAdvanceStep() {
   padding: 3px 10px;
   border-radius: 12px;
   background: #F3F4F6;
-  color: #9CA3AF;
+  color: #767676;
   transition: all 0.2s ease;
 }
 
@@ -612,11 +612,11 @@ function tryAdvanceStep() {
 
 .step-done-pill {
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 400;
   padding: 3px 10px;
   border-radius: 12px;
-  background: #D1FAE5;
-  color: #065F46;
+  background: transparent;
+  color: #047857;
   display: inline-flex;
   align-items: center;
   gap: 4px;
@@ -630,7 +630,7 @@ function tryAdvanceStep() {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #9CA3AF;
+  color: #767676;
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s ease, background 0.15s ease;
   flex-shrink: 0;
 }

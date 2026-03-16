@@ -141,7 +141,10 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
 import { useCalculatorStore } from '~/stores/architect/calculator'
-import { getScores, Q_OPTS, type ScoreResult } from '~/utils/architect/scoring-engine'
+import { getScores, Q_OPTS, DEF_BASES, DEF_SAVINGS, DEF_MATRIX, type ScoreResult } from '~/utils/architect/scoring-engine'
+
+// Quick Selector always uses default scoring params — never project-specific tuning
+const DEF_PARAMS = { bases: DEF_BASES, savings: DEF_SAVINGS, matrix: DEF_MATRIX }
 import { FC, gfc } from '~/utils/architect/constants'
 import useTranslations from '~/composables/useTranslations'
 
@@ -209,7 +212,7 @@ function buildDisplayName(r: ScoreResult): string {
 const scores = computed<DisplayResult[]>(() => {
   if (!allSelected.value) return []
   const raw = getScores(
-    store.params,
+    DEF_PARAMS,
     sel.value[0], sel.value[1], sel.value[2], sel.value[3], sel.value[4], sel.value[5],
   )
   return raw

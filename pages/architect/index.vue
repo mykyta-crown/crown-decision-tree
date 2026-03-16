@@ -628,7 +628,7 @@ function openProject(proj: any) {
 .clear-all-btn {
   font-size: 12px;
   font-weight: 500;
-  color: #9CA3AF;
+  color: #767676;
   background: none;
   border: none;
   cursor: pointer;
@@ -670,7 +670,7 @@ function openProject(proj: any) {
 .base-table-btn {
   opacity: 0.5;
   text-transform: none !important;
-  font-size: 11px !important;
+  font-size: 12px !important;
   letter-spacing: 0 !important;
 }
 

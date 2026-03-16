@@ -250,7 +250,7 @@ const verdictDesc = computed(() => {
 .p1-card-sub {
   font-size: 12px;
   font-weight: 400;
-  color: #787878;
+  color: #595959;
   line-height: normal;
   margin-top: 2px;
   margin-bottom: 16px;
@@ -411,7 +411,7 @@ const verdictDesc = computed(() => {
 .verdict-desc {
   font-size: 12px;
   font-weight: 400;
-  color: #787878;
+  color: #595959;
   line-height: 1.55;
   flex: 1;
 }

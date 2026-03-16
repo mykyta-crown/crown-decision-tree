@@ -77,7 +77,15 @@
               <input v-model.number="editLotQty" type="number" class="ap-lot-input" :min="1" step="1" />
             </div>
             <div class="ap-lot-detail ap-lot-detail--baseline">
-              <label class="ap-lot-detail-lbl">{{ t('calc.auctionParams.baselinePrice', {}, 'Baseline') }}</label>
+              <label class="ap-lot-detail-lbl">
+                {{ t('calc.auctionParams.baselinePrice', {}, 'Baseline') }}
+                <v-tooltip location="top" max-width="220" content-class="bg-white text-black border">
+                  <template #activator="{ props: tip }">
+                    <span v-bind="tip" class="ap-ceil-info">ⓘ</span>
+                  </template>
+                  <span style="font-size:12px;line-height:1.5">{{ locale === 'fr' ? 'Prix de référence (budget actuel). Utilisé pour calculer les économies estimées.' : 'Reference price (current spend). Used to calculate estimated savings.' }}</span>
+                </v-tooltip>
+              </label>
               <input v-model.number="editBaseline" type="number" class="ap-lot-input ap-lot-input--num" :min="0" step="any" />
             </div>
           </div>
@@ -112,7 +120,13 @@
               <!-- Right: min + max decrement side by side -->
               <div class="ap-english-decr">
                 <div class="ap-english-decr-item">
-                  <span class="ap-arc-ctrl-lbl">{{ t('calc.auctionParams.minDecrement', {}, 'Min /bid') }}</span>
+                  <span class="ap-arc-ctrl-lbl">
+                    {{ t('calc.auctionParams.minDecrement', {}, 'Min /bid') }}
+                    <v-tooltip location="top" max-width="200" content-class="bg-white text-black border">
+                      <template #activator="{ props: tip }"><span v-bind="tip" class="ap-ceil-info">ⓘ</span></template>
+                      <span style="font-size:12px;line-height:1.5">{{ locale === 'fr' ? 'Réduction minimale requise par offre.' : 'Minimum required price reduction per bid.' }}</span>
+                    </v-tooltip>
+                  </span>
                   <div class="ap-price-arc-step">
                     <span class="ap-price-arc-step-sign" style="color:#059669">−</span>
                     <input v-model.number="editMinDecr" type="number" class="ap-step-input" step="any" :min="0" />
@@ -120,7 +134,13 @@
                   <div v-if="editLotQty > 1" class="ap-step-sub">× {{ editLotQty }} = {{ fmtN(Math.round(editMinDecr * editLotQty)) }}</div>
                 </div>
                 <div class="ap-english-decr-item">
-                  <span class="ap-arc-ctrl-lbl">{{ t('calc.auctionParams.maxDecrement', {}, 'Max /bid') }}</span>
+                  <span class="ap-arc-ctrl-lbl">
+                    {{ t('calc.auctionParams.maxDecrement', {}, 'Max /bid') }}
+                    <v-tooltip location="top" max-width="200" content-class="bg-white text-black border">
+                      <template #activator="{ props: tip }"><span v-bind="tip" class="ap-ceil-info">ⓘ</span></template>
+                      <span style="font-size:12px;line-height:1.5">{{ locale === 'fr' ? 'Réduction maximale autorisée par offre.' : 'Maximum allowed price reduction per bid.' }}</span>
+                    </v-tooltip>
+                  </span>
                   <div class="ap-price-arc-step">
                     <span class="ap-price-arc-step-sign" style="color:#059669">−</span>
                     <input v-model.number="editMaxDecr" type="number" class="ap-step-input" step="any" :min="0" />
@@ -138,7 +158,13 @@
               {{ t('calc.auctionParams.dutchPreferredNote') }}
             </div>
             <div class="ap-prebid-toggle">
-              <span class="ap-prebid-toggle-label">Pre-bid</span>
+              <span class="ap-prebid-toggle-label">
+                Pre-bid
+                <v-tooltip location="top" max-width="240" content-class="bg-white text-black border">
+                  <template #activator="{ props: tip }"><span v-bind="tip" class="ap-ceil-info">ⓘ</span></template>
+                  <span style="font-size:12px;line-height:1.5">{{ locale === 'fr' ? 'Le fournisseur définit un seuil à l\'avance. Le système accepte automatiquement quand le prix atteint ce seuil — garantit une offre le jour J.' : 'Supplier sets a threshold in advance. The system auto-accepts when the price reaches it — guarantees an offer on auction day.' }}</span>
+                </v-tooltip>
+              </span>
               <button
                 class="ap-toggle-track"
                 :class="editPrebid ? 'ap-toggle-track--on' : 'ap-toggle-track--off'"
@@ -208,7 +234,13 @@
           <!-- JAPANESE -->
           <template v-else-if="params?.type === 'Japanese'">
             <div class="ap-prebid-toggle">
-              <span class="ap-prebid-toggle-label">Pre-bid</span>
+              <span class="ap-prebid-toggle-label">
+                Pre-bid
+                <v-tooltip location="top" max-width="240" content-class="bg-white text-black border">
+                  <template #activator="{ props: tip }"><span v-bind="tip" class="ap-ceil-info">ⓘ</span></template>
+                  <span style="font-size:12px;line-height:1.5">{{ locale === 'fr' ? 'Le fournisseur définit un seuil à l\'avance. Le système accepte automatiquement quand le prix atteint ce seuil — garantit une offre le jour J.' : 'Supplier sets a threshold in advance. The system auto-accepts when the price reaches it — guarantees an offer on auction day.' }}</span>
+                </v-tooltip>
+              </span>
               <button
                 class="ap-toggle-track"
                 :class="editPrebid ? 'ap-toggle-track--on' : 'ap-toggle-track--off'"
@@ -303,7 +335,13 @@
               <!-- Right: min + max decrement side by side -->
               <div class="ap-english-decr">
                 <div class="ap-english-decr-item">
-                  <span class="ap-arc-ctrl-lbl">{{ t('calc.auctionParams.minDecrement', {}, 'Min /bid') }}</span>
+                  <span class="ap-arc-ctrl-lbl">
+                    {{ t('calc.auctionParams.minDecrement', {}, 'Min /bid') }}
+                    <v-tooltip location="top" max-width="200" content-class="bg-white text-black border">
+                      <template #activator="{ props: tip }"><span v-bind="tip" class="ap-ceil-info">ⓘ</span></template>
+                      <span style="font-size:12px;line-height:1.5">{{ locale === 'fr' ? 'Réduction minimale requise par offre.' : 'Minimum required price reduction per bid.' }}</span>
+                    </v-tooltip>
+                  </span>
                   <div class="ap-price-arc-step">
                     <span class="ap-price-arc-step-sign" style="color:#67E8F9">−</span>
                     <input v-model.number="editMinDecr" type="number" class="ap-step-input" step="any" :min="0" />
@@ -311,7 +349,13 @@
                   <div v-if="editLotQty > 1" class="ap-step-sub">× {{ editLotQty }} = {{ fmtN(Math.round(editMinDecr * editLotQty)) }}</div>
                 </div>
                 <div class="ap-english-decr-item">
-                  <span class="ap-arc-ctrl-lbl">{{ t('calc.auctionParams.maxDecrement', {}, 'Max /bid') }}</span>
+                  <span class="ap-arc-ctrl-lbl">
+                    {{ t('calc.auctionParams.maxDecrement', {}, 'Max /bid') }}
+                    <v-tooltip location="top" max-width="200" content-class="bg-white text-black border">
+                      <template #activator="{ props: tip }"><span v-bind="tip" class="ap-ceil-info">ⓘ</span></template>
+                      <span style="font-size:12px;line-height:1.5">{{ locale === 'fr' ? 'Réduction maximale autorisée par offre.' : 'Maximum allowed price reduction per bid.' }}</span>
+                    </v-tooltip>
+                  </span>
                   <div class="ap-price-arc-step">
                     <span class="ap-price-arc-step-sign" style="color:#67E8F9">−</span>
                     <input v-model.number="editMaxDecr" type="number" class="ap-step-input" step="any" :min="0" />
@@ -354,7 +398,13 @@
               <!-- Right: min + max decrement side by side -->
               <div class="ap-english-decr">
                 <div class="ap-english-decr-item">
-                  <span class="ap-arc-ctrl-lbl">{{ t('calc.auctionParams.minDecrement', {}, 'Min /bid') }}</span>
+                  <span class="ap-arc-ctrl-lbl">
+                    {{ t('calc.auctionParams.minDecrement', {}, 'Min /bid') }}
+                    <v-tooltip location="top" max-width="200" content-class="bg-white text-black border">
+                      <template #activator="{ props: tip }"><span v-bind="tip" class="ap-ceil-info">ⓘ</span></template>
+                      <span style="font-size:12px;line-height:1.5">{{ locale === 'fr' ? 'Réduction minimale requise par offre.' : 'Minimum required price reduction per bid.' }}</span>
+                    </v-tooltip>
+                  </span>
                   <div class="ap-price-arc-step">
                     <span class="ap-price-arc-step-sign" style="color:#059669">−</span>
                     <input v-model.number="editMinDecr" type="number" class="ap-step-input" step="any" :min="0" />
@@ -362,7 +412,13 @@
                   <div v-if="editLotQty > 1" class="ap-step-sub">× {{ editLotQty }} = {{ fmtN(Math.round(editMinDecr * editLotQty)) }}</div>
                 </div>
                 <div class="ap-english-decr-item">
-                  <span class="ap-arc-ctrl-lbl">{{ t('calc.auctionParams.maxDecrement', {}, 'Max /bid') }}</span>
+                  <span class="ap-arc-ctrl-lbl">
+                    {{ t('calc.auctionParams.maxDecrement', {}, 'Max /bid') }}
+                    <v-tooltip location="top" max-width="200" content-class="bg-white text-black border">
+                      <template #activator="{ props: tip }"><span v-bind="tip" class="ap-ceil-info">ⓘ</span></template>
+                      <span style="font-size:12px;line-height:1.5">{{ locale === 'fr' ? 'Réduction maximale autorisée par offre.' : 'Maximum allowed price reduction per bid.' }}</span>
+                    </v-tooltip>
+                  </span>
                   <div class="ap-price-arc-step">
                     <span class="ap-price-arc-step-sign" style="color:#059669">−</span>
                     <input v-model.number="editMaxDecr" type="number" class="ap-step-input" step="any" :min="0" />
@@ -400,6 +456,16 @@
               </div>
               <div class="ap-sup-col-prop ap-sup-col-prop--head">
                 {{ t('calc.auctionParams.proposedCeiling') }}
+                <v-tooltip
+                  location="top"
+                  max-width="260"
+                  content-class="bg-white text-black border"
+                >
+                  <template #activator="{ props: tip }">
+                    <span v-bind="tip" class="ap-ceil-info">ⓘ</span>
+                  </template>
+                  <span style="font-size:12px;line-height:1.5">{{ t('calc.auctionParams.proposedCeilingTooltip') }}</span>
+                </v-tooltip>
               </div>
               <div v-if="params?.type === 'DutchPreferred'" class="ap-sup-col-pref ap-sup-col-pref--head">
                 {{ locale === 'fr' ? 'Préféré' : 'Preferred' }}
@@ -507,17 +573,15 @@
           </div>
         </div>
 
-        </div><!-- /ap-col--right -->
-      </div>
-
-      <!-- ── Footer ────────────────────────────────────────────────────── -->
-      <div class="ap-footer">
+        <!-- ── Build button ──────────────────────────────────────────── -->
         <button class="ap-btn-primary" @click="buildAuction">
           <span class="ap-btn-label">{{ t('calc.auctionParams.build') }}</span>
           <span class="ap-btn-arrow-wrap">
             <v-icon size="15">mdi-arrow-right</v-icon>
           </span>
         </button>
+
+        </div><!-- /ap-col--right -->
       </div>
 
     </v-card>
@@ -548,6 +612,7 @@ const show = defineModel<boolean>({ default: false })
 const { t, locale } = useTranslations('architect')
 const store = useCalculatorStore()
 const { saveArchitectState } = useArchitectBuildState()
+
 
 // ── Buyer name ────────────────────────────────────────────────────────────────
 
@@ -1037,19 +1102,30 @@ const familyLabel = computed(() =>
 .ap-body {
   display: grid;
   grid-template-columns: 1.1fr 0.9fr;
-  align-items: start;
+  align-items: stretch;
   overflow-y: auto; flex: 1;
 }
 
 .ap-col {
-  padding: 0 16px 12px;
+  padding: 0 16px 16px;
   display: flex; flex-direction: column;
 }
 .ap-col--left  { border-right: 1px solid #F3F4F6; }
+.ap-col--right {
+  position: sticky; top: 0;
+  height: 100%; max-height: 90vh;
+  display: flex; flex-direction: column;
+  overflow: hidden; gap: 0;
+  padding-bottom: 16px;
+}
+.ap-col--right .ap-section {
+  flex: 1; overflow-y: auto; min-height: 0;
+  border-bottom: none;
+}
 
 /* ── Sections ───────────────────────────────────────────────────────────── */
 .ap-section {
-  padding: 10px 0;
+  padding: 12px 0;
   border-bottom: 1px solid #F3F4F6;
   display: flex; flex-direction: column; gap: 8px;
 }
@@ -1061,6 +1137,7 @@ const familyLabel = computed(() =>
   text-transform: uppercase; letter-spacing: 0.07em;
   margin-bottom: 0;
 }
+
 
 /* ── Editable fields ─────────────────────────────────────────────────────── */
 .ap-field { display: flex; flex-direction: column; gap: 3px; }
@@ -1088,30 +1165,28 @@ const familyLabel = computed(() =>
 
 /* ── Lot details strip ──────────────────────────────────────────────────── */
 .ap-lot-details {
-  display: flex; gap: 0;
-  border: 1px solid #E9EAEC; border-radius: 6px; overflow: hidden;
+  display: grid;
+  grid-template-columns: 2fr 0.7fr 0.7fr 1.3fr;
+  gap: 8px;
 }
 .ap-lot-detail {
-  flex: 1; padding: 5px 8px;
   display: flex; flex-direction: column; gap: 3px;
-  border-right: 1px solid #E9EAEC; background: #fff;
 }
-.ap-lot-detail--wide     { flex: 2; }
-.ap-lot-detail--sm       { flex: 0.7; }
-.ap-lot-detail--baseline { flex: 1.3; }
-.ap-lot-detail:last-child { border-right: none; }
+.ap-lot-detail--wide,
+.ap-lot-detail--sm,
+.ap-lot-detail--baseline { /* proportions handled by grid-template-columns */ }
 .ap-lot-detail-lbl {
-  font-size: 9px; font-weight: 700; color: #9CA3AF;
-  text-transform: uppercase; letter-spacing: 0.07em;
+  font-size: 11px; font-weight: 600; color: #6B7280;
+  letter-spacing: 0.02em;
 }
 .ap-lot-input {
-  width: 100%; height: 22px; padding: 0; border: none; outline: none;
-  font-size: 13px; font-weight: 600; color: #1D1D1B;
-  background: transparent; font-family: inherit;
-  border-bottom: 1.5px solid transparent;
+  width: 100%; height: 32px; padding: 0 10px;
+  border: 1px solid #E9EAEC; border-radius: 4px;
+  font-size: 13px; color: #1D1D1B; background: #fff;
+  font-family: inherit; outline: none;
   transition: border-color 0.15s; box-sizing: border-box;
 }
-.ap-lot-input:focus { border-bottom-color: #9CA3AF; }
+.ap-lot-input:focus { border-color: #9CA3AF; }
 .ap-lot-input--num  { text-align: right; font-variant-numeric: tabular-nums; }
 .ap-lot-input::-webkit-outer-spin-button,
 .ap-lot-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
@@ -1169,9 +1244,12 @@ const familyLabel = computed(() =>
 /* ── Prebid toggle ──────────────────────────────────────────────────────── */
 .ap-prebid-toggle {
   display: flex; align-items: center; gap: 8px;
+  padding: 8px 10px; border-radius: 6px;
+  background: #F9FAFB; border: 1px solid #E9EAEC;
 }
 .ap-prebid-toggle-label {
   font-size: 12px; font-weight: 600; color: #374151;
+  flex: 1;
 }
 .ap-toggle-track {
   position: relative; width: 36px; height: 20px;
@@ -1400,7 +1478,7 @@ const familyLabel = computed(() =>
 .ap-sup-col-prop {
   display: grid; grid-template-columns: 1fr 1fr;
   align-items: center; gap: 4px;
-  padding: 4px 8px; background: #F0FDF4;
+  padding: 4px 8px; background: #F5F6FF;
   border-radius: 0 6px 6px 0; margin: 1px 2px 1px 0;
   transition: background 0.15s;
 }
@@ -1409,12 +1487,19 @@ const familyLabel = computed(() =>
 /* Head/sub-header group labels */
 .ap-sup-col-init--head,
 .ap-sup-col-prop--head {
-  display: block; text-align: center;
+  display: flex; align-items: center; justify-content: center; gap: 4px;
   padding: 4px 8px; background: transparent;
   font-size: 10px; font-weight: 700; color: #6B7280;
   letter-spacing: 0.06em; text-transform: uppercase;
   border-radius: 0; margin: 0;
 }
+.ap-ceil-info {
+  font-size: 11px; color: #9CA3AF; cursor: help;
+  font-style: normal; text-transform: none; letter-spacing: 0;
+  transition: color 0.15s;
+  line-height: 1;
+}
+.ap-ceil-info:hover { color: #6B7280; }
 .ap-sup-col-init--sub,
 .ap-sup-col-prop--sub {
   background: transparent; padding: 2px 8px; margin: 0; border-radius: 0;
@@ -1436,13 +1521,13 @@ const familyLabel = computed(() =>
 .ap-sup-input-wrap { display: flex; align-items: center; }
 .ap-sup-input {
   width: 100%; height: 26px; padding: 0 6px;
-  border: 1px solid #D1FAE5; border-radius: 4px;
+  border: 1px solid #DDD6FE; border-radius: 4px;
   font-size: 12px; font-weight: 600; color: #1D1D1B;
   text-align: right; background: #fff; outline: none;
   font-family: inherit; transition: border-color 0.15s;
   box-sizing: border-box;
 }
-.ap-sup-input:focus { border-color: #6EE7B7; }
+.ap-sup-input:focus { border-color: #A78BFA; }
 .ap-sup-input::-webkit-outer-spin-button,
 .ap-sup-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 .ap-sup-input[type=number] { -moz-appearance: textfield; }
@@ -1484,7 +1569,7 @@ const familyLabel = computed(() =>
   font-size: 10px; font-weight: 600;
   color: #9CA3AF;
 }
-.ap-delta--neg { color: #16A34A; }
+.ap-delta--neg { color: #6366F1; }  /* indigo — proposed limit, not a result */
 .ap-delta--pos { color: #DC2626; }
 
 /* ── Terms ──────────────────────────────────────────────────────────────── */
@@ -1510,12 +1595,6 @@ const familyLabel = computed(() =>
 .ap-term-content :deep(li) { margin-bottom: 4px; }
 .ap-term-content :deep(li:last-child) { margin-bottom: 0; }
 
-/* ── Footer ─────────────────────────────────────────────────────────────── */
-.ap-footer {
-  padding: 8px 16px; border-top: 1px solid #E9EAEC; background: #FAFAFA;
-  flex-shrink: 0;
-}
-
 @keyframes ap-shimmer {
   0%   { background-position: 200% center; }
   100% { background-position: -200% center; }
@@ -1529,7 +1608,7 @@ const familyLabel = computed(() =>
   background-size: 250% 100%;
   animation: ap-shimmer 4s linear infinite;
   font-size: 14px; font-weight: 600; color: white;
-  cursor: pointer;
+  cursor: pointer; flex-shrink: 0;
   transition: transform 0.15s, box-shadow 0.15s;
 }
 .ap-btn-primary:hover {
