@@ -1,6 +1,7 @@
 import { FC, PREF_LABELS, getFamilyOptions, CCY } from './constants'
 import { fmtE } from './formatting'
 import type { ScoreResult } from './scoring-engine'
+import type { AuctionParams } from './computeAuctionParams'
 
 interface ExportLot {
   name: string
@@ -13,6 +14,7 @@ interface ExportLot {
   excl: boolean[]
   baseline: number
   top3: ScoreResult[]
+  params?: AuctionParams
 }
 
 interface ExportData {
@@ -186,6 +188,105 @@ function supplierPriceTableHtml(lot: ExportLot, supNames: string[], ccy: string)
   </table>`
 }
 
+function fmtDur(min: number): string {
+  return min % 1 === 0 ? `${min} min` : `${Math.round(min * 60)}s`
+}
+
+function paramCell(label: string, value: string, accent?: string): string {
+  return `<div style="display:flex;flex-direction:column;gap:2px;">
+    <span style="font-size:10px;color:#9CA3AF;font-weight:500;text-transform:uppercase;letter-spacing:0.04em;">${label}</span>
+    <span style="font-size:13px;font-weight:700;color:${accent || '#1D1D1B'};">${value}</span>
+  </div>`
+}
+
+function paramsBlockHtml(params: AuctionParams, ccy: string): string {
+  const wrap = (content: string) => `
+  <div style="margin-top:12px;padding:14px 16px;background:#F9FAFB;border:1px solid #E9EAEC;border-radius:8px;">
+    <div style="font-size:11px;font-weight:600;color:#61615F;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px;">Recommended Parameters</div>
+    ${content}
+  </div>`
+
+  const row = (cells: string) =>
+    `<div style="display:flex;flex-wrap:wrap;gap:20px;">${cells}</div>`
+
+  const phaseLabel = (label: string, color: string) =>
+    `<div style="display:flex;align-items:center;gap:6px;margin-top:10px;margin-bottom:6px;">
+      <div style="width:8px;height:8px;border-radius:50%;background:${color};"></div>
+      <span style="font-size:11px;font-weight:600;color:${color};">${label}</span>
+    </div>`
+
+  if (params.type === 'English') {
+    return wrap(row(
+      paramCell('Duration', fmtDur(params.duration)) +
+      paramCell('Overtime', fmtDur(params.overtimeRange)) +
+      paramCell('Min decrement', fmtE(params.minDecr, ccy), '#059669') +
+      paramCell('Max decrement', fmtE(params.maxDecr, ccy), '#059669')
+    ))
+  }
+
+  if (params.type === 'SealedBid') {
+    return wrap(row(
+      paramCell('Min decrement', fmtE(params.minDecr, ccy), '#0891B2') +
+      paramCell('Max decrement', fmtE(params.maxDecr, ccy), '#0891B2')
+    ))
+  }
+
+  if (params.type === 'Dutch' || params.type === 'DutchPreferred') {
+    const accent = '#7C3AED'
+    return wrap(
+      row(
+        paramCell('Duration', fmtDur(params.duration)) +
+        paramCell('Round', fmtDur(params.roundDuration)) +
+        paramCell('Rounds', String(params.nbRounds)) +
+        paramCell('Pre-bid', 'ON', '#059669')
+      ) +
+      `<div style="margin-top:10px;">` +
+      row(
+        paramCell('Starting price', fmtE(params.starting, ccy)) +
+        paramCell('+/round', fmtE(params.incr, ccy), accent) +
+        paramCell('Ceiling', fmtE(params.ending, ccy))
+      ) +
+      `</div>`
+    )
+  }
+
+  if (params.type === 'Japanese') {
+    const accent = '#D97706'
+    return wrap(
+      row(
+        paramCell('Duration', fmtDur(params.duration)) +
+        paramCell('Round', fmtDur(params.roundDuration)) +
+        paramCell('Rounds', String(params.nbRounds)) +
+        paramCell('Pre-bid', 'ON', '#059669')
+      ) +
+      `<div style="margin-top:10px;">` +
+      row(
+        paramCell('Starting price', fmtE(params.starting, ccy)) +
+        paramCell('−/round', fmtE(params.decr, ccy), accent) +
+        paramCell('Floor', fmtE(params.floor, ccy))
+      ) +
+      `</div>`
+    )
+  }
+
+  if (params.type === 'DoubleScenario') {
+    const en = params.english
+    return wrap(
+      phaseLabel('English Phase', '#059669') +
+      row(
+        paramCell('Duration', fmtDur(en.duration)) +
+        paramCell('Overtime', fmtDur(en.overtimeRange)) +
+        paramCell('Min decrement', fmtE(en.minDecr, ccy), '#059669') +
+        paramCell('Max decrement', fmtE(en.maxDecr, ccy), '#059669')
+      ) +
+      phaseLabel('Dutch Phase', '#7C3AED') +
+      `<div style="font-size:12px;color:#6B7280;font-style:italic;">Parameters set after the English phase, based on the best price achieved.</div>`
+    )
+  }
+
+  return ''
+}
+
 function intensityLevelLabel(intens: number): string {
   if (intens <= 33) return 'Collaborative'
   if (intens <= 66) return 'Competitive'
@@ -263,6 +364,9 @@ function lotBlockHtml(lot: ExportLot, li: number, data: ExportData): string {
 
     <!-- Supplier price table -->
     ${supplierPriceTableHtml(lot, data.supNames, data.ccy)}
+
+    <!-- Recommended parameters (top 1 family) -->
+    ${lot.params ? paramsBlockHtml(lot.params, data.ccy) : ''}
 
     <!-- Recommendations -->
     <div style="margin-top:16px;">

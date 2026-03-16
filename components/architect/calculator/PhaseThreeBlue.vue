@@ -213,6 +213,7 @@ import { useProjectsStore } from '~/stores/architect/projects'
 import { FC, gfc, PREF_LABELS, getFamilyOptions } from '~/utils/architect/constants'
 import { fmtE } from '~/utils/architect/formatting'
 import { exportArchitectPdf } from '~/utils/architect/exportPdf'
+import { computeAuctionParams } from '~/utils/architect/computeAuctionParams'
 import useTranslations from '~/composables/useTranslations'
 import type { Lot } from '~/stores/architect/calculator'
 import type { ScoreResult } from '~/utils/architect/scoring-engine'
@@ -424,11 +425,19 @@ function exportReport() {
     ccy: store.ccy,
     totBase: store.totBase,
     supNames: store.supNames,
-    lots: store.lots.map((lot, i) => ({
-      ...lot,
-      baseline: store.lotBaseline(lot),
-      top3: getTop3(i),
-    })),
+    lots: store.lots.map((lot, i) => {
+      const top3 = getTop3(i)
+      const baseline = store.lotBaseline(lot)
+      const topFamily = top3[0]?.family ?? null
+      return {
+        ...lot,
+        baseline,
+        top3,
+        params: topFamily
+          ? computeAuctionParams(topFamily, lot.pref, lot.prices, lot.excl, baseline, store.builderParams) ?? undefined
+          : undefined,
+      }
+    }),
   })
 }
 </script>

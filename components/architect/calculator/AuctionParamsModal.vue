@@ -944,8 +944,11 @@ const params = computed(() => {
   }
 
   if (props.family === 'Sealed Bid') {
+    const bp = store.builderParams.sealedBid
     return { ...buildDefaults, type: 'SealedBid' as const, builderType: 'sealed-bid' as const,
       maxRankDisplayed: 2,
+      minDecr: niceRound(props.lotBaseline * (bp.min_decr_factor ?? 0.25) / 100),
+      maxDecr: niceRound(props.lotBaseline * (bp.max_decr_factor ?? 20) / 100),
       supplierCeilings: activeCeilingsData() }
   }
 
