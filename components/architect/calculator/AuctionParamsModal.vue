@@ -269,7 +269,47 @@
 
           <!-- SEALED BID -->
           <template v-else-if="params?.type === 'SealedBid'">
-            <!-- baseline visible in lot strip above -->
+            <div class="ap-price-arc ap-price-arc--english ap-english-card">
+              <!-- Left: timing selects stacked -->
+              <div class="ap-english-timing">
+                <div class="ap-arc-ctrl">
+                  <span class="ap-arc-ctrl-lbl">{{ t('calc.auctionParams.duration', {}, 'Total duration') }}</span>
+                  <select v-model.number="editDuration" class="ap-arc-ctrl-sel">
+                    <option v-for="d in [5,10,15,20,25,30,35,40]" :key="d" :value="d">{{ d }}m</option>
+                  </select>
+                </div>
+                <div class="ap-arc-ctrl">
+                  <span class="ap-arc-ctrl-lbl">Overtime</span>
+                  <select v-model.number="editRoundDuration" class="ap-arc-ctrl-sel">
+                    <option :value="0.5">30s</option>
+                    <option :value="1">1m</option>
+                    <option :value="2">2m</option>
+                    <option :value="3">3m</option>
+                    <option :value="4">4m</option>
+                    <option :value="5">5m</option>
+                  </select>
+                </div>
+              </div>
+              <!-- Divider -->
+              <div class="ap-english-sep" />
+              <!-- Right: min + max decrement side by side -->
+              <div class="ap-english-decr">
+                <div class="ap-english-decr-item">
+                  <span class="ap-arc-ctrl-lbl">{{ t('calc.auctionParams.minDecrement', {}, 'Min /bid') }}</span>
+                  <div class="ap-price-arc-step">
+                    <span class="ap-price-arc-step-sign" style="color:#67E8F9">−</span>
+                    <input v-model.number="editMinDecr" type="number" class="ap-step-input" step="any" :min="0" />
+                  </div>
+                </div>
+                <div class="ap-english-decr-item">
+                  <span class="ap-arc-ctrl-lbl">{{ t('calc.auctionParams.maxDecrement', {}, 'Max /bid') }}</span>
+                  <div class="ap-price-arc-step">
+                    <span class="ap-price-arc-step-sign" style="color:#67E8F9">−</span>
+                    <input v-model.number="editMaxDecr" type="number" class="ap-step-input" step="any" :min="0" />
+                  </div>
+                </div>
+              </div>
+            </div>
           </template>
 
           <!-- DOUBLE SCENARIO -->
