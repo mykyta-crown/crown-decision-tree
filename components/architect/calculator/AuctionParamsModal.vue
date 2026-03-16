@@ -187,10 +187,13 @@
                   <div class="ap-price-arc-line" />
                   <v-icon size="14" color="#A78BFA">mdi-arrow-right</v-icon>
                 </div>
-                <div class="ap-price-arc-step">
-                  <span class="ap-price-arc-step-sign" style="color:#A78BFA">+</span>
-                  <input v-model.number="editIncr" type="number" class="ap-step-input" step="any" :min="0" />
-                  <span class="ap-price-arc-step-unit">/round</span>
+                <div class="ap-step-labeled">
+                  <span class="ap-arc-ctrl-lbl">Increment</span>
+                  <div class="ap-price-arc-step">
+                    <span class="ap-price-arc-step-sign" style="color:#A78BFA">+</span>
+                    <input v-model.number="editIncr" type="number" class="ap-step-input" step="any" :min="0" />
+                    <span class="ap-price-arc-step-unit">/round</span>
+                  </div>
                 </div>
               </div>
               <!-- Right: editable ending price (ceiling) -->
@@ -254,10 +257,13 @@
                   <div class="ap-price-arc-line" />
                   <v-icon size="14" color="#FBBF24">mdi-arrow-right</v-icon>
                 </div>
-                <div class="ap-price-arc-step">
-                  <span class="ap-price-arc-step-sign" style="color:#FBBF24">−</span>
-                  <input v-model.number="editDecr" type="number" class="ap-step-input" step="any" :min="0" />
-                  <span class="ap-price-arc-step-unit">/round</span>
+                <div class="ap-step-labeled">
+                  <span class="ap-arc-ctrl-lbl">Decrement</span>
+                  <div class="ap-price-arc-step">
+                    <span class="ap-price-arc-step-sign" style="color:#FBBF24">−</span>
+                    <input v-model.number="editDecr" type="number" class="ap-step-input" step="any" :min="0" />
+                    <span class="ap-price-arc-step-unit">/round</span>
+                  </div>
                 </div>
               </div>
               <!-- Right: computed floor (auto-updates) -->
@@ -1252,7 +1258,7 @@ const familyLabel = computed(() =>
 
 /* ── Arc timing controls (inside the arc card) ──────────────────────────── */
 .ap-arc-timing {
-  display: flex; align-items: center; gap: 4px;
+  display: flex; align-items: flex-end; gap: 4px;
   white-space: nowrap;
 }
 .ap-arc-ctrl {
@@ -1332,6 +1338,9 @@ const familyLabel = computed(() =>
 }
 .ap-step-sub {
   font-size: 10px; color: #9CA3AF; text-align: center; margin-top: 1px;
+}
+.ap-step-labeled {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
 }
 .ap-arc-price-input--dutch    { color: #6D28D9; }
 .ap-arc-price-input--dutch:focus { border-color: #A78BFA; background: #fff; }
@@ -1414,7 +1423,7 @@ const familyLabel = computed(() =>
 .ap-sup-name     { color: #374151; font-weight: 500; padding-right: 4px; }
 .ap-sup-price    { font-weight: 700; color: #1D1D1B; text-align: right; }
 .ap-sup-total    { font-size: 12px; color: #6B7280; text-align: right; }
-.ap-sup-sub      { font-style: italic; font-weight: 400; text-align: right; display: block; }
+.ap-sup-sub      { font-style: normal; font-weight: 400; text-align: right; display: block; }
 .ap-sup-empty    { color: #9CA3AF; font-size: 13px; padding: 6px 0; }
 
 /* Proposed total cell: stacks value + delta */
