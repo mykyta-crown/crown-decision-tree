@@ -706,7 +706,7 @@ async function buildAuction() {
   }
 
   show.value = false
-  navigateTo('/builder?mode=architect')
+  window.location.href = '/builder?mode=architect'
 }
 
 // ── Family colors ────────────────────────────────────────────────────────────
