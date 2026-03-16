@@ -278,32 +278,44 @@
               <div class="ap-phase-dot" style="background:#34D399" />
               {{ t('calc.auctionParams.phaseEnglish') }}
             </div>
-            <div class="ap-phase-body">
-              <div class="ap-timing-edit">
-                <div class="ap-field-inline">
-                  <label class="ap-field-label">{{ t('calc.auctionParams.duration') }}</label>
-                  <div class="ap-num-wrap">
-                    <input v-model.number="editDuration" type="number" min="1" max="120" class="ap-input ap-input--sm" />
-                    <span class="ap-unit">min</span>
-                  </div>
+            <div class="ap-price-arc ap-price-arc--english ap-english-card">
+              <!-- Left: timing selects stacked -->
+              <div class="ap-english-timing">
+                <div class="ap-arc-ctrl">
+                  <span class="ap-arc-ctrl-lbl">{{ t('calc.auctionParams.duration', {}, 'Total duration') }}</span>
+                  <select v-model.number="editDuration" class="ap-arc-ctrl-sel">
+                    <option v-for="d in [5,10,15,20,25,30,35,40]" :key="d" :value="d">{{ d }}m</option>
+                  </select>
                 </div>
-                <div class="ap-field-inline">
-                  <label class="ap-field-label">{{ t('calc.auctionParams.overtime') }}</label>
-                  <div class="ap-num-wrap">
-                    <input v-model.number="editRoundDuration" type="number" min="0" max="30" class="ap-input ap-input--sm" />
-                    <span class="ap-unit">min</span>
-                  </div>
+                <div class="ap-arc-ctrl">
+                  <span class="ap-arc-ctrl-lbl">Overtime</span>
+                  <select v-model.number="editRoundDuration" class="ap-arc-ctrl-sel">
+                    <option :value="0.5">30s</option>
+                    <option :value="1">1m</option>
+                    <option :value="2">2m</option>
+                    <option :value="3">3m</option>
+                    <option :value="4">4m</option>
+                    <option :value="5">5m</option>
+                  </select>
                 </div>
               </div>
-              <div class="ap-banner ap-banner--sm">
-                <div class="ap-param">
-                  <div class="ap-param-label">{{ t('calc.auctionParams.minDecrement') }}</div>
-                  <div class="ap-param-value ap-param-value--sm">{{ fmtN(params.english.minDecr) }}</div>
+              <!-- Divider -->
+              <div class="ap-english-sep" />
+              <!-- Right: min + max decrement side by side -->
+              <div class="ap-english-decr">
+                <div class="ap-english-decr-item">
+                  <span class="ap-arc-ctrl-lbl">{{ t('calc.auctionParams.minDecrement', {}, 'Min /bid') }}</span>
+                  <div class="ap-price-arc-step">
+                    <span class="ap-price-arc-step-sign" style="color:#059669">−</span>
+                    <input v-model.number="editMinDecr" type="number" class="ap-step-input" step="any" :min="0" />
+                  </div>
                 </div>
-                <div class="ap-param-div" />
-                <div class="ap-param">
-                  <div class="ap-param-label">{{ t('calc.auctionParams.maxDecline') }}</div>
-                  <div class="ap-param-value ap-param-value--sm">{{ fmtN(params.english.maxDecr) }}</div>
+                <div class="ap-english-decr-item">
+                  <span class="ap-arc-ctrl-lbl">{{ t('calc.auctionParams.maxDecrement', {}, 'Max /bid') }}</span>
+                  <div class="ap-price-arc-step">
+                    <span class="ap-price-arc-step-sign" style="color:#059669">−</span>
+                    <input v-model.number="editMaxDecr" type="number" class="ap-step-input" step="any" :min="0" />
+                  </div>
                 </div>
               </div>
             </div>
@@ -312,10 +324,6 @@
               {{ t('calc.auctionParams.phaseDutch') }}
             </div>
             <div class="ap-phase-body">
-              <div class="ap-timing">
-                <v-icon size="12" color="#9CA3AF">mdi-clock-outline</v-icon>
-                <span>10 min</span><span class="ap-dot">·</span><span>30s/round</span><span class="ap-dot">·</span><span>20 rounds</span>
-              </div>
               <div class="ap-ds-note">
                 <v-icon size="13" color="#A78BFA">mdi-information-outline</v-icon>
                 <span>{{ t('calc.auctionParams.dsParamsAfterEnglish') }}</span>
@@ -575,8 +583,8 @@ function initEditable() {
   editStarting.value = p.starting ?? 0
   editPrebid.value   = p.prebid !== false  // default ON
   editBaseline.value = Math.round(props.lotBaseline)
-  editMinDecr.value  = p.minDecr ?? 0
-  editMaxDecr.value  = p.maxDecr ?? 0
+  editMinDecr.value  = p.type === 'DoubleScenario' ? (p.english?.minDecr ?? 0) : (p.minDecr ?? 0)
+  editMaxDecr.value  = p.type === 'DoubleScenario' ? (p.english?.maxDecr ?? 0) : (p.maxDecr ?? 0)
 
   // Proposed prices — per supplier for English/SealedBid/DS; global auction price for Dutch/Japanese
   const globalProposed =
@@ -657,7 +665,7 @@ async function buildAuction() {
   } else if (p.type === 'Japanese') {
     p = { ...p, duration: editDuration.value, roundDuration: editRoundDuration.value, overtimeRange: editRoundDuration.value, decr: editDecr.value, starting: editStarting.value, floor: japaneseFloor.value, nbRounds: nbRounds.value, prebid: editPrebid.value }
   } else if (p.type === 'DoubleScenario') {
-    p = { ...p, english: { ...p.english, duration: editDuration.value, overtimeRange: editRoundDuration.value, supplierCeilings: ceilingsData } }
+    p = { ...p, english: { ...p.english, duration: editDuration.value, overtimeRange: editRoundDuration.value, minDecr: editMinDecr.value, maxDecr: editMaxDecr.value, supplierCeilings: ceilingsData } }
   }
 
   const state = saveArchitectState(p, props.lot, editBaseline.value, editCcy.value, locale.value, store.supNames)
