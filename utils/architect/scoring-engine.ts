@@ -225,3 +225,246 @@ export function getScores(params: ScoringParams, a: number, b: number, c: number
 export function deepCloneMatrix(matrix: number[][][]): number[][][] {
   return matrix.map(s => s.map(q => [...q]))
 }
+
+// ══════════════════════════════════════════════════════════════
+// BUILDER PARAMS — Per-type auction configuration + templates
+// ══════════════════════════════════════════════════════════════
+//
+// Factor fields are stored as PERCENTAGES (human-readable):
+//   ending_factor: 95  →  ending = best × 0.95
+//   min_decr_factor: 0.25  →  minDecr = baseline × 0.0025
+//   max_decr_factor: 20    →  maxDecr = baseline × 0.20
+//
+// Divide by 100 when computing actual prices.
+//
+// Placeholders in templates: {{lotName}} {{qty}} {{unit}} {{baseline}} {{currency}}
+// ══════════════════════════════════════════════════════════════
+
+export interface BuilderTypeParams {
+  duration?: number         // total duration (min)
+  overtime_range?: number   // overtime trigger window (min)
+  round_duration?: number   // duration per round (min)
+  nb_rounds?: number        // total rounds
+  time_per_round?: number   // Dutch Preferred exclusive window (seconds)
+  min_decr_factor?: number  // min decrement = baseline × (factor / 100)
+  max_decr_factor?: number  // max decrement = baseline × (factor / 100)
+  ending_factor?: number    // Dutch ending price = best × (factor / 100)
+  range_percent?: number    // Dutch range = ending × (factor / 100)
+  starting_factor?: number  // Japanese starting = best × (factor / 100)
+  floor_factor?: number     // Japanese floor = best × (factor / 100)
+  steps?: number            // number of price steps (Dutch/Japanese)
+  max_rank_displayed?: number
+}
+
+export interface BuilderTemplateSet {
+  awarding_principles: string
+  commercials_terms: string
+}
+
+export interface BuilderTypeConfig extends BuilderTypeParams {
+  templates: { fr: BuilderTemplateSet; en: BuilderTemplateSet }
+}
+
+export interface BuilderParams {
+  english: BuilderTypeConfig
+  sealedBid: BuilderTypeConfig
+  dutch: BuilderTypeConfig
+  dutchPreferred: BuilderTypeConfig
+  japanese: BuilderTypeConfig
+  doubleScenario: BuilderTypeConfig
+}
+
+// ── Default templates ────────────────────────────────────────────────────────
+
+const _tAwardingFR = (intro: string, rules: string[]) =>
+  `<p>${intro}</p><ul>${rules.map(r => `<li>${r}</li>`).join('')}</ul>`
+const _tAwardingEN = (intro: string, rules: string[]) =>
+  `<p>${intro}</p><ul>${rules.map(r => `<li>${r}</li>`).join('')}</ul>`
+
+const _tCommFR = `<p><strong>{{lotName}}</strong></p><ul><li><strong>Quantit\u00e9\u00a0:</strong> {{qty}} {{unit}}</li><li><strong>Devise\u00a0:</strong> {{currency}}</li><li><strong>Prix de r\u00e9f\u00e9rence\u00a0:</strong> {{baseline}} {{currency}}</li><li><strong>Conditions de paiement\u00a0:</strong> [\u00c0 compl\u00e9ter]</li><li><strong>D\u00e9lai de livraison\u00a0:</strong> [\u00c0 compl\u00e9ter]</li><li><strong>Dur\u00e9e du contrat\u00a0:</strong> [\u00c0 compl\u00e9ter]</li></ul>`
+const _tCommEN = `<p><strong>{{lotName}}</strong></p><ul><li><strong>Quantity:</strong> {{qty}} {{unit}}</li><li><strong>Currency:</strong> {{currency}}</li><li><strong>Reference price:</strong> {{baseline}} {{currency}}</li><li><strong>Payment terms:</strong> [To be completed]</li><li><strong>Delivery timeline:</strong> [To be completed]</li><li><strong>Contract duration:</strong> [To be completed]</li></ul>`
+
+export const DEF_BUILDER_PARAMS: BuilderParams = {
+  english: {
+    duration: 15, overtime_range: 3,
+    min_decr_factor: 0.25, max_decr_factor: 20,
+    templates: {
+      fr: {
+        awarding_principles: _tAwardingFR(
+          `Attribution au prix le plus bas pour le lot <strong>{{lotName}}</strong> ({{qty}} {{unit}}).`,
+          [
+            `Le fournisseur ayant soumis le prix total le plus bas \u00e0 l\u2019issue de l\u2019ench\u00e8re sera s\u00e9lectionn\u00e9.`,
+            `En cas d\u2019\u00e9galit\u00e9 de prix, le premier \u00e0 avoir soumis cette offre sera retenu.`,
+            `L\u2019acheteur se r\u00e9serve le droit de ne pas attribuer le lot si aucune offre n\u2019est jug\u00e9e satisfaisante.`,
+          ]
+        ),
+        commercials_terms: _tCommFR,
+      },
+      en: {
+        awarding_principles: _tAwardingEN(
+          `Award to the lowest price for lot <strong>{{lotName}}</strong> ({{qty}} {{unit}}).`,
+          [
+            `The supplier submitting the lowest total price at auction close will be selected.`,
+            `In case of a price tie, the first submission is retained.`,
+            `The buyer reserves the right not to award if no offer is satisfactory.`,
+          ]
+        ),
+        commercials_terms: _tCommEN,
+      },
+    },
+  },
+
+  sealedBid: {
+    min_decr_factor: 0.25, max_decr_factor: 20,
+    templates: {
+      fr: {
+        awarding_principles: _tAwardingFR(
+          `Attribution sur appel d\u2019offres scell\u00e9 pour le lot <strong>{{lotName}}</strong> ({{qty}} {{unit}}).`,
+          [
+            `Chaque fournisseur soumet une offre unique et confidentielle avant la cl\u00f4ture.`,
+            `L\u2019attribution est r\u00e9alis\u00e9e au prix le plus bas \u00e0 l\u2019issue du d\u00e9pouillement.`,
+            `Les offres ne sont r\u00e9v\u00e9l\u00e9es qu\u2019\u00e0 la cl\u00f4ture de la session.`,
+            `L\u2019acheteur se r\u00e9serve le droit de ne pas attribuer le lot si aucune offre n\u2019est jug\u00e9e satisfaisante.`,
+          ]
+        ),
+        commercials_terms: _tCommFR,
+      },
+      en: {
+        awarding_principles: _tAwardingEN(
+          `Award via sealed bid for lot <strong>{{lotName}}</strong> ({{qty}} {{unit}}).`,
+          [
+            `Each supplier submits a single confidential offer before the deadline.`,
+            `Award goes to the lowest price after opening.`,
+            `Offers are only revealed at session close.`,
+            `The buyer reserves the right not to award if no offer is satisfactory.`,
+          ]
+        ),
+        commercials_terms: _tCommEN,
+      },
+    },
+  },
+
+  dutch: {
+    duration: 10, round_duration: 0.5, nb_rounds: 20,
+    ending_factor: 95, range_percent: 35, steps: 19,
+    templates: {
+      fr: {
+        awarding_principles: _tAwardingFR(
+          `Attribution au premier fournisseur acceptant le prix courant pour le lot <strong>{{lotName}}</strong> ({{qty}} {{unit}}).`,
+          [
+            `Le prix d\u00e9marre bas et monte automatiquement \u00e0 chaque round.`,
+            `Le premier fournisseur \u00e0 accepter le prix affich\u00e9 remporte le lot \u2014 l\u2019ench\u00e8re s\u2019arr\u00eate imm\u00e9diatement.`,
+            `L\u2019attribution est d\u00e9finitive et contraignante d\u00e8s l\u2019acceptation.`,
+          ]
+        ),
+        commercials_terms: _tCommFR,
+      },
+      en: {
+        awarding_principles: _tAwardingEN(
+          `Award to the first supplier accepting the current price for lot <strong>{{lotName}}</strong> ({{qty}} {{unit}}).`,
+          [
+            `The price starts low and rises automatically each round.`,
+            `The first supplier to accept wins \u2014 the auction stops immediately.`,
+            `The award is final and binding upon acceptance.`,
+          ]
+        ),
+        commercials_terms: _tCommEN,
+      },
+    },
+  },
+
+  dutchPreferred: {
+    duration: 20, round_duration: 1, nb_rounds: 20, time_per_round: 30,
+    ending_factor: 95, range_percent: 35, steps: 19,
+    templates: {
+      fr: {
+        awarding_principles: _tAwardingFR(
+          `Attribution au premier fournisseur acceptant le prix courant pour le lot <strong>{{lotName}}</strong> ({{qty}} {{unit}}).`,
+          [
+            `Le prix d\u00e9marre bas et monte automatiquement \u00e0 chaque round.`,
+            `Un fournisseur pr\u00e9f\u00e9r\u00e9 b\u00e9n\u00e9ficie d\u2019une fen\u00eatre d\u2019acceptation exclusive en d\u00e9but de chaque round.`,
+            `Le premier fournisseur \u00e0 accepter le prix affich\u00e9 remporte le lot.`,
+            `L\u2019attribution est d\u00e9finitive et contraignante d\u00e8s l\u2019acceptation.`,
+          ]
+        ),
+        commercials_terms: _tCommFR,
+      },
+      en: {
+        awarding_principles: _tAwardingEN(
+          `Award to the first supplier accepting the current price for lot <strong>{{lotName}}</strong> ({{qty}} {{unit}}).`,
+          [
+            `The price starts low and rises automatically each round.`,
+            `A preferred supplier has exclusive access for the first seconds of each round.`,
+            `The first to accept wins \u2014 the auction stops immediately.`,
+            `The award is final and binding upon acceptance.`,
+          ]
+        ),
+        commercials_terms: _tCommEN,
+      },
+    },
+  },
+
+  japanese: {
+    duration: 10, round_duration: 0.5, nb_rounds: 20,
+    starting_factor: 95, floor_factor: 65, steps: 19,
+    templates: {
+      fr: {
+        awarding_principles: _tAwardingFR(
+          `Attribution au dernier fournisseur pr\u00e9sent dans l\u2019ench\u00e8re pour le lot <strong>{{lotName}}</strong> ({{qty}} {{unit}}).`,
+          [
+            `Le prix d\u00e9marre haut et descend d\u2019un palier \u00e0 chaque round.`,
+            `Les fournisseurs doivent confirmer leur participation \u00e0 chaque round ou se retirer.`,
+            `Le dernier fournisseur \u00e0 rester dans l\u2019ench\u00e8re remporte le lot.`,
+            `Chaque fournisseur apprend son rang au moment o\u00f9 il se retire.`,
+          ]
+        ),
+        commercials_terms: _tCommFR,
+      },
+      en: {
+        awarding_principles: _tAwardingEN(
+          `Award to the last supplier remaining in the auction for lot <strong>{{lotName}}</strong> ({{qty}} {{unit}}).`,
+          [
+            `The price starts high and drops one step each round.`,
+            `Suppliers must confirm each round or exit.`,
+            `The last supplier remaining wins the lot.`,
+            `Each supplier learns their rank when they exit.`,
+          ]
+        ),
+        commercials_terms: _tCommEN,
+      },
+    },
+  },
+
+  doubleScenario: {
+    duration: 15, overtime_range: 3,
+    min_decr_factor: 0.25, max_decr_factor: 20, max_rank_displayed: 3,
+    templates: {
+      fr: {
+        awarding_principles: _tAwardingFR(
+          `Attribution par Double Ench\u00e8re pour le lot <strong>{{lotName}}</strong> ({{qty}} {{unit}}).`,
+          [
+            `<strong>Phase\u00a01\u00a0\u2014\u00a0Ench\u00e8re Anglaise\u00a0:</strong> tous les fournisseurs concourent \u00e0 la baisse pour \u00e9tablir un prix comp\u00e9titif. Les 3 meilleurs passent en phase\u00a02.`,
+            `<strong>Phase\u00a02\u00a0\u2014\u00a0Ench\u00e8re Dutch\u00a0:</strong> les 3 finalistes s\u2019affrontent sur une ench\u00e8re \u00e0 prix montant. Le premier \u00e0 accepter remporte le lot.`,
+            `L\u2019attribution est d\u00e9finitive et contraignante \u00e0 l\u2019issue de la Phase\u00a02.`,
+          ]
+        ),
+        commercials_terms: _tCommFR,
+      },
+      en: {
+        awarding_principles: _tAwardingEN(
+          `Award via Double Scenario for lot <strong>{{lotName}}</strong> ({{qty}} {{unit}}).`,
+          [
+            `<strong>Phase\u00a01\u00a0\u2014\u00a0English Auction:</strong> all suppliers compete downward to establish a competitive price. The top 3 proceed to phase\u00a02.`,
+            `<strong>Phase\u00a02\u00a0\u2014\u00a0Dutch Auction:</strong> the 3 finalists compete in an ascending price auction. The first to accept wins.`,
+            `The award is final and binding at the end of Phase\u00a02.`,
+          ]
+        ),
+        commercials_terms: _tCommEN,
+      },
+    },
+  },
+}
+
+export function deepCloneBuilderParams(bp: BuilderParams): BuilderParams {
+  return JSON.parse(JSON.stringify(bp))
+}

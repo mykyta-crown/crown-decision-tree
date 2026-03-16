@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, watch, onMounted, onUpdated, onUnmounted, nextTick } from 'vue'
-import { useCalculatorStore } from '~/stores/architect/calculator'
+import { useCalculatorStore, type Lot } from '~/stores/architect/calculator'
 import { fmtE } from '~/utils/architect/formatting'
 import { DEMO_PRESETS } from '~/utils/architect/demo-presets'
 import useTranslations from '~/composables/useTranslations'
@@ -28,6 +28,17 @@ onUpdated(() => { nextTick(() => { measureHeader(); updateThumb() }) })
 function focusSetLot(li: number, e: FocusEvent) {
   store.selLot = li
   ;(e.target as HTMLInputElement).select()
+}
+
+function onPriceInput(li: number, si: number, e: Event) {
+  const input = e.target as HTMLInputElement
+  const val = Number(input.value)
+  if (val < 0) {
+    input.value = ''
+    store.updatePrice(li, si, 0)
+  } else {
+    store.updatePrice(li, si, val || 0)
+  }
 }
 
 /* Column widths (must match CSS .col-* values) */
@@ -94,6 +105,10 @@ function onTrackClick(e: MouseEvent) {
 // Update thumb whenever suppliers change or layout updates
 watch(() => store.sc, () => nextTick(updateThumb))
 onUnmounted(stopDrag)
+
+function isLotComplete(lot: Lot): boolean {
+  return lot.prices.every((p, i) => lot.excl[i] || p > 0)
+}
 </script>
 
 <template>
@@ -272,7 +287,12 @@ onUnmounted(stopDrag)
             @click="store.selLot = li"
           >
             <!-- # -->
-            <td class="xl-td xl-td--num xl-td--sticky-num" :class="{ active: store.selLot === li }">{{ li + 1 }}</td>
+            <td class="xl-td xl-td--num xl-td--sticky-num" :class="{ active: store.selLot === li }">
+              <div class="lot-num-cell">
+                <span>{{ li + 1 }}</span>
+                <span class="lot-dot" :class="isLotComplete(lot) ? 'lot-dot--ok' : 'lot-dot--missing'" />
+              </div>
+            </td>
 
             <!-- Lot name -->
             <td class="xl-td xl-td--name xl-td--sticky-name" :style="{ left: stickyLeftName }">
@@ -373,10 +393,11 @@ onUnmounted(stopDrag)
               <div v-else class="price-wrap" :class="{ 'price-wrap--err': store.offersErr && !lot.prices[si - 1] }" @click.stop>
                 <input
                   type="number"
+                  min="0"
                   :value="lot.prices[si - 1] || ''"
                   placeholder="0"
                   class="xl-input xl-input--price"
-                  @input="store.updatePrice(li, si - 1, Number(($event.target as HTMLInputElement).value) || 0)"
+                  @input="onPriceInput(li, si - 1, $event)"
                   @focus="focusSetLot(li, $event)"
                 />
                 <button
@@ -818,6 +839,20 @@ onUnmounted(stopDrag)
   color: #CCCCCC;
   padding: 6px 2px;
 }
+.lot-num-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+.lot-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.lot-dot--ok      { background: #34D399; }
+.lot-dot--missing { background: #FCA5A5; }
 .xl-td--name {
   padding-left: 2px;
 }

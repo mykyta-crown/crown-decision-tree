@@ -5,15 +5,15 @@
       <div class="results-header">
         <span class="header-label">{{ t('calc.phase3.lot') }}</span>
         <div class="header-rec">
-          <span class="header-rank header-rank--1">{{ t('calc.phase3.rank1') }}</span>
-          <span class="header-rec-text">{{ t('calc.phase3.bestMatch') }}</span>
+          <span class="header-rank header-rank--1">1</span>
+          <span class="header-rec-text header-rec-text--strong">{{ t('calc.phase3.bestMatch') }}</span>
         </div>
         <div class="header-rec">
-          <span class="header-rank header-rank--2">{{ t('calc.phase3.rank2') }}</span>
+          <span class="header-rank header-rank--2">2</span>
           <span class="header-rec-text">{{ t('calc.phase3.alternative') }}</span>
         </div>
         <div class="header-rec">
-          <span class="header-rank header-rank--3">{{ t('calc.phase3.rank3') }}</span>
+          <span class="header-rank header-rank--3">3</span>
           <span class="header-rec-text">{{ t('calc.phase3.option') }}</span>
         </div>
       </div>
@@ -80,7 +80,7 @@
             <div
               v-if="getTop3(li)[ri - 1]"
               class="rec-card"
-              :class="{ 'rec-card--expanded': store.expLot === li }"
+              :class="{ 'rec-card--expanded': store.expLot === li, [`rec-card--col${ri}`]: true }"
             >
               <!-- Accent bar spanning full card height -->
               <div class="card-accent" :style="accentBg(li, ri - 1)" />
@@ -149,10 +149,16 @@
 
                   <!-- Action buttons -->
                   <div class="card-btn-wrap">
-                    <button class="card-btn" @click.stop="emit('learn-more', familyToKey(getTop3(li)[ri - 1].family))">
-                      {{ t('calc.phase3.learnMore') }}
+                    <button class="card-btn-params" @click.stop="emit('learn-more', familyToKey(getTop3(li)[ri - 1].family))">
                       <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                         <path d="M3.5 8h9M8.5 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                      </svg>
+                      {{ t('calc.phase3.learnMore') }}
+                    </button>
+                    <button v-if="getTop3(li)[ri - 1].family !== 'Traditional'" class="card-btn" @click.stop="openParams(li, ri - 1)">
+                      {{ t('calc.auctionParams.viewParams') }}
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M3.5 8h9M8.5 4l4 4-4 4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                       </svg>
                     </button>
                   </div>
@@ -165,6 +171,18 @@
         </div>
       </div>
     </v-card>
+
+    <!-- Auction params modal -->
+    <ArchitectCalculatorAuctionParamsModal
+      v-if="paramsLotIndex >= 0"
+      v-model="showParamsModal"
+      :family="paramsFamily"
+      :lot="store.lots[paramsLotIndex]"
+      :lot-baseline="store.lotBaseline(store.lots[paramsLotIndex])"
+      :ccy="store.ccy"
+      :sup-names="store.supNames"
+      :ev-name="store.evName"
+    />
 
     <!-- Footer — black buttons -->
     <div class="d-flex justify-center ga-8 mt-6">
@@ -206,6 +224,19 @@ const store = useCalculatorStore()
 const projectsStore = useProjectsStore()
 
 const animatedLots = ref(new Set<number>())
+
+// Auction params modal
+const showParamsModal = ref(false)
+const paramsFamily = ref('')
+const paramsLotIndex = ref(-1)
+
+function openParams(li: number, ri: number) {
+  const rec = getTop3(li)[ri]
+  if (!rec) return
+  paramsLotIndex.value = li
+  paramsFamily.value = rec.family
+  showParamsModal.value = true
+}
 
 onMounted(() => {
   if (store.expLot >= 0) {
@@ -432,33 +463,27 @@ function exportReport() {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
   font-size: 11px;
   font-weight: 700;
   flex-shrink: 0;
+  line-height: 1;
 }
-
-.header-rank--1 {
-  background: #D1FAE5;
-  color: #065F46;
-}
-
-.header-rank--2 {
-  background: #FEF3C7;
-  color: #92400E;
-}
-
-.header-rank--3 {
-  background: #F3F4F6;
-  color: #6B7280;
-}
+.header-rank--1 { background: #1D1D1B; color: #fff; }
+.header-rank--2 { background: #E9EAEC; color: #9CA3AF; }
+.header-rank--3 { background: #F3F4F6; color: #C5C7C9; }
 
 .header-rec-text {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 400;
-  color: #787878;
+  color: #9CA3AF;
+  line-height: 1;
+}
+.header-rec-text--strong {
+  font-weight: 600;
+  color: #1D1D1B;
 }
 
 /* ----------------------------------------------------------------
@@ -614,6 +639,16 @@ function exportReport() {
   box-shadow: 0 1px 4px rgba(0,0,0,0.06);
 }
 
+.rec-card--col2,
+.rec-card--col3 {
+  filter: grayscale(1);
+  transition: filter 0.3s ease;
+}
+.rec-card--col2:hover,
+.rec-card--col3:hover {
+  filter: grayscale(0);
+}
+
 .rec-empty {
   min-width: 0;
 }
@@ -753,6 +788,28 @@ function exportReport() {
 .card-btn-learn:hover {
   background: #F9FAFB;
   color: #1D1D1B;
+  border-color: #D1D5DB;
+}
+
+.card-btn-params {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  padding: 9px 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #374151;
+  font-size: 13px;
+  font-weight: 500;
+  border: 1px solid #E9EAEC;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.card-btn-params:hover {
+  background: #F9FAFB;
   border-color: #D1D5DB;
 }
 

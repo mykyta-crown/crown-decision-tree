@@ -13,7 +13,9 @@ export interface DemoPreset {
     qty: number
     pref: number
     intens: number
+    award?: number
     prices: number[]
+    excl?: boolean[]
   }>
 }
 
@@ -42,14 +44,47 @@ export const DEMO_PRESETS: DemoPreset[] = [
     ],
   },
   {
-    id: 'office',
-    emoji: '📎',
-    label: 'Office Supplies — Paper, Pens, Folders',
-    suppliers: ['OfficeWorld', 'StatioPlus', 'ProOffice'],
+    id: 'transport',
+    emoji: '🚛',
+    label: 'Transport — Paris routes, containers',
+    suppliers: ['TransLog', 'RouteExpress', 'FreightPro', 'CargoFast'],
     lots: [
-      { name: 'Paper reams', unit: 'Boxes', qty: 500, pref: 1, intens: 25, prices: [22, 25, 20] },
-      { name: 'Ballpoint pens', unit: 'Boxes', qty: 1000, pref: 2, intens: 55, prices: [18, 15, 21] },
-      { name: 'Folders', unit: 'Boxes', qty: 200, pref: 1, intens: 40, prices: [85, 78, 92] },
+      { name: 'Paris — Marseille', unit: 'Containers', qty: 1000, pref: 1, intens: 55, award: 1, prices: [1250, 1320, 1180, 1290] },
+      { name: 'Paris — Toulon',    unit: 'Containers', qty: 2000, pref: 1, intens: 55, award: 1, prices: [1380, 1460, 1300, 1420] },
+      { name: 'Paris — Lille',     unit: 'Containers', qty: 3000, pref: 1, intens: 55, award: 1, prices: [510, 490, 545, 525] },
+      { name: 'Paris — Lyon',      unit: 'Containers', qty: 1500, pref: 1, intens: 55, award: 1, prices: [820, 860, 790, 840] },
+    ],
+  },
+  {
+    id: 'capex',
+    emoji: '🏭',
+    label: 'Capex — Production line',
+    suppliers: ['IndustrialSys', 'FabriTech', 'ManuPro'],
+    lots: [
+      { name: 'Production Line', unit: 'Unit', qty: 1, pref: 1, intens: 25, award: 1, prices: [2850000, 3050000, 2960000] },
+    ],
+  },
+  {
+    id: 'consulting',
+    emoji: '📊',
+    label: 'Consulting — Audit & Roadmap (PwC, KPMG, EY)',
+    suppliers: ['PwC', 'KPMG', 'EY'],
+    lots: [
+      // All 3 firms respond to the audit
+      { name: 'Strategic Audit',        unit: 'Mission', qty: 1, pref: 1, intens: 70, award: 2, prices: [1100000, 1380000, 1250000] },
+      // EY cannot respond to the implementation lot (conflict of interest)
+      { name: 'Implementation Roadmap', unit: 'Mission', qty: 1, pref: 1, intens: 70, award: 2, prices: [1750000, 2100000, 0], excl: [false, false, true] },
+    ],
+  },
+  {
+    id: 'construction',
+    emoji: '🏗️',
+    label: 'Construction — Structural, Facade, Electrical',
+    suppliers: ['BTP Construct', 'SolBâtiment', 'TravauxPro', 'CivilBuild', 'EuroBâti'],
+    lots: [
+      { name: 'Structural Works',    unit: 'Lump sum', qty: 1, pref: 1, intens: 60, award: 1, prices: [850000, 920000, 780000, 870000, 910000] },
+      { name: 'Facade & Insulation', unit: 'Lump sum', qty: 1, pref: 1, intens: 60, award: 1, prices: [320000, 380000, 340000, 295000, 360000] },
+      { name: 'Electrical Networks', unit: 'Lump sum', qty: 1, pref: 1, intens: 60, award: 1, prices: [180000, 210000, 195000, 175000, 205000] },
     ],
   },
   {

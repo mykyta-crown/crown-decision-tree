@@ -35,7 +35,7 @@ const p2PctFull = computed(() => {
   let d = store.evName.trim() ? 1 : 0
   store.lots.forEach(l => {
     t++
-    if (l.prices.some((p, i) => p > 0 && !l.excl[i])) d++
+    if (l.prices.every((p, i) => l.excl[i] || p > 0)) d++
   })
   return t > 0 ? Math.round(d / t * 100) : 0
 })
@@ -101,6 +101,7 @@ function flashErrors(step: number) {
   } else if (step === 1) {
     // Phase 2 errors
     if (!store.evName.trim()) store.evNameErr = true
+    if (!store.allOffersFilled) store.offersErr = true
   }
   // Trigger shake animation
   shakeStep.value = step

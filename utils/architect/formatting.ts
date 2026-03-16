@@ -7,6 +7,10 @@ export function fmtE(n: number, c?: string): string {
   return n ? s + Math.round(n).toLocaleString('en-US') : s + '0'
 }
 
+export function fmtN(n: number): string {
+  return n ? Math.round(n).toLocaleString('en-US') : '0'
+}
+
 export function fmtDate(iso: string | null | undefined): string {
   if (!iso) return '—'
   const d = new Date(iso)

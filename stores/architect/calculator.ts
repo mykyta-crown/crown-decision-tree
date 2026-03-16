@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed, watch } from 'vue'
-import { getScores, DEF_BASES, DEF_SAVINGS, DEF_MATRIX, deepCloneMatrix, type ScoringParams } from '~/utils/architect/scoring-engine'
+import { getScores, DEF_BASES, DEF_SAVINGS, DEF_MATRIX, deepCloneMatrix, DEF_BUILDER_PARAMS, deepCloneBuilderParams, type ScoringParams, type BuilderParams } from '~/utils/architect/scoring-engine'
 import { createSnapshot, parseSnapshot } from '~/utils/architect/snapshot-schema'
 import type { DemoPreset } from '~/utils/architect/demo-presets'
 
@@ -62,6 +62,7 @@ export const useCalculatorStore = defineStore('calculator', () => {
     savings: [...DEF_SAVINGS],
     matrix: deepCloneMatrix(DEF_MATRIX),
   })
+  const builderParams = ref<BuilderParams>(deepCloneBuilderParams(DEF_BUILDER_PARAMS))
 
   // ─── Computed scoring ───
   const v1 = computed(() => spend.value < 100000 ? 1 : spend.value <= 500000 ? 2 : 3)
@@ -303,9 +304,10 @@ export const useCalculatorStore = defineStore('calculator', () => {
       intens: l.intens,
       award: (l as any).award || 1,
       prices: [...l.prices],
-      excl: l.prices.map(() => false),
+      excl: l.excl ? [...l.excl] : l.prices.map(() => false),
     }))
     selLot.value = 0
+    evName.value = preset.label
     // Sync Phase 1 from preset data
     nSup.value = n
     const totalSpend = preset.lots.reduce((sum, l) => {
@@ -356,6 +358,10 @@ export const useCalculatorStore = defineStore('calculator', () => {
     }
   }
 
+  function resetBuilderParams() {
+    builderParams.value = deepCloneBuilderParams(DEF_BUILDER_PARAMS)
+  }
+
   // ─── Supabase scoring params ───
   const paramsLoaded = ref(false)
 
@@ -367,7 +373,7 @@ export const useCalculatorStore = defineStore('calculator', () => {
 
       const { data, error } = await supabase
         .from('dt_scoring_params')
-        .select('bases, savings, matrix')
+        .select('bases, savings, matrix, builder_params')
         .eq('user_id', user.id)
         .maybeSingle()
 
@@ -377,6 +383,9 @@ export const useCalculatorStore = defineStore('calculator', () => {
           bases: Array.isArray(data.bases) ? data.bases : [...DEF_BASES],
           savings: Array.isArray(data.savings) ? data.savings : [...DEF_SAVINGS],
           matrix: Array.isArray(data.matrix) ? data.matrix : deepCloneMatrix(DEF_MATRIX),
+        }
+        if (data.builder_params && typeof data.builder_params === 'object') {
+          builderParams.value = { ...deepCloneBuilderParams(DEF_BUILDER_PARAMS), ...data.builder_params }
         }
       }
     } catch (e) {
@@ -399,16 +408,24 @@ export const useCalculatorStore = defineStore('calculator', () => {
           bases: params.value.bases,
           savings: params.value.savings,
           matrix: params.value.matrix,
+          builder_params: builderParams.value,
         }, { onConflict: 'user_id' })
 
       if (error) throw error
     } catch (e) {
       console.error('[DT] Failed to save scoring params:', e)
+      useToast().error('Échec de la sauvegarde des paramètres')
     }
   }
 
-  // Debounced auto-save when params change
+  // Debounced auto-save when params or builderParams change
   watch(params, () => {
+    if (!paramsLoaded.value) return
+    if (_paramsSaveTimer) clearTimeout(_paramsSaveTimer)
+    _paramsSaveTimer = setTimeout(() => saveScoringParams(), 1500)
+  }, { deep: true })
+
+  watch(builderParams, () => {
     if (!paramsLoaded.value) return
     if (_paramsSaveTimer) clearTimeout(_paramsSaveTimer)
     _paramsSaveTimer = setTimeout(() => saveScoringParams(), 1500)
@@ -467,7 +484,7 @@ export const useCalculatorStore = defineStore('calculator', () => {
   return {
     // State
     mode, phase, spend, nSup, award, ccy, evName, evNameErr, userNameErr, spendErr, nSupErr, awardErr, offersErr,
-    lots, sc, supNames, selLot, expLot, showParams, params, lotHeaderH,
+    lots, sc, supNames, selLot, expLot, showParams, params, builderParams, lotHeaderH,
     // Computed
     v1, v3, p1Ok, p1Sc, hasAuction, eligible, notRec, status,
     lotSc, lotBaseline, totBase, lotTop3, allOffersFilled,
@@ -475,7 +492,7 @@ export const useCalculatorStore = defineStore('calculator', () => {
     // Actions
     updateLot, updatePrice, addLot, removeLot,
     addSupplier, removeSupplierAt, renameSupplier, toggleExclude,
-    applyDemoPreset, resetEditor, resetParams, dispose,
+    applyDemoPreset, resetEditor, resetParams, resetBuilderParams, dispose,
     getSnapshot, hydrateFromState,
     paramsLoaded, loadScoringParams, saveScoringParams,
   }

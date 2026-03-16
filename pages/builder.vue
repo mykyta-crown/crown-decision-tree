@@ -354,8 +354,66 @@ async function formatExistingAuction(auctionId) {
   // console.log('lots.value: ', lots.value)
 }
 
+// Mode architect : pré-remplir depuis sessionStorage (généré par l'architect calculator)
+if (route.query.mode === 'architect') {
+  const { getArchitectState, clearArchitectState } = useArchitectBuildState()
+  const state = getArchitectState()
+
+  if (state) {
+    basics.value = {
+      ...basics.value,
+      ...state.basics,
+      date: dayjs(state.basics.date),
+    }
+
+    // Hydrate architect placeholder suppliers (supplier+N@crown.ovh) with real profile data
+    const rawSuppliers = state.suppliers ?? []
+    const emails = rawSuppliers.map((s) => s.email)
+    if (emails.length) {
+      const { data: profiles } = await supabase
+        .from('profiles')
+        .select('email, first_name, last_name, phone, position, companies(name, address, country, legal_id)')
+        .in('email', emails)
+
+      suppliers.value = rawSuppliers.map((s) => {
+        const p = profiles?.find((pr) => pr.email === s.email)
+        if (p) {
+          return {
+            email: s.email,
+            phone: p.phone ?? s.phone ?? '',
+            name: p.last_name ? `${p.first_name} ${p.last_name}` : (p.first_name ?? null),
+            company: p.companies?.name ?? null,
+            address: p.companies?.address ?? null,
+            country: p.companies?.country ?? null,
+            id: p.companies?.legal_id ?? null,
+            position: p.position ?? null,
+            isNew: false,
+          }
+        }
+        return s
+      })
+    } else {
+      suppliers.value = rawSuppliers
+    }
+
+    lots.value = state.lots ?? []
+    timingRule.value = state.timingRule ?? 'serial'
+
+    clearArchitectState()
+
+    await nextTick()
+    basics.value = { ...basics.value }
+    if (suppliers.value) suppliers.value = [...suppliers.value]
+    lots.value = [...lots.value]
+    await new Promise((resolve) => setTimeout(resolve, 0))
+  } else {
+    console.warn('[Builder] Mode architect mais aucun état trouvé, création standard')
+    await until(() => !pending.value).toBe(true)
+    addLot()
+  }
+
 // Mode duplication : charger depuis sessionStorage
-if (route.query.mode === 'duplicate') {
+} else if (route.query.mode === 'duplicate') {
   const { getDuplicateState } = useDuplicateAuctionState()
   const state = getDuplicateState()
 

@@ -34,11 +34,14 @@ export default function useTranslations(customRouteName = null) {
     return cleanName
   })
 
+  // In dev mode, skip the in-memory cache so content file changes are picked up immediately
+  const useCache = !import.meta.dev
+
   // Load common translations with global cache
   const loadCommonTranslations = async (localeValue) => {
     const cacheKey = `common-${localeValue}`
 
-    if (globalTranslationCache.has(cacheKey)) {
+    if (useCache && globalTranslationCache.has(cacheKey)) {
       return globalTranslationCache.get(cacheKey)
     }
 
@@ -49,7 +52,7 @@ export default function useTranslations(customRouteName = null) {
     const promise = (async () => {
       try {
         const result = await queryContent(`${localeValue}/common`).findOne()
-        globalTranslationCache.set(cacheKey, result)
+        if (useCache) globalTranslationCache.set(cacheKey, result)
         return result
       } catch (error) {
         console.error('Error loading common translations:', error)
@@ -67,7 +70,7 @@ export default function useTranslations(customRouteName = null) {
   const loadPageTranslations = async (localeValue, routeName) => {
     const cacheKey = `page-${routeName}-${localeValue}`
 
-    if (globalTranslationCache.has(cacheKey)) {
+    if (useCache && globalTranslationCache.has(cacheKey)) {
       return globalTranslationCache.get(cacheKey)
     }
 
@@ -78,7 +81,7 @@ export default function useTranslations(customRouteName = null) {
     const promise = (async () => {
       try {
         const result = await queryContent(`${localeValue}/${routeName}`).findOne()
-        globalTranslationCache.set(cacheKey, result)
+        if (useCache) globalTranslationCache.set(cacheKey, result)
         return result
       } catch (error) {
         console.error('Error loading page translations:', error)
@@ -92,10 +95,10 @@ export default function useTranslations(customRouteName = null) {
     return await promise
   }
 
-  // Sync access to cached translations (no reactivity)
-  const commonTranslations = ref(globalTranslationCache.get(`common-${locale.value}`))
+  // In dev mode always start empty so fresh data is always fetched
+  const commonTranslations = ref(useCache ? globalTranslationCache.get(`common-${locale.value}`) : null)
   const pageTranslations = ref(
-    globalTranslationCache.get(`page-${cleanRouteName.value}-${locale.value}`)
+    useCache ? globalTranslationCache.get(`page-${cleanRouteName.value}-${locale.value}`) : null
   )
   const pending = ref(false)
 
@@ -103,7 +106,6 @@ export default function useTranslations(customRouteName = null) {
   if (!commonTranslations.value) {
     pending.value = true
     loadCommonTranslations(locale.value).then((data) => {
-      // console.log('data common', data)
       commonTranslations.value = data
       pending.value = false
     })
@@ -111,7 +113,6 @@ export default function useTranslations(customRouteName = null) {
   if (!pageTranslations.value) {
     pending.value = true
     loadPageTranslations(locale.value, cleanRouteName.value).then((data) => {
-      // console.log('data page', data)
       pageTranslations.value = data
       pending.value = false
     })

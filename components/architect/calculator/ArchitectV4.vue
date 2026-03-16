@@ -5,26 +5,27 @@
       <div class="dt4-header">
         <div class="d-flex align-center ga-3">
           <div class="dt4-icon">
-            <v-icon size="20" color="white">mdi-tune-variant</v-icon>
+            <v-icon size="15" color="white">mdi-tune-variant</v-icon>
           </div>
           <div>
             <div class="dt4-title">{{ t('v4.title') }}</div>
             <div class="dt4-sub">{{ t('v4.subtitle') }}</div>
           </div>
         </div>
-        <div class="d-flex align-center ga-2">
+        <div class="d-flex align-center ga-1">
           <v-btn
             v-if="hasSelection"
+            icon
             variant="text"
-            size="small"
+            size="x-small"
             color="grey-darken-1"
-            prepend-icon="mdi-restart"
+            :title="t('v4.reset')"
             @click="reset"
           >
-            {{ t('v4.reset') }}
+            <v-icon size="15">mdi-restart</v-icon>
           </v-btn>
           <v-btn icon variant="text" size="small" @click="show = false">
-            <v-icon>mdi-close</v-icon>
+            <v-icon size="17">mdi-close</v-icon>
           </v-btn>
         </div>
       </div>
@@ -36,7 +37,15 @@
             <div class="crit-label">
               <v-icon :icon="q.icon" size="18" color="#9CA3AF" class="crit-icon" />
               <div>
-                <div class="crit-name">{{ q.label }}</div>
+                <div class="crit-name">
+                  {{ q.label }}
+                  <v-tooltip v-if="q.tooltip" location="top end" max-width="240" content-class="bg-white text-black border text-body-2">
+                    <template #activator="{ props: tip }">
+                      <v-icon v-bind="tip" size="12" color="#C4C4C4" style="cursor:help;vertical-align:middle;margin-left:3px">mdi-information-outline</v-icon>
+                    </template>
+                    <span style="font-size:12px;line-height:1.5">{{ q.tooltip }}</span>
+                  </v-tooltip>
+                </div>
                 <div class="crit-hint">{{ q.hint }}</div>
               </div>
             </div>
@@ -78,6 +87,10 @@
                     <span class="stat-value">{{ topResult.family }}</span>
                   </div>
                 </div>
+                <button class="result-learn-btn" @click="openLearnMore(topResult.family)">
+                  {{ t('v4.learnMore') }}
+                  <v-icon size="13">mdi-arrow-right</v-icon>
+                </button>
               </div>
               <div class="result-chart">
                 <ArchitectCalculatorChartsAChart
@@ -98,18 +111,30 @@
           </div>
         </Transition>
 
-        <!-- Empty state -->
+        <!-- Progress / empty state -->
         <div v-if="!topResult" class="dt4-empty">
-          <div class="empty-icon">
-            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-              <circle cx="20" cy="20" r="18" stroke="#E5E7EB" stroke-width="2" stroke-dasharray="4 4" />
-              <path d="M14 20h12M20 14v12" stroke="#D1D5DB" stroke-width="2" stroke-linecap="round" />
-            </svg>
+          <div class="empty-progress">
+            <div class="progress-dots">
+              <div
+                v-for="i in 6"
+                :key="i"
+                class="progress-dot"
+                :class="{ 'progress-dot--filled': sel[i - 1] > 0 }"
+              />
+            </div>
+            <div class="empty-text">
+              {{ selectedCount }} / 6 {{ t('v4.emptyState') }}
+            </div>
           </div>
-          <div class="empty-text">{{ t('v4.emptyState') }}</div>
         </div>
       </div>
     </v-card>
+
+    <ArchitectCalculatorHowItWorksDialog
+      v-model="showHiw"
+      initial-section="families"
+      :initial-family="hiwFamily"
+    />
   </v-dialog>
 </template>
 
@@ -129,18 +154,20 @@ interface DisplayResult extends ScoreResult {
 }
 
 const questions = computed(() => [
-  { label: t('v4.spend'),       icon: 'mdi-cash-multiple',          hint: t('v4.spendHint'),       options: pageTranslations.value?.v4?.spendOpts      || Q_OPTS[0] },
-  { label: t('v4.suppliers'),  icon: 'mdi-account-group-outline',  hint: t('v4.suppliersHint'),   options: pageTranslations.value?.v4?.suppliersOpts  || Q_OPTS[1] },
-  { label: t('v4.awarding'),   icon: 'mdi-trophy-outline',         hint: t('v4.awardingHint'),    options: pageTranslations.value?.v4?.awardingOpts   || Q_OPTS[2] },
-  { label: t('v4.preferenceQ'), icon: 'mdi-star-outline',          hint: t('v4.preferenceHint'),  options: pageTranslations.value?.v4?.preferenceOpts || Q_OPTS[3] },
-  { label: t('v4.intensity'),  icon: 'mdi-fire',                   hint: t('v4.intensityHint'),   options: pageTranslations.value?.v4?.intensityOpts  || Q_OPTS[4] },
-  { label: t('v4.priceGap'),   icon: 'mdi-ruler',                  hint: t('v4.priceGapHint'),    options: pageTranslations.value?.v4?.priceGapOpts   || Q_OPTS[5] },
+  { label: t('v4.spend'),        icon: 'mdi-cash-multiple',         hint: t('v4.spendHint'),      options: pageTranslations.value?.v4?.spendOpts      || Q_OPTS[0] },
+  { label: t('v4.suppliers'),    icon: 'mdi-account-group-outline', hint: t('v4.suppliersHint'),  options: pageTranslations.value?.v4?.suppliersOpts  || Q_OPTS[1] },
+  { label: t('v4.awarding'),     icon: 'mdi-trophy-outline',        hint: t('v4.awardingHint'),   options: pageTranslations.value?.v4?.awardingOpts   || Q_OPTS[2], tooltip: t('v4.awardingTooltip') },
+  { label: t('v4.preferenceQ'),  icon: 'mdi-star-outline',          hint: t('v4.preferenceHint'), options: pageTranslations.value?.v4?.preferenceOpts || Q_OPTS[3], tooltip: t('v4.preferenceTooltip') },
+  { label: t('v4.intensity'),    icon: 'mdi-fire',                  hint: t('v4.intensityHint'),  options: pageTranslations.value?.v4?.intensityOpts  || Q_OPTS[4], tooltip: t('v4.intensityTooltip') },
+  { label: t('v4.priceGap'),     icon: 'mdi-ruler',                 hint: t('v4.priceGapHint'),   options: pageTranslations.value?.v4?.priceGapOpts   || Q_OPTS[5], tooltip: t('v4.priceGapTooltip') },
 ])
 
 // Selection state: 0 = not selected, 1-3 = option index
 const sel = ref<number[]>([0, 0, 0, 0, 0, 0])
 
 const hasSelection = computed(() => sel.value.some(v => v > 0))
+const allSelected = computed(() => sel.value.every(v => v > 0))
+const selectedCount = computed(() => sel.value.filter(v => v > 0).length)
 
 function toggle(qi: number, val: number) {
   sel.value[qi] = sel.value[qi] === val ? 0 : val
@@ -163,31 +190,27 @@ function getFamilyName(family: string): string {
   return map[family] || family
 }
 
-const tfLabels: Record<string, string> = {
-  'Fixed+Dynamic': 'Transfo',
-  Ceiling: 'Ceiling',
-  Preference: 'Preferred',
-  'Ceiling+Pref': 'Ceiling + Preferred',
-}
+const tfLabels = computed<Record<string, string>>(() => ({
+  'Fixed+Dynamic': t('calc.rec.transfo'),
+  Ceiling: t('calc.rec.ceiling'),
+  Preference: t('calc.rec.preferred'),
+  'Ceiling+Pref': t('calc.rec.ceilingPreferred'),
+}))
 
 function buildDisplayName(r: ScoreResult): string {
   const base = getFamilyName(r.family)
   if (r.family === 'Traditional' || r.family === 'Double Scenario') return base
   const parts = [base]
-  if (r.tf && r.tf !== 'None' && r.tf !== '—') parts.push(tfLabels[r.tf] || r.tf)
+  if (r.tf && r.tf !== 'None' && r.tf !== '—') parts.push(tfLabels.value[r.tf] || r.tf)
   if (r.aw && r.aw !== '—') parts.push(r.aw)
   return parts.join(' - ')
 }
 
 const scores = computed<DisplayResult[]>(() => {
-  if (!hasSelection.value) return []
-  // Default unselected criteria to middle option (2)
-  const vals = sel.value.map(v => v || 2)
-
-  // Use store params (may have been customized via Base Table)
+  if (!allSelected.value) return []
   const raw = getScores(
     store.params,
-    vals[0], vals[1], vals[2], vals[3], vals[4], vals[5],
+    sel.value[0], sel.value[1], sel.value[2], sel.value[3], sel.value[4], sel.value[5],
   )
   return raw
     .filter(r => !r.eliminated)
@@ -200,6 +223,17 @@ const topColor = computed(() => topResult.value ? gfc(topResult.value.family) : 
 function getFC(f: string) { return gfc(f) }
 
 watch(show, (val) => { if (val) reset() })
+
+const showHiw = ref(false)
+const hiwFamily = ref('')
+const familyKeyMap: Record<string, string> = {
+  'Double Scenario': 'ds', English: 'en', Dutch: 'du',
+  Japanese: 'jp', 'Sealed Bid': 'sb', Traditional: 'tr',
+}
+function openLearnMore(family: string) {
+  hiwFamily.value = familyKeyMap[family] || 'en'
+  showHiw.value = true
+}
 </script>
 
 <style scoped>
@@ -213,21 +247,24 @@ watch(show, (val) => { if (val) reset() })
   align-items: center;
   justify-content: space-between;
   padding: 14px 20px;
+  background: linear-gradient(to bottom, #F3F4F6, #FAFAFA);
   border-bottom: 1px solid #E9EAEC;
 }
 
 .dt4-icon {
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  background: linear-gradient(135deg, #34D399 0%, #059669 100%);
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: #1D1D1B;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.18), 0 0 0 1px rgba(255,255,255,0.06) inset;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 .dt4-title {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 700;
   color: #1D1D1B;
 }
@@ -404,6 +441,25 @@ watch(show, (val) => { if (val) reset() })
   color: #1D1D1B;
 }
 
+.result-learn-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 12px;
+  padding: 0;
+  background: none;
+  border: none;
+  font-size: 12px;
+  font-weight: 600;
+  color: #6B7280;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+
+.result-learn-btn:hover {
+  color: #1D1D1B;
+}
+
 .result-chart {
   width: 220px;
   padding: 10px 12px;
@@ -452,13 +508,37 @@ watch(show, (val) => { if (val) reset() })
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 40px 0 16px;
-  gap: 12px;
+  padding: 28px 0 16px;
+}
+
+.empty-progress {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.progress-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.progress-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #E5E7EB;
+  transition: background 0.2s ease;
+}
+
+.progress-dot--filled {
+  background: #1D1D1B;
 }
 
 .empty-text {
-  font-size: 13px;
+  font-size: 12px;
   color: #9CA3AF;
+  font-weight: 500;
 }
 
 /* Transition */
