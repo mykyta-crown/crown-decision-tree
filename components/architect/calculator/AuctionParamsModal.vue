@@ -117,6 +117,7 @@
                     <span class="ap-price-arc-step-sign" style="color:#059669">−</span>
                     <input v-model.number="editMinDecr" type="number" class="ap-step-input" step="any" :min="0" />
                   </div>
+                  <div v-if="editLotQty > 1" class="ap-step-sub">× {{ editLotQty }} = {{ fmtN(Math.round(editMinDecr * editLotQty)) }}</div>
                 </div>
                 <div class="ap-english-decr-item">
                   <span class="ap-arc-ctrl-lbl">{{ t('calc.auctionParams.maxDecrement', {}, 'Max /bid') }}</span>
@@ -124,6 +125,7 @@
                     <span class="ap-price-arc-step-sign" style="color:#059669">−</span>
                     <input v-model.number="editMaxDecr" type="number" class="ap-step-input" step="any" :min="0" />
                   </div>
+                  <div v-if="editLotQty > 1" class="ap-step-sub">× {{ editLotQty }} = {{ fmtN(Math.round(editMaxDecr * editLotQty)) }}</div>
                 </div>
               </div>
             </div>
@@ -300,6 +302,7 @@
                     <span class="ap-price-arc-step-sign" style="color:#67E8F9">−</span>
                     <input v-model.number="editMinDecr" type="number" class="ap-step-input" step="any" :min="0" />
                   </div>
+                  <div v-if="editLotQty > 1" class="ap-step-sub">× {{ editLotQty }} = {{ fmtN(Math.round(editMinDecr * editLotQty)) }}</div>
                 </div>
                 <div class="ap-english-decr-item">
                   <span class="ap-arc-ctrl-lbl">{{ t('calc.auctionParams.maxDecrement', {}, 'Max /bid') }}</span>
@@ -307,6 +310,7 @@
                     <span class="ap-price-arc-step-sign" style="color:#67E8F9">−</span>
                     <input v-model.number="editMaxDecr" type="number" class="ap-step-input" step="any" :min="0" />
                   </div>
+                  <div v-if="editLotQty > 1" class="ap-step-sub">× {{ editLotQty }} = {{ fmtN(Math.round(editMaxDecr * editLotQty)) }}</div>
                 </div>
               </div>
             </div>
@@ -349,6 +353,7 @@
                     <span class="ap-price-arc-step-sign" style="color:#059669">−</span>
                     <input v-model.number="editMinDecr" type="number" class="ap-step-input" step="any" :min="0" />
                   </div>
+                  <div v-if="editLotQty > 1" class="ap-step-sub">× {{ editLotQty }} = {{ fmtN(Math.round(editMinDecr * editLotQty)) }}</div>
                 </div>
                 <div class="ap-english-decr-item">
                   <span class="ap-arc-ctrl-lbl">{{ t('calc.auctionParams.maxDecrement', {}, 'Max /bid') }}</span>
@@ -356,6 +361,7 @@
                     <span class="ap-price-arc-step-sign" style="color:#059669">−</span>
                     <input v-model.number="editMaxDecr" type="number" class="ap-step-input" step="any" :min="0" />
                   </div>
+                  <div v-if="editLotQty > 1" class="ap-step-sub">× {{ editLotQty }} = {{ fmtN(Math.round(editMaxDecr * editLotQty)) }}</div>
                 </div>
               </div>
             </div>
@@ -623,8 +629,12 @@ function initEditable() {
   editStarting.value = p.starting ?? 0
   editPrebid.value   = p.prebid !== false  // default ON
   editBaseline.value = Math.round(props.lotBaseline)
-  editMinDecr.value  = p.type === 'DoubleScenario' ? (p.english?.minDecr ?? 0) : (p.minDecr ?? 0)
-  editMaxDecr.value  = p.type === 'DoubleScenario' ? (p.english?.maxDecr ?? 0) : (p.maxDecr ?? 0)
+  // Store per-unit values so the UI shows unit price; multiply by qty when saving
+  const _qty = editLotQty.value || 1
+  const _rawMin = p.type === 'DoubleScenario' ? (p.english?.minDecr ?? 0) : (p.minDecr ?? 0)
+  const _rawMax = p.type === 'DoubleScenario' ? (p.english?.maxDecr ?? 0) : (p.maxDecr ?? 0)
+  editMinDecr.value = _qty > 1 ? Math.round(_rawMin / _qty * 100) / 100 : _rawMin
+  editMaxDecr.value = _qty > 1 ? Math.round(_rawMax / _qty * 100) / 100 : _rawMax
 
   // Proposed prices — per supplier for English/SealedBid/DS; global auction price for Dutch/Japanese
   const globalProposed =
@@ -694,18 +704,19 @@ async function buildAuction() {
   if (!params.value) return
 
   const ceilingsData = editCeilings.value.map(s => ({ name: s.name, price: s.proposedPrice }))
+  const qty = editLotQty.value || 1
 
   let p: any = { ...params.value, name: editName.value, time: editTime.value, currency: editCcy.value }
 
-  // Apply edited durations
+  // Apply edited durations (editMinDecr/editMaxDecr are per-unit → multiply by qty for total)
   if (p.type === 'English' || p.type === 'SealedBid') {
-    p = { ...p, duration: editDuration.value, overtimeRange: editRoundDuration.value, minDecr: editMinDecr.value, maxDecr: editMaxDecr.value, supplierCeilings: ceilingsData }
+    p = { ...p, duration: editDuration.value, overtimeRange: editRoundDuration.value, minDecr: editMinDecr.value * qty, maxDecr: editMaxDecr.value * qty, supplierCeilings: ceilingsData }
   } else if (p.type === 'Dutch' || p.type === 'DutchPreferred') {
     p = { ...p, duration: editDuration.value, roundDuration: editRoundDuration.value, overtimeRange: editRoundDuration.value, incr: editIncr.value, ending: editEnding.value, starting: dutchStarting.value, nbRounds: nbRounds.value, prebid: editPrebid.value }
   } else if (p.type === 'Japanese') {
     p = { ...p, duration: editDuration.value, roundDuration: editRoundDuration.value, overtimeRange: editRoundDuration.value, decr: editDecr.value, starting: editStarting.value, floor: japaneseFloor.value, nbRounds: nbRounds.value, prebid: editPrebid.value }
   } else if (p.type === 'DoubleScenario') {
-    p = { ...p, english: { ...p.english, duration: editDuration.value, overtimeRange: editRoundDuration.value, minDecr: editMinDecr.value, maxDecr: editMaxDecr.value, supplierCeilings: ceilingsData } }
+    p = { ...p, english: { ...p.english, duration: editDuration.value, overtimeRange: editRoundDuration.value, minDecr: editMinDecr.value * qty, maxDecr: editMaxDecr.value * qty, supplierCeilings: ceilingsData } }
   }
 
   const state = saveArchitectState(p, props.lot, editBaseline.value, editCcy.value, locale.value, store.supNames)
@@ -724,8 +735,8 @@ async function buildAuction() {
       state.lots[0].dutch_prebid_enabled = editPrebid.value
       if (p.type === 'English' || p.type === 'SealedBid') {
         state.lots[0].baseline     = editBaseline.value
-        state.lots[0].min_bid_decr = editMinDecr.value
-        state.lots[0].max_bid_decr = editMaxDecr.value
+        state.lots[0].min_bid_decr = editMinDecr.value * qty
+        state.lots[0].max_bid_decr = editMaxDecr.value * qty
       }
       if (state.lots[0].items?.[0]) {
         state.lots[0].items[0].line_item = editLotName.value
@@ -1318,6 +1329,9 @@ const familyLabel = computed(() =>
 }
 .ap-english-decr-item {
   display: flex; flex-direction: column; gap: 4px;
+}
+.ap-step-sub {
+  font-size: 10px; color: #9CA3AF; text-align: center; margin-top: 1px;
 }
 .ap-arc-price-input--dutch    { color: #6D28D9; }
 .ap-arc-price-input--dutch:focus { border-color: #A78BFA; background: #fff; }
