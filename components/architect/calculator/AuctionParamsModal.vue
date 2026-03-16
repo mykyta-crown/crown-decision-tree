@@ -601,11 +601,6 @@ watch(show, async (val) => {
   }
 })
 
-// Re-init when params become available (async store load) while modal is already open
-watch(params, (val) => {
-  if (val && show.value) initEditable()
-})
-
 // ── Dutch / Japanese reactive price computations ───────────────────────────
 
 const nbRounds = computed(() =>
@@ -923,6 +918,11 @@ const params = computed(() => {
   }
 
   return null
+})
+
+// Re-init when params become available (async store load) while modal is already open
+watch(params, (val) => {
+  if (val && show.value) initEditable()
 })
 
 const familyI18nKey: Record<string, string> = {
