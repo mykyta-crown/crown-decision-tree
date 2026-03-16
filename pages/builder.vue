@@ -354,9 +354,32 @@ async function formatExistingAuction(auctionId) {
   // console.log('lots.value: ', lots.value)
 }
 
-// Mode architect : handled entirely in onMounted (avoids SSR/async-setup issues)
+// Mode architect : pré-remplir depuis sessionStorage
+if (route.query.mode === 'architect') {
+  const _ARCH_KEY = 'crown_architect_build_state'
+  let _state = null
+  try { const _s = sessionStorage.getItem(_ARCH_KEY); _state = _s ? JSON.parse(_s) : null } catch {}
+
+  if (_state) {
+    basics.value = { ...basics.value, ..._state.basics, date: dayjs(_state.basics.date) }
+    suppliers.value = _state.suppliers ?? []
+    lots.value = _state.lots ?? []
+    timingRule.value = _state.timingRule ?? 'serial'
+    try { sessionStorage.removeItem(_ARCH_KEY) } catch {}
+
+    await nextTick()
+    basics.value = { ...basics.value }
+    suppliers.value = [...suppliers.value]
+    lots.value = [...lots.value]
+    await new Promise((resolve) => setTimeout(resolve, 0))
+  } else {
+    console.warn('[Builder] Mode architect mais aucun état trouvé, création standard')
+    await until(() => !pending.value).toBe(true)
+    addLot()
+  }
+
 // Mode duplication : charger depuis sessionStorage
-if (route.query.mode === 'duplicate') {
+} else if (route.query.mode === 'duplicate') {
   const { getDuplicateState } = useDuplicateAuctionState()
   const state = getDuplicateState()
 
@@ -406,62 +429,37 @@ if (route.query.mode === 'duplicate') {
   }
 } else if (route.query.auction_id) {
   await formatExistingAuction(route.query.auction_id)
-} else if (!route.query.mode) {
+} else {
   // Wait for translations to load before adding default lot
   await until(() => !pending.value).toBe(true)
   addLot()
 }
 
-// Architect mode: fully client-side init (sessionStorage not available on SSR)
+// Architect mode: hydrate supplier+N@crown.ovh placeholders with real profile data
 onMounted(async () => {
   if (route.query.mode !== 'architect') return
-
-  const _ARCH_KEY = 'crown_architect_build_state'
-  let state = null
-  try { const _s = sessionStorage.getItem(_ARCH_KEY); state = _s ? JSON.parse(_s) : null } catch {}
-
-  if (!state) {
-    console.warn('[Builder] Mode architect mais aucun état trouvé, création standard')
-    addLot()
-    return
-  }
-
-  basics.value = { ...basics.value, ...state.basics, date: dayjs(state.basics.date) }
-  suppliers.value = state.suppliers ?? []
-  lots.value = state.lots ?? []
-  timingRule.value = state.timingRule ?? 'serial'
-  try { sessionStorage.removeItem(_ARCH_KEY) } catch {}
-
-  // Hydrate supplier+N@crown.ovh with real profile data
-  const emails = suppliers.value.map((s) => s.email).filter(Boolean)
-  if (emails.length) {
-    const { data: profiles } = await supabase
-      .from('profiles')
-      .select('email, first_name, last_name, phone, position, companies(name, address, country, legal_id)')
-      .in('email', emails)
-    if (profiles?.length) {
-      suppliers.value = suppliers.value.map((s) => {
-        const p = profiles.find((pr) => pr.email === s.email)
-        if (!p) return s
-        return {
-          email: s.email,
-          phone: p.phone ?? s.phone ?? '',
-          name: p.last_name ? `${p.first_name} ${p.last_name}` : (p.first_name ?? null),
-          company: p.companies?.name ?? null,
-          address: p.companies?.address ?? null,
-          country: p.companies?.country ?? null,
-          id: p.companies?.legal_id ?? null,
-          position: p.position ?? null,
-          isNew: false,
-        }
-      })
+  const emails = (suppliers.value ?? []).map((s) => s.email).filter(Boolean)
+  if (!emails.length) return
+  const { data: profiles } = await supabase
+    .from('profiles')
+    .select('email, first_name, last_name, phone, position, companies(name, address, country, legal_id)')
+    .in('email', emails)
+  if (!profiles?.length) return
+  suppliers.value = suppliers.value.map((s) => {
+    const p = profiles.find((pr) => pr.email === s.email)
+    if (!p) return s
+    return {
+      email: s.email,
+      phone: p.phone ?? s.phone ?? '',
+      name: p.last_name ? `${p.first_name} ${p.last_name}` : (p.first_name ?? null),
+      company: p.companies?.name ?? null,
+      address: p.companies?.address ?? null,
+      country: p.companies?.country ?? null,
+      id: p.companies?.legal_id ?? null,
+      position: p.position ?? null,
+      isNew: false,
     }
-  }
-
-  await nextTick()
-  basics.value = { ...basics.value }
-  suppliers.value = [...suppliers.value]
-  lots.value = [...lots.value]
+  })
 })
 
 const validLots = computed(() => {
