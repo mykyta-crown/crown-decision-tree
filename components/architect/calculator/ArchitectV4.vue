@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="show" max-width="850" width="90%">
-    <v-card class="dt4-card" rounded="lg">
+    <v-card class="dt4-card" rounded="lg" :style="{ height: '820px', maxHeight: '92vh' }">
       <!-- Header -->
       <div class="dt4-header">
         <div class="d-flex align-center ga-3">
@@ -290,12 +290,16 @@ function openLearnMore(family: string) {
 
 /* Body */
 .dt4-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
   padding: 24px;
 }
 
-/* Bottom — reserves space so modal never grows when results appear */
+/* Bottom — fixed height = full result section (badge + card + 3 runners) */
 .dt4-bottom {
-  min-height: 80px;
+  height: 400px;
+  flex-shrink: 0;
 }
 
 /* Criteria */
