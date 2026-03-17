@@ -502,6 +502,7 @@ function openLearnMore(family: string) {
 
 .runner {
   flex: 1;
+  min-width: 0;
   padding: 10px 14px;
   border-radius: 8px;
   background: #F9FAFB;
@@ -509,12 +510,18 @@ function openLearnMore(family: string) {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  overflow: hidden;
+  gap: 6px;
 }
 
 .runner-name {
   font-size: 12px;
   font-weight: 600;
   color: #374151;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
 }
 
 .runner-pct {
