@@ -2,8 +2,6 @@ import { defineStore } from 'pinia'
 import { ref, computed, watch } from 'vue'
 import { getScores, DEF_BASES, DEF_SAVINGS, DEF_MATRIX, deepCloneMatrix, DEF_BUILDER_PARAMS, deepCloneBuilderParams, type ScoringParams, type BuilderParams } from '~/utils/architect/scoring-engine'
 import { createSnapshot, parseSnapshot } from '~/utils/architect/snapshot-schema'
-import type { DemoPreset } from '~/utils/architect/demo-presets'
-
 let _paramsSaveTimer: ReturnType<typeof setTimeout> | null = null
 
 export interface Lot {
@@ -291,32 +289,6 @@ export const useCalculatorStore = defineStore('calculator', () => {
     })
   }
 
-  function applyDemoPreset(preset: DemoPreset) {
-    const n = preset.suppliers.length
-    sc.value = n
-    supNames.value = [...preset.suppliers]
-    lots.value = preset.lots.map((l, i) => ({
-      id: Date.now() + i,
-      name: l.name,
-      unit: l.unit,
-      qty: l.qty,
-      pref: l.pref,
-      intens: l.intens,
-      award: (l as any).award || 1,
-      prices: [...l.prices],
-      excl: l.excl ? [...l.excl] : l.prices.map(() => false),
-    }))
-    selLot.value = 0
-    evName.value = preset.label
-    // Sync Phase 1 from preset data
-    nSup.value = n
-    const totalSpend = preset.lots.reduce((sum, l) => {
-      const avg = l.prices.reduce((s, p) => s + p, 0) / l.prices.length
-      return sum + avg * l.qty
-    }, 0)
-    spend.value = Math.round(totalSpend)
-  }
-
   function resetEditor() {
     if (_paramsSaveTimer) {
       clearTimeout(_paramsSaveTimer)
@@ -492,7 +464,7 @@ export const useCalculatorStore = defineStore('calculator', () => {
     // Actions
     updateLot, updatePrice, addLot, removeLot,
     addSupplier, removeSupplierAt, renameSupplier, toggleExclude,
-    applyDemoPreset, resetEditor, resetParams, resetBuilderParams, dispose,
+    resetEditor, resetParams, resetBuilderParams, dispose,
     getSnapshot, hydrateFromState,
     paramsLoaded, loadScoringParams, saveScoringParams,
   }

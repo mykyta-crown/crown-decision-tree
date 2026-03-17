@@ -7,7 +7,7 @@ const user = ref(null)
 const profile = ref(null)
 
 const isAdmin = computed(() => {
-  return profile.value?.admin
+  return profile.value?.role === 'admin'
 })
 
 const isBuyer = computed(() => {

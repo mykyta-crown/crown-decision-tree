@@ -55,7 +55,7 @@ function rowToProject(r: DbRow): Project {
     ccy: r.ccy || 'EUR',
     status: r.status,
     owner: r.owner_name || '',
-    client: r.client || 'Crown',
+    client: r.client || '',
     category: r.category || 'Real',
     favorite: r.favorite ?? false,
     topFamily: r.top_family,

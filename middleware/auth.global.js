@@ -24,25 +24,6 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     return
   }
 
-  // Routes architect : réservées aux admins et buyers (pas les suppliers)
-  if (to.path.startsWith('/architect')) {
-    const supabase = useSupabaseClient()
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
-    if (authError || !user) return navigateTo('/auth/signin')
-
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('role')
-      .eq('id', user.id)
-      .single()
-
-    const allowedRoles = ['admin', 'buyer', 'super_buyer']
-    if (!profile || !allowedRoles.includes(profile.role)) {
-      return navigateTo('/home')
-    }
-    return
-  }
-
   const supabase = useSupabaseClient()
   const user = useSupabaseUser()
 

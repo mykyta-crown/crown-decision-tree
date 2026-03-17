@@ -43,90 +43,6 @@
     "sealedBid": "Sealed Bid",
     "traditional": "Traditional Negotiation"
   },
-  "v1": {
-    "title": "Negotiation Scenarios",
-    "subtitle": "Which eAuction format fits your context?",
-    "mostRecommended": "Most recommended",
-    "leastRecommended": "Least recommended",
-    "veryHighCompetition": "Very high competition",
-    "highCompetition": "High competition",
-    "lowNoCompetition": "Low / No competition",
-    "lessThan3Suppliers": "< 3 Suppliers",
-    "or": "OR",
-    "gapOver7": "Gap > 7%",
-    "smallSpend": "Small spend",
-    "savings": "savings",
-    "veryHigh": "Very high",
-    "high": "High",
-    "medium": "Medium",
-    "low": "Low",
-    "preBid": "Pre bid",
-    "preference": "Preference",
-    "ceiling": "Ceiling",
-    "mostOptions": "Most options",
-    "awardPostAward": "Award / Post Award",
-    "competition": "Competition",
-    "awardBinding": "Award binding",
-    "rankingOnly": "Ranking only",
-    "postAward": "Post Award",
-    "awardBindingNote": "Award binding →",
-    "noAwardNote": "No award →"
-  },
-  "v2": {
-    "title": "eAuction Selection Cascade",
-    "intro": "Start from the top. The first eAuction type whose conditions you meet is your best option.",
-    "bestSavings": "Best savings",
-    "mostFlexible": "Most flexible",
-    "dsDesc": "English + Dutch combined for maximum competition",
-    "enDesc": "Most options & transformations available (preference, ceiling, award…)",
-    "duDesc": "Price ascends from a low starting point, first to accept wins",
-    "jpDesc": "Price descends from a high starting point, last remaining supplier wins",
-    "sbDesc": "Single blind submission, no live interaction",
-    "trDesc": "Direct discussions with available suppliers",
-    "cond5Suppliers": "5+ qualified suppliers",
-    "condSimpleSpecs": "Simple, standardized specs",
-    "condMultipleLots": "Multiple lots available",
-    "condRealTimeBidding": "Suppliers accept real-time bidding",
-    "cond3Suppliers": "3+ qualified suppliers",
-    "condAllOptions": "All eAuction options available",
-    "condBindingAward": "Binding award required",
-    "condKnownPrice": "Known market/starting price",
-    "condNoBinding": "No binding award needed",
-    "condRanking": "Ranking / price discovery",
-    "condSuppliersAvailable": "3+ suppliers available",
-    "condRefuseLive": "Suppliers refuse live bidding",
-    "condFewer3": "Fewer than 3 suppliers",
-    "condNoCompetition": "No competitive tension possible",
-    "conditionsNotMet": "Conditions not met?",
-    "needDifferent": "Need different approach?",
-    "realTimeNotPossible": "Real-time not possible?",
-    "notEnoughSuppliers": "Not enough suppliers?"
-  },
-  "v3": {
-    "title": "eAuction Compatibility Matrix",
-    "intro": "Match your situation against each column. The eAuction type with the most matches is your best fit.",
-    "parameters": "Parameters",
-    "suppliersNeeded": "Suppliers needed",
-    "specComplexity": "Spec complexity",
-    "realTimeBidding": "Real-time bidding",
-    "multipleLots": "Multiple lots",
-    "bindingAward": "Binding award",
-    "startingPriceKnown": "Starting price known",
-    "speed": "Speed",
-    "priceTransparency": "Price transparency",
-    "estSavings": "Est. savings",
-    "simple": "Simple",
-    "any": "Any",
-    "complexOk": "Complex OK",
-    "optional": "Optional",
-    "preferred": "Preferred",
-    "fast": "Fast",
-    "slow": "Slow",
-    "variable": "Variable",
-    "full": "Full",
-    "partial": "Partial",
-    "none": "None"
-  },
   "v4": {
     "title": "Fast Compass",
     "subtitle": "Select criteria to find the best eAuction type",
@@ -153,12 +69,36 @@
     "priceGap": "Price Gap",
     "priceGapHint": "Spread between best offers",
     "priceGapTooltip": "The spread between your best and second-best current offers. Tight gap = suppliers are already close in price",
-    "spendOpts": ["< 100K", "100K–500K", "> 500K"],
-    "suppliersOpts": ["One", "Two", "Three +"],
-    "awardingOpts": ["Award", "Rank", "No Rank"],
-    "preferenceOpts": ["None", "Non-financial", "Financial"],
-    "intensityOpts": ["Collaborative", "Competitive", "Intense"],
-    "priceGapOpts": ["< 7%", "7%–10%", "> 10%"]
+    "spendOpts": [
+      "< 100K",
+      "100K–500K",
+      "> 500K"
+    ],
+    "suppliersOpts": [
+      "One",
+      "Two",
+      "Three +"
+    ],
+    "awardingOpts": [
+      "Award",
+      "Rank",
+      "No Rank"
+    ],
+    "preferenceOpts": [
+      "None",
+      "Non-financial",
+      "Financial"
+    ],
+    "intensityOpts": [
+      "Collaborative",
+      "Competitive",
+      "Intense"
+    ],
+    "priceGapOpts": [
+      "< 7%",
+      "7%–10%",
+      "> 10%"
+    ]
   },
   "v5": {
     "title": "Architect",
@@ -226,22 +166,47 @@
     "scoringElimination": "Strategies incompatible with your inputs are automatically eliminated (e.g. English eAuctions require ranking, Double Scenario needs 3+ suppliers).",
     "dim1": "Spend Range",
     "dim1Desc": "Total budget for the category",
-    "dim1Opts": ["< 100K", "100K–500K", "> 500K"],
+    "dim1Opts": [
+      "< 100K",
+      "100K–500K",
+      "> 500K"
+    ],
     "dim2": "Supplier Count",
     "dim2Desc": "Number of qualified suppliers",
-    "dim2Opts": ["One", "Two", "Three+"],
+    "dim2Opts": [
+      "One",
+      "Two",
+      "Three+"
+    ],
     "dim3": "Award Method",
     "dim3Desc": "How the winner is selected",
-    "dim3Opts": ["Award", "Rank", "No Rank"],
+    "dim3Opts": [
+      "Award",
+      "Rank",
+      "No Rank"
+    ],
     "dim4": "Preference Type",
     "dim4Desc": "Bonus or malus applied to a supplier's offer based on quality, relationship, or other criteria",
-    "dim4Opts": ["None", "Non-financial", "Financial"],
+    "dim4Opts": [
+      "None",
+      "Non-financial",
+      "Financial"
+    ],
     "dim5": "Competitive Intensity",
     "dim5Desc": "Level of competitive pressure",
-    "dim5Opts": ["Collaborative", "Competitive", "High", "Intense"],
+    "dim5Opts": [
+      "Collaborative",
+      "Competitive",
+      "High",
+      "Intense"
+    ],
     "dim6": "Price Gap",
     "dim6Desc": "Spread between top supplier offers",
-    "dim6Opts": ["< 7%", "7%–10%", "> 10%"],
+    "dim6Opts": [
+      "< 7%",
+      "7%–10%",
+      "> 10%"
+    ],
     "conceptsTitle": "Key concepts",
     "conceptPreBid": "Pre-bid",
     "conceptPreBidDesc": "Offer submitted by a supplier before the live eAuction begins. During the live eAuction, this bid is executed automatically.",

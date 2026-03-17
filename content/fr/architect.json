@@ -43,90 +43,6 @@
     "sealedBid": "Offre Scellée",
     "traditional": "Négociation Traditionnelle"
   },
-  "v1": {
-    "title": "Scénarios de Négociation",
-    "subtitle": "Quel format d'eAuction correspond à votre contexte ?",
-    "mostRecommended": "Plus recommandé",
-    "leastRecommended": "Moins recommandé",
-    "veryHighCompetition": "Compétition très élevée",
-    "highCompetition": "Compétition élevée",
-    "lowNoCompetition": "Faible / Pas de compétition",
-    "lessThan3Suppliers": "< 3 Fournisseurs",
-    "or": "OU",
-    "gapOver7": "Écart > 7%",
-    "smallSpend": "Petit budget",
-    "savings": "d'économies",
-    "veryHigh": "Très élevée",
-    "high": "Élevée",
-    "medium": "Moyenne",
-    "low": "Faible",
-    "preBid": "Pré-offre",
-    "preference": "Préférence",
-    "ceiling": "Plafond",
-    "mostOptions": "Plus d'options",
-    "awardPostAward": "Attribution / Post Attribution",
-    "competition": "Compétition",
-    "awardBinding": "Attribution contraignante",
-    "rankingOnly": "Classement uniquement",
-    "postAward": "Post Attribution",
-    "awardBindingNote": "Attribution contraignante →",
-    "noAwardNote": "Pas d'attribution →"
-  },
-  "v2": {
-    "title": "Cascade de Sélection d'eAuctions",
-    "intro": "Commencez par le haut. Le premier type d'eAuction dont vous remplissez les conditions est votre meilleure option.",
-    "bestSavings": "Meilleures économies",
-    "mostFlexible": "Le plus flexible",
-    "dsDesc": "Anglaise + Hollandaise combinées pour une compétition maximale",
-    "enDesc": "Le plus d'options & transformations disponibles (préférence, plafond, attribution…)",
-    "duDesc": "Le prix monte à partir d'un prix de départ bas, le premier à accepter gagne",
-    "jpDesc": "Le prix descend à partir d'un prix de départ élevé, le dernier fournisseur restant gagne",
-    "sbDesc": "Soumission unique à l'aveugle, sans interaction en direct",
-    "trDesc": "Discussions directes avec les fournisseurs disponibles",
-    "cond5Suppliers": "5+ fournisseurs qualifiés",
-    "condSimpleSpecs": "Spécifications simples et standardisées",
-    "condMultipleLots": "Plusieurs lots disponibles",
-    "condRealTimeBidding": "Fournisseurs acceptent les enchères en temps réel",
-    "cond3Suppliers": "3+ fournisseurs qualifiés",
-    "condAllOptions": "Toutes les options d'eAuction disponibles",
-    "condBindingAward": "Attribution contraignante requise",
-    "condKnownPrice": "Prix de marché / prix de départ connu",
-    "condNoBinding": "Pas d'attribution contraignante nécessaire",
-    "condRanking": "Classement / découverte de prix",
-    "condSuppliersAvailable": "3+ fournisseurs disponibles",
-    "condRefuseLive": "Fournisseurs refusent les enchères en direct",
-    "condFewer3": "Moins de 3 fournisseurs",
-    "condNoCompetition": "Aucune tension concurrentielle possible",
-    "conditionsNotMet": "Conditions non remplies ?",
-    "needDifferent": "Besoin d'une autre approche ?",
-    "realTimeNotPossible": "Temps réel impossible ?",
-    "notEnoughSuppliers": "Pas assez de fournisseurs ?"
-  },
-  "v3": {
-    "title": "Matrice de Compatibilité des eAuctions",
-    "intro": "Comparez votre situation avec chaque colonne. Le type d'eAuction avec le plus de correspondances est le plus adapté.",
-    "parameters": "Paramètres",
-    "suppliersNeeded": "Fournisseurs nécessaires",
-    "specComplexity": "Complexité des spéc.",
-    "realTimeBidding": "Enchères en temps réel",
-    "multipleLots": "Lots multiples",
-    "bindingAward": "Attribution contraignante",
-    "startingPriceKnown": "Prix de départ connu",
-    "speed": "Rapidité",
-    "priceTransparency": "Transparence des prix",
-    "estSavings": "Écon. estimées",
-    "simple": "Simple",
-    "any": "Toute",
-    "complexOk": "Complexe OK",
-    "optional": "Optionnel",
-    "preferred": "Préféré",
-    "fast": "Rapide",
-    "slow": "Lent",
-    "variable": "Variable",
-    "full": "Totale",
-    "partial": "Partielle",
-    "none": "Aucune"
-  },
   "v4": {
     "title": "Fast Compass",
     "subtitle": "Sélectionnez des critères pour trouver le meilleur type d'eAuction",
@@ -153,12 +69,36 @@
     "priceGap": "Écart de prix",
     "priceGapHint": "Écart entre les meilleures offres",
     "priceGapTooltip": "L'écart entre votre meilleure et deuxième offre actuelle. Écart faible = les fournisseurs sont déjà proches",
-    "spendOpts": ["< 100K", "100K–500K", "> 500K"],
-    "suppliersOpts": ["Un", "Deux", "Trois +"],
-    "awardingOpts": ["Attribution", "Classement", "Sans classement"],
-    "preferenceOpts": ["Aucune", "Non financière", "Financière"],
-    "intensityOpts": ["Collaborative", "Compétitive", "Intense"],
-    "priceGapOpts": ["< 7%", "7%–10%", "> 10%"]
+    "spendOpts": [
+      "< 100K",
+      "100K–500K",
+      "> 500K"
+    ],
+    "suppliersOpts": [
+      "Un",
+      "Deux",
+      "Trois +"
+    ],
+    "awardingOpts": [
+      "Attribution",
+      "Classement",
+      "Sans classement"
+    ],
+    "preferenceOpts": [
+      "Aucune",
+      "Non financière",
+      "Financière"
+    ],
+    "intensityOpts": [
+      "Collaborative",
+      "Compétitive",
+      "Intense"
+    ],
+    "priceGapOpts": [
+      "< 7%",
+      "7%–10%",
+      "> 10%"
+    ]
   },
   "v5": {
     "title": "Architect",
@@ -226,22 +166,47 @@
     "scoringElimination": "Les stratégies incompatibles avec vos données sont automatiquement éliminées (ex. les eAuctions anglaises nécessitent un classement, le Double Scénario nécessite 3+ fournisseurs).",
     "dim1": "Fourchette de budget",
     "dim1Desc": "Budget total pour la catégorie",
-    "dim1Opts": ["< 100K", "100K–500K", "> 500K"],
+    "dim1Opts": [
+      "< 100K",
+      "100K–500K",
+      "> 500K"
+    ],
     "dim2": "Nombre de fournisseurs",
     "dim2Desc": "Nombre de fournisseurs qualifiés",
-    "dim2Opts": ["Un", "Deux", "Trois+"],
+    "dim2Opts": [
+      "Un",
+      "Deux",
+      "Trois+"
+    ],
     "dim3": "Méthode d'attribution",
     "dim3Desc": "Comment le gagnant est sélectionné",
-    "dim3Opts": ["Attribution", "Classement", "Sans classement"],
+    "dim3Opts": [
+      "Attribution",
+      "Classement",
+      "Sans classement"
+    ],
     "dim4": "Type de préférence",
     "dim4Desc": "Bonus ou malus appliqué à l'offre d'un fournisseur selon la qualité, la relation ou d'autres critères",
-    "dim4Opts": ["Aucune", "Non financière", "Financière"],
+    "dim4Opts": [
+      "Aucune",
+      "Non financière",
+      "Financière"
+    ],
     "dim5": "Intensité concurrentielle",
     "dim5Desc": "Niveau de pression concurrentielle",
-    "dim5Opts": ["Collaborative", "Compétitive", "Élevée", "Intense"],
+    "dim5Opts": [
+      "Collaborative",
+      "Compétitive",
+      "Élevée",
+      "Intense"
+    ],
     "dim6": "Écart de prix",
     "dim6Desc": "Écart entre les meilleures offres",
-    "dim6Opts": ["< 7%", "7%–10%", "> 10%"],
+    "dim6Opts": [
+      "< 7%",
+      "7%–10%",
+      "> 10%"
+    ],
     "conceptsTitle": "Concepts clés",
     "conceptPreBid": "Pré-offre",
     "conceptPreBidDesc": "Offre soumise par un fournisseur avant le début de l'eAuction en direct. Lors de l'eAuction, cette offre est exécutée automatiquement.",
