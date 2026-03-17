@@ -560,6 +560,8 @@
       "initialOffer": "Offre initiale",
       "proposedCeiling": "Plafond proposé",
       "proposedCeilingTooltip": "Prix maximum suggéré par fournisseur, basé sur leur offre initiale et les données du marché. Les fournisseurs ne peuvent pas enchérir au-delà de ce seuil pendant l'eAuction.",
+      "proposedPrebid": "Pré-bid suggéré",
+      "proposedPrebidTooltip": "Seuil de pré-bid suggéré par fournisseur. Le système accepte automatiquement quand le prix de l'enchère atteint ce montant. Le fournisseur le moins cher est positionné 5% en dessous de son offre initiale pour favoriser une acceptation anticipée.",
       "close": "Fermer",
       "build": "Construire cette eAuction"
     },

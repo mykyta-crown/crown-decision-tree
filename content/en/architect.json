@@ -560,6 +560,8 @@
       "initialOffer": "Initial offer",
       "proposedCeiling": "Proposed ceiling",
       "proposedCeilingTooltip": "Suggested maximum price per supplier, based on their initial offer and market data. Suppliers cannot bid above this threshold during the eAuction.",
+      "proposedPrebid": "Proposed pre-bid",
+      "proposedPrebidTooltip": "Suggested pre-bid threshold per supplier. The system will auto-accept when the auction price reaches this amount. The best supplier is set 5% below their initial offer to encourage early acceptance.",
       "close": "Close",
       "build": "Build this eAuction"
     },

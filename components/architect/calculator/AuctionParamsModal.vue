@@ -455,7 +455,7 @@
                 {{ t('calc.auctionParams.initialOffer') }}
               </div>
               <div class="ap-sup-col-prop ap-sup-col-prop--head">
-                {{ t('calc.auctionParams.proposedCeiling') }}
+                {{ (params?.type === 'Dutch' || params?.type === 'DutchPreferred' || params?.type === 'Japanese') ? t('calc.auctionParams.proposedPrebid') : t('calc.auctionParams.proposedCeiling') }}
                 <v-tooltip
                   location="top"
                   max-width="260"
@@ -464,7 +464,7 @@
                   <template #activator="{ props: tip }">
                     <span v-bind="tip" class="ap-ceil-info">ⓘ</span>
                   </template>
-                  <span style="font-size:12px;line-height:1.5">{{ t('calc.auctionParams.proposedCeilingTooltip') }}</span>
+                  <span style="font-size:12px;line-height:1.5">{{ (params?.type === 'Dutch' || params?.type === 'DutchPreferred' || params?.type === 'Japanese') ? t('calc.auctionParams.proposedPrebidTooltip') : t('calc.auctionParams.proposedCeilingTooltip') }}</span>
                 </v-tooltip>
               </div>
               <div v-if="params?.type === 'DutchPreferred'" class="ap-sup-col-pref ap-sup-col-pref--head">
@@ -708,16 +708,27 @@ function initEditable() {
   editMinDecr.value = _qty > 1 ? Math.round(_rawMin / _qty * 100) / 100 : _rawMin
   editMaxDecr.value = _qty > 1 ? Math.round(_rawMax / _qty * 100) / 100 : _rawMax
 
-  // Proposed prices — per supplier for English/SealedBid/DS; global auction price for Dutch/Japanese
-  const globalProposed =
-    p.type === 'Dutch' || p.type === 'DutchPreferred' ? p.ending :
-    p.type === 'Japanese' ? p.starting : null
-
-  editCeilings.value = activeSuppliers.value.map(s => ({
-    name: s.name,
-    originalPrice: s.price,
-    proposedPrice: globalProposed != null ? globalProposed : Math.round(s.price * 0.97),
-  }))
+  // Proposed prices — per supplier
+  // Dutch/Japanese: each supplier's original price; cheapest supplier gets −5%
+  // English/SealedBid/DS: 3% below original price as proposed ceiling
+  const isDutchOrJap = p.type === 'Dutch' || p.type === 'DutchPreferred' || p.type === 'Japanese'
+  if (isDutchOrJap) {
+    const activePrices = activeSuppliers.value.filter(s => s.price > 0).map(s => s.price)
+    const lowestPrice = activePrices.length > 0 ? Math.min(...activePrices) : 0
+    editCeilings.value = activeSuppliers.value.map(s => ({
+      name: s.name,
+      originalPrice: s.price,
+      proposedPrice: s.price > 0 && s.price === lowestPrice
+        ? niceRound(s.price * 0.95)
+        : s.price,
+    }))
+  } else {
+    editCeilings.value = activeSuppliers.value.map(s => ({
+      name: s.name,
+      originalPrice: s.price,
+      proposedPrice: Math.round(s.price * 0.97),
+    }))
+  }
 
   nextTick(() => {
     const tp = termsPreview.value
@@ -784,9 +795,9 @@ async function buildAuction() {
   if (p.type === 'English' || p.type === 'SealedBid') {
     p = { ...p, duration: editDuration.value, overtimeRange: editRoundDuration.value, minDecr: editMinDecr.value * qty, maxDecr: editMaxDecr.value * qty, supplierCeilings: ceilingsData }
   } else if (p.type === 'Dutch' || p.type === 'DutchPreferred') {
-    p = { ...p, duration: editDuration.value, roundDuration: editRoundDuration.value, overtimeRange: editRoundDuration.value, incr: editIncr.value, ending: editEnding.value, starting: dutchStarting.value, nbRounds: nbRounds.value, prebid: editPrebid.value }
+    p = { ...p, duration: editDuration.value, roundDuration: editRoundDuration.value, overtimeRange: editRoundDuration.value, incr: editIncr.value, ending: editEnding.value, starting: dutchStarting.value, nbRounds: nbRounds.value, prebid: editPrebid.value, supplierCeilings: ceilingsData }
   } else if (p.type === 'Japanese') {
-    p = { ...p, duration: editDuration.value, roundDuration: editRoundDuration.value, overtimeRange: editRoundDuration.value, decr: editDecr.value, starting: editStarting.value, floor: japaneseFloor.value, nbRounds: nbRounds.value, prebid: editPrebid.value }
+    p = { ...p, duration: editDuration.value, roundDuration: editRoundDuration.value, overtimeRange: editRoundDuration.value, decr: editDecr.value, starting: editStarting.value, floor: japaneseFloor.value, nbRounds: nbRounds.value, prebid: editPrebid.value, supplierCeilings: ceilingsData }
   } else if (p.type === 'DoubleScenario') {
     p = { ...p, english: { ...p.english, duration: editDuration.value, overtimeRange: editRoundDuration.value, minDecr: editMinDecr.value * qty, maxDecr: editMaxDecr.value * qty, supplierCeilings: ceilingsData } }
   }

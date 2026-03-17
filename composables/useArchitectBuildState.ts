@@ -88,15 +88,24 @@ export const useArchitectBuildState = () => {
       })
     }
 
-    // Inject per-supplier selling prices (Dutch, Japanese prebid)
-    if (phaseParams.builderType === 'dutch' || phaseParams.builderType === 'japanese') {
+    // Fallback prebid injection for Dutch/Japanese when supplierCeilings not provided by modal
+    // Applies the same rule: original price for all, cheapest supplier gets −5%
+    if (!supplierCeilings?.length && (phaseParams.builderType === 'dutch' || phaseParams.builderType === 'japanese')) {
       const items = lotData.items as Record<string, unknown>[]
+      const activePrices = supNames
+        .map((_, i) => (!lot.excl?.[i] ? (lot.prices?.[i] ?? 0) : 0))
+        .filter(p => p > 0)
+      const lowestPrice = activePrices.length > 0 ? Math.min(...activePrices) : 0
       supNames.forEach((name, i) => {
         if (lot.excl?.[i]) return
         const price = lot.prices?.[i]
         if (!price || price <= 0) return
         const match = activeSuppliers.find(s => s.name === name)
-        if (match) items[0][match.email] = price
+        if (match) {
+          items[0][match.email] = (price === lowestPrice && lowestPrice > 0)
+            ? Math.round(price * 0.95)
+            : price
+        }
       })
     }
 
