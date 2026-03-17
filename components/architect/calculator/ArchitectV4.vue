@@ -1,6 +1,6 @@
 <template>
-  <v-dialog v-model="show" max-width="850" width="90%">
-    <v-card class="dt4-card" rounded="lg" :style="{ height: '700px', maxHeight: '92vh' }">
+  <v-dialog v-model="show" max-width="850" width="90%" class="dt4-dialog">
+    <v-card class="dt4-card" rounded="lg">
       <!-- Header -->
       <div class="dt4-header">
         <div class="d-flex align-center ga-3">
@@ -63,64 +63,63 @@
           </div>
         </div>
 
-        <!-- Bottom area — fixed height reserved from the start -->
+        <!-- Bottom — both sections always in DOM, only opacity toggled -->
         <div class="dt4-bottom">
-          <!-- Result -->
-          <Transition name="result-fade">
-            <div v-if="topResult" class="dt4-result">
-              <div class="result-divider" />
-              <div class="result-label">
-                <v-icon size="16" class="mr-1">mdi-check-decagram</v-icon>
-                {{ t('v4.bestMatch') }}
-              </div>
 
-              <div class="result-card" :style="{ background: topColor.bg, borderColor: topColor.border }">
-                <div class="result-accent" :style="{ background: topColor.border }" />
-                <div class="result-main">
-                  <div class="result-title" :style="{ color: topColor.text }">{{ topResult.displayName }}</div>
-                  <div class="result-pct">{{ topResult.pctMatch }}% {{ t('v4.match') }}</div>
-                  <div class="result-stats">
-                    <div class="result-stat">
-                      <span class="stat-label">{{ t('v4.savingsLabel') }}</span>
-                      <span class="stat-value">{{ topResult.saving }}%</span>
-                    </div>
-                    <div class="result-stat">
-                      <span class="stat-label">{{ t('v4.familyLabel') }}</span>
-                      <span class="stat-value">{{ topResult.family }}</span>
-                    </div>
+          <!-- Result section -->
+          <div class="dt4-result" :class="{ 'dt4-section--hidden': !topResult }">
+            <div class="result-divider" />
+            <div class="result-label">
+              <v-icon size="16" class="mr-1">mdi-check-decagram</v-icon>
+              {{ t('v4.bestMatch') }}
+            </div>
+
+            <div class="result-card" :style="{ background: topColor.bg, borderColor: topColor.border }">
+              <div class="result-accent" :style="{ background: topColor.border }" />
+              <div class="result-main">
+                <div class="result-title" :style="{ color: topColor.text }">{{ topResult?.displayName }}</div>
+                <div class="result-pct">{{ topResult?.pctMatch }}% {{ t('v4.match') }}</div>
+                <div class="result-stats">
+                  <div class="result-stat">
+                    <span class="stat-label">{{ t('v4.savingsLabel') }}</span>
+                    <span class="stat-value">{{ topResult?.saving }}%</span>
                   </div>
-                  <button class="result-learn-btn" @click="openLearnMore(topResult.family)">
-                    {{ t('v4.learnMore') }}
-                    <v-icon size="13">mdi-arrow-right</v-icon>
-                  </button>
+                  <div class="result-stat">
+                    <span class="stat-label">{{ t('v4.familyLabel') }}</span>
+                    <span class="stat-value">{{ topResult?.family }}</span>
+                  </div>
                 </div>
-                <div class="result-chart">
-                  <ArchitectCalculatorChartsAChart
-                    :family="topResult.family"
-                    :color="topColor.border"
-                    ccy="EUR"
-                  />
-                </div>
+                <button class="result-learn-btn" @click="topResult && openLearnMore(topResult.family)">
+                  {{ t('v4.learnMore') }}
+                  <v-icon size="13">mdi-arrow-right</v-icon>
+                </button>
               </div>
-
-              <!-- Runner-ups — always 3 slots to keep stable height -->
-              <div class="runners">
-                <div
-                  v-for="i in 3"
-                  :key="i"
-                  class="runner"
-                  :class="{ 'runner--ghost': i > runners.length }"
-                  :style="i <= runners.length ? { borderLeftColor: getFC(runners[i - 1].family).border } : {}"
-                >
-                  <span v-if="i <= runners.length" class="runner-name">{{ runners[i - 1].displayName }}</span>
-                  <span v-if="i <= runners.length" class="runner-pct">{{ runners[i - 1].pctMatch }}%</span>
-                </div>
+              <div class="result-chart">
+                <ArchitectCalculatorChartsAChart
+                  :family="topResult?.family || ''"
+                  :color="topColor.border"
+                  ccy="EUR"
+                />
               </div>
             </div>
-          </Transition>
 
-          <!-- Progress / empty state -->
-          <div v-if="!topResult" class="dt4-empty">
+            <!-- Always 3 runner slots -->
+            <div class="runners">
+              <div
+                v-for="i in 3"
+                :key="i"
+                class="runner"
+                :class="{ 'runner--ghost': i > runners.length }"
+                :style="i <= runners.length ? { borderLeftColor: getFC(runners[i - 1].family).border } : {}"
+              >
+                <span v-if="i <= runners.length" class="runner-name">{{ runners[i - 1].displayName }}</span>
+                <span v-if="i <= runners.length" class="runner-pct">{{ runners[i - 1].pctMatch }}%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Empty state -->
+          <div class="dt4-empty" :class="{ 'dt4-section--hidden': !!topResult }">
             <div class="empty-progress">
               <div class="progress-dots">
                 <div
@@ -135,6 +134,7 @@
               </div>
             </div>
           </div>
+
         </div>
       </div>
     </v-card>
@@ -248,7 +248,14 @@ function openLearnMore(family: string) {
 </script>
 
 <style scoped>
+/* Fix dialog height via Vuetify's overlay content wrapper */
+.dt4-dialog :deep(.v-overlay__content) {
+  height: 700px;
+  max-height: 92vh;
+}
+
 .dt4-card {
+  height: 100%;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -262,6 +269,7 @@ function openLearnMore(family: string) {
   padding: 14px 20px;
   background: linear-gradient(to bottom, #F3F4F6, #FAFAFA);
   border-bottom: 1px solid #E9EAEC;
+  flex-shrink: 0;
 }
 
 .dt4-icon {
@@ -292,18 +300,15 @@ function openLearnMore(family: string) {
 .dt4-body {
   flex: 1;
   min-height: 0;
-  overflow-y: auto;
+  overflow: hidden;
   padding: 24px;
-}
-
-/* Bottom — fixed height = full result section (badge + card + 3 runners) */
-.dt4-bottom {
-  height: 300px;
-  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Criteria */
 .dt4-criteria {
+  flex-shrink: 0;
   display: grid;
   grid-template-columns: 260px 1fr 1fr 1fr;
   gap: 12px 16px;
@@ -383,9 +388,32 @@ function openLearnMore(family: string) {
   border-color: #333;
 }
 
+/* Bottom — fills remaining space, both sections absolutely stacked */
+.dt4-bottom {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Both sections transition via opacity only — no layout change */
+.dt4-result,
+.dt4-empty {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  transition: opacity 0.25s ease;
+}
+
+.dt4-section--hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
 /* Result */
 .dt4-result {
-  margin-top: 24px;
+  padding-top: 20px;
 }
 
 .result-divider {
@@ -538,12 +566,13 @@ function openLearnMore(family: string) {
   visibility: hidden;
 }
 
-/* Empty state */
+/* Empty state — centered in the bottom area */
 .dt4-empty {
+  top: 50%;
+  transform: translateY(-50%);
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  padding: 28px 0 16px;
 }
 
 .empty-progress {
@@ -576,25 +605,6 @@ function openLearnMore(family: string) {
   font-weight: 500;
 }
 
-/* Transition */
-.result-fade-enter-active {
-  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.result-fade-leave-active {
-  transition: all 0.2s ease;
-}
-
-.result-fade-enter-from {
-  opacity: 0;
-  transform: translateY(12px);
-}
-
-.result-fade-leave-to {
-  opacity: 0;
-  transform: translateY(-8px);
-}
-
 /* ── Responsive ── */
 @media (max-width: 600px) {
   .dt4-header {
@@ -606,16 +616,8 @@ function openLearnMore(family: string) {
   }
 
   .dt4-criteria {
-    gap: 14px;
-  }
-
-  .dt4-criteria {
     grid-template-columns: 1fr;
     gap: 8px;
-  }
-
-  .crit-row {
-    display: contents;
   }
 
   .crit-pills {
@@ -644,10 +646,6 @@ function openLearnMore(family: string) {
 
   .runners {
     flex-direction: column;
-  }
-
-  .dt4-empty {
-    padding: 24px 0 8px;
   }
 }
 </style>
