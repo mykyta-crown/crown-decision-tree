@@ -992,7 +992,7 @@ const params = computed(() => {
       type: 'English' as const,
       builderType: 'reverse' as const,
       duration: bp.duration ?? 15, overtimeRange: bp.overtime_range ?? 3,
-      maxRankDisplayed: 2,
+      maxRankDisplayed: activeSuppliers.value.length,
       minDecr: niceRound(props.lotBaseline * (bp.min_decr_factor ?? 0.25) / 100),
       maxDecr: niceRound(props.lotBaseline * (bp.max_decr_factor ?? 20) / 100),
       supplierCeilings: activeCeilingsData(),
@@ -1022,7 +1022,7 @@ const params = computed(() => {
     const decr     = niceRound((starting - floor) / (bp.steps ?? 19))
     return { ...buildDefaults, type: 'Japanese' as const, builderType: 'japanese' as const,
       duration: bp.duration ?? 10, roundDuration: bp.round_duration ?? 0.5, nbRounds: bp.nb_rounds ?? 20, overtimeRange: bp.round_duration ?? 0.5,
-      maxRankDisplayed: 0, prebid: true, starting, floor, decr }
+      maxRankDisplayed: props.lot.award === 1 ? 1 : props.lot.award === 2 ? activeSuppliers.value.length : 0, prebid: true, starting, floor, decr }
   }
 
   if (props.family === 'Sealed Bid') {
