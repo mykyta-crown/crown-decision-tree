@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="show" max-width="850" width="90%">
-    <v-card class="dt4-card" rounded="lg" :style="{ height: '820px', maxHeight: '92vh' }">
+    <v-card class="dt4-card" rounded="lg" :style="{ height: '780px', maxHeight: '92vh' }">
       <!-- Header -->
       <div class="dt4-header">
         <div class="d-flex align-center ga-3">
