@@ -596,6 +596,7 @@ import { useCalculatorStore } from '~/stores/architect/calculator'
 import { fmtE, fmtN } from '~/utils/architect/formatting'
 import useTranslations from '~/composables/useTranslations'
 import { useArchitectBuildState } from '~/composables/useArchitectBuildState'
+import { niceRound, softRound, roundIncrement } from '~/utils/architect/computeAuctionParams'
 
 const STORAGE_KEY = 'crown_architect_build_state'
 
@@ -867,40 +868,6 @@ function bestOffer(): number {
   return valid.length > 0 ? Math.min(...valid) : 0
 }
 
-function niceRound(val: number): number {
-  if (val <= 0) return 0
-  if (val < 1)       return Math.round(val * 100) / 100
-  if (val < 5)       return Math.round(val * 4) / 4
-  if (val < 20)      return Math.round(val * 2) / 2
-  if (val < 100)     return Math.round(val)
-  if (val < 500)     return Math.round(val / 10) * 10
-  if (val < 2000)    return Math.round(val / 50) * 50
-  if (val < 10000)   return Math.round(val / 1000) * 1000
-  if (val < 50000)   return Math.round(val / 5000) * 5000
-  if (val < 200000)  return Math.round(val / 10000) * 10000
-  return Math.round(val / 50000) * 50000
-}
-
-function roundIncrement(val: number): number {
-  if (val <= 0) return 0
-  if (val < 1)     return Math.round(val * 10) / 10
-  if (val < 5)     return Math.round(val)
-  if (val < 50)    return Math.round(val / 5) * 5
-  if (val < 500)   return Math.round(val / 25) * 25
-  if (val < 2000)  return Math.round(val / 100) * 100
-  if (val < 10000) return Math.round(val / 500) * 500
-  return Math.round(val / 2000) * 2000
-}
-
-function softRound(val: number): number {
-  if (val <= 0) return 0
-  if (val < 10)      return Math.round(val * 10) / 10
-  if (val < 100)     return Math.round(val)
-  if (val < 1000)    return Math.round(val / 5) * 5
-  if (val < 10000)   return Math.round(val / 50) * 50
-  if (val < 100000)  return Math.round(val / 100) * 100
-  return Math.round(val / 1000) * 1000
-}
 
 function tot(unitVal: number): number {
   return softRound(unitVal * props.lot.qty)

@@ -366,13 +366,11 @@ export const useCalculatorStore = defineStore('calculator', () => {
   async function loadScoringParams() {
     try {
       const supabase = useSupabaseClient()
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) return
 
       const { data, error } = await supabase
-        .from('dt_scoring_params')
+        .from('dt_global_params')
         .select('bases, savings, matrix, builder_params')
-        .eq('user_id', user.id)
+        .eq('id', 1)
         .maybeSingle()
 
       if (error) throw error
@@ -394,26 +392,18 @@ export const useCalculatorStore = defineStore('calculator', () => {
   }
 
   async function saveScoringParams() {
-    try {
-      const supabase = useSupabaseClient()
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) return
+    const supabase = useSupabaseClient()
+    const { error } = await supabase
+      .from('dt_global_params')
+      .upsert({
+        id: 1,
+        bases: params.value.bases,
+        savings: params.value.savings,
+        matrix: params.value.matrix,
+        builder_params: builderParams.value,
+      }, { onConflict: 'id' })
 
-      const { error } = await supabase
-        .from('dt_scoring_params')
-        .upsert({
-          user_id: user.id,
-          bases: params.value.bases,
-          savings: params.value.savings,
-          matrix: params.value.matrix,
-          builder_params: builderParams.value,
-        }, { onConflict: 'user_id' })
-
-      if (error) throw error
-    } catch (e) {
-      console.error('[DT] Failed to save scoring params:', e)
-      useToast().error('Échec de la sauvegarde des paramètres')
-    }
+    if (error) throw error
   }
 
   // Debounced auto-save when params or builderParams change

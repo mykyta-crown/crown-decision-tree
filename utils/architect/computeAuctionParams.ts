@@ -1,7 +1,9 @@
 // Pure utility: compute recommended auction parameters for a given family + lot data.
-// Used by PhaseThreeBlue.vue (PDF export). Same logic as AuctionParamsModal `params` computed.
+// Used by PhaseThreeBlue.vue (PDF export) and AuctionParamsModal.vue.
+// niceRound / softRound / roundIncrement are exported so AuctionParamsModal can import
+// them directly instead of maintaining duplicate copies.
 
-function niceRound(val: number): number {
+export function niceRound(val: number): number {
   if (val <= 0) return 0
   if (val < 1)       return Math.round(val * 100) / 100
   if (val < 5)       return Math.round(val * 4) / 4
@@ -15,7 +17,7 @@ function niceRound(val: number): number {
   return Math.round(val / 50000) * 50000
 }
 
-function roundIncrement(val: number): number {
+export function roundIncrement(val: number): number {
   if (val <= 0) return 0
   if (val < 1)     return Math.round(val * 10) / 10
   if (val < 5)     return Math.round(val)
@@ -26,7 +28,7 @@ function roundIncrement(val: number): number {
   return Math.round(val / 2000) * 2000
 }
 
-function softRound(val: number): number {
+export function softRound(val: number): number {
   if (val <= 0) return 0
   if (val < 10)      return Math.round(val * 10) / 10
   if (val < 100)     return Math.round(val)

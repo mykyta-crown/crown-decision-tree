@@ -1,7 +1,5 @@
 import { describe, it, expect } from 'vitest'
-
-// ─── Pure functions extracted from AuctionParamsModal.vue ───────────────────
-// These mirror the logic in components/architect/calculator/AuctionParamsModal.vue
+import { niceRound, softRound, roundIncrement } from '~/utils/architect/computeAuctionParams'
 
 interface Lot {
   prices: number[]
@@ -14,44 +12,6 @@ interface Lot {
 function bestOffer(lot: Lot): number {
   const valid = lot.prices.filter((p, i) => !lot.excl[i] && p > 0)
   return valid.length > 0 ? Math.min(...valid) : 0
-}
-
-/** Scale-aware rounding — for steps/decrements/increments */
-function niceRound(val: number): number {
-  if (val <= 0) return 0
-  if (val < 1)       return Math.round(val * 100) / 100    // nearest 0.01
-  if (val < 5)       return Math.round(val * 4) / 4        // nearest 0.25
-  if (val < 20)      return Math.round(val * 2) / 2        // nearest 0.5
-  if (val < 100)     return Math.round(val)                 // nearest 1
-  if (val < 500)     return Math.round(val / 10) * 10       // nearest 10
-  if (val < 2000)    return Math.round(val / 50) * 50       // nearest 50
-  if (val < 10000)   return Math.round(val / 1000) * 1000    // nearest 1 000
-  if (val < 50000)   return Math.round(val / 5000) * 5000    // nearest 5 000
-  if (val < 200000)  return Math.round(val / 10000) * 10000  // nearest 10 000
-  return Math.round(val / 50000) * 50000                     // nearest 50 000
-}
-
-/** Round increments/decrements to very clean numbers (5, 25, 100, 500…) */
-function roundIncrement(val: number): number {
-  if (val <= 0) return 0
-  if (val < 1)     return Math.round(val * 10) / 10    // nearest 0.1
-  if (val < 5)     return Math.round(val)               // nearest 1
-  if (val < 50)    return Math.round(val / 5) * 5       // nearest 5
-  if (val < 500)   return Math.round(val / 25) * 25     // nearest 25
-  if (val < 2000)  return Math.round(val / 100) * 100   // nearest 100
-  if (val < 10000) return Math.round(val / 500) * 500   // nearest 500
-  return Math.round(val / 2000) * 2000                  // nearest 2000
-}
-
-/** Gentle rounding — for price levels (≤1-2% deviation), never for supplier ceilings */
-function softRound(val: number): number {
-  if (val <= 0) return 0
-  if (val < 10)      return Math.round(val * 10) / 10      // nearest 0.1
-  if (val < 100)     return Math.round(val)                 // nearest 1
-  if (val < 1000)    return Math.round(val / 5) * 5         // nearest 5
-  if (val < 10000)   return Math.round(val / 50) * 50       // nearest 50
-  if (val < 100000)  return Math.round(val / 100) * 100     // nearest 100
-  return Math.round(val / 1000) * 1000                      // nearest 1 000
 }
 
 /** Returns active supplier ceilings (current offer as ceiling) */

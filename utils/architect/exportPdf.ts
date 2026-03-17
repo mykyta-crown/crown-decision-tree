@@ -638,10 +638,11 @@ export function exportArchitectPdf(data: ExportData) {
 </body>
 </html>`
 
+  if (!import.meta.client) return
   const win = window.open('', '_blank')
   if (!win) return
   win.document.write(html)
   win.document.close()
-  // Wait for fonts to load, then trigger print
-  setTimeout(() => { win.print() }, 500)
+  // Wait for fonts to load before printing
+  win.document.fonts.ready.then(() => { win.print() })
 }

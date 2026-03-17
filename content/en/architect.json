@@ -27,6 +27,8 @@
     "selected": "selected",
     "deleteSelected": "Delete selected",
     "confirmBulkDelete": "Are you sure you want to delete {count} scenario(s)?",
+    "confirmBulkDeleteTitle": "Delete scenarios",
+    "cancel": "Cancel",
     "perPage": "Per page",
     "of": "of",
     "all": "All",

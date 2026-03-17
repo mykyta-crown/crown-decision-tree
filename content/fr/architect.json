@@ -27,6 +27,8 @@
     "selected": "sélectionné(s)",
     "deleteSelected": "Supprimer la sélection",
     "confirmBulkDelete": "Êtes-vous sûr de vouloir supprimer {count} scénario(s) ?",
+    "confirmBulkDeleteTitle": "Supprimer les scénarios",
+    "cancel": "Annuler",
     "perPage": "Par page",
     "of": "sur",
     "all": "Tous",

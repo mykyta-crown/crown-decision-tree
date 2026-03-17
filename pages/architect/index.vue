@@ -35,6 +35,20 @@
     <!-- How does it work dialog -->
     <ArchitectCalculatorHowItWorksDialog v-model="showHowItWorks" @start="createNew" />
 
+    <!-- Bulk delete confirmation dialog -->
+    <v-dialog v-model="showDeleteConfirm" max-width="400">
+      <v-card rounded="lg">
+        <v-card-title class="pt-5 px-5" style="font-size:16px;font-weight:600;">{{ t('page.confirmBulkDeleteTitle') }}</v-card-title>
+        <v-card-text class="px-5" style="font-size:14px;color:#61615F;">
+          {{ t('page.confirmBulkDelete', { count: projectsStore.selectedIds.size }) }}
+        </v-card-text>
+        <v-card-actions class="px-5 pb-4 ga-2 justify-end">
+          <v-btn variant="outlined" @click="showDeleteConfirm = false">{{ t('page.cancel') }}</v-btn>
+          <v-btn color="error" variant="flat" @click="executeBulkDelete">{{ t('page.deleteSelected') }}</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
     <!-- Toolbar -->
     <v-row align="center" class="mb-6">
       <v-col cols="auto" class="d-flex align-center ga-2">
@@ -389,6 +403,7 @@ const { isAdmin } = useUser()
 const showTreeV4 = ref(false)
 const showTreeV5 = ref(false)
 const showHowItWorks = ref(false)
+const showDeleteConfirm = ref(false)
 
 // Column search fields
 const clientSearch = ref('')
@@ -527,13 +542,14 @@ const paginationRange = computed(() => {
 })
 
 // ─── Bulk delete ───
-async function confirmBulkDelete() {
-  const count = projectsStore.selectedIds.size
-  if (!count) return
-  // Simple confirm
-  if (confirm(t('page.confirmBulkDelete', { count }))) {
-    await projectsStore.bulkDelete()
-  }
+function confirmBulkDelete() {
+  if (!projectsStore.selectedIds.size) return
+  showDeleteConfirm.value = true
+}
+
+async function executeBulkDelete() {
+  showDeleteConfirm.value = false
+  await projectsStore.bulkDelete()
 }
 
 // ─── Actions ───
