@@ -684,19 +684,20 @@ function exportReport() {
 .chip-top {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   gap: 8px;
   flex: 1;
   margin-bottom: 6px;
+  min-width: 0;
 }
 
 .chip-family {
   font-size: 14px;
   font-weight: 600;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+  white-space: nowrap;
   overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
 }
 
 .chip-pct {
