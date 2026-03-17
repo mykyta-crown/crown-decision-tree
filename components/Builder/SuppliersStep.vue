@@ -509,6 +509,14 @@ const headers = computed(() => [
 ])
 const suppliers = ref(model.value ?? [])
 const stepDone = ref(!!suppliers.value.length)
+
+// Sync when parent sets suppliers after mount (e.g. architect mode onMounted hydration)
+watch(model, (val) => {
+  if (val && val !== suppliers.value) {
+    suppliers.value = val
+    stepDone.value = !!val.length
+  }
+})
 const isValidSupplier = ref(false)
 
 const editedIndex = ref(-1)

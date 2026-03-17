@@ -714,7 +714,7 @@ function famTryBtnStyle(f: string) {
   display: flex; align-items: center; gap: 10px;
   padding: 12px 20px;
   font-size: 13px; font-weight: 500;
-  color: #9CA3AF;
+  color: #595959;
   background: none; border: none;
   border-left: 3px solid transparent;
   cursor: pointer;
@@ -723,7 +723,7 @@ function famTryBtnStyle(f: string) {
   white-space: nowrap;
 }
 .sidebar-btn:hover {
-  color: #6B7280;
+  color: #1D1D1B;
   background: #F9FAFB;
 }
 .sidebar-btn.active {
@@ -732,7 +732,7 @@ function famTryBtnStyle(f: string) {
   border-left-color: #1D1D1B;
   background: #F3F4F6;
 }
-.sidebar-icon { flex-shrink: 0; opacity: 0.7; }
+.sidebar-icon { flex-shrink: 0; }
 .sidebar-label { overflow: hidden; text-overflow: ellipsis; }
 
 /* ═══ BODY (scrollable content) ═══ */
@@ -750,7 +750,7 @@ function famTryBtnStyle(f: string) {
   margin-bottom: 12px;
 }
 .section-desc {
-  font-size: 14px; color: #6B7280; line-height: 1.75;
+  font-size: 14px; color: #595959; line-height: 1.75;
   margin-bottom: 20px;
 }
 .section-divider {
@@ -1222,7 +1222,7 @@ function famTryBtnStyle(f: string) {
 .dim-icon { font-size: 18px; flex-shrink: 0; width: 26px; text-align: center; }
 .dim-info { flex: 1; min-width: 0; }
 .dim-name { font-size: 14px; font-weight: 600; color: #1D1D1B; }
-.dim-desc { font-size: 12px; color: #9CA3AF; margin-top: 2px; }
+.dim-desc { font-size: 12px; color: #636363; margin-top: 2px; }
 .dim-opts { display: flex; gap: 5px; flex-shrink: 0; }
 .dim-opt {
   font-size: 11px; font-weight: 500;
@@ -1257,8 +1257,8 @@ function famTryBtnStyle(f: string) {
   border-bottom: 2px solid #E9EAEC;
   vertical-align: bottom;
 }
-.compat-th-icon { display: block; margin-bottom: 4px; }
-.compat-th-name { font-size: 11px; font-weight: 700; display: block; }
+.compat-th-icon { display: flex; justify-content: center; margin-bottom: 4px; }
+.compat-th-name { font-size: 11px; font-weight: 700; display: block; text-align: center; }
 .compat-label {
   font-size: 13px; font-weight: 500; color: #6B7280;
   padding: 10px 10px 10px 0;
@@ -1290,7 +1290,7 @@ function famTryBtnStyle(f: string) {
 }
 .concept-item:last-child { border-bottom: none; }
 .concept-term { font-size: 14px; font-weight: 700; color: #1D1D1B; margin-bottom: 4px; }
-.concept-def { font-size: 13px; color: #6B7280; line-height: 1.6; }
+.concept-def { font-size: 13px; color: #595959; line-height: 1.6; }
 
 /* Concept levels */
 .concept-levels {
@@ -1307,7 +1307,7 @@ function famTryBtnStyle(f: string) {
   flex-shrink: 0; min-width: 88px;
 }
 .concept-level-desc {
-  font-size: 12px; color: #9CA3AF; line-height: 1.4;
+  font-size: 12px; color: #636363; line-height: 1.4;
 }
 
 /* Intensity bar */

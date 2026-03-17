@@ -46,7 +46,7 @@
       <div v-else class="connector" />
 
       <!-- 2. Number of suppliers -->
-      <div class="p1-card" :class="{ 'p1-card--done': store.nSup > 0 }">
+      <div class="p1-card p1-card--sup" :class="{ 'p1-card--done': store.nSup > 0 }">
         <div class="p1-card-header">
           <div class="p1-card-title">{{ t('calc.phase1.numSuppliers') }}</div>
           <v-tooltip
@@ -65,24 +65,26 @@
         <div class="p1-card-sub">{{ t('calc.phase1.suppliersSub') }}</div>
 
         <div class="sup-icon">
-          <svg width="32" height="32" viewBox="0 0 48 48" fill="none">
-            <circle cx="20" cy="16" r="6" stroke="#C4C4C4" stroke-width="1.8" fill="none" />
-            <path d="M10 38c0-5.523 4.477-10 10-10s10 4.477 10 10" stroke="#C4C4C4" stroke-width="1.8" fill="none" stroke-linecap="round" />
-            <circle cx="32" cy="18" r="4.5" stroke="#C4C4C4" stroke-width="1.5" fill="none" />
-            <path d="M36 38c0-4.418-2.686-8-6-8" stroke="#C4C4C4" stroke-width="1.5" fill="none" stroke-linecap="round" />
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+            <ellipse cx="16" cy="13" rx="5" ry="5" stroke="#C4C4C4" stroke-width="1.6" />
+            <path d="M24 22c0-4.418-3.582-8-8-8s-8 3.582-8 8" stroke="#C4C4C4" stroke-width="1.6" stroke-linecap="round" />
+            <path d="M26 14c1.657 0 3 1.343 3 3" stroke="#C4C4C4" stroke-width="1.4" stroke-linecap="round" />
+            <path d="M29 22c0-2.761-1.343-5-3-5" stroke="#C4C4C4" stroke-width="1.4" stroke-linecap="round" />
+            <path d="M6 14c-1.657 0-3 1.343-3 3" stroke="#C4C4C4" stroke-width="1.4" stroke-linecap="round" />
+            <path d="M3 22c0-2.761 1.343-5 3-5" stroke="#C4C4C4" stroke-width="1.4" stroke-linecap="round" />
           </svg>
         </div>
 
         <div class="sup-counter">
-          <button class="sup-btn" aria-label="Remove supplier" @click="store.nSup = Math.max(0, store.nSup - 1)">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path d="M4 8h8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+          <button class="sup-btn sup-btn--minus" aria-label="Remove supplier" @click="store.nSup = Math.max(0, store.nSup - 1)">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M3 7h8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
             </svg>
           </button>
           <span class="sup-val" :class="{ 'sup-val--zero': store.nSup === 0 }">{{ store.nSup }}</span>
           <button class="sup-btn sup-btn--plus" aria-label="Add supplier" @click="store.nSup = Math.min(20, store.nSup + 1)">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path d="M8 4v8M4 8h8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M7 3v8M3 7h8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
             </svg>
           </button>
         </div>
@@ -206,22 +208,23 @@ const verdictDesc = computed(() => {
 .p1-card {
   flex: 1;
   min-width: 0;
-  border: 1.5px solid #E5E7EB;
+  height: 220px;
+  border: 1px solid #E9EAEC;
   border-radius: 4px;
   background: #FFF;
   padding: 20px;
   display: flex;
   flex-direction: column;
-  transition: border-color 0.3s, box-shadow 0.3s;
+  transition: border-color 0.3s;
 }
 
-.p1-card:hover {
-  border-color: #D1D5DB;
+.p1-card:hover,
+.p1-card:focus-within {
+  border-color: #A6F0D3;
 }
 
 .p1-card--done {
-  border-color: #34D399;
-  box-shadow: 0 0 0 1px rgba(52, 211, 153, 0.1);
+  border-color: #A6F0D3;
 }
 
 /* ── Connector dashes ── */
@@ -250,10 +253,10 @@ const verdictDesc = computed(() => {
 .p1-card-sub {
   font-size: 12px;
   font-weight: 400;
-  color: #595959;
+  color: #787878;
   line-height: normal;
   margin-top: 2px;
-  margin-bottom: 16px;
+  margin-bottom: 28px;
 }
 
 /* ── Spend input ── */
@@ -261,34 +264,42 @@ const verdictDesc = computed(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  border: 1.5px solid #D1D5DB;
+  width: 160px;
+  height: 40px;
+  gap: 4px;
+  border: 1px solid #DBDCDD;
   border-radius: 4px;
-  padding: 6px 14px;
+  padding: 0 12px;
   margin: 0 auto;
   transition: border-color 0.25s;
 }
 
+.spend-input-wrap:focus-within {
+  border-color: #8E8E8E;
+}
+
 .spend-input-wrap--done {
-  border-color: #1D1D1B;
+  border-color: #DBDCDD;
 }
 
 .spend-slider-area {
-  margin-top: 12px;
+  margin-top: 20px;
 }
 
 .ccy-select {
-  width: 58px;
-  flex: 0 0 58px;
+  width: 52px;
+  flex: 0 0 52px;
   font-weight: 400;
-  font-size: 16px;
+  font-size: 14px;
+  color: #787878;
 }
 
 .ccy-select :deep(.v-field__input) {
   padding: 0;
   min-height: auto;
   font-weight: 400;
-  font-size: 16px;
+  font-size: 14px;
+  color: #787878;
 }
 
 .ccy-select :deep(.v-field) {
@@ -298,66 +309,83 @@ const verdictDesc = computed(() => {
 .ccy-select :deep(.v-field__append-inner) {
   padding: 0;
   margin: 0;
+  color: #787878;
+}
+
+/* ── Suppliers card layout ── */
+.p1-card--sup {
+  align-items: center;
+  justify-content: space-between;
+}
+
+.p1-card--sup .p1-card-header,
+.p1-card--sup .p1-card-sub {
+  align-self: flex-start;
 }
 
 /* ── Suppliers ── */
 .sup-icon {
   display: flex;
   justify-content: center;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
 }
 
 .sup-counter {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 16px;
-  border: 1.5px solid #E5E7EB;
+  justify-content: space-between;
+  width: 150px;
+  height: 40px;
+  border: 1px solid #E9EAEC;
   border-radius: 4px;
-  padding: 8px 20px;
   margin: 0 auto;
+  overflow: hidden;
 }
 
 .sup-btn {
-  width: 32px;
-  height: 32px;
-  border-radius: 4px;
-  border: 1.5px solid #E5E7EB;
-  background: #FFF;
-  color: #9CA3AF;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border: none;
+  background: #F8F9FA;
+  color: #636363;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.15s ease;
+  transition: background 0.15s;
 }
 
-.sup-btn:hover {
-  border-color: #1D1D1B;
-  color: #1D1D1B;
-}
-
-.sup-btn:active {
-  transform: scale(0.93);
+.sup-btn--minus {
+  border-right: 1px solid #E9EAEC;
+  border-radius: 4px 0 0 4px;
 }
 
 .sup-btn--plus {
-  border-color: #1D1D1B;
-  color: #1D1D1B;
+  border-left: 1px solid #E9EAEC;
+  border-radius: 0 4px 4px 0;
+}
+
+.sup-btn:hover {
+  background: #EFEFEF;
+}
+
+.sup-btn:active {
+  background: #E5E5E5;
 }
 
 .sup-val {
-  font-size: 28px;
-  font-weight: 700;
-  color: #1D1D1B;
-  min-width: 32px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333333;
+  font-feature-settings: 'liga' off, 'clig' off;
+  flex: 1;
   text-align: center;
   line-height: 1;
-  font-variant-numeric: tabular-nums;
 }
 
 .sup-val--zero {
-  color: #D1D5DB;
+  color: #C5C7C9;
 }
 
 /* ── Verdict card ── */

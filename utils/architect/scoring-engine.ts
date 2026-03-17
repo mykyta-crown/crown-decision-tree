@@ -222,6 +222,49 @@ export function getScores(params: ScoringParams, a: number, b: number, c: number
     .sort((a, b) => b.tiebreak - a.tiebreak)
 }
 
+/**
+ * Partial scoring — supports unselected criteria (0 = not answered).
+ * Unselected questions contribute 0 points and cannot eliminate a strategy.
+ * Cross-dependencies only fire when all involved questions are answered.
+ * Used by Fast Compass for progressive, incremental recommendations.
+ */
+export function getScoresPartial(params: ScoringParams, a: number, b: number, c: number, d: number, e: number, f: number): ScoreResult[] {
+  const vals = [a, b, c, d, e, f]
+  const res = SC.map((s, i) => {
+    let raw = params.bases[i]
+    let hardElim = false
+    for (let qx = 0; qx < 6; qx++) {
+      const v = vals[qx]
+      if (v === 0) continue // unselected — no contribution, no elimination
+      const adj = params.matrix[i][qx][v - 1]
+      if (adj === -999) { hardElim = true; break }
+      raw += adj
+    }
+    if (hardElim) {
+      raw = -999
+    } else {
+      // Cross-deps only when all involved questions are selected
+      if (a > 0 && c > 0 && a === 1 && c !== 1) {
+        if (s.family === 'Traditional') raw += 30
+        if (s.family === 'Sealed Bid') raw += -1029
+      }
+      if (a > 0 && b > 0 && c > 0 && a >= 2 && b <= 2 && c !== 1 && s.family === 'Japanese') raw += 40
+      if (c > 0 && c === 1 && s.family === 'Dutch') raw += 10
+      if (s.family === 'Traditional' && raw <= 0) raw = 1
+    }
+    return { ...s, raw, saving: params.savings[i], tiebreak: raw + (22 - i) / 10000 }
+  })
+  const pos = res.filter(r => r.raw >= 0).map(r => r.raw)
+  const mx = pos.length ? Math.max(...pos) : 0
+  return res
+    .map(r => ({
+      ...r,
+      eliminated: r.raw < 0,
+      pctMatch: r.raw >= 0 && mx > 0 ? Math.round(r.raw / mx * 100) : 0,
+    }))
+    .sort((a, b) => b.tiebreak - a.tiebreak)
+}
+
 export function deepCloneMatrix(matrix: number[][][]): number[][][] {
   return matrix.map(s => s.map(q => [...q]))
 }

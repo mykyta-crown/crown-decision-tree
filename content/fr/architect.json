@@ -15,7 +15,7 @@
     "dt2": "Architect 2",
     "dt3": "Architect 3",
     "dt4": "Fast Compass",
-    "quickSelector": "Sélecteur rapide",
+    "quickSelector": "Fast Compass",
     "dt5": "Architect",
     "newScenario": "Nouveau scénario",
     "baseTable": "Table de base",
@@ -128,7 +128,7 @@
     "none": "Aucune"
   },
   "v4": {
-    "title": "Sélecteur Rapide",
+    "title": "Fast Compass",
     "subtitle": "Sélectionnez des critères pour trouver le meilleur type d'eAuction",
     "reset": "Réinitialiser",
     "bestMatch": "Meilleure correspondance",

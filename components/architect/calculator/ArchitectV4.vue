@@ -141,7 +141,7 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
 import { useCalculatorStore } from '~/stores/architect/calculator'
-import { getScores, Q_OPTS, DEF_BASES, DEF_SAVINGS, DEF_MATRIX, type ScoreResult } from '~/utils/architect/scoring-engine'
+import { getScoresPartial, Q_OPTS, DEF_BASES, DEF_SAVINGS, DEF_MATRIX, type ScoreResult } from '~/utils/architect/scoring-engine'
 
 // Quick Selector always uses default scoring params — never project-specific tuning
 const DEF_PARAMS = { bases: DEF_BASES, savings: DEF_SAVINGS, matrix: DEF_MATRIX }
@@ -169,7 +169,6 @@ const questions = computed(() => [
 const sel = ref<number[]>([0, 0, 0, 0, 0, 0])
 
 const hasSelection = computed(() => sel.value.some(v => v > 0))
-const allSelected = computed(() => sel.value.every(v => v > 0))
 const selectedCount = computed(() => sel.value.filter(v => v > 0).length)
 
 function toggle(qi: number, val: number) {
@@ -210,8 +209,8 @@ function buildDisplayName(r: ScoreResult): string {
 }
 
 const scores = computed<DisplayResult[]>(() => {
-  if (!allSelected.value) return []
-  const raw = getScores(
+  if (!hasSelection.value) return []
+  const raw = getScoresPartial(
     DEF_PARAMS,
     sel.value[0], sel.value[1], sel.value[2], sel.value[3], sel.value[4], sel.value[5],
   )
@@ -274,7 +273,7 @@ function openLearnMore(family: string) {
 
 .dt4-sub {
   font-size: 12px;
-  color: #9CA3AF;
+  color: #757575;
   margin-top: 1px;
 }
 
@@ -313,15 +312,15 @@ function openLearnMore(family: string) {
 }
 
 .crit-name {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   color: #1D1D1B;
 }
 
 .crit-hint {
-  font-size: 11px;
-  color: #9CA3AF;
-  margin-top: 1px;
+  font-size: 12px;
+  color: #757575;
+  margin-top: 2px;
 }
 
 .crit-pills {
@@ -332,13 +331,14 @@ function openLearnMore(family: string) {
 
 .pill {
   flex: 1;
+  min-height: 40px;
   padding: 9px 8px;
   border-radius: 8px;
   border: 1.5px solid #E5E7EB;
   background: #FFF;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 500;
-  color: #6B7280;
+  color: #636363;
   cursor: pointer;
   transition: all 0.15s ease;
   text-align: center;

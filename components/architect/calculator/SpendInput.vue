@@ -60,11 +60,13 @@ function commit() {
 <style scoped>
 .spend-edit,
 .spend-display {
-  font-size: 26px;
-  font-weight: 700;
-  width: 140px;
-  height: 34px;
-  line-height: 34px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #363633;
+  font-feature-settings: 'liga' off, 'clig' off;
+  width: 80px;
+  height: 40px;
+  line-height: 40px;
   text-align: center;
   font-family: inherit;
   white-space: nowrap;
