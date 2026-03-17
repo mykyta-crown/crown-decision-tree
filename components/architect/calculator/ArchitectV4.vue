@@ -63,67 +63,75 @@
           </div>
         </div>
 
-        <!-- Result -->
-        <Transition name="result-fade">
-          <div v-if="topResult" class="dt4-result">
-            <div class="result-divider" />
-            <div class="result-label">
-              <v-icon size="16" class="mr-1">mdi-check-decagram</v-icon>
-              {{ t('v4.bestMatch') }}
-            </div>
-
-            <div class="result-card" :style="{ background: topColor.bg, borderColor: topColor.border }">
-              <div class="result-accent" :style="{ background: topColor.border }" />
-              <div class="result-main">
-                <div class="result-title" :style="{ color: topColor.text }">{{ topResult.displayName }}</div>
-                <div class="result-pct">{{ topResult.pctMatch }}% {{ t('v4.match') }}</div>
-                <div class="result-stats">
-                  <div class="result-stat">
-                    <span class="stat-label">{{ t('v4.savingsLabel') }}</span>
-                    <span class="stat-value">{{ topResult.saving }}%</span>
-                  </div>
-                  <div class="result-stat">
-                    <span class="stat-label">{{ t('v4.familyLabel') }}</span>
-                    <span class="stat-value">{{ topResult.family }}</span>
-                  </div>
-                </div>
-                <button class="result-learn-btn" @click="openLearnMore(topResult.family)">
-                  {{ t('v4.learnMore') }}
-                  <v-icon size="13">mdi-arrow-right</v-icon>
-                </button>
+        <!-- Bottom area — fixed height reserved from the start -->
+        <div class="dt4-bottom">
+          <!-- Result -->
+          <Transition name="result-fade">
+            <div v-if="topResult" class="dt4-result">
+              <div class="result-divider" />
+              <div class="result-label">
+                <v-icon size="16" class="mr-1">mdi-check-decagram</v-icon>
+                {{ t('v4.bestMatch') }}
               </div>
-              <div class="result-chart">
-                <ArchitectCalculatorChartsAChart
-                  :family="topResult.family"
-                  :color="topColor.border"
-                  ccy="EUR"
+
+              <div class="result-card" :style="{ background: topColor.bg, borderColor: topColor.border }">
+                <div class="result-accent" :style="{ background: topColor.border }" />
+                <div class="result-main">
+                  <div class="result-title" :style="{ color: topColor.text }">{{ topResult.displayName }}</div>
+                  <div class="result-pct">{{ topResult.pctMatch }}% {{ t('v4.match') }}</div>
+                  <div class="result-stats">
+                    <div class="result-stat">
+                      <span class="stat-label">{{ t('v4.savingsLabel') }}</span>
+                      <span class="stat-value">{{ topResult.saving }}%</span>
+                    </div>
+                    <div class="result-stat">
+                      <span class="stat-label">{{ t('v4.familyLabel') }}</span>
+                      <span class="stat-value">{{ topResult.family }}</span>
+                    </div>
+                  </div>
+                  <button class="result-learn-btn" @click="openLearnMore(topResult.family)">
+                    {{ t('v4.learnMore') }}
+                    <v-icon size="13">mdi-arrow-right</v-icon>
+                  </button>
+                </div>
+                <div class="result-chart">
+                  <ArchitectCalculatorChartsAChart
+                    :family="topResult.family"
+                    :color="topColor.border"
+                    ccy="EUR"
+                  />
+                </div>
+              </div>
+
+              <!-- Runner-ups -->
+              <div class="runners">
+                <template v-if="runners.length">
+                  <div v-for="r in runners" :key="r.id" class="runner" :style="{ borderLeftColor: getFC(r.family).border }">
+                    <span class="runner-name">{{ r.displayName }}</span>
+                    <span class="runner-pct">{{ r.pctMatch }}%</span>
+                  </div>
+                </template>
+                <template v-else>
+                  <div v-for="i in 3" :key="i" class="runner runner--ghost" />
+                </template>
+              </div>
+            </div>
+          </Transition>
+
+          <!-- Progress / empty state -->
+          <div v-if="!topResult" class="dt4-empty">
+            <div class="empty-progress">
+              <div class="progress-dots">
+                <div
+                  v-for="i in 6"
+                  :key="i"
+                  class="progress-dot"
+                  :class="{ 'progress-dot--filled': sel[i - 1] > 0 }"
                 />
               </div>
-            </div>
-
-            <!-- Runner-ups -->
-            <div v-if="runners.length" class="runners">
-              <div v-for="r in runners" :key="r.id" class="runner" :style="{ borderLeftColor: getFC(r.family).border }">
-                <span class="runner-name">{{ r.displayName }}</span>
-                <span class="runner-pct">{{ r.pctMatch }}%</span>
+              <div class="empty-text">
+                {{ selectedCount }} / 6 {{ t('v4.emptyState') }}
               </div>
-            </div>
-          </div>
-        </Transition>
-
-        <!-- Progress / empty state -->
-        <div v-if="!topResult" class="dt4-empty">
-          <div class="empty-progress">
-            <div class="progress-dots">
-              <div
-                v-for="i in 6"
-                :key="i"
-                class="progress-dot"
-                :class="{ 'progress-dot--filled': sel[i - 1] > 0 }"
-              />
-            </div>
-            <div class="empty-text">
-              {{ selectedCount }} / 6 {{ t('v4.emptyState') }}
             </div>
           </div>
         </div>
@@ -240,8 +248,6 @@ function openLearnMore(family: string) {
 
 <style scoped>
 .dt4-card {
-  height: 740px !important;
-  max-height: 92vh !important;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -283,10 +289,12 @@ function openLearnMore(family: string) {
 
 /* Body */
 .dt4-body {
-  flex: 1;
-  min-height: 0;
-  overflow-y: auto;
   padding: 24px;
+}
+
+/* Bottom — always reserves the full result-section height */
+.dt4-bottom {
+  min-height: 390px;
 }
 
 /* Criteria */
@@ -512,6 +520,10 @@ function openLearnMore(family: string) {
   font-size: 12px;
   font-weight: 600;
   color: #9CA3AF;
+}
+
+.runner--ghost {
+  visibility: hidden;
 }
 
 /* Empty state */
