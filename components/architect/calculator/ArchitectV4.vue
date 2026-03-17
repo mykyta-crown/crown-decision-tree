@@ -298,7 +298,7 @@ function openLearnMore(family: string) {
 
 /* Bottom — fixed height = full result section (badge + card + 3 runners) */
 .dt4-bottom {
-  height: 360px;
+  height: 300px;
   flex-shrink: 0;
 }
 
