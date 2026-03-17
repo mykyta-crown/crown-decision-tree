@@ -390,6 +390,7 @@
       "awardAward": "Attribution",
       "awardRank": "Classement",
       "awardNoRank": "Sans classement",
+      "quickFill": "Remplissage rapide :",
       "offersError": "Veuillez remplir toutes les offres fournisseurs avant de continuer."
     },
     "phase1": {

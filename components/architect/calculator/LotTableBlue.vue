@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, watch, onMounted, onUpdated, onUnmounted, nextTick } from 'vue'
 import { useCalculatorStore, type Lot } from '~/stores/architect/calculator'
+import { DEMO_PRESETS } from '~/utils/architect/demo-presets'
 import { fmtE } from '~/utils/architect/formatting'
 import useTranslations from '~/composables/useTranslations'
 
@@ -439,6 +440,20 @@ function isLotComplete(lot: Lot): boolean {
     <!-- Footer -->
     <div class="table-footer">
       <div class="table-footer-spacer" />
+      <div class="demo-presets">
+        <span class="demo-label">{{ t('calc.lotTable.quickFill') }}</span>
+        <v-btn
+          v-for="p in DEMO_PRESETS"
+          :key="p.id"
+          :title="p.label"
+          variant="outlined"
+          size="x-small"
+          class="demo-btn"
+          @click="store.applyDemoPreset(p)"
+        >
+          {{ p.emoji }}
+        </v-btn>
+      </div>
     </div>
 
     <!-- Offers validation error message -->
@@ -1080,6 +1095,20 @@ function isLotComplete(lot: Lot): boolean {
 }
 .table-footer-spacer {
   flex: 1;
+}
+.demo-presets {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.demo-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #9CA3AF;
+}
+.demo-btn {
+  min-width: 32px !important;
+  font-size: 16px;
 }
 
 /* ── Responsive ── */
