@@ -149,7 +149,7 @@ export const useCalculatorStore = defineStore('calculator', () => {
     let t = 1, d = evName.value.trim() ? 1 : 0
     lots.value.forEach(l => {
       t += 1
-      if (l.prices.some((p, i) => p > 0 && !l.excl[i])) d++
+      if (l.prices.every((p, i) => l.excl[i] || p > 0)) d++
     })
     return t > 0 ? Math.round(d / t * 100) : 0
   })

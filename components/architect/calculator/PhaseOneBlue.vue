@@ -2,7 +2,7 @@
   <div class="blue-p1">
     <div class="p1-row">
       <!-- 1. Total spend -->
-      <div class="p1-card" :class="{ 'p1-card--done': store.spend > 0 }">
+      <div class="p1-card p1-card--spend" :class="{ 'p1-card--done': store.spend > 0 }">
         <div class="p1-card-header">
           <div class="p1-card-title">{{ t('calc.phase1.totalSpend') }}</div>
           <v-tooltip
@@ -22,14 +22,9 @@
 
         <div class="spend-input-wrap" :class="{ 'spend-input-wrap--done': store.spend > 0 }">
           <SpendInput v-model="store.spend" />
-          <v-select
-            v-model="store.ccy"
-            :items="['EUR', 'USD', 'GBP', 'CHF', 'JPY', 'CNY', 'CAD', 'AUD', 'SEK', 'NOK', 'DKK', 'PLN']"
-            variant="plain"
-            density="compact"
-            hide-details
-            class="ccy-select"
-          />
+          <select v-model="store.ccy" class="ccy-select">
+            <option v-for="c in ['EUR','USD','GBP','CHF','JPY','CNY','CAD','AUD','SEK','NOK','DKK','PLN']" :key="c" :value="c">{{ c }}</option>
+          </select>
         </div>
 
         <div class="spend-slider-area">
@@ -65,13 +60,11 @@
         <div class="p1-card-sub">{{ t('calc.phase1.suppliersSub') }}</div>
 
         <div class="sup-icon">
-          <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-            <ellipse cx="16" cy="13" rx="5" ry="5" stroke="#C4C4C4" stroke-width="1.6" />
-            <path d="M24 22c0-4.418-3.582-8-8-8s-8 3.582-8 8" stroke="#C4C4C4" stroke-width="1.6" stroke-linecap="round" />
-            <path d="M26 14c1.657 0 3 1.343 3 3" stroke="#C4C4C4" stroke-width="1.4" stroke-linecap="round" />
-            <path d="M29 22c0-2.761-1.343-5-3-5" stroke="#C4C4C4" stroke-width="1.4" stroke-linecap="round" />
-            <path d="M6 14c-1.657 0-3 1.343-3 3" stroke="#C4C4C4" stroke-width="1.4" stroke-linecap="round" />
-            <path d="M3 22c0-2.761 1.343-5 3-5" stroke="#C4C4C4" stroke-width="1.4" stroke-linecap="round" />
+          <svg width="42" height="42" viewBox="0 0 48 48" fill="none">
+            <circle cx="20" cy="16" r="6" stroke="#C4C4C4" stroke-width="1.8" fill="none" />
+            <path d="M10 38c0-5.523 4.477-10 10-10s10 4.477 10 10" stroke="#C4C4C4" stroke-width="1.8" fill="none" stroke-linecap="round" />
+            <circle cx="32" cy="18" r="4.5" stroke="#C4C4C4" stroke-width="1.5" fill="none" />
+            <path d="M36 38c0-4.418-2.686-8-6-8" stroke="#C4C4C4" stroke-width="1.5" fill="none" stroke-linecap="round" />
           </svg>
         </div>
 
@@ -256,20 +249,19 @@ const verdictDesc = computed(() => {
   color: #787878;
   line-height: normal;
   margin-top: 2px;
-  margin-bottom: 28px;
+  margin-bottom: 16px;
 }
 
 /* ── Spend input ── */
 .spend-input-wrap {
   display: flex;
   align-items: center;
-  justify-content: center;
-  width: 160px;
+  justify-content: space-between;
+  width: 210px;
   height: 40px;
-  gap: 4px;
   border: 1px solid #DBDCDD;
   border-radius: 4px;
-  padding: 0 12px;
+  padding: 0 10px 0 12px;
   margin: 0 auto;
   transition: border-color 0.25s;
 }
@@ -283,39 +275,30 @@ const verdictDesc = computed(() => {
 }
 
 .spend-slider-area {
-  margin-top: 20px;
+  margin-top: auto;
+  padding-bottom: 22px;
 }
 
 .ccy-select {
-  width: 52px;
-  flex: 0 0 52px;
+  flex-shrink: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23787878' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E") no-repeat right 0px center;
+  padding-right: 14px;
+  border: none;
+  outline: none;
+  font-family: inherit;
+  font-size: 13px;
   font-weight: 400;
-  font-size: 14px;
   color: #787878;
-}
-
-.ccy-select :deep(.v-field__input) {
-  padding: 0;
-  min-height: auto;
-  font-weight: 400;
-  font-size: 14px;
-  color: #787878;
-}
-
-.ccy-select :deep(.v-field) {
-  padding: 0;
-}
-
-.ccy-select :deep(.v-field__append-inner) {
-  padding: 0;
-  margin: 0;
-  color: #787878;
+  cursor: pointer;
+  line-height: 40px;
 }
 
 /* ── Suppliers card layout ── */
 .p1-card--sup {
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
 }
 
 .p1-card--sup .p1-card-header,
@@ -327,7 +310,9 @@ const verdictDesc = computed(() => {
 .sup-icon {
   display: flex;
   justify-content: center;
-  margin-bottom: 12px;
+  margin-bottom: 6px;
+  margin-top: auto;
+  padding-bottom: 22px;
 }
 
 .sup-counter {

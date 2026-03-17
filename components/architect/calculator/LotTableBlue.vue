@@ -702,9 +702,11 @@ function isLotComplete(lot: Lot): boolean {
   border-radius: 999px;
   cursor: grab;
   transition: background 0.15s;
+  will-change: left, width;
+  box-sizing: border-box;
 }
 .custom-scroll-thumb:hover { background: #A0A0A0; }
-.custom-scroll-thumb:active { cursor: grabbing; background: #888888; }
+.custom-scroll-thumb:active { cursor: grabbing; background: #888888; height: 5px; }
 
 /* ─── Excel-like table ─── */
 .xl-table {

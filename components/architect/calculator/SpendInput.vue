@@ -64,12 +64,15 @@ function commit() {
   font-weight: 600;
   color: #363633;
   font-feature-settings: 'liga' off, 'clig' off;
-  width: 80px;
+  flex: 1;
+  min-width: 0;
   height: 40px;
   line-height: 40px;
   text-align: center;
   font-family: inherit;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .spend-edit {

@@ -288,7 +288,7 @@
       </div>
 
       <!-- Project rows -->
-      <TransitionGroup name="row" tag="div">
+      <div class="rows-container" :class="{ 'rows-fading': !rowsVisible }">
         <ArchitectCalculatorProjectRow
           v-for="proj in projectsStore.paginatedProjects"
           :key="proj.id"
@@ -301,7 +301,7 @@
           @duplicate="projectsStore.duplicateProject(proj.id)"
           @archive="projectsStore.archiveProject(proj.id)"
         />
-      </TransitionGroup>
+      </div>
     </v-card>
 
     <!-- Pagination footer -->
@@ -319,7 +319,7 @@
           variant="text"
           size="x-small"
           :disabled="projectsStore.page <= 1"
-          @click="projectsStore.page--"
+          @click="changePage(projectsStore.page - 1)"
         >
           <v-icon size="18">mdi-chevron-left</v-icon>
         </v-btn>
@@ -331,7 +331,7 @@
           variant="text"
           size="x-small"
           :disabled="projectsStore.page >= projectsStore.totalPages"
-          @click="projectsStore.page++"
+          @click="changePage(projectsStore.page + 1)"
         >
           <v-icon size="18">mdi-chevron-right</v-icon>
         </v-btn>
@@ -373,7 +373,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, nextTick } from 'vue'
 import { useProjectsStore } from '~/stores/architect/projects'
 import { useCalculatorStore } from '~/stores/architect/calculator'
 import useTranslations from '~/composables/useTranslations'
@@ -503,6 +503,17 @@ function clearColumnFilter(key: string) {
       projectsStore.sortBy = projectsStore.sortBy.filter(s => s.key !== 'status')
       break
   }
+}
+
+// ─── Pagination fade ───
+const rowsVisible = ref(true)
+
+function changePage(newPage: number) {
+  rowsVisible.value = false
+  setTimeout(() => {
+    projectsStore.page = newPage
+    nextTick(() => { rowsVisible.value = true })
+  }, 120)
 }
 
 // ─── Pagination range label ───
@@ -639,24 +650,12 @@ function openProject(proj: any) {
   color: #1D1D1B;
 }
 
-/* ─── Row transition group ─── */
-.row-enter-active,
-.row-leave-active {
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+/* ─── Rows container fade on page change ─── */
+.rows-container {
+  transition: opacity 0.12s ease;
 }
-
-.row-enter-from {
+.rows-container.rows-fading {
   opacity: 0;
-  transform: translateY(-8px);
-}
-
-.row-leave-to {
-  opacity: 0;
-  transform: translateX(16px);
-}
-
-.row-move {
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* ── Base Table button (bottom of page) ── */

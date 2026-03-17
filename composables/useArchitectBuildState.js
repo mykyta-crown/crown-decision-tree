@@ -46,7 +46,8 @@ export const useArchitectBuildState = () => {
     const activeSuppliers = supNames
       .map((name, i) => ({ name, excluded: lot.excl?.[i] ?? false }))
       .filter(s => !s.excluded)
-      .map((_, i) => ({
+      .map((s, i) => ({
+        name: s.name,
         email: `supplier+${i + 1}@crown.ovh`,
         phone: '',
         isNew: true,
@@ -61,12 +62,14 @@ export const useArchitectBuildState = () => {
     }
 
     // Inject per-supplier ceiling prices into items (English, SealedBid, DoubleScenario)
-    // The builder reads them as lineItem[supplier.email]
+    // Use name-based matching to correctly assign prices even when some suppliers have price=0
     const supplierCeilings = params.supplierCeilings ?? params.english?.supplierCeilings
     if (supplierCeilings?.length) {
-      supplierCeilings.forEach((s, i) => {
-        const email = `supplier+${i + 1}@crown.ovh`
-        lotData.items[0][email] = s.price
+      supplierCeilings.forEach((ceiling) => {
+        const match = activeSuppliers.find(s => s.name === ceiling.name)
+        if (match) {
+          lotData.items[0][match.email] = ceiling.price
+        }
       })
     }
 

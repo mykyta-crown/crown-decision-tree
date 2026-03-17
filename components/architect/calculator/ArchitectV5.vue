@@ -41,9 +41,9 @@
                 <g fill="none" :stroke="gsRoot()" stroke-width="1.5">
                   <line x1="50" y1="46" x2="50" y2="60" />
                 </g>
-                <!-- Horizontal split: left half follows YES, right half follows NO -->
+                <!-- Q1 horizontal split: each half belongs to its own branch -->
                 <g fill="none" :stroke="gs({q1:'yes'})" :stroke-width="gsw({q1:'yes'})">
-                  <line x1="33.33" y1="60" x2="50" y2="60" />
+                  <line x1="50" y1="60" x2="33.33" y2="60" />
                 </g>
                 <g fill="none" :stroke="gs({q1:'no'})" :stroke-width="gsw({q1:'no'})">
                   <line x1="50" y1="60" x2="83.33" y2="60" />
@@ -53,7 +53,6 @@
                   <line x1="33.33" y1="60" x2="33.33" y2="76" />
                   <line x1="33.33" y1="98" x2="33.33" y2="112" />
                   <line x1="33.33" y1="152" x2="33.33" y2="166" />
-                  <line x1="16.67" y1="166" x2="50" y2="166" />
                 </g>
                 <!-- Q1=NO branch -->
                 <g fill="none" :stroke="gs({q1:'no'})" :stroke-width="gsw({q1:'no'})">
@@ -61,54 +60,59 @@
                   <line x1="83.33" y1="98" x2="83.33" y2="128" />
                   <line x1="83.33" y1="142" x2="83.33" y2="194" />
                   <line x1="83.33" y1="232" x2="83.33" y2="248" />
-                  <line x1="75" y1="248" x2="91.67" y2="248" />
                 </g>
-                <!-- Q2=YES branch -->
+                <!-- Q2=YES branch — left half of Q2 split + vertical to Q3a -->
                 <g fill="none" :stroke="gs({q1:'yes',q2:'yes'})" :stroke-width="gsw({q1:'yes',q2:'yes'})">
+                  <line x1="33.33" y1="166" x2="16.67" y2="166" />
                   <line x1="16.67" y1="166" x2="16.67" y2="180" />
                   <line x1="16.67" y1="180" x2="16.67" y2="184" />
                   <line x1="16.67" y1="214" x2="16.67" y2="224" />
                   <line x1="16.67" y1="258" x2="16.67" y2="272" />
-                  <line x1="8.33" y1="272" x2="25" y2="272" />
                 </g>
-                <!-- Q2=NO branch -->
+                <!-- Q2=NO branch — right half of Q2 split + vertical to Q3 -->
                 <g fill="none" :stroke="gs({q1:'yes',q2:'no'})" :stroke-width="gsw({q1:'yes',q2:'no'})">
+                  <line x1="33.33" y1="166" x2="50" y2="166" />
                   <line x1="50" y1="166" x2="50" y2="180" />
                   <line x1="50" y1="180" x2="50" y2="184" />
                   <line x1="50" y1="202" x2="50" y2="224" />
                   <line x1="50" y1="258" x2="50" y2="272" />
-                  <line x1="41.67" y1="272" x2="58.33" y2="272" />
                 </g>
-                <!-- Q4=YES → Sealed Bid -->
+                <!-- Q4=YES → Sealed Bid — left half of Q4 split + vertical -->
                 <g fill="none" :stroke="gs({q1:'no',q4:'yes'})" :stroke-width="gsw({q1:'no',q4:'yes'})">
+                  <line x1="83.33" y1="248" x2="75" y2="248" />
                   <line x1="75" y1="248" x2="75" y2="264" />
                   <line x1="75" y1="282" x2="75" y2="400" />
                 </g>
-                <!-- Q4=NO → Traditional -->
+                <!-- Q4=NO → Traditional — right half of Q4 split + vertical -->
                 <g fill="none" :stroke="gs({q1:'no',q4:'no'})" :stroke-width="gsw({q1:'no',q4:'no'})">
+                  <line x1="83.33" y1="248" x2="91.67" y2="248" />
                   <line x1="91.67" y1="248" x2="91.67" y2="264" />
                   <line x1="91.67" y1="282" x2="91.67" y2="400" />
                 </g>
-                <!-- Q3a=YES → Double Scenario -->
+                <!-- Q3a=YES → Double Scenario — left half of Q3a split + vertical -->
                 <g fill="none" :stroke="gs({q1:'yes',q2:'yes',q3a:'yes'})" :stroke-width="gsw({q1:'yes',q2:'yes',q3a:'yes'})">
+                  <line x1="16.67" y1="272" x2="8.33" y2="272" />
                   <line x1="8.33" y1="272" x2="8.33" y2="286" />
                   <line x1="8.33" y1="286" x2="8.33" y2="290" />
                   <line x1="8.33" y1="308" x2="8.33" y2="400" />
                 </g>
-                <!-- Q3a=NO → English -->
+                <!-- Q3a=NO → English — right half of Q3a split + vertical -->
                 <g fill="none" :stroke="gs({q1:'yes',q2:'yes',q3a:'no'})" :stroke-width="gsw({q1:'yes',q2:'yes',q3a:'no'})">
+                  <line x1="16.67" y1="272" x2="25" y2="272" />
                   <line x1="25" y1="272" x2="25" y2="286" />
                   <line x1="25" y1="286" x2="25" y2="290" />
                   <line x1="25" y1="308" x2="25" y2="400" />
                 </g>
-                <!-- Q3=YES → Dutch -->
+                <!-- Q3=YES → Dutch — left half of Q3 split + vertical -->
                 <g fill="none" :stroke="gs({q1:'yes',q2:'no',q3:'yes'})" :stroke-width="gsw({q1:'yes',q2:'no',q3:'yes'})">
+                  <line x1="50" y1="272" x2="41.67" y2="272" />
                   <line x1="41.67" y1="272" x2="41.67" y2="286" />
                   <line x1="41.67" y1="286" x2="41.67" y2="290" />
                   <line x1="41.67" y1="308" x2="41.67" y2="400" />
                 </g>
-                <!-- Q3=NO → Japanese -->
+                <!-- Q3=NO → Japanese — right half of Q3 split + vertical -->
                 <g fill="none" :stroke="gs({q1:'yes',q2:'no',q3:'no'})" :stroke-width="gsw({q1:'yes',q2:'no',q3:'no'})">
+                  <line x1="50" y1="272" x2="58.33" y2="272" />
                   <line x1="58.33" y1="272" x2="58.33" y2="286" />
                   <line x1="58.33" y1="286" x2="58.33" y2="290" />
                   <line x1="58.33" y1="308" x2="58.33" y2="400" />

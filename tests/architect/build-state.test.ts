@@ -543,3 +543,101 @@ describe('saveArchitectState — basics construction', () => {
     expect(state.suppliers).toBeNull()
   })
 })
+
+// ─────────────────────────────────────────────────────────────────────────────
+
+// Mirror of the name-based ceiling injection logic from useArchitectBuildState.js
+function injectCeilings(
+  supNames: string[],
+  excl: boolean[],
+  supplierCeilings: { name: string; price: number }[],
+  items: Record<string, unknown>[],
+) {
+  const activeSuppliers = supNames
+    .map((name, i) => ({ name, excluded: excl[i] ?? false }))
+    .filter(s => !s.excluded)
+    .map((s, i) => ({ name: s.name, email: `supplier+${i + 1}@crown.ovh` }))
+
+  supplierCeilings.forEach((ceiling) => {
+    const match = activeSuppliers.find(s => s.name === ceiling.name)
+    if (match) {
+      items[0][match.email] = ceiling.price
+    }
+  })
+
+  return { items, activeSuppliers }
+}
+
+describe('ceiling injection — name-based matching', () => {
+  it('assigns ceiling to correct email when all suppliers have prices', () => {
+    const supNames = ['Alpha', 'Beta', 'Gamma']
+    const excl = [false, false, false]
+    const ceilings = [
+      { name: 'Alpha', price: 970 },
+      { name: 'Beta',  price: 1160 },
+      { name: 'Gamma', price: 870 },
+    ]
+    const items: Record<string, unknown>[] = [{ line_item: 'Lot', quantity: 1, unit: 'u', index: 0 }]
+    injectCeilings(supNames, excl, ceilings, items)
+
+    expect(items[0]['supplier+1@crown.ovh']).toBe(970)
+    expect(items[0]['supplier+2@crown.ovh']).toBe(1160)
+    expect(items[0]['supplier+3@crown.ovh']).toBe(870)
+  })
+
+  it('correctly skips supplier with price=0 (not in ceilings) without shifting other indices', () => {
+    // S1=Alpha(price>0), S2=Beta(price=0, absent from ceilings), S3=Gamma(price>0)
+    // activeSuppliers: Alpha→+1, Beta→+2, Gamma→+3
+    // ceilings only has Alpha and Gamma
+    const supNames = ['Alpha', 'Beta', 'Gamma']
+    const excl = [false, false, false]
+    const ceilings = [
+      { name: 'Alpha', price: 970 },
+      { name: 'Gamma', price: 870 },
+    ]
+    const items: Record<string, unknown>[] = [{ line_item: 'Lot', quantity: 1, unit: 'u', index: 0 }]
+    injectCeilings(supNames, excl, ceilings, items)
+
+    expect(items[0]['supplier+1@crown.ovh']).toBe(970)   // Alpha → +1 ✓
+    expect(items[0]['supplier+2@crown.ovh']).toBeUndefined() // Beta skipped ✓
+    expect(items[0]['supplier+3@crown.ovh']).toBe(870)   // Gamma → +3 ✓ (not +2!)
+  })
+
+  it('excluded suppliers shift the email index', () => {
+    // S1=Alpha(excl), S2=Beta, S3=Gamma
+    // activeSuppliers after excl filter: Beta→+1, Gamma→+2
+    const supNames = ['Alpha', 'Beta', 'Gamma']
+    const excl = [true, false, false]
+    const ceilings = [
+      { name: 'Beta',  price: 800 },
+      { name: 'Gamma', price: 900 },
+    ]
+    const items: Record<string, unknown>[] = [{ line_item: 'Lot', quantity: 1, unit: 'u', index: 0 }]
+    const { activeSuppliers } = injectCeilings(supNames, excl, ceilings, items)
+
+    expect(activeSuppliers).toHaveLength(2)
+    expect(items[0]['supplier+1@crown.ovh']).toBe(800)   // Beta → +1
+    expect(items[0]['supplier+2@crown.ovh']).toBe(900)   // Gamma → +2
+    expect(items[0]['supplier+3@crown.ovh']).toBeUndefined()
+  })
+
+  it('no-op when supplierCeilings is empty', () => {
+    const supNames = ['Alpha', 'Beta']
+    const excl = [false, false]
+    const items: Record<string, unknown>[] = [{ line_item: 'Lot', quantity: 1, unit: 'u', index: 0 }]
+    injectCeilings(supNames, excl, [], items)
+
+    expect(items[0]['supplier+1@crown.ovh']).toBeUndefined()
+    expect(items[0]['supplier+2@crown.ovh']).toBeUndefined()
+  })
+
+  it('unrecognised name in ceilings is silently ignored', () => {
+    const supNames = ['Alpha']
+    const excl = [false]
+    const ceilings = [{ name: 'Unknown', price: 500 }]
+    const items: Record<string, unknown>[] = [{ line_item: 'Lot', quantity: 1, unit: 'u', index: 0 }]
+    injectCeilings(supNames, excl, ceilings, items)
+
+    expect(items[0]['supplier+1@crown.ovh']).toBeUndefined()
+  })
+})

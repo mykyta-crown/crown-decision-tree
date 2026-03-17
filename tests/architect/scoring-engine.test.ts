@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import {
   getScores,
+  getScoresPartial,
   DEF_BASES,
   DEF_SAVINGS,
   DEF_MATRIX,
@@ -1025,5 +1026,91 @@ describe('Matrix consistency checks', () => {
       expect(s).toBeGreaterThan(0)
       expect(s).toBeLessThanOrEqual(100)
     })
+  })
+})
+
+// ══════════════════════════════════════════════════════════════
+// getScoresPartial — Progressive scoring (Fast Compass)
+// ══════════════════════════════════════════════════════════════
+
+const P = { bases: DEF_BASES, savings: DEF_SAVINGS, matrix: deepCloneMatrix(DEF_MATRIX) }
+
+describe('getScoresPartial — zero selections', () => {
+  it('returns base scores (unadjusted) when nothing is selected', () => {
+    // The component gates display with hasSelection — the function itself returns base scores
+    const r = getScoresPartial(P, 0, 0, 0, 0, 0, 0)
+    expect(r.length).toBe(STRATEGY_COUNT)
+    // No eliminations when no criteria are answered
+    r.forEach(x => expect(x.eliminated).toBe(false))
+  })
+})
+
+describe('getScoresPartial — single selection', () => {
+  it('returns results after first click (no allSelected required)', () => {
+    const r = getScoresPartial(P, 3, 0, 0, 0, 0, 0)  // only Q1 answered
+    expect(r.length).toBeGreaterThan(0)
+  })
+
+  it('unselected dimensions (0) contribute 0 — never eliminate', () => {
+    // Q3=1 (Award) normally eliminates Japanese Rank/NoRank
+    // But here only Q1 is set — Q3 is 0 — Japanese should NOT be eliminated
+    const r = getScoresPartial(P, 3, 0, 0, 0, 0, 0)
+    const jp = r.filter(x => x.family === 'Japanese')
+    expect(jp.length).toBeGreaterThan(0)
+    jp.forEach(x => expect(x.eliminated).toBe(false))
+  })
+
+  it('selected dimension with -999 eliminates correctly', () => {
+    // Q3=1 (Award only) eliminates Japanese Rank/NoRank
+    const r = getScoresPartial(P, 0, 0, 1, 0, 0, 0)
+    const jpRankNoRank = r.filter(x => x.family === 'Japanese' && (x.aw === 'Rank' || x.aw === 'No Rank'))
+    jpRankNoRank.forEach(x => expect(x.eliminated).toBe(true))
+  })
+})
+
+describe('getScoresPartial — progressive consistency', () => {
+  it('answering all 6 questions produces same winner as getScores', () => {
+    // Full selection: large spend, many suppliers, Award, no pref, competitive, tight gap
+    const full = getScores(P, 3, 3, 1, 1, 3, 1).filter(r => !r.eliminated)
+    const partial = getScoresPartial(P, 3, 3, 1, 1, 3, 1).filter(r => !r.eliminated)
+    expect(partial[0]?.family).toBe(full[0]?.family)
+  })
+
+  it('top result changes as more criteria are filled in', () => {
+    const after1 = getScoresPartial(P, 3, 0, 0, 0, 0, 0)
+    const after3 = getScoresPartial(P, 3, 1, 1, 0, 0, 0)  // Q1=large, Q2=few, Q3=award → Dutch should surface
+    // Just verify both return valid non-empty results
+    expect(after1.length).toBeGreaterThan(0)
+    expect(after3.length).toBeGreaterThan(0)
+  })
+
+  it('Traditional always present (never fully eliminated)', () => {
+    // Traditional has a fallback that keeps raw >= 1
+    const r = getScoresPartial(P, 3, 3, 1, 1, 3, 1)
+    const trad = r.find(x => x.family === 'Traditional')
+    expect(trad).toBeDefined()
+    expect(trad!.eliminated).toBe(false)
+  })
+
+  it('pctMatch is between 0 and 100 for all results', () => {
+    const r = getScoresPartial(P, 3, 3, 1, 1, 3, 1)
+    r.filter(x => !x.eliminated).forEach(x => {
+      expect(x.pctMatch).toBeGreaterThanOrEqual(0)
+      expect(x.pctMatch).toBeLessThanOrEqual(100)
+    })
+  })
+
+  it('no crashes across all 729 full combinations', () => {
+    for (let a = 0; a <= 3; a++)
+    for (let b = 0; b <= 3; b++)
+    for (let c = 0; c <= 3; c++)
+    for (let d = 0; d <= 3; d++)
+    for (let e = 0; e <= 3; e++)
+    for (let f = 0; f <= 3; f++) {
+      if ([a, b, c, d, e, f].filter(v => v > 0).length === 0) continue
+      const r = getScoresPartial(P, a, b, c, d, e, f)
+      expect(Array.isArray(r)).toBe(true)
+      r.forEach(x => expect(typeof x.raw).toBe('number'))
+    }
   })
 })

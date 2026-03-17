@@ -281,8 +281,10 @@
                   <tr>
                     <th class="compat-th-empty" />
                     <th v-for="fam in families" :key="fam.key" class="compat-th">
-                      <v-icon :icon="fam.icon" size="16" :color="gfc(fam.family).text" class="compat-th-icon" />
-                      <span class="compat-th-name" :style="{ color: gfc(fam.family).text }">{{ fam.shortName }}</span>
+                      <div class="compat-th-inner">
+                        <v-icon :icon="fam.icon" size="16" :color="gfc(fam.family).text" />
+                        <span class="compat-th-name" :style="{ color: gfc(fam.family).text }">{{ fam.shortName }}</span>
+                      </div>
                     </th>
                   </tr>
                 </thead>
@@ -1257,8 +1259,8 @@ function famTryBtnStyle(f: string) {
   border-bottom: 2px solid #E9EAEC;
   vertical-align: bottom;
 }
-.compat-th-icon { display: flex; justify-content: center; margin-bottom: 4px; }
-.compat-th-name { font-size: 11px; font-weight: 700; display: block; text-align: center; }
+.compat-th-inner { display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 5px; }
+.compat-th-name { font-size: 11px; font-weight: 700; }
 .compat-label {
   font-size: 13px; font-weight: 500; color: #6B7280;
   padding: 10px 10px 10px 0;

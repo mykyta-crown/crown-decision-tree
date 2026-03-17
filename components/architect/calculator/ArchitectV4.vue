@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="show" max-width="720" scrollable>
+  <v-dialog v-model="show" max-width="850" width="90%">
     <v-card class="dt4-card" rounded="lg">
       <!-- Header -->
       <div class="dt4-header">
@@ -240,6 +240,10 @@ function openLearnMore(family: string) {
 
 <style scoped>
 .dt4-card {
+  height: 740px !important;
+  max-height: 92vh !important;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
 }
 
@@ -279,14 +283,17 @@ function openLearnMore(family: string) {
 
 /* Body */
 .dt4-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
   padding: 24px;
 }
 
 /* Criteria */
 .dt4-criteria {
   display: grid;
-  grid-template-columns: 200px 1fr 1fr 1fr;
-  gap: 12px 8px;
+  grid-template-columns: 260px 1fr 1fr 1fr;
+  gap: 12px 16px;
   align-items: center;
 }
 
@@ -321,6 +328,7 @@ function openLearnMore(family: string) {
   font-size: 12px;
   color: #757575;
   margin-top: 2px;
+  white-space: nowrap;
 }
 
 .crit-pills {
