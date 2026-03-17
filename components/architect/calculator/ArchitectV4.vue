@@ -103,17 +103,18 @@
                 </div>
               </div>
 
-              <!-- Runner-ups -->
+              <!-- Runner-ups — always 3 slots to keep stable height -->
               <div class="runners">
-                <template v-if="runners.length">
-                  <div v-for="r in runners" :key="r.id" class="runner" :style="{ borderLeftColor: getFC(r.family).border }">
-                    <span class="runner-name">{{ r.displayName }}</span>
-                    <span class="runner-pct">{{ r.pctMatch }}%</span>
-                  </div>
-                </template>
-                <template v-else>
-                  <div v-for="i in 3" :key="i" class="runner runner--ghost" />
-                </template>
+                <div
+                  v-for="i in 3"
+                  :key="i"
+                  class="runner"
+                  :class="{ 'runner--ghost': i > runners.length }"
+                  :style="i <= runners.length ? { borderLeftColor: getFC(runners[i - 1].family).border } : {}"
+                >
+                  <span v-if="i <= runners.length" class="runner-name">{{ runners[i - 1].displayName }}</span>
+                  <span v-if="i <= runners.length" class="runner-pct">{{ runners[i - 1].pctMatch }}%</span>
+                </div>
               </div>
             </div>
           </Transition>
@@ -292,9 +293,9 @@ function openLearnMore(family: string) {
   padding: 24px;
 }
 
-/* Bottom — always reserves the full result-section height */
+/* Bottom — reserves space so modal never grows when results appear */
 .dt4-bottom {
-  min-height: 390px;
+  min-height: 80px;
 }
 
 /* Criteria */
