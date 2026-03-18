@@ -851,6 +851,16 @@ async function buildAuction() {
         state.lots[0].min_bid_decr = editMinDecr.value * qty
         state.lots[0].max_bid_decr = editMaxDecr.value * qty
       }
+      if (p.type === 'Dutch' || p.type === 'DutchPreferred') {
+        state.lots[0].baseline     = dutchStarting.value * qty
+        state.lots[0].min_bid_decr = editIncr.value * qty
+        state.lots[0].max_bid_decr = editEnding.value * qty
+      }
+      if (p.type === 'Japanese') {
+        state.lots[0].baseline     = editStarting.value * qty
+        state.lots[0].min_bid_decr = editDecr.value * qty
+        state.lots[0].max_bid_decr = editStarting.value * qty
+      }
       if (state.lots[0].items?.[0]) {
         state.lots[0].items[0].line_item = editLotName.value
         state.lots[0].items[0].unit      = editLotUnit.value
