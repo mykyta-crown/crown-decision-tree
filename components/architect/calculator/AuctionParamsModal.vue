@@ -176,7 +176,7 @@
               <span class="ap-toggle-state" :class="editPrebid ? 'ap-toggle-state--on' : ''">
                 {{ editPrebid ? 'ON' : 'OFF' }}
               </span>
-              <span v-if="editPrebid" class="ap-prebid-hint">— {{ t('calc.auctionParams.prebidRecommended', {}, 'guarantees an offer on auction day') }}</span>
+              <span class="ap-prebid-hint" :style="{ opacity: editPrebid ? 1 : 0 }">— {{ t('calc.auctionParams.prebidRecommended', {}, 'guarantees an offer on auction day') }}</span>
             </div>
             <div class="ap-price-arc ap-price-arc--dutch">
               <!-- Left: computed starting price (auto-updates) -->
@@ -252,7 +252,7 @@
               <span class="ap-toggle-state" :class="editPrebid ? 'ap-toggle-state--on' : ''">
                 {{ editPrebid ? 'ON' : 'OFF' }}
               </span>
-              <span v-if="editPrebid" class="ap-prebid-hint">— {{ t('calc.auctionParams.prebidRecommended', {}, 'guarantees an offer on auction day') }}</span>
+              <span class="ap-prebid-hint" :style="{ opacity: editPrebid ? 1 : 0 }">— {{ t('calc.auctionParams.prebidRecommended', {}, 'guarantees an offer on auction day') }}</span>
             </div>
             <div class="ap-price-arc ap-price-arc--japanese">
               <!-- Left: editable starting price -->
