@@ -65,15 +65,15 @@
           <!-- Lot details (editable) -->
           <div class="ap-lot-details">
             <div class="ap-lot-detail ap-lot-detail--wide">
-              <label class="ap-lot-detail-lbl">{{ t('calc.auctionParams.lotItem', {}, locale === 'fr' ? 'Nom du lot' : 'Lot name') }}</label>
+              <label class="ap-lot-detail-lbl">{{ t('calc.auctionParams.lotItem') }}</label>
               <input v-model="editLotName" type="text" class="ap-lot-input" />
             </div>
             <div class="ap-lot-detail ap-lot-detail--sm">
-              <label class="ap-lot-detail-lbl">{{ t('calc.auctionParams.lotUnit', {}, locale === 'fr' ? 'Unité' : 'Unit') }}</label>
+              <label class="ap-lot-detail-lbl">{{ t('calc.auctionParams.lotUnit') }}</label>
               <input v-model="editLotUnit" type="text" class="ap-lot-input" />
             </div>
             <div class="ap-lot-detail ap-lot-detail--sm">
-              <label class="ap-lot-detail-lbl">{{ t('calc.auctionParams.lotQty', {}, locale === 'fr' ? 'Qté' : 'Qty') }}</label>
+              <label class="ap-lot-detail-lbl">{{ t('calc.auctionParams.lotQty') }}</label>
               <input v-model.number="editLotQty" type="number" class="ap-lot-input" :min="1" step="1" />
             </div>
             <div class="ap-lot-detail ap-lot-detail--baseline">
@@ -708,26 +708,56 @@ function initEditable() {
   editMinDecr.value = _qty > 1 ? Math.round(_rawMin / _qty * 100) / 100 : _rawMin
   editMaxDecr.value = _qty > 1 ? Math.round(_rawMax / _qty * 100) / 100 : _rawMax
 
-  // Proposed prices — per supplier
-  // Dutch/Japanese: each supplier's original price; cheapest supplier gets −5%
-  // English/SealedBid/DS: 3% below original price as proposed ceiling
-  const isDutchOrJap = p.type === 'Dutch' || p.type === 'DutchPreferred' || p.type === 'Japanese'
-  if (isDutchOrJap) {
+  // Proposed sailings — per supplier
+  // Dutch / Japanese: ALL suppliers get the same sailing = niceRound(min × factor)
+  //   This equals the auction ending price (Dutch) or starting price (Japanese).
+  // English / SealedBid / DoubleScenario: each supplier keeps their exact price,
+  //   except the cheapest who gets niceRound(price × factor).
+  {
+    const bpAny = p as any
+    const isDutchFamily = bpAny.type === 'Dutch' || bpAny.type === 'DutchPreferred'
+    const isJapanese = bpAny.type === 'Japanese'
+    const familyBp = bpAny.type === 'DoubleScenario'
+      ? store.builderParams.doubleScenario
+      : isDutchFamily
+        ? (bpAny.type === 'DutchPreferred' ? store.builderParams.dutchPreferred : store.builderParams.dutch)
+        : isJapanese
+          ? store.builderParams.japanese
+          : bpAny.type === 'SealedBid'
+            ? store.builderParams.sealedBid
+            : store.builderParams.english
     const activePrices = activeSuppliers.value.filter(s => s.price > 0).map(s => s.price)
     const lowestPrice = activePrices.length > 0 ? Math.min(...activePrices) : 0
-    editCeilings.value = activeSuppliers.value.map(s => ({
-      name: s.name,
-      originalPrice: s.price,
-      proposedPrice: s.price > 0 && s.price === lowestPrice
-        ? niceRound(s.price * 0.95)
-        : s.price,
-    }))
-  } else {
-    editCeilings.value = activeSuppliers.value.map(s => ({
-      name: s.name,
-      originalPrice: s.price,
-      proposedPrice: Math.round(s.price * 0.97),
-    }))
+
+    if (isDutchFamily) {
+      // All suppliers get the ending price (= niceRound(min × ending_factor))
+      const factor = (familyBp?.ending_factor ?? 95) / 100
+      const sailing = lowestPrice > 0 ? niceRound(lowestPrice * factor) : 0
+      editCeilings.value = activeSuppliers.value.map(s => ({
+        name: s.name,
+        originalPrice: s.price,
+        proposedPrice: sailing,
+      }))
+    } else if (isJapanese) {
+      // All suppliers get the starting price (= niceRound(min × starting_factor))
+      const factor = (familyBp?.starting_factor ?? 95) / 100
+      const sailing = lowestPrice > 0 ? niceRound(lowestPrice * factor) : 0
+      editCeilings.value = activeSuppliers.value.map(s => ({
+        name: s.name,
+        originalPrice: s.price,
+        proposedPrice: sailing,
+      }))
+    } else {
+      // English / SealedBid / DoubleScenario: exact price, cheapest gets -prebid_factor%
+      const prebidFactor = (familyBp?.prebid_factor ?? 95) / 100
+      editCeilings.value = activeSuppliers.value.map(s => ({
+        name: s.name,
+        originalPrice: s.price,
+        proposedPrice: s.price > 0 && s.price === lowestPrice
+          ? niceRound(s.price * prebidFactor)
+          : s.price,
+      }))
+    }
   }
 
   nextTick(() => {
@@ -1006,7 +1036,7 @@ const params = computed(() => {
   if (props.family === 'Sealed Bid') {
     const bp = store.builderParams.sealedBid
     return { ...buildDefaults, type: 'SealedBid' as const, builderType: 'sealed-bid' as const,
-      maxRankDisplayed: 2,
+      maxRankDisplayed: props.lot.award === 1 ? 1 : props.lot.award === 2 ? activeSuppliers.value.length : 0,
       minDecr: niceRound(props.lotBaseline * (bp.min_decr_factor ?? 0.25) / 100),
       maxDecr: niceRound(props.lotBaseline * (bp.max_decr_factor ?? 20) / 100),
       supplierCeilings: activeCeilingsData() }
@@ -1022,7 +1052,7 @@ const params = computed(() => {
       english: {
         builderType: 'reverse' as const,
         duration: bp.duration ?? 15, overtimeRange: bp.overtime_range ?? 3,
-        maxRankDisplayed: bp.max_rank_displayed ?? 3,
+        maxRankDisplayed: activeSuppliers.value.length,
         minDecr: enMinDecr, maxDecr: enMaxDecr,
         supplierCeilings: activeCeilingsData(),
       },

@@ -125,7 +125,7 @@ export function computeAuctionParams(
   if (family === 'Dutch') {
     const isDutchPreferred = pref === 2
     const bp = isDutchPreferred ? (builderParams?.dutchPreferred || {}) : (builderParams?.dutch || {})
-    const ending   = softRound(best * (bp.ending_factor ?? 95) / 100)
+    const ending   = niceRound(best * (bp.ending_factor ?? 95) / 100)
     const incr     = roundIncrement((ending * (bp.range_percent ?? 35) / 100) / (bp.steps ?? 19))
     const starting = softRound(ending - (bp.steps ?? 19) * incr)
     return {
@@ -140,7 +140,7 @@ export function computeAuctionParams(
 
   if (family === 'Japanese') {
     const bp = builderParams?.japanese || {}
-    const starting = softRound(best * (bp.starting_factor ?? 95) / 100)
+    const starting = niceRound(best * (bp.starting_factor ?? 95) / 100)
     const floor    = softRound(best * (bp.floor_factor ?? 65) / 100)
     const decr     = niceRound((starting - floor) / (bp.steps ?? 19))
     return {
