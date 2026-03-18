@@ -183,7 +183,7 @@
               <div class="ap-price-arc-node">
                 <div class="ap-price-arc-lbl">{{ t('calc.auctionParams.startingPrice') }}</div>
                 <div class="ap-price-arc-val ap-price-arc-val--muted">{{ fmtN(dutchStarting) }}</div>
-                <div v-if="lot.qty > 1" class="ap-price-arc-total">× {{ lot.qty }} = {{ fmtN(tot(dutchStarting)) }}</div>
+                <div v-if="editLotQty > 1" class="ap-price-arc-total">× {{ editLotQty }} = {{ fmtN(tot(dutchStarting)) }}</div>
               </div>
               <!-- Middle: timing controls + incr -->
               <div class="ap-price-arc-mid ap-price-arc-mid--wide">
@@ -226,7 +226,7 @@
               <div class="ap-price-arc-node ap-price-arc-node--end">
                 <div class="ap-price-arc-lbl">{{ t('calc.auctionParams.endingPrice') }}</div>
                 <input v-model.number="editEnding" type="number" class="ap-arc-price-input ap-arc-price-input--dutch" step="any" :min="0" />
-                <div v-if="lot.qty > 1" class="ap-price-arc-total">× {{ lot.qty }} = {{ fmtN(tot(editEnding)) }}</div>
+                <div v-if="editLotQty > 1" class="ap-price-arc-total">× {{ editLotQty }} = {{ fmtN(tot(editEnding)) }}</div>
               </div>
             </div>
           </template>
@@ -259,7 +259,7 @@
               <div class="ap-price-arc-node">
                 <div class="ap-price-arc-lbl">{{ t('calc.auctionParams.startingPrice') }}</div>
                 <input v-model.number="editStarting" type="number" class="ap-arc-price-input ap-arc-price-input--japanese" step="any" :min="0" />
-                <div v-if="lot.qty > 1" class="ap-price-arc-total">× {{ lot.qty }} = {{ fmtN(tot(editStarting)) }}</div>
+                <div v-if="editLotQty > 1" class="ap-price-arc-total">× {{ editLotQty }} = {{ fmtN(tot(editStarting)) }}</div>
               </div>
               <!-- Middle: timing controls + decr -->
               <div class="ap-price-arc-mid ap-price-arc-mid--wide">
@@ -302,7 +302,7 @@
               <div class="ap-price-arc-node ap-price-arc-node--end">
                 <div class="ap-price-arc-lbl">{{ t('calc.auctionParams.floorPrice') }}</div>
                 <div class="ap-price-arc-val ap-price-arc-val--muted">{{ fmtN(japaneseFloor) }}</div>
-                <div v-if="lot.qty > 1" class="ap-price-arc-total">× {{ lot.qty }} = {{ fmtN(tot(japaneseFloor)) }}</div>
+                <div v-if="editLotQty > 1" class="ap-price-arc-total">× {{ editLotQty }} = {{ fmtN(tot(japaneseFloor)) }}</div>
               </div>
             </div>
           </template>
@@ -911,11 +911,11 @@ function bestOffer(): number {
 
 
 function tot(unitVal: number): number {
-  return softRound(unitVal * props.lot.qty)
+  return softRound(unitVal * (editLotQty.value || 1))
 }
 
 function supTot(unitVal: number): number {
-  return softRound(unitVal * props.lot.qty)
+  return softRound(unitVal * (editLotQty.value || 1))
 }
 
 function activeCeilingsData() {
