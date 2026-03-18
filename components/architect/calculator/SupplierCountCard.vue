@@ -12,7 +12,7 @@
       </div>
       <p class="text-caption text-grey-darken-1 mb-4">More suppliers mean stronger competition</p>
     </div>
-    <div class="flex-grow-1 d-flex flex-column align-center justify-center ga-5">
+    <div class="d-flex flex-column align-center ga-2" style="margin-top:12px">
       <svg width="32" height="32" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M17.3117 15C17.9361 15 18.4328 14.6071 18.8787 14.0576C19.7916 12.9329 18.2928 12.034 17.7211 11.5938C17.14 11.1463 16.4912 10.8928 15.8333 10.8333M15 9.16667C16.1506 9.16667 17.0833 8.23393 17.0833 7.08333C17.0833 5.93274 16.1506 5 15 5" stroke="#1D1D1B" stroke-linecap="round"/>
         <path d="M2.68846 15C2.06404 15 1.56739 14.6071 1.12145 14.0576C0.20857 12.9329 1.70739 12.034 2.27903 11.5938C2.86014 11.1463 3.50898 10.8928 4.16683 10.8333M4.5835 9.16667C3.4329 9.16667 2.50016 8.23393 2.50016 7.08333C2.50016 5.93274 3.4329 5 4.5835 5" stroke="#1D1D1B" stroke-linecap="round"/>

@@ -311,8 +311,8 @@ const verdictDesc = computed(() => {
   display: flex;
   justify-content: center;
   margin-bottom: 6px;
-  margin-top: auto;
-  padding-bottom: 22px;
+  margin-top: 16px;
+  padding-bottom: 0;
 }
 
 .sup-counter {
