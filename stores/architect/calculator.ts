@@ -381,7 +381,14 @@ export const useCalculatorStore = defineStore('calculator', () => {
           matrix: Array.isArray(data.matrix) ? data.matrix : deepCloneMatrix(DEF_MATRIX),
         }
         if (data.builder_params && typeof data.builder_params === 'object') {
-          builderParams.value = { ...deepCloneBuilderParams(DEF_BUILDER_PARAMS), ...data.builder_params }
+          const base = deepCloneBuilderParams(DEF_BUILDER_PARAMS)
+          const remote = data.builder_params as any
+          for (const key of Object.keys(base) as (keyof BuilderParams)[]) {
+            if (remote[key] && typeof remote[key] === 'object') {
+              ;(base[key] as any) = { ...(base[key] as any), ...remote[key], templates: (base[key] as any).templates }
+            }
+          }
+          builderParams.value = base
         }
       }
     } catch (e) {
