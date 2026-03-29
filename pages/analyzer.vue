@@ -245,7 +245,7 @@
       <v-col cols="12" class="datatable-col px-0 pt-0">
         <v-data-table v-model:sort-by="sortBy" v-model:page="page" :headers="auctionHeaders" :items="filteredAuctions" :items-per-page="effectivePageSize" :hover="true" class="bg-none custom-data-table-in-tabs" hide-default-footer must-sort>
           <template #item="{ item, index }">
-            <tr :class="[hoveredRow === index ? 'bg-grey-deep' : 'bg-white', selectedLotId === item.id ? 'supplier-row-selected' : '']" @mouseover="hoveredRow = index" @mouseleave="hoveredRow = null" @click="loadLotDetail(item.id)" style="cursor:pointer">
+            <tr :class="hoveredRow === index ? 'bg-grey-deep' : 'bg-white'" @mouseover="hoveredRow = index" @mouseleave="hoveredRow = null" @click="loadLotDetail(item.id)" style="cursor:pointer">
               <td class="auction-name-cell pl-3"><v-tooltip activator="parent" location="top left" content-class="bg-white border">{{ item.name }}</v-tooltip>{{ item.name }}</td>
               <td class="truncate-cell">{{ titleCase(item.company_name) }}</td>
               <td><div class="type-chip" :class="`type-chip--${item.type}`">{{ typeLabel(item.type) }}</div></td>
