@@ -264,6 +264,43 @@ SUPABASE_ANON_KEY=eyJhbGci...  # PROD anon key
 PG_URL=postgresql://postgres:<prod_password>@db.jgwbqdpxygwsnswtnrxf.supabase.co:5432/postgres
 ```
 
+### Read-Only Access for Analytics / AI Assistants
+
+**⚠️ CRITICAL: When querying PROD for analytics, ALWAYS use the read-only connection.**
+
+A dedicated PostgreSQL role `readonly_analyst` exists on PROD with **SELECT-only** permissions.
+This role CANNOT insert, update, delete, create tables, or modify anything.
+
+**Connection string** (stored in `.env` as `PG_URL_READONLY`):
+
+```bash
+PG_URL_READONLY=postgresql://readonly_analyst:<password>@db.jgwbqdpxygwsnswtnrxf.supabase.co:5432/postgres
+```
+
+**Usage in Node.js scripts**:
+
+```javascript
+const url = process.env.PG_URL_READONLY; // Always use readonly for analytics
+const c = new Client({ connectionString: url });
+// Only SELECT queries will work — anything else will be rejected by PostgreSQL
+```
+
+**Rules for AI assistants**:
+
+1. **NEVER use `PG_URL` (full-access) for analytics or read operations on PROD**
+2. **ALWAYS use `PG_URL_READONLY` when querying PROD data**
+3. The readonly role is limited to `SELECT` on `public` schema tables
+4. If a query fails with "permission denied", that's the safety working — do NOT switch to `PG_URL`
+
+**How to recreate the role** (if needed, via Supabase Dashboard SQL Editor):
+
+```sql
+CREATE ROLE readonly_analyst WITH LOGIN PASSWORD 'your_secure_password';
+GRANT USAGE ON SCHEMA public TO readonly_analyst;
+GRANT SELECT ON ALL TABLES IN SCHEMA public TO readonly_analyst;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO readonly_analyst;
+```
+
 ### Common Issues
 
 **Issue: "Remote migration versions not found in local migrations directory"**
@@ -610,10 +647,54 @@ This documentation is a living resource - keep it accurate and helpful!
 
 Each new browser test flow should have its own section with the same structure.
 
+## Analyzer Module
+
+### Overview
+The **Analyzer** is a data analytics module accessible from the sidebar navigation. It provides insights on auction performance, supplier participation, pricing trends, and buyer activity.
+
+### Data Scope — CRITICAL
+**The Analyzer ONLY uses real, completed auctions.** Every query MUST include:
+
+```sql
+WHERE usage = 'real' AND deleted = false AND published = true
+  AND start_at <= NOW() AND (status IS NULL OR status != 'running')
+  AND baseline > 1
+```
+
+This filters out:
+- ❌ Test auctions (`usage = 'test'`)
+- ❌ Training auctions (`usage = 'training'`)
+- ❌ Deleted/archived auctions (`deleted = true`)
+- ❌ Not yet started auctions (`start_at > NOW()`)
+- ❌ Currently running auctions (`status = 'running'`)
+- ❌ Unpublished drafts (`published = false`)
+- ❌ Pause lots (`baseline <= 1` — 5-min pauses inserted between lots)
+
+**PROD dataset (as of 2026-03-28):** 173 completed auctions
+
+### Database Connection
+- Uses `PG_URL_READONLY` (read-only role `readonly_analyst`) — **NEVER** `PG_URL`
+- The role has SELECT-only permissions, cannot modify any data
+- See "Read-Only Access for Analytics" section above for details
+
+### Route
+- `/analyzer` — to be created in the sidebar navigation
+
+### Key Tables for Analytics
+- `auctions` — auction metadata (type, dates, status, company_id)
+- `auctions_sellers` — supplier invitations, terms acceptance, exit times
+- `bids` — all bids and prebids (price, seller_email, type, timestamp)
+- `bid_supplies` — per-item bid prices
+- `supplies` — items/lots within auctions
+- `supplies_sellers` — supplier config per item (ceiling, handicaps)
+- `companies` — buyer companies
+- `profiles` — user profiles
+- `auctions_handicaps` — preference/transformation settings
+
 ## Session State (updated every ~5 messages)
 
 ### Current Scope
-- Working on **Decision Tree / Architect module** only
+- Working on **Analyzer module** — data analytics interface for auction performance
 - Do NOT modify the rest of the codebase (auction engine, bidding, etc.) unless explicitly asked
 
 ### Decision Tree Routes

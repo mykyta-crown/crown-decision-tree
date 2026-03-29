@@ -84,6 +84,17 @@
       </v-list-item>
       <v-list-item
         v-if="isAdmin || isBuyer"
+        id="analyzer-nav-item"
+        title="Analyzer"
+        active-class="active-icon"
+        to="/analyzer"
+      >
+        <template #prepend>
+          <v-icon size="16">mdi-chart-bar</v-icon>
+        </template>
+      </v-list-item>
+      <v-list-item
+        v-if="isAdmin || isBuyer"
         id="ai-analysis-nav-item"
         title="Crown GPT"
         active-class="active-icon"
